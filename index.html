@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AND_GAME — Logic Gate Puzzles</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- HUD Overlay -->
+  <div id="hud">
+    <div id="hud-left">
+      <div id="level-label">LEVEL</div>
+      <div id="level-name">—</div>
+    </div>
+    <div id="hud-center">
+      <div id="hud-title">AND_GAME</div>
+      <div id="hud-subtitle">COMBINATIONAL LOGIC PUZZLES</div>
+    </div>
+    <div id="hud-right">
+      <div id="gate-palette-label">GATE PALETTE</div>
+      <div id="gate-palette">
+        <span class="gate-chip" data-gate="AND">AND</span>
+        <span class="gate-chip" data-gate="OR">OR</span>
+        <span class="gate-chip" data-gate="XOR">XOR</span>
+        <span class="gate-chip" data-gate="NAND">NAND</span>
+        <span class="gate-chip" data-gate="NOR">NOR</span>
+        <span class="gate-chip" data-gate="NOT">NOT</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Canvas -->
+  <canvas id="game-canvas"></canvas>
+
+  <!-- Win Overlay -->
+  <div id="win-overlay" class="hidden">
+    <div id="win-box">
+      <div id="win-icon">✓</div>
+      <div id="win-title">CIRCUIT SOLVED</div>
+      <div id="win-level"></div>
+      <button id="btn-next">NEXT LEVEL →</button>
+      <button id="btn-restart" class="btn-secondary">RESTART</button>
+    </div>
+  </div>
+
+  <!-- Final Win Overlay -->
+  <div id="final-overlay" class="hidden">
+    <div id="final-box">
+      <div id="final-icon">⚡</div>
+      <div id="final-title">ALL CIRCUITS COMPLETE</div>
+      <div id="final-sub">You have mastered combinational logic.</div>
+      <button id="btn-play-again">PLAY AGAIN</button>
+    </div>
+  </div>
+
+  <!-- Hint tooltip -->
+  <div id="tooltip" class="hidden"></div>
+
+  <script src="js/state.js"></script>
+  <script src="js/engine.js"></script>
+  <script src="js/levels.js"></script>
+  <script src="js/renderer.js"></script>
+  <script src="js/input.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,315 @@
+/* ============================================================
+   AND_GAME — EDA / PCB Dark Theme
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&display=swap');
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg:           #0a0e14;
+  --bg-panel:     #0f1520;
+  --bg-panel-alt: #131a26;
+  --border:       #1e2d45;
+  --border-bright:#2a4060;
+  --text-primary: #c8d8f0;
+  --text-dim:     #4a6080;
+  --text-muted:   #2a3a55;
+  --accent-blue:  #1e90ff;
+  --accent-cyan:  #00d4ff;
+  --neon-green:   #39ff14;
+  --neon-dim:     #1a7a00;
+  --signal-low:   #c62828;
+  --signal-none:  #3a3a3a;
+  --gold:         #ffd700;
+  --font:         'JetBrains Mono', 'Courier New', monospace;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg);
+  color: var(--text-primary);
+  font-family: var(--font);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Canvas ─────────────────────────────────────────────── */
+
+#game-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  cursor: default;
+}
+
+/* ── HUD ─────────────────────────────────────────────────── */
+
+#hud {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 64px;
+  background: linear-gradient(180deg, rgba(10,14,20,0.98) 0%, rgba(10,14,20,0.85) 100%);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  z-index: 100;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 2px 24px rgba(0,0,0,0.6);
+}
+
+#hud-left,
+#hud-right {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 180px;
+}
+
+#hud-right {
+  align-items: flex-end;
+}
+
+#level-label,
+#gate-palette-label {
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+}
+
+#level-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--accent-cyan);
+  letter-spacing: 1px;
+}
+
+#hud-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+#hud-title {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 6px;
+  color: var(--text-primary);
+  text-shadow: 0 0 12px rgba(0, 212, 255, 0.4);
+}
+
+#hud-subtitle {
+  font-size: 8px;
+  letter-spacing: 4px;
+  color: var(--text-dim);
+}
+
+/* Gate Palette Chips */
+#gate-palette {
+  display: flex;
+  gap: 5px;
+  flex-wrap: nowrap;
+}
+
+.gate-chip {
+  font-size: 9px;
+  font-family: var(--font);
+  font-weight: 600;
+  letter-spacing: 1px;
+  padding: 3px 7px;
+  border: 1px solid var(--border-bright);
+  border-radius: 3px;
+  color: var(--accent-cyan);
+  background: rgba(30, 144, 255, 0.06);
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.gate-chip.active {
+  background: rgba(0, 212, 255, 0.15);
+  border-color: var(--accent-cyan);
+  color: #fff;
+  box-shadow: 0 0 8px rgba(0,212,255,0.3);
+}
+
+/* ── Win Overlay ─────────────────────────────────────────── */
+
+#win-overlay,
+#final-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(6px);
+  animation: fadeIn 0.4s ease;
+}
+
+#win-overlay.hidden,
+#final-overlay.hidden {
+  display: none;
+}
+
+#win-box,
+#final-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 48px 56px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-bright);
+  border-radius: 6px;
+  box-shadow:
+    0 0 60px rgba(57, 255, 20, 0.12),
+    0 0 120px rgba(57, 255, 20, 0.05),
+    inset 0 1px 0 rgba(255,255,255,0.04);
+  animation: slideUp 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+#win-icon,
+#final-icon {
+  font-size: 48px;
+  line-height: 1;
+  filter: drop-shadow(0 0 16px var(--neon-green));
+  color: var(--neon-green);
+  animation: pulse 1.5s ease infinite;
+}
+
+#final-icon {
+  color: var(--gold);
+  filter: drop-shadow(0 0 16px var(--gold));
+}
+
+#win-title,
+#final-title {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: 6px;
+  color: var(--neon-green);
+  text-shadow: 0 0 20px rgba(57, 255, 20, 0.6);
+}
+
+#final-title {
+  color: var(--gold);
+  text-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+}
+
+#win-level {
+  font-size: 12px;
+  letter-spacing: 3px;
+  color: var(--text-dim);
+}
+
+#final-sub {
+  font-size: 12px;
+  letter-spacing: 2px;
+  color: var(--text-dim);
+}
+
+/* Buttons */
+button {
+  font-family: var(--font);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  padding: 12px 32px;
+  border: 1px solid var(--accent-cyan);
+  border-radius: 4px;
+  background: rgba(0, 212, 255, 0.1);
+  color: var(--accent-cyan);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  outline: none;
+  text-transform: uppercase;
+}
+
+button:hover {
+  background: rgba(0, 212, 255, 0.2);
+  box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+  color: #fff;
+}
+
+button:active {
+  transform: scale(0.97);
+}
+
+.btn-secondary {
+  font-size: 10px;
+  padding: 8px 24px;
+  border-color: var(--border-bright);
+  background: transparent;
+  color: var(--text-dim);
+}
+
+.btn-secondary:hover {
+  background: rgba(255,255,255,0.05);
+  color: var(--text-primary);
+  box-shadow: none;
+  border-color: var(--text-dim);
+}
+
+#btn-play-again {
+  border-color: var(--gold);
+  background: rgba(255, 215, 0, 0.08);
+  color: var(--gold);
+}
+
+#btn-play-again:hover {
+  background: rgba(255, 215, 0, 0.18);
+  box-shadow: 0 0 20px rgba(255,215,0,0.25);
+  color: #fff;
+}
+
+/* ── Tooltip ─────────────────────────────────────────────── */
+
+#tooltip {
+  position: fixed;
+  z-index: 300;
+  padding: 6px 10px;
+  background: var(--bg-panel-alt);
+  border: 1px solid var(--border-bright);
+  border-radius: 3px;
+  font-size: 10px;
+  letter-spacing: 1px;
+  color: var(--accent-cyan);
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+#tooltip.hidden {
+  display: none;
+}
+
+/* ── Animations ──────────────────────────────────────────── */
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(24px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0)    scale(1);    }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1;   transform: scale(1);    }
+  50%       { opacity: 0.7; transform: scale(1.05); }
+}

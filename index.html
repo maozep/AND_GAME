@@ -19,7 +19,10 @@
       <div id="hud-subtitle">COMBINATIONAL LOGIC PUZZLES</div>
     </div>
     <div id="hud-right">
-      <div id="gate-palette-label">GATE PALETTE</div>
+      <div id="gate-palette-label-row">
+        <div id="gate-palette-label">GATE PALETTE</div>
+        <button id="btn-info" aria-label="Open gate truth tables" title="Gate Truth Tables">i</button>
+      </div>
       <div id="gate-palette">
         <span class="gate-chip" data-gate="AND">AND</span>
         <span class="gate-chip" data-gate="OR">OR</span>
@@ -52,6 +55,94 @@
       <div id="final-title">ALL CIRCUITS COMPLETE</div>
       <div id="final-sub">You have mastered combinational logic.</div>
       <button id="btn-play-again">PLAY AGAIN</button>
+    </div>
+  </div>
+
+  <!-- Info Overlay -->
+  <div id="info-overlay" class="hidden" aria-hidden="true">
+    <div id="info-box" role="dialog" aria-modal="true" aria-labelledby="info-title">
+      <div id="info-header">
+        <div id="info-title">GATE TRUTH TABLES</div>
+        <button id="btn-info-close" class="btn-secondary" aria-label="Close information">CLOSE</button>
+      </div>
+
+      <div id="truth-grid">
+        <section class="truth-card">
+          <h3>AND</h3>
+          <table>
+            <thead><tr><th>A</th><th>B</th><th>OUT</th></tr></thead>
+            <tbody>
+              <tr><td>0</td><td>0</td><td>0</td></tr>
+              <tr><td>0</td><td>1</td><td>0</td></tr>
+              <tr><td>1</td><td>0</td><td>0</td></tr>
+              <tr><td>1</td><td>1</td><td>1</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="truth-card">
+          <h3>OR</h3>
+          <table>
+            <thead><tr><th>A</th><th>B</th><th>OUT</th></tr></thead>
+            <tbody>
+              <tr><td>0</td><td>0</td><td>0</td></tr>
+              <tr><td>0</td><td>1</td><td>1</td></tr>
+              <tr><td>1</td><td>0</td><td>1</td></tr>
+              <tr><td>1</td><td>1</td><td>1</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="truth-card">
+          <h3>XOR</h3>
+          <table>
+            <thead><tr><th>A</th><th>B</th><th>OUT</th></tr></thead>
+            <tbody>
+              <tr><td>0</td><td>0</td><td>0</td></tr>
+              <tr><td>0</td><td>1</td><td>1</td></tr>
+              <tr><td>1</td><td>0</td><td>1</td></tr>
+              <tr><td>1</td><td>1</td><td>0</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="truth-card">
+          <h3>NAND</h3>
+          <table>
+            <thead><tr><th>A</th><th>B</th><th>OUT</th></tr></thead>
+            <tbody>
+              <tr><td>0</td><td>0</td><td>1</td></tr>
+              <tr><td>0</td><td>1</td><td>1</td></tr>
+              <tr><td>1</td><td>0</td><td>1</td></tr>
+              <tr><td>1</td><td>1</td><td>0</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="truth-card">
+          <h3>NOR</h3>
+          <table>
+            <thead><tr><th>A</th><th>B</th><th>OUT</th></tr></thead>
+            <tbody>
+              <tr><td>0</td><td>0</td><td>1</td></tr>
+              <tr><td>0</td><td>1</td><td>0</td></tr>
+              <tr><td>1</td><td>0</td><td>0</td></tr>
+              <tr><td>1</td><td>1</td><td>0</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="truth-card">
+          <h3>NOT</h3>
+          <table>
+            <thead><tr><th>A</th><th>OUT</th></tr></thead>
+            <tbody>
+              <tr><td>0</td><td>1</td></tr>
+              <tr><td>1</td><td>0</td></tr>
+            </tbody>
+          </table>
+        </section>
+      </div>
     </div>
   </div>
 

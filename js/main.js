@@ -10,9 +10,22 @@
   const winOverlay  = document.getElementById('win-overlay');
   const winLevelEl  = document.getElementById('win-level');
   const finalOverlay = document.getElementById('final-overlay');
+  const infoOverlay = document.getElementById('info-overlay');
+  const btnInfo     = document.getElementById('btn-info');
+  const btnInfoClose = document.getElementById('btn-info-close');
   const btnNext     = document.getElementById('btn-next');
   const btnRestart  = document.getElementById('btn-restart');
   const btnPlayAgain = document.getElementById('btn-play-again');
+
+  function colorizeTruthTableBits() {
+    const cells = document.querySelectorAll('#truth-grid td');
+    cells.forEach((cell) => {
+      const value = cell.textContent.trim();
+      cell.classList.remove('bit-0', 'bit-1');
+      if (value === '0') cell.classList.add('bit-0');
+      if (value === '1') cell.classList.add('bit-1');
+    });
+  }
 
   // ── Animation loop (for dashed border pulse) ─────────────
   let _rafId = null;
@@ -100,6 +113,34 @@
     finalOverlay.classList.add('hidden');
     loadLevel(0);
   });
+
+  // ── Info Overlay Handlers ───────────────────────────────
+  function openInfoOverlay() {
+    infoOverlay.classList.remove('hidden');
+    infoOverlay.setAttribute('aria-hidden', 'false');
+  }
+
+  function closeInfoOverlay() {
+    infoOverlay.classList.add('hidden');
+    infoOverlay.setAttribute('aria-hidden', 'true');
+  }
+
+  btnInfo.addEventListener('click', openInfoOverlay);
+  btnInfoClose.addEventListener('click', closeInfoOverlay);
+
+  // Close when clicking the dark backdrop
+  infoOverlay.addEventListener('click', (e) => {
+    if (e.target === infoOverlay) closeInfoOverlay();
+  });
+
+  // Keyboard accessibility
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !infoOverlay.classList.contains('hidden')) {
+      closeInfoOverlay();
+    }
+  });
+
+  colorizeTruthTableBits();
 
   // ── Input Callbacks ───────────────────────────────────────
   Input.init(canvas, {

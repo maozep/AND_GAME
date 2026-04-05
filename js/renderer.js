@@ -387,7 +387,7 @@ const Renderer = (() => {
 
     // Target annotation
     ctx.fillStyle    = 'rgba(100,150,170,0.7)';
-    ctx.font         = '8px JetBrains Mono, monospace';
+    ctx.font         = 'bold 10px JetBrains Mono, monospace';
     ctx.textBaseline = 'middle';
     ctx.fillText(`→${node.targetValue}`, node.x, node.y + 12);
 

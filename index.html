@@ -12,7 +12,14 @@
   <div id="hud">
     <div id="hud-left">
       <div id="level-label">LEVEL</div>
-      <div id="level-name">—</div>
+      <div id="level-status-row">
+        <div id="level-name">—</div>
+        <div id="level-time-row">
+          <div id="level-time">TIME 00:00.00</div>
+          <div id="level-best">BEST --:--.--</div>
+        </div>
+      </div>
+      <button id="btn-levels" class="btn-secondary">STAGES</button>
     </div>
     <div id="hud-center">
       <div id="hud-title">AND_GAME</div>
@@ -37,12 +44,28 @@
   <!-- Main Canvas -->
   <canvas id="game-canvas"></canvas>
 
+  <!-- Stage Select Overlay -->
+  <div id="menu-overlay" class="hidden" aria-hidden="true">
+    <div id="menu-box" role="dialog" aria-modal="true" aria-labelledby="menu-title">
+      <div id="menu-header">
+        <div>
+          <div id="menu-title">SELECT STAGE</div>
+          <div id="menu-subtitle">Completed stages are shown in green. You can replay any stage.</div>
+        </div>
+        <button id="btn-menu-close" class="btn-secondary" aria-label="Close stage select">CLOSE</button>
+      </div>
+      <div id="level-grid"></div>
+    </div>
+  </div>
+
   <!-- Win Overlay -->
   <div id="win-overlay" class="hidden">
     <div id="win-box">
       <div id="win-icon">✓</div>
       <div id="win-title">CIRCUIT SOLVED</div>
       <div id="win-level"></div>
+      <div id="win-time"></div>
+      <div id="win-best"></div>
       <button id="btn-next">NEXT LEVEL →</button>
       <button id="btn-restart" class="btn-secondary">RESTART</button>
     </div>

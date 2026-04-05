@@ -19,7 +19,10 @@
           <div id="level-best">BEST --:--.--</div>
         </div>
       </div>
-      <button id="btn-levels" class="btn-secondary">STAGES</button>
+      <div id="hud-actions">
+        <button id="btn-levels" class="btn-secondary">STAGES</button>
+        <button id="btn-hint" class="btn-secondary">HINT</button>
+      </div>
     </div>
     <div id="hud-center">
       <div id="hud-title">AND_GAME</div>
@@ -54,6 +57,7 @@
         </div>
         <button id="btn-menu-close" class="btn-secondary" aria-label="Close stage select">CLOSE</button>
       </div>
+      <div id="difficulty-tabs" role="tablist" aria-label="Difficulty categories"></div>
       <div id="level-grid"></div>
     </div>
   </div>
@@ -166,6 +170,20 @@
           </table>
         </section>
       </div>
+    </div>
+  </div>
+
+  <!-- Hint Overlay -->
+  <div id="hint-overlay" class="hidden" aria-hidden="true">
+    <div id="hint-box" role="dialog" aria-modal="true" aria-labelledby="hint-title">
+      <div id="hint-header">
+        <div>
+          <div id="hint-title">HINT</div>
+          <div id="hint-level"></div>
+        </div>
+        <button id="btn-hint-close" class="btn-secondary" aria-label="Close hint">CLOSE</button>
+      </div>
+      <div id="hint-body"></div>
     </div>
   </div>
 

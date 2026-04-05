@@ -8,8 +8,10 @@
   const canvas      = document.getElementById('game-canvas');
   const levelName   = document.getElementById('level-name');
   const btnLevels   = document.getElementById('btn-levels');
+  const btnHint     = document.getElementById('btn-hint');
   const menuOverlay = document.getElementById('menu-overlay');
   const menuBox     = document.getElementById('menu-box');
+  const difficultyTabs = document.getElementById('difficulty-tabs');
   const levelGrid   = document.getElementById('level-grid');
   const btnMenuClose = document.getElementById('btn-menu-close');
   const levelTimeEl = document.getElementById('level-time');
@@ -19,6 +21,10 @@
   const winTimeEl   = document.getElementById('win-time');
   const winBestEl   = document.getElementById('win-best');
   const finalOverlay = document.getElementById('final-overlay');
+  const hintOverlay = document.getElementById('hint-overlay');
+  const hintLevelEl = document.getElementById('hint-level');
+  const hintBodyEl = document.getElementById('hint-body');
+  const btnHintClose = document.getElementById('btn-hint-close');
   const infoOverlay = document.getElementById('info-overlay');
   const btnInfo     = document.getElementById('btn-info');
   const btnInfoClose = document.getElementById('btn-info-close');
@@ -30,6 +36,8 @@
   const BEST_TIMES_KEY = 'and_game_best_times';
   const completedLevelIds = new Set(loadCompletedLevelIds());
   const bestTimes = loadBestTimes();
+  const DIFFICULTY_ORDER = ['Easy', 'Medium', 'Hard', 'Very Hard'];
+  let currentMenuDifficulty = 'Easy';
 
   function colorizeTruthTableBits() {
     const cells = document.querySelectorAll('#truth-grid td');
@@ -173,10 +181,43 @@
     return completedLevelIds.has(levelId);
   }
 
+  function setMenuDifficulty(difficulty) {
+    currentMenuDifficulty = difficulty;
+    renderLevelMenu();
+  }
+
+  function renderDifficultyTabs() {
+    difficultyTabs.innerHTML = '';
+
+    DIFFICULTY_ORDER.forEach((difficulty) => {
+      const count = LEVELS.filter((level) => level.difficulty === difficulty).length;
+      const tab = document.createElement('button');
+      tab.type = 'button';
+      tab.className = `difficulty-tab${currentMenuDifficulty === difficulty ? ' active' : ''}`;
+      tab.textContent = `${difficulty} (${count})`;
+      tab.setAttribute('aria-pressed', currentMenuDifficulty === difficulty ? 'true' : 'false');
+      tab.addEventListener('click', () => setMenuDifficulty(difficulty));
+      difficultyTabs.appendChild(tab);
+    });
+  }
+
   function renderLevelMenu() {
     levelGrid.innerHTML = '';
+    renderDifficultyTabs();
 
-    LEVELS.forEach((level, index) => {
+    const filteredLevels = LEVELS
+      .map((level, index) => ({ level, index }))
+      .filter(({ level }) => (level.difficulty || 'Medium') === currentMenuDifficulty);
+
+    if (filteredLevels.length === 0) {
+      const empty = document.createElement('div');
+      empty.className = 'difficulty-empty';
+      empty.textContent = 'No stages in this category yet.';
+      levelGrid.appendChild(empty);
+      return;
+    }
+
+    filteredLevels.forEach(({ level, index }) => {
       const completed = isLevelCompleted(level.id);
       const best = getBestTime(level.id);
       const card = document.createElement('button');
@@ -189,12 +230,11 @@
           <div class="level-card-name">LEVEL ${index + 1}</div>
           <div class="level-card-status">${completed ? 'COMPLETED' : 'NEW'}</div>
         </div>
-        <div class="level-card-description">${level.name}</div>
+        <div class="level-card-title">${level.name}</div>
         <div class="level-card-meta">
           <span>Difficulty: ${level.difficulty || 'Medium'}</span>
           <span>${completed ? 'REPLAY' : 'PLAY'}</span>
         </div>
-        <div class="level-card-description">${level.description}</div>
         <div class="level-card-best">Best: ${best !== null ? formatTime(best) : '--:--.--'}</div>
       `;
 
@@ -218,6 +258,25 @@
     menuOverlay.classList.add('hidden');
     menuOverlay.setAttribute('aria-hidden', 'true');
     _menuVisible = false;
+  }
+
+  function openHintOverlay() {
+    if (!State.level) return;
+
+    const level = LEVELS[State.currentLevelIndex];
+    hintLevelEl.textContent = `LEVEL ${State.currentLevelIndex + 1} — ${level.name}`;
+    hintBodyEl.textContent = level.hint || 'Try matching the target by combining the gate outputs and input values carefully.';
+    hintOverlay.classList.remove('hidden');
+    hintOverlay.setAttribute('aria-hidden', 'false');
+  }
+
+  function closeHintOverlay() {
+    hintOverlay.classList.add('hidden');
+    hintOverlay.setAttribute('aria-hidden', 'true');
+  }
+
+  function updateHintButtonState() {
+    btnHint.disabled = !State.level;
   }
 
   // ── Core: Evaluate + Render ───────────────────────────────
@@ -264,9 +323,12 @@
 
     // Update HUD
     levelName.textContent = `${index + 1}. ${levelDef.name}`;
+    updateHintButtonState();
+    currentMenuDifficulty = levelDef.difficulty || 'Medium';
 
     // Hide overlays
     closeMenuOverlay();
+    closeHintOverlay();
     winOverlay.classList.add('hidden');
     finalOverlay.classList.add('hidden');
 
@@ -316,6 +378,14 @@
     loadLevel(0);
   });
 
+  btnHint.addEventListener('click', openHintOverlay);
+
+  btnHintClose.addEventListener('click', closeHintOverlay);
+
+  hintOverlay.addEventListener('click', (e) => {
+    if (e.target === hintOverlay) closeHintOverlay();
+  });
+
   btnLevels.addEventListener('click', () => {
     openMenuOverlay();
   });
@@ -356,6 +426,11 @@
 
     if (e.key === 'Escape' && !menuOverlay.classList.contains('hidden')) {
       closeMenuOverlay();
+      return;
+    }
+
+    if (e.key === 'Escape' && !hintOverlay.classList.contains('hidden')) {
+      closeHintOverlay();
     }
   });
 
@@ -390,7 +465,9 @@
   }, 100);
 
   // ── Start ─────────────────────────────────────────────────
+  currentMenuDifficulty = LEVELS[0].difficulty || 'Easy';
   renderLevelMenu();
+  updateHintButtonState();
   openMenuOverlay();
 
 })();

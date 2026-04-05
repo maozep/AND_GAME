@@ -773,6 +773,84 @@ const LEVELS = [
   }),
 ];
 
+function deriveHint(level) {
+  const name = level.name.toUpperCase();
+
+  if (name.includes('MUX')) {
+    return 'Use the select lines to choose exactly one data path. A standard solution is built from NOT gates on the select inputs, several AND paths, then one OR gate at the end.';
+  }
+
+  if (name.includes('DEMUX')) {
+    return 'Split the input into two paths with S and NOT S. Only one output path should stay active at a time.';
+  }
+
+  if (name.includes('HALF ADDER SUM')) {
+    return 'The SUM output of a half adder is XOR. Try the XOR gate first.';
+  }
+
+  if (name.includes('HALF ADDER CARRY')) {
+    return 'The CARRY output of a half adder is AND. Both inputs must be high.';
+  }
+
+  if (name.includes('FULL ADDER')) {
+    return 'A full adder can be built from two XOR gates for SUM, plus AND/OR logic for COUT. Think in two stages: first A xor B, then combine with Cin.';
+  }
+
+  if (name.includes('XNOR')) {
+    return 'XNOR is just XOR followed by NOT.';
+  }
+
+  if (name.includes('PARITY')) {
+    return 'Parity puzzles usually reduce to chained XOR gates. XOR all bits together step by step.';
+  }
+
+  if (name.includes('TREE NETWORK') || name.includes('FINAL LOGIC MIX') || name.includes('THREE-WAY JUNCTION')) {
+    return 'Work from the inputs to the outputs one stage at a time. Fan-out is allowed, and some paths need inversion before they combine.';
+  }
+
+  if (name.includes('SERIES')) {
+    return 'This is a chained puzzle: solve the first gate, then feed its output into the next one.';
+  }
+
+  if (name.includes('FANOUT')) {
+    return 'One input feeds multiple branches. Check where the same signal must be reused in both outputs.';
+  }
+
+  if (name.includes('MATRIX')) {
+    return 'This is a dense multi-output puzzle. Start from the outputs and trace the dependencies backward. Build the shared intermediate signals first.';
+  }
+
+  if (name.includes('INVERTER') || name.includes('NOT')) {
+    return 'The solution is the NOT gate. Invert the single input to match the target.';
+  }
+
+  if (name.includes('NAND')) {
+    return 'NAND is the inverse of AND. The output goes low only when both inputs are high.';
+  }
+
+  if (name.includes('NOR')) {
+    return 'NOR is the inverse of OR. The output stays high only when both inputs are low.';
+  }
+
+  if (name.includes('XOR')) {
+    return 'XOR is high when the inputs differ. Use it when you need a mismatch detector.';
+  }
+
+  if (name.includes('AND')) {
+    return 'AND becomes high only when both inputs are high.';
+  }
+
+  if (name.includes('OR')) {
+    return 'OR becomes high when at least one input is high.';
+  }
+
+  return 'Look at the target values and choose the gate behavior that matches the required output.';
+}
+
+LEVELS.forEach((level) => {
+  level.hint = deriveHint(level);
+});
+
 function getDifficultyLabel(levelId) {
   if (levelId <= 10) return 'Easy';
   if (levelId <= 20) return 'Medium';

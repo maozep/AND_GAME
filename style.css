@@ -156,22 +156,23 @@ html, body {
 /* Gate Palette Chips */
 #gate-palette {
   display: flex;
-  gap: 5px;
+  gap: 7px;
   flex-wrap: nowrap;
 }
 
 .gate-chip {
-  font-size: 9px;
+  font-size: 11px;
   font-family: var(--font);
   font-weight: 600;
   letter-spacing: 1px;
-  padding: 3px 7px;
+  padding: 8px 12px;
   border: 1px solid var(--border-bright);
-  border-radius: 3px;
+  border-radius: 5px;
   color: var(--accent-cyan);
   background: rgba(30, 144, 255, 0.06);
   transition: all 0.15s ease;
   user-select: none;
+  cursor: grab;
 }
 
 .gate-chip.active {
@@ -179,6 +180,12 @@ html, body {
   border-color: var(--accent-cyan);
   color: #fff;
   box-shadow: 0 0 8px rgba(0,212,255,0.3);
+}
+
+.gate-chip.dragging {
+  opacity: 0.55;
+  transform: scale(0.96);
+  cursor: grabbing;
 }
 
 /* ── Win Overlay ─────────────────────────────────────────── */

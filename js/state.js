@@ -126,14 +126,11 @@ const State = (() => {
     // then immediately falls back to 0. This is the "STEP" action.
     stepClock() {
       if (!_level || _solved) return;
-      // Rising edge
+      _stepCount++;
       _clockHigh = true;
       _setClockValue(1);
-      // The engine will detect the rising edge on the next evaluate() call.
-      // After evaluation, bring clock back low.
-      _stepCount++;
-      _clockHigh = false;
-      _setClockValue(0);
+      // tick() in main.js will call evaluate() while CLK=1 (detecting the rising edge),
+      // then lower the clock via State.lowerClock().
     },
 
     // For auto-clock: raise CLK, let one tick pass, then lower.

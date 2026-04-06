@@ -28,6 +28,11 @@
   const infoOverlay = document.getElementById('info-overlay');
   const btnInfo     = document.getElementById('btn-info');
   const btnInfoClose = document.getElementById('btn-info-close');
+  const diagramOverlay = document.getElementById('diagram-overlay');
+  const diagramTitle = document.getElementById('diagram-title');
+  const diagramSubtitle = document.getElementById('diagram-subtitle');
+  const diagramContent = document.getElementById('diagram-content');
+  const btnDiagramClose = document.getElementById('btn-diagram-close');
   const btnNext     = document.getElementById('btn-next');
   const btnRestart  = document.getElementById('btn-restart');
   const btnPlayAgain = document.getElementById('btn-play-again');
@@ -42,8 +47,8 @@
   const BEST_TIMES_KEY = 'and_game_best_times';
   const completedLevelIds = new Set(loadCompletedLevelIds());
   const bestTimes = loadBestTimes();
-  const DIFFICULTY_ORDER = ['Easy', 'Medium', 'Hard', 'Very Hard', 'Sequential'];
-  let currentMenuDifficulty = 'Easy';
+  const DIFFICULTY_ORDER = ['1. Basics', '2. Classic Circuits', '3. Advanced Circuits', '4. Flip-Flops', '5. Sequential Logic'];
+  let currentMenuDifficulty = LEVELS[0] ? LEVELS[0].difficulty : '1. Basics';
 
   function colorizeTruthTableBits() {
     const cells = document.querySelectorAll('#truth-grid td');
@@ -52,6 +57,348 @@
       cell.classList.remove('bit-0', 'bit-1');
       if (value === '0') cell.classList.add('bit-0');
       if (value === '1') cell.classList.add('bit-1');
+    });
+  }
+
+  function renderComponentDiagram(componentKey) {
+    // ── Color palette ──────────────────────────────────────────
+    const BG='#0d1320', NC='#39ff14', PC='#ffd700';
+    const WC='#8ab4cc', VC='#4a8fff', GC='#ff5050';
+    const AC='#ff9933', OC='#00d4ff', TC='#c8d8f0', DC='#4a6080';
+
+    // ── MOSFET transistor symbol ───────────────────────────────
+    // cx,cy = center; type='N'|'P'; gx = gate wire left x
+    // ty = top terminal y; by = bottom terminal y; lbl = label
+    //   NMOS: drain at top, source at bottom (GND side), arrow ▲ at source
+    //   PMOS: source at top (VDD side), drain at bottom, bubble ○ on gate, arrow ▼ at source
+    function T(cx,cy,type,gx,ty,by,lbl){
+      const isN=type==='N', c=isN?NC:PC, px=cx-10, bR=5;
+      const gEnd=isN?px:px-bR*2-2;
+      const bub=isN?'':`<circle cx="${px-bR}" cy="${cy}" r="${bR}" fill="${BG}" stroke="${c}" stroke-width="2"/>`;
+      const aY=isN?cy+12:cy-12;
+      const arr=isN
+        ?`<polygon points="${cx-4},${aY+9} ${cx+4},${aY+9} ${cx},${aY+1}" fill="${c}" opacity="0.88"/>`
+        :`<polygon points="${cx-4},${aY-9} ${cx+4},${aY-9} ${cx},${aY-1}" fill="${c}" opacity="0.88"/>`;
+      return `
+        <line x1="${px}" y1="${cy-22}" x2="${px}" y2="${cy+22}" stroke="${c}" stroke-width="4" stroke-linecap="round"/>
+        <line x1="${px+1}" y1="${cy-12}" x2="${cx}" y2="${cy-12}" stroke="${c}" stroke-width="2.5"/>
+        <line x1="${px+1}" y1="${cy+12}" x2="${cx}" y2="${cy+12}" stroke="${c}" stroke-width="2.5"/>
+        <line x1="${cx}" y1="${cy-12}" x2="${cx}" y2="${cy+12}" stroke="${c}" stroke-width="2.5"/>
+        ${bub}
+        <line x1="${gx}" y1="${cy}" x2="${gEnd}" y2="${cy}" stroke="${AC}" stroke-width="2.5"/>
+        <line x1="${cx}" y1="${cy-12}" x2="${cx}" y2="${ty}" stroke="${WC}" stroke-width="2"/>
+        <line x1="${cx}" y1="${cy+12}" x2="${cx}" y2="${by}" stroke="${WC}" stroke-width="2"/>
+        ${arr}
+        <text x="${cx+16}" y="${cy+5}" fill="${c}" font-size="11" font-family="monospace" font-weight="bold">${lbl}</text>`;
+    }
+
+    // ── Circuit element helpers ────────────────────────────────
+    function VDD(x,y){return `<line x1="${x-24}" y1="${y}" x2="${x+24}" y2="${y}" stroke="${VC}" stroke-width="3.5"/><text x="${x}" y="${y-8}" text-anchor="middle" fill="${VC}" font-size="10" font-family="monospace" font-weight="bold">VDD</text>`;}
+    function VDDBAR(x1,x2,y){return `<line x1="${x1}" y1="${y}" x2="${x2}" y2="${y}" stroke="${VC}" stroke-width="3.5"/><text x="${(x1+x2)/2}" y="${y-8}" text-anchor="middle" fill="${VC}" font-size="10" font-family="monospace" font-weight="bold">VDD</text>`;}
+    function GND(x,y){return `<line x1="${x-22}" y1="${y}" x2="${x+22}" y2="${y}" stroke="${GC}" stroke-width="3.5"/><line x1="${x-14}" y1="${y+7}" x2="${x+14}" y2="${y+7}" stroke="${GC}" stroke-width="2.5"/><line x1="${x-6}" y1="${y+14}" x2="${x+6}" y2="${y+14}" stroke="${GC}" stroke-width="2"/>`;}
+    function IN(x,y,n){return `<circle cx="${x}" cy="${y}" r="17" fill="${BG}" stroke="#1e6fa0" stroke-width="2"/><text x="${x}" y="${y+5}" text-anchor="middle" fill="${TC}" font-size="14" font-family="monospace" font-weight="bold">${n}</text>`;}
+    function OUTNODE(x,y){return `<circle cx="${x}" cy="${y}" r="6" fill="${OC}"/><line x1="${x+6}" y1="${y}" x2="${x+54}" y2="${y}" stroke="${OC}" stroke-width="2.5"/><text x="${x+60}" y="${y+5}" fill="${OC}" font-size="13" font-family="monospace" font-weight="bold">OUT</text>`;}
+    function DOT(x,y,c){return `<circle cx="${x}" cy="${y}" r="4.5" fill="${c}"/>`;}
+    function L(x1,y1,x2,y2,c,w){return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${c||WC}" stroke-width="${w||2}"/>`;}
+    function BLK(x,y,w,h,l1,l2,bc){return `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="10" fill="#111a2a" stroke="${bc||'#2a5080'}" stroke-width="2"/><text x="${x+w/2}" y="${y+h/2-5}" text-anchor="middle" fill="${bc||TC}" font-size="13" font-family="monospace" font-weight="bold">${l1}</text><text x="${x+w/2}" y="${y+h/2+13}" text-anchor="middle" fill="${DC}" font-size="10" font-family="monospace">${l2||''}</text>`;}
+    function NOTE(t){return `<text x="22" y="444" fill="${DC}" font-size="11" font-family="monospace">${t}</text>`;}
+    function DIVIDER(x){return `<line x1="${x}" y1="68" x2="${x}" y2="438" stroke="#1a3060" stroke-width="1" stroke-dasharray="4,4"/>`;}
+    function SHELL(title,sub,body){return `<svg viewBox="0 0 720 460" xmlns="http://www.w3.org/2000/svg"><rect width="720" height="460" rx="14" fill="${BG}" stroke="#1a3060" stroke-width="1.5"/><text x="22" y="36" fill="${OC}" font-size="18" font-weight="700" font-family="monospace" letter-spacing="2">${title}</text><text x="22" y="56" fill="${DC}" font-size="11" font-family="monospace" letter-spacing="1">${sub}</text><line x1="22" y1="63" x2="698" y2="63" stroke="#1a3060" stroke-width="1"/>${body}</svg>`;}
+
+    switch(componentKey){
+
+    // ── NOT (INVERTER) ─────────────────────────────────────────
+    // 1 PMOS pull-up + 1 NMOS pull-down
+    case 'NOT':{
+      const cx=340, vY=82, gY=418, pY=185, nY=318, mid=251, gx=118;
+      return SHELL('NOT GATE','CMOS INVERTER  ·  1 PMOS (gold) + 1 NMOS (green)',`
+        ${VDD(cx,vY)}
+        ${T(cx,pY,'P',gx,vY,mid,'P1')}
+        ${DOT(cx,mid,OC)}${L(cx,mid,554,mid,OC,2.5)}${OUTNODE(554,mid)}
+        ${T(cx,nY,'N',gx,mid,gY,'N1')}
+        ${GND(cx,gY)}
+        ${IN(56,mid,'A')}
+        ${L(73,mid,gx,mid,AC,2.5)}
+        ${L(gx,pY,gx,nY,AC,1.5)}
+        ${DOT(gx,mid,AC)}
+        <text x="380" y="${pY-20}" fill="${PC}" font-size="10" font-family="monospace">source → VDD</text>
+        <text x="380" y="${nY+36}" fill="${NC}" font-size="10" font-family="monospace">source → GND</text>
+        ${NOTE('A=0: PMOS ON (gate low), NMOS OFF → OUT pulled to VDD=1   |   A=1: NMOS ON, PMOS OFF → OUT to GND=0')}
+      `);}
+
+    // ── NAND ──────────────────────────────────────────────────
+    // 2 PMOS in parallel (pull-up) + 2 NMOS in series (pull-down)
+    case 'NAND':{
+      const p1=233, p2=448, nx=340, pY=178, oY=256, n1Y=318, n2Y=400, gY=446;
+      const gxA=98, gxB=620;
+      return SHELL('NAND GATE','2 PMOS parallel pull-up  +  2 NMOS series pull-down',`
+        ${VDDBAR(188,494,82)}
+        ${T(p1,pY,'P',gxA,82,oY,'P1')}
+        ${T(p2,pY,'P',gxB,82,oY,'P2')}
+        ${L(p1,oY,p2,oY,WC,2)}
+        ${DOT(nx,oY,OC)}${L(nx,oY,566,oY,OC,2.5)}${OUTNODE(566,oY)}
+        ${T(nx,n1Y,'N',gxA,oY,n2Y-12,'N1')}
+        ${T(nx,n2Y,'N',gxB,n1Y+12,gY,'N2')}
+        ${GND(nx,gY)}
+        ${IN(50,224,'A')}
+        ${L(67,224,gxA,224,AC,2.5)}${L(gxA,pY,gxA,n1Y,AC,1.5)}${DOT(gxA,224,AC)}
+        ${IN(662,342,'B')}
+        ${L(645,342,gxB,342,AC,2.5)}${L(gxB,pY,gxB,n2Y,AC,1.5)}${DOT(gxB,342,AC)}
+        <text x="${p1-18}" y="${pY-22}" fill="${PC}" font-size="10" font-family="monospace">‖ parallel</text>
+        <text x="${nx+18}" y="${(n1Y+n2Y)/2}" fill="${NC}" font-size="10" font-family="monospace">series ≡</text>
+        ${NOTE('OUT=0 only when A=1 AND B=1 (both series NMOS conduct). Otherwise OUT=1.')}
+      `);}
+
+    // ── NOR ───────────────────────────────────────────────────
+    // 2 PMOS in series (pull-up) + 2 NMOS in parallel (pull-down)
+    case 'NOR':{
+      const nx1=248, nx2=450, px=350, vY=82, p1Y=168, p2Y=262, oY=344, nY=394, gY=446;
+      const gxA=98, gxB=620;
+      return SHELL('NOR GATE','2 PMOS series pull-up  +  2 NMOS parallel pull-down',`
+        ${VDD(px,vY)}
+        ${T(px,p1Y,'P',gxA,vY,p2Y-12,'P1')}
+        ${T(px,p2Y,'P',gxB,p1Y+12,oY,'P2')}
+        ${DOT(px,oY,OC)}${L(px,oY,576,oY,OC,2.5)}${OUTNODE(576,oY)}
+        ${L(nx1,oY,nx2,oY,WC,2)}
+        ${DOT(nx1,oY,WC)}${DOT(nx2,oY,WC)}
+        ${T(nx1,nY,'N',gxA,oY,gY,'N1')}
+        ${T(nx2,nY,'N',gxB,oY,gY,'N2')}
+        ${GND(nx1,gY)}${GND(nx2,gY)}
+        ${IN(50,216,'A')}
+        ${L(67,216,gxA,216,AC,2.5)}${L(gxA,p1Y,gxA,nY,AC,1.5)}${DOT(gxA,216,AC)}
+        ${IN(662,330,'B')}
+        ${L(645,330,gxB,330,AC,2.5)}${L(gxB,p2Y,gxB,nY,AC,1.5)}${DOT(gxB,330,AC)}
+        <text x="${px+18}" y="${(p1Y+p2Y)/2}" fill="${PC}" font-size="10" font-family="monospace">series ≡</text>
+        <text x="${nx1-40}" y="${nY-22}" fill="${NC}" font-size="10" font-family="monospace">‖ parallel</text>
+        ${NOTE('OUT=1 only when A=0 AND B=0 (both series PMOS conduct). Otherwise OUT=0.')}
+      `);}
+
+    // ── AND ───────────────────────────────────────────────────
+    // NAND(3T) stage + NOT(2T) stage = 3 PMOS + 3 NMOS
+    case 'AND':{
+      const p1=158, p2=294, nnx=226, vY=82, pYn=166, oYn=232, n1=294, n2=372, gY=428;
+      const ix=528, pYi=180, nYi=316, midI=248;
+      const gxA=74, gxB=576, gxI=398;
+      return SHELL('AND GATE','NAND stage + Inverter  ·  3 PMOS (gold) + 3 NMOS (green)',`
+        ${VDDBAR(114,322,vY)}${VDD(ix,vY)}
+        ${T(p1,pYn,'P',gxA,vY,oYn,'P1')}
+        ${T(p2,pYn,'P',gxB,vY,oYn,'P2')}
+        ${L(p1,oYn,p2,oYn,WC,2)}${DOT(nnx,oYn,WC)}
+        ${T(nnx,n1,'N',gxA,oYn,n2-12,'N1')}
+        ${T(nnx,n2,'N',gxB,n1+12,gY,'N2')}
+        ${GND(nnx,gY)}
+        ${L(nnx,oYn,gxI,oYn,WC,1.5)}
+        ${L(gxI,pYi,gxI,nYi,WC,1.5)}${DOT(gxI,oYn,WC)}
+        ${T(ix,pYi,'P',gxI,vY,midI,'P3')}
+        ${DOT(ix,midI,OC)}${L(ix,midI,606,midI,OC,2.5)}${OUTNODE(606,midI)}
+        ${T(ix,nYi,'N',gxI,midI,gY,'N3')}
+        ${GND(ix,gY)}
+        ${IN(36,197,'A')}
+        ${L(53,197,gxA,197,AC,2.5)}${L(gxA,pYn,gxA,n1,AC,1.5)}${DOT(gxA,197,AC)}
+        ${IN(634,294,'B')}
+        ${L(617,294,gxB,294,AC,2.5)}${L(gxB,pYn,gxB,n2,AC,1.5)}${DOT(gxB,294,AC)}
+        ${DIVIDER(356)}
+        <text x="136" y="${oYn-8}" fill="${DC}" font-size="10" font-family="monospace">NAND(A,B)</text>
+        <text x="362" y="${oYn-8}" fill="${DC}" font-size="10" font-family="monospace">NOT →</text>
+        ${NOTE('AND = NAND followed by NOT. Left: 2P‖ + 2N≡  |  Right: 1P + 1N inverter.')}
+      `);}
+
+    // ── OR ────────────────────────────────────────────────────
+    // NOR(3T) stage + NOT(2T) stage = 3 PMOS + 3 NMOS
+    case 'OR':{
+      const nx1=148, nx2=284, norX=216, vY=82, p1Y=164, p2Y=258, oYnor=334, nY=386, gY=428;
+      const ix=528, pYi=180, nYi=316, midI=248;
+      const gxA=74, gxB=576, gxI=398;
+      return SHELL('OR GATE','NOR stage + Inverter  ·  3 PMOS (gold) + 3 NMOS (green)',`
+        ${VDD(norX,vY)}${VDD(ix,vY)}
+        ${T(norX,p1Y,'P',gxA,vY,p2Y-12,'P1')}
+        ${T(norX,p2Y,'P',gxB,p1Y+12,oYnor,'P2')}
+        ${DOT(norX,oYnor,WC)}
+        ${L(nx1,oYnor,nx2,oYnor,WC,2)}
+        ${DOT(nx1,oYnor,WC)}${DOT(nx2,oYnor,WC)}
+        ${T(nx1,nY,'N',gxA,oYnor,gY,'N1')}
+        ${T(nx2,nY,'N',gxB,oYnor,gY,'N2')}
+        ${GND(nx1,gY)}${GND(nx2,gY)}
+        ${L(norX,oYnor,gxI,oYnor,WC,1.5)}
+        ${L(gxI,pYi,gxI,nYi,WC,1.5)}${DOT(gxI,oYnor,WC)}
+        ${T(ix,pYi,'P',gxI,vY,midI,'P3')}
+        ${DOT(ix,midI,OC)}${L(ix,midI,606,midI,OC,2.5)}${OUTNODE(606,midI)}
+        ${T(ix,nYi,'N',gxI,midI,gY,'N3')}
+        ${GND(ix,gY)}
+        ${IN(36,197,'A')}
+        ${L(53,197,gxA,197,AC,2.5)}${L(gxA,p1Y,gxA,nY,AC,1.5)}${DOT(gxA,197,AC)}
+        ${IN(634,294,'B')}
+        ${L(617,294,gxB,294,AC,2.5)}${L(gxB,p2Y,gxB,nY,AC,1.5)}${DOT(gxB,294,AC)}
+        ${DIVIDER(356)}
+        <text x="128" y="${oYnor-8}" fill="${DC}" font-size="10" font-family="monospace">NOR(A,B)</text>
+        <text x="362" y="${oYnor-8}" fill="${DC}" font-size="10" font-family="monospace">NOT →</text>
+        ${NOTE('OR = NOR followed by NOT. Left: 2P≡ + 2N‖  |  Right: 1P + 1N inverter.')}
+      `);}
+
+    // ── XOR ───────────────────────────────────────────────────
+    // Transmission-gate XOR: INV(A) generates Ā, then two TGs select B or B̄
+    case 'XOR':{
+      const vY=82, gY=420, icx=130, ipY=180, inY=316, imid=248, igx=68;
+      return SHELL('XOR GATE','Transmission-Gate XOR  ·  1 PMOS + 1 NMOS + 2 TG pairs',`
+        ${VDD(icx,vY)}
+        ${T(icx,ipY,'P',igx,vY,imid,'P0')}
+        ${DOT(icx,imid,NC)}
+        ${T(icx,inY,'N',igx,imid,gY,'N0')}
+        ${GND(icx,gY)}
+        ${IN(48,imid,'A')}
+        ${L(65,imid,igx,imid,AC,2.5)}
+        ${L(igx,ipY,igx,inY,AC,1.5)}
+        ${DOT(igx,imid,AC)}
+        ${L(icx,imid,226,imid,NC,1.5)}
+        <text x="${icx+20}" y="${imid+18}" fill="${NC}" font-size="13" font-family="monospace" font-weight="bold">Ā</text>
+        ${DIVIDER(210)}
+        <text x="222" y="82" fill="${DC}" font-size="11" font-family="monospace">TG1: passes B when A=0</text>
+        ${BLK(222,92,220,130,'P1 + N1',`P1 gate=A  ·  N1 gate=Ā`,PC)}
+        ${IN(264,148,'B')}${L(264,165,264,92,AC,2)}${DOT(264,148,AC)}
+        ${L(442,157,490,200,OC,2)}
+        <text x="222" y="262" fill="${DC}" font-size="11" font-family="monospace">TG2: passes B̄ when A=1</text>
+        ${BLK(222,272,220,130,'P2 + N2',`P2 gate=Ā  ·  N2 gate=A`,NC)}
+        ${IN(264,328,'B̄')}${L(264,345,264,272,AC,2)}${DOT(264,328,AC)}
+        ${L(442,337,490,296,OC,2)}
+        ${DOT(490,248,OC)}${L(490,200,490,296,OC,2)}${L(490,248,596,248,OC,2.5)}${OUTNODE(596,248)}
+        <text x="222" y="436" fill="${DC}" font-size="10" font-family="monospace">TG = PMOS‖NMOS in parallel. Both ON = signal passes. Complementary gates ensure one active at a time.</text>
+        ${NOTE('TG1 ON when A=0 → passes B. TG2 ON when A=1 → passes B̄. OUT = A⊕B.')}
+      `);}
+
+    // ── FLIP-FLOPS (structural block diagrams) ────────────────
+    case 'D':
+      return SHELL('D FLIP-FLOP','Master-slave latch pair  ·  ~20 transistors total',`
+        ${BLK(80,130,240,180,'MASTER','samples D on CLK=1',NC)}
+        ${BLK(400,130,240,180,'SLAVE','transfers to Q on CLK=0',PC)}
+        ${IN(40,220,'D')}${L(57,220,80,220,AC,2.5)}
+        ${L(320,220,400,220,OC,2.5)}
+        <text x="330" y="212" fill="${OC}" font-size="11" font-family="monospace">X</text>
+        ${L(640,220,690,220,OC,2.5)}<circle cx="690" cy="220" r="7" fill="${OC}"/>
+        <text x="706" y="225" fill="${OC}" font-size="14" font-family="monospace" font-weight="bold">Q</text>
+        ${IN(240,390,'CLK')}
+        ${L(240,373,240,310,AC,2)}${L(240,310,280,310,AC,2)}
+        <polygon points="280,304 280,316 292,310" fill="${AC}"/>
+        ${L(292,310,520,310,AC,2)}${L(520,310,520,310,AC,2)}
+        <polygon points="520,304 520,316 532,310" fill="${AC}"/>
+        <text x="296" y="306" fill="${DC}" font-size="9" font-family="monospace">CLK  →  MASTER</text>
+        <text x="364" y="332" fill="${DC}" font-size="9" font-family="monospace">CLK̄  →  SLAVE</text>
+        ${NOTE('Master latch samples D while CLK=1. Slave transfers to Q on falling edge.')}
+      `);
+
+    case 'T':
+      return SHELL('T FLIP-FLOP','D-FF with XOR feedback  ·  ~22 transistors total',`
+        ${BLK(110,145,180,170,'XOR','T ⊕ Q_prev',WC)}
+        ${BLK(390,125,240,190,'D  FF','captures on CLK ↑',NC)}
+        ${IN(55,230,'T')}${L(72,230,110,230,AC,2.5)}
+        ${L(290,230,390,230,OC,2.5)}
+        ${L(630,230,690,230,OC,2.5)}<circle cx="690" cy="230" r="7" fill="${OC}"/>
+        <text x="706" y="235" fill="${OC}" font-size="14" font-family="monospace" font-weight="bold">Q</text>
+        <path d="M 690 230 C 760 230 760 380 200 380 C 160 380 145 325 145 315" fill="none" stroke="${WC}" stroke-width="2" stroke-dasharray="6,4"/>
+        ${DOT(145,315,WC)}
+        <text x="680" y="350" fill="${DC}" font-size="11" font-family="monospace">Q feedback →</text>
+        ${IN(240,390,'CLK')}${L(240,373,240,315,AC,2)}${L(240,315,510,315,AC,2)}
+        <polygon points="510,309 510,321 522,315" fill="${AC}"/>
+        ${NOTE('T=0 → Q holds. T=1 → Q toggles. The XOR computes D = T ⊕ Q_prev each cycle.')}
+      `);
+
+    case 'SR':
+      return SHELL('SR FLIP-FLOP','Cross-coupled NAND latch  ·  8 transistors',`
+        ${BLK(268,108,192,148,'NAND 1','S input + Q̄ feedback',PC)}
+        ${BLK(268,284,192,148,'NAND 2','R input + Q feedback',NC)}
+        ${IN(55,182,'S')}${L(72,182,268,182,AC,2.5)}
+        ${IN(55,358,'R')}${L(72,358,268,358,AC,2.5)}
+        ${L(460,182,590,182,OC,2.5)}<circle cx="590" cy="182" r="7" fill="${OC}"/>
+        <text x="604" y="187" fill="${OC}" font-size="14" font-family="monospace" font-weight="bold">Q</text>
+        ${L(460,358,590,358,WC,2.5)}<circle cx="590" cy="358" r="7" fill="${WC}"/>
+        <text x="604" y="363" fill="${WC}" font-size="13" font-family="monospace" font-weight="bold">Q̄</text>
+        <path d="M 590 182 C 660 182 660 440 240 440 C 218 440 210 415 210 405" fill="none" stroke="${OC}" stroke-width="2" stroke-dasharray="5,4"/>
+        ${DOT(210,405,OC)}
+        <path d="M 590 358 C 670 358 670 70 240 70 C 218 70 210 95 210 108" fill="none" stroke="${WC}" stroke-width="2" stroke-dasharray="5,4"/>
+        ${DOT(210,108,WC)}
+        <text x="282" y="274" fill="${DC}" font-size="11" font-family="monospace">← Q̄ feeds back to NAND1</text>
+        <text x="282" y="102" fill="${DC}" font-size="11" font-family="monospace">← Q feeds back to NAND2</text>
+        ${NOTE('S=1,R=0 → Q=1. S=0,R=1 → Q=0. S=R=1 → Q=1 (S priority). Latches state via cross-coupling.')}
+      `);
+
+    case 'JK':
+      return SHELL('JK FLIP-FLOP','SR latch with output feedback gating  ·  ~24 transistors',`
+        ${BLK(110,116,192,155,'AND 1','J · Q̄  (Set gate)',PC)}
+        ${BLK(110,299,192,155,'AND 2','K · Q  (Reset gate)',NC)}
+        ${BLK(406,136,220,192,'SR LATCH','(NAND-based)',WC)}
+        ${IN(50,194,'J')}${L(67,194,110,194,AC,2.5)}
+        ${IN(50,377,'K')}${L(67,377,110,377,AC,2.5)}
+        ${L(302,194,406,210,OC,2.5)}
+        ${L(302,377,406,262,WC,2.5)}
+        ${L(626,236,690,236,OC,2.5)}<circle cx="690" cy="236" r="7" fill="${OC}"/>
+        <text x="706" y="241" fill="${OC}" font-size="14" font-family="monospace" font-weight="bold">Q</text>
+        ${L(626,296,690,296,WC,2.5)}<circle cx="690" cy="296" r="7" fill="${WC}"/>
+        <text x="706" y="301" fill="${WC}" font-size="13" font-family="monospace" font-weight="bold">Q̄</text>
+        <path d="M 690 296 C 780 296 780 450 50 450 C 28 450 22 415 22 400" fill="none" stroke="${WC}" stroke-width="1.5" stroke-dasharray="5,4"/>
+        <path d="M 690 236 C 790 236 790 462 45 462 C 22 462 16 428 16 412" fill="none" stroke="${OC}" stroke-width="1.5" stroke-dasharray="5,4"/>
+        ${IN(248,285,'CLK')}${L(248,268,248,194,AC,2)}${L(248,194,302,194,AC,1.5)}
+        ${NOTE('J=K=1 → toggle. J=1,K=0 → set Q=1. J=0,K=1 → reset Q=0. J=K=0 → hold.')}
+      `);
+
+    default:
+      return SHELL('UNKNOWN','No diagram available','');
+    }
+  }
+
+  function openComponentDiagram(componentKey, title) {
+    diagramTitle.textContent = title;
+    diagramSubtitle.textContent = 'Simplified transistor schematic';
+    diagramContent.innerHTML = renderComponentDiagram(componentKey);
+    diagramOverlay.classList.remove('hidden');
+    diagramOverlay.setAttribute('aria-hidden', 'false');
+  }
+
+  function closeComponentDiagram() {
+    diagramOverlay.classList.add('hidden');
+    diagramOverlay.setAttribute('aria-hidden', 'true');
+  }
+
+  function setupComponentInfoButtons() {
+    const titleMap = new Map([
+      ['AND', { key: 'AND', label: 'AND' }],
+      ['OR', { key: 'OR', label: 'OR' }],
+      ['XOR', { key: 'XOR', label: 'XOR' }],
+      ['NAND', { key: 'NAND', label: 'NAND' }],
+      ['NOR', { key: 'NOR', label: 'NOR' }],
+      ['NOT', { key: 'NOT', label: 'NOT' }],
+      ['D FLIP-FLOP', { key: 'D', label: 'D FLIP-FLOP' }],
+      ['T FLIP-FLOP (TOGGLE)', { key: 'T', label: 'T FLIP-FLOP' }],
+      ['SR FLIP-FLOP (SET-RESET)', { key: 'SR', label: 'SR FLIP-FLOP' }],
+      ['JK FLIP-FLOP', { key: 'JK', label: 'JK FLIP-FLOP' }],
+    ]);
+
+    document.querySelectorAll('.truth-card h3').forEach((h3) => {
+      if (h3.querySelector('.component-info-btn')) return;
+
+      const componentKey = h3.dataset.component;
+      const rawTitle = h3.textContent.trim().replace(/\s+/g, ' ');
+      const info = componentKey ? titleMap.get(componentKey) : titleMap.get(rawTitle);
+      if (!info) return;
+
+      const titleSpan = h3.querySelector('.component-title') || document.createElement('span');
+      titleSpan.className = 'component-title';
+      titleSpan.textContent = info.label;
+
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'component-info-btn';
+      btn.textContent = 'i';
+      btn.setAttribute('aria-label', `Show ${info.label} structure diagram`);
+      btn.addEventListener('click', (event) => {
+        event.stopPropagation();
+        openComponentDiagram(info.key, info.label);
+      });
+
+      if (!h3.querySelector('.component-title')) {
+        h3.textContent = '';
+        h3.append(titleSpan, btn);
+      } else {
+        h3.append(btn);
+      }
     });
   }
 
@@ -341,6 +688,11 @@
     const result = Engine.evaluate(level, State.getFfStates());
     State.setEvalResult(result);
 
+    // Lower the clock after evaluation so the rising edge is detected exactly once.
+    if (State.clockHigh) {
+      State.lowerClock();
+    }
+
     Renderer.render(level, result, State.hoveredNodeId, result.solved);
 
     // Trigger win sequence if newly solved
@@ -463,25 +815,37 @@
 
   // ── Info Overlay Handlers ───────────────────────────────
   function openInfoOverlay() {
+    closeComponentDiagram();
     infoOverlay.classList.remove('hidden');
     infoOverlay.setAttribute('aria-hidden', 'false');
   }
 
   function closeInfoOverlay() {
+    closeComponentDiagram();
     infoOverlay.classList.add('hidden');
     infoOverlay.setAttribute('aria-hidden', 'true');
   }
 
   btnInfo.addEventListener('click', openInfoOverlay);
   btnInfoClose.addEventListener('click', closeInfoOverlay);
+  btnDiagramClose.addEventListener('click', closeComponentDiagram);
 
   // Close when clicking the dark backdrop
   infoOverlay.addEventListener('click', (e) => {
     if (e.target === infoOverlay) closeInfoOverlay();
   });
 
+  diagramOverlay.addEventListener('click', (e) => {
+    if (e.target === diagramOverlay) closeComponentDiagram();
+  });
+
   // Keyboard accessibility
   window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !diagramOverlay.classList.contains('hidden')) {
+      closeComponentDiagram();
+      return;
+    }
+
     if (e.key === 'Escape' && !infoOverlay.classList.contains('hidden')) {
       closeInfoOverlay();
       return;
@@ -498,6 +862,7 @@
   });
 
   colorizeTruthTableBits();
+  setupComponentInfoButtons();
 
   // ── Input Callbacks ───────────────────────────────────────
   Input.init(canvas, {

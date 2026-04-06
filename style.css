@@ -308,6 +308,7 @@ html, body {
 #final-overlay,
 #menu-overlay,
 #hint-overlay,
+#diagram-overlay,
 #info-overlay {
   position: fixed;
   inset: 0;
@@ -324,6 +325,7 @@ html, body {
 #final-overlay.hidden,
 #menu-overlay.hidden,
 #hint-overlay.hidden,
+#diagram-overlay.hidden,
 #info-overlay.hidden {
   display: none;
 }
@@ -357,6 +359,61 @@ html, body {
     0 0 24px rgba(0, 212, 255, 0.12);
   padding: 20px;
   animation: slideUp 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+#diagram-overlay {
+  z-index: 240;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+#diagram-box {
+  width: min(960px, calc(100vw - 24px));
+  max-height: min(760px, calc(100vh - 24px));
+  overflow: auto;
+  background: linear-gradient(180deg, rgba(15,21,32,0.99) 0%, rgba(10,14,20,0.98) 100%);
+  border: 1px solid var(--border-bright);
+  border-radius: 10px;
+  padding: 22px;
+  box-shadow:
+    0 0 60px rgba(0, 0, 0, 0.6),
+    0 0 24px rgba(0, 212, 255, 0.1);
+  animation: slideUp 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+#diagram-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  padding-bottom: 12px;
+  margin-bottom: 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+#diagram-title {
+  font-size: 22px;
+  letter-spacing: 4px;
+  color: var(--accent-cyan);
+  font-weight: 700;
+}
+
+#diagram-subtitle {
+  margin-top: 4px;
+  font-size: 12px;
+  letter-spacing: 2px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+}
+
+#diagram-content {
+  display: grid;
+  place-items: center;
+}
+
+#diagram-content svg {
+  width: 100%;
+  height: auto;
+  display: block;
 }
 
 #menu-box {
@@ -658,10 +715,91 @@ html, body {
 }
 
 .truth-card h3 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
   font-size: 13px;
   letter-spacing: 2px;
   color: var(--text-primary);
   margin-bottom: 8px;
+}
+
+.truth-card h3 .component-title {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.ff-type-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 34px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 999px;
+  border: 1px solid var(--border-bright);
+  background: rgba(160, 96, 255, 0.12);
+  color: #caa0ff;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  flex: 0 0 auto;
+}
+
+.ff-type-d {
+  border-color: rgba(0, 212, 255, 0.5);
+  background: rgba(0, 212, 255, 0.12);
+  color: #7fe7ff;
+}
+
+.ff-type-t {
+  border-color: rgba(57, 255, 20, 0.45);
+  background: rgba(57, 255, 20, 0.1);
+  color: #97ff82;
+}
+
+.ff-type-sr {
+  border-color: rgba(255, 215, 0, 0.5);
+  background: rgba(255, 215, 0, 0.1);
+  color: #ffe38a;
+}
+
+.ff-type-jk {
+  border-color: rgba(160, 96, 255, 0.55);
+  background: rgba(160, 96, 255, 0.14);
+  color: #d4b6ff;
+}
+
+.component-title {
+  min-width: 0;
+}
+
+.component-info-btn {
+  width: 20px;
+  height: 20px;
+  min-width: 20px;
+  padding: 0;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 212, 255, 0.75);
+  background: rgba(0, 212, 255, 0.12);
+  color: var(--accent-cyan);
+  font-size: 12px;
+  line-height: 1;
+  letter-spacing: 0;
+  font-weight: 700;
+  text-transform: none;
+  flex: 0 0 auto;
+}
+
+.component-info-btn:hover {
+  background: rgba(0, 212, 255, 0.24);
+  box-shadow: 0 0 10px rgba(0, 212, 255, 0.25);
+}
+
+.component-info-btn:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
 }
 
 .truth-card table {
@@ -1057,6 +1195,12 @@ button:active {
   #info-box {
     width: calc(100vw - 16px);
     max-height: calc(100vh - 84px);
+    padding: 14px;
+  }
+
+  #diagram-box {
+    width: calc(100vw - 16px);
+    max-height: calc(100vh - 16px);
     padding: 14px;
   }
 

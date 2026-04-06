@@ -245,7 +245,7 @@ const Renderer = (() => {
         return { x: node.x - hw, y: node.y + 22 };
       }
       // Data inputs distributed on the left side
-      const ffInputCount = _ffDataInputCount(node.type);
+      const ffInputCount = _ffDataInputCount(node);
       const spread = 20;
       const totalH = (ffInputCount - 1) * spread;
       const offsetY = inputIndex * spread - totalH / 2;
@@ -254,8 +254,11 @@ const Renderer = (() => {
     return { x: node.x - NODE.inputR, y: node.y };
   }
 
-  function _ffDataInputCount(type) {
-    return { FLIPFLOP_D: 1, FLIPFLOP_T: 1, FLIPFLOP_SR: 2, FLIPFLOP_JK: 2 }[type] || 1;
+  function _ffDataInputCount(node) {
+    if (node.type === 'FF_SLOT') {
+      return (node.ffType === 'SR' || node.ffType === 'JK') ? 2 : 1;
+    }
+    return { FLIPFLOP_D: 1, FLIPFLOP_T: 1, FLIPFLOP_SR: 2, FLIPFLOP_JK: 2 }[node.type] || 1;
   }
 
   // ── Nodes ─────────────────────────────────────────────────
@@ -362,7 +365,7 @@ const Renderer = (() => {
     const y = node.y - h / 2;
     ctx.save();
 
-    const isEmpty = node.gate === null;
+    const isEmpty = node.gate == null;
     if (hovered) { ctx.shadowColor = 'rgba(0,212,255,0.5)'; ctx.shadowBlur = 20; }
 
     ctx.fillStyle = isEmpty ? 'rgba(10,20,35,0.92)' : 'rgba(14,31,51,0.96)';

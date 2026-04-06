@@ -136,7 +136,7 @@ const Engine = (() => {
         nodeValues.set(id + '__qnot', ffState.qNot);
 
       } else if (node.type === 'GATE_SLOT') {
-        if (node.gate === null) {
+        if (node.gate == null) {
           value = null;
         } else {
           const inputSlots = inputs.get(id);
@@ -236,7 +236,7 @@ const Engine = (() => {
 
         let value = null;
         if (node.type === 'GATE_SLOT') {
-          if (node.gate !== null) {
+          if (node.gate != null) {
             const inputSlots = inputs.get(id);
             const args = inputSlots.map(slot => nodeValues.get(slot.sourceId));
             if (!args.some(a => a === null || a === undefined)) {

@@ -714,6 +714,31 @@ html, body {
   padding: 10px;
 }
 
+.gate-symbol-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 8px 4px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 8px;
+}
+
+.gate-svg {
+  width: 86px;
+  height: 48px;
+  flex-shrink: 0;
+}
+
+.gate-formula {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: 1px;
+  white-space: nowrap;
+}
+
 .truth-card h3 {
   display: flex;
   align-items: center;

@@ -33,9 +33,10 @@
   const diagramSubtitle = document.getElementById('diagram-subtitle');
   const diagramContent = document.getElementById('diagram-content');
   const btnDiagramClose = document.getElementById('btn-diagram-close');
-  const btnNext     = document.getElementById('btn-next');
-  const btnRestart  = document.getElementById('btn-restart');
-  const btnPlayAgain = document.getElementById('btn-play-again');
+  const btnNext       = document.getElementById('btn-next');
+  const btnRestart    = document.getElementById('btn-restart');
+  const btnWinStages  = document.getElementById('btn-win-stages');
+  const btnPlayAgain  = document.getElementById('btn-play-again');
 
   // ── Clock UI References ───────────────────────────────────
   const clockControls = document.getElementById('clock-controls');
@@ -236,33 +237,71 @@
       `);}
 
     // ── XOR ───────────────────────────────────────────────────
-    // Transmission-gate XOR: INV(A) generates Ā, then two TGs select B or B̄
+    // Gate-level XOR: NOT(A)=Ā, AND1(A,B̄)=AB̄, AND2(Ā,B)=ĀB, OR(AB̄, ĀB)=A⊕B
     case 'XOR':{
-      const vY=82, gY=420, icx=130, ipY=180, inY=316, imid=248, igx=68;
-      return SHELL('XOR GATE','Transmission-Gate XOR  ·  1 PMOS + 1 NMOS + 2 TG pairs',`
-        ${VDD(icx,vY)}
-        ${T(icx,ipY,'P',igx,vY,imid,'P0')}
-        ${DOT(icx,imid,NC)}
-        ${T(icx,inY,'N',igx,imid,gY,'N0')}
-        ${GND(icx,gY)}
-        ${IN(48,imid,'A')}
-        ${L(65,imid,igx,imid,AC,2.5)}
-        ${L(igx,ipY,igx,inY,AC,1.5)}
-        ${DOT(igx,imid,AC)}
-        ${L(icx,imid,226,imid,NC,1.5)}
-        <text x="${icx+20}" y="${imid+18}" fill="${NC}" font-size="13" font-family="monospace" font-weight="bold">Ā</text>
-        ${DIVIDER(210)}
-        <text x="222" y="82" fill="${DC}" font-size="11" font-family="monospace">TG1: passes B when A=0</text>
-        ${BLK(222,92,220,130,'P1 + N1',`P1 gate=A  ·  N1 gate=Ā`,PC)}
-        ${IN(264,148,'B')}${L(264,165,264,92,AC,2)}${DOT(264,148,AC)}
-        ${L(442,157,490,200,OC,2)}
-        <text x="222" y="262" fill="${DC}" font-size="11" font-family="monospace">TG2: passes B̄ when A=1</text>
-        ${BLK(222,272,220,130,'P2 + N2',`P2 gate=Ā  ·  N2 gate=A`,NC)}
-        ${IN(264,328,'B̄')}${L(264,345,264,272,AC,2)}${DOT(264,328,AC)}
-        ${L(442,337,490,296,OC,2)}
-        ${DOT(490,248,OC)}${L(490,200,490,296,OC,2)}${L(490,248,596,248,OC,2.5)}${OUTNODE(596,248)}
-        <text x="222" y="436" fill="${DC}" font-size="10" font-family="monospace">TG = PMOS‖NMOS in parallel. Both ON = signal passes. Complementary gates ensure one active at a time.</text>
-        ${NOTE('TG1 ON when A=0 → passes B. TG2 ON when A=1 → passes B̄. OUT = A⊕B.')}
+      // SVG gate helper — draws a standard gate shape inline
+      function GSVG(x,y,type,inputs,outLbl){
+        const W=78,H=52,cy=y+H/2;
+        let body='';
+        if(type==='NOT'){
+          body=`<polygon points="${x+8},${y+4} ${x+8},${y+H-4} ${x+W-18},${cy}" fill="rgba(0,212,255,0.09)" stroke="${OC}" stroke-width="2" stroke-linejoin="round"/>
+                <circle cx="${x+W-6}" cy="${cy}" r="7" fill="${BG}" stroke="${OC}" stroke-width="2"/>`;
+          return body+`<line x1="${x}" y1="${cy}" x2="${x+8}" y2="${cy}" stroke="${OC}" stroke-width="1.8"/>
+                       <line x1="${x+W+1}" y1="${cy}" x2="${x+W+18}" y2="${cy}" stroke="${OC}" stroke-width="1.8"/>
+                       <text x="${x+W+20}" y="${cy+4}" fill="${TC}" font-size="11" font-family="monospace">${outLbl}</text>
+                       <text x="${x-14}" y="${cy+4}" fill="${AC}" font-size="11" font-family="monospace">${inputs[0]}</text>`;
+        }
+        if(type==='AND'){
+          body=`<path d="M${x+8},${y+5} L${x+8},${y+H-5} Q${x+W-8},${y+H-5} ${x+W-8},${cy} Q${x+W-8},${y+5} ${x+8},${y+5} Z" fill="rgba(0,212,255,0.09)" stroke="${OC}" stroke-width="2" stroke-linejoin="round"/>`;
+          return body+`<line x1="${x}" y1="${y+16}" x2="${x+8}" y2="${y+16}" stroke="${OC}" stroke-width="1.8"/>
+                       <line x1="${x}" y1="${y+H-16}" x2="${x+8}" y2="${y+H-16}" stroke="${OC}" stroke-width="1.8"/>
+                       <line x1="${x+W-8}" y1="${cy}" x2="${x+W+18}" y2="${cy}" stroke="${OC}" stroke-width="1.8"/>
+                       <text x="${x-14}" y="${y+20}" fill="${AC}" font-size="11" font-family="monospace">${inputs[0]}</text>
+                       <text x="${x-14}" y="${y+H-12}" fill="${AC}" font-size="11" font-family="monospace">${inputs[1]}</text>
+                       <text x="${x+W+20}" y="${cy+4}" fill="${TC}" font-size="11" font-family="monospace">${outLbl}</text>`;
+        }
+        if(type==='OR'){
+          body=`<path d="M${x+8},${y+5} Q${x+28},${y+5} ${x+W-8},${cy} Q${x+28},${y+H-5} ${x+8},${y+H-5} Q${x+20},${cy} ${x+8},${y+5} Z" fill="rgba(0,212,255,0.09)" stroke="${OC}" stroke-width="2" stroke-linejoin="round"/>`;
+          return body+`<line x1="${x}" y1="${y+16}" x2="${x+13}" y2="${y+16}" stroke="${OC}" stroke-width="1.8"/>
+                       <line x1="${x}" y1="${y+H-16}" x2="${x+13}" y2="${y+H-16}" stroke="${OC}" stroke-width="1.8"/>
+                       <line x1="${x+W-8}" y1="${cy}" x2="${x+W+18}" y2="${cy}" stroke="${OC}" stroke-width="1.8"/>
+                       <text x="${x-14}" y="${y+20}" fill="${AC}" font-size="11" font-family="monospace">${inputs[0]}</text>
+                       <text x="${x-14}" y="${y+H-12}" fill="${AC}" font-size="11" font-family="monospace">${inputs[1]}</text>
+                       <text x="${x+W+20}" y="${cy+4}" fill="${TC}" font-size="11" font-family="monospace">${outLbl}</text>`;
+        }
+        return '';
+      }
+
+      // Layout: NOT at left, two ANDs in middle, OR at right
+      // NOT(A): col 100, row 200  → Ā
+      // AND1(A, B): col 280, row 130  → A·B̄ (note: A AND !B actually — see formula below)
+      // AND2(Ā, B): col 280, row 310  → Ā·B
+      // OR(AND1, AND2): col 490, row 220 → A⊕B
+      return SHELL('XOR GATE','Gate-Level XOR  ·  NOT + AND + AND + OR',`
+        ${IN(42,220,'A')}
+        ${IN(42,340,'B')}
+        ${L(59,220,90,220,AC,2)}
+        ${L(59,340,480,340,AC,2)}
+        ${DOT(90,220,AC)}
+
+        ${GSVG(90,194,'NOT',['A'],'Ā')}
+        ${L(90,220,90,194,AC,1.5)}
+
+        ${DOT(192,220,WC)}${L(192,220,264,160,WC,1.8)}
+        ${DOT(192,220,WC)}${L(192,220,264,300,WC,1.8)}
+        <text x="196" y="216" fill="${NC}" font-size="12" font-family="monospace" font-weight="bold">Ā</text>
+        ${L(168,220,264,220,NC,1.8)}
+
+        ${GSVG(264,130,'AND',['A','Ā'],'A·Ā')}
+        ${GSVG(264,270,'AND',['Ā','B'],'Ā·B')}
+
+        ${L(360,156,460,240,OC,1.8)}
+        ${L(360,296,460,260,OC,1.8)}
+
+        ${GSVG(460,216,'OR',['',''],'OUT')}
+        ${L(556,242,614,242,OC,2.5)}${OUTNODE(614,242)}
+
+        <text x="22" y="444" fill="${DC}" font-size="11" font-family="monospace">XOR = (A·B̄) + (Ā·B)  — output is 1 when exactly one input is 1</text>
       `);}
 
     // ── FLIP-FLOPS (structural block diagrams) ────────────────
@@ -786,6 +825,11 @@
   btnRestart.addEventListener('click', () => {
     winOverlay.classList.add('hidden');
     loadLevel(State.currentLevelIndex);
+  });
+
+  btnWinStages.addEventListener('click', () => {
+    winOverlay.classList.add('hidden');
+    openMenuOverlay();
   });
 
   btnPlayAgain.addEventListener('click', () => {

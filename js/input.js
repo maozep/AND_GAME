@@ -1,3 +1,31 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* ============================================================
    input.js — Mouse Interaction Handler
    Supports dragging both logic gates (GATE_SLOT) and

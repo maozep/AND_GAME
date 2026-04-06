@@ -90,6 +90,7 @@
       <div id="win-best"></div>
       <button id="btn-next">NEXT LEVEL →</button>
       <button id="btn-restart" class="btn-secondary">RESTART</button>
+      <button id="btn-win-stages" class="btn-secondary">STAGES</button>
     </div>
   </div>
 
@@ -114,6 +115,18 @@
       <div id="truth-grid">
         <section class="truth-card">
           <h3>AND</h3>
+          <div class="gate-symbol-row">
+            <svg class="gate-svg" viewBox="0 0 86 48" xmlns="http://www.w3.org/2000/svg">
+              <path d="M10,4 L10,44 Q58,44 58,24 Q58,4 10,4 Z" fill="rgba(0,212,255,0.08)" stroke="#00d4ff" stroke-width="2.5" stroke-linejoin="round"/>
+              <line x1="0" y1="15" x2="10" y2="15" stroke="#00d4ff" stroke-width="2"/>
+              <line x1="0" y1="33" x2="10" y2="33" stroke="#00d4ff" stroke-width="2"/>
+              <line x1="58" y1="24" x2="76" y2="24" stroke="#00d4ff" stroke-width="2"/>
+              <text x="1" y="14" font-size="9" fill="#4a8fff" font-family="monospace">A</text>
+              <text x="1" y="36" font-size="9" fill="#4a8fff" font-family="monospace">B</text>
+              <text x="78" y="28" font-size="9" fill="#4a8fff" font-family="monospace">Z</text>
+            </svg>
+            <span class="gate-formula">Z = A · B</span>
+          </div>
           <table>
             <thead><tr><th>A</th><th>B</th><th>OUT</th></tr></thead>
             <tbody>
@@ -127,6 +140,18 @@
 
         <section class="truth-card">
           <h3>OR</h3>
+          <div class="gate-symbol-row">
+            <svg class="gate-svg" viewBox="0 0 86 48" xmlns="http://www.w3.org/2000/svg">
+              <path d="M6,4 Q28,4 58,24 Q28,44 6,44 Q19,24 6,4 Z" fill="rgba(0,212,255,0.08)" stroke="#00d4ff" stroke-width="2.5" stroke-linejoin="round"/>
+              <line x1="0" y1="15" x2="12" y2="15" stroke="#00d4ff" stroke-width="2"/>
+              <line x1="0" y1="33" x2="12" y2="33" stroke="#00d4ff" stroke-width="2"/>
+              <line x1="58" y1="24" x2="76" y2="24" stroke="#00d4ff" stroke-width="2"/>
+              <text x="1" y="14" font-size="9" fill="#4a8fff" font-family="monospace">A</text>
+              <text x="1" y="36" font-size="9" fill="#4a8fff" font-family="monospace">B</text>
+              <text x="78" y="28" font-size="9" fill="#4a8fff" font-family="monospace">Z</text>
+            </svg>
+            <span class="gate-formula">Z = A + B</span>
+          </div>
           <table>
             <thead><tr><th>A</th><th>B</th><th>OUT</th></tr></thead>
             <tbody>
@@ -140,6 +165,19 @@
 
         <section class="truth-card">
           <h3>XOR</h3>
+          <div class="gate-symbol-row">
+            <svg class="gate-svg" viewBox="0 0 86 48" xmlns="http://www.w3.org/2000/svg">
+              <path d="M4,4 Q16,24 4,44" fill="none" stroke="#00d4ff" stroke-width="2.5" stroke-linecap="round"/>
+              <path d="M12,4 Q34,4 60,24 Q34,44 12,44 Q24,24 12,4 Z" fill="rgba(0,212,255,0.08)" stroke="#00d4ff" stroke-width="2.5" stroke-linejoin="round"/>
+              <line x1="0" y1="15" x2="18" y2="15" stroke="#00d4ff" stroke-width="2"/>
+              <line x1="0" y1="33" x2="18" y2="33" stroke="#00d4ff" stroke-width="2"/>
+              <line x1="60" y1="24" x2="76" y2="24" stroke="#00d4ff" stroke-width="2"/>
+              <text x="1" y="14" font-size="9" fill="#4a8fff" font-family="monospace">A</text>
+              <text x="1" y="36" font-size="9" fill="#4a8fff" font-family="monospace">B</text>
+              <text x="78" y="28" font-size="9" fill="#4a8fff" font-family="monospace">Z</text>
+            </svg>
+            <span class="gate-formula">Z = A ⊕ B</span>
+          </div>
           <table>
             <thead><tr><th>A</th><th>B</th><th>OUT</th></tr></thead>
             <tbody>
@@ -153,6 +191,19 @@
 
         <section class="truth-card">
           <h3>NAND</h3>
+          <div class="gate-symbol-row">
+            <svg class="gate-svg" viewBox="0 0 86 48" xmlns="http://www.w3.org/2000/svg">
+              <path d="M10,4 L10,44 Q52,44 52,24 Q52,4 10,4 Z" fill="rgba(0,212,255,0.08)" stroke="#00d4ff" stroke-width="2.5" stroke-linejoin="round"/>
+              <circle cx="59" cy="24" r="7" fill="rgba(4,12,24,0.85)" stroke="#00d4ff" stroke-width="2.5"/>
+              <line x1="0" y1="15" x2="10" y2="15" stroke="#00d4ff" stroke-width="2"/>
+              <line x1="0" y1="33" x2="10" y2="33" stroke="#00d4ff" stroke-width="2"/>
+              <line x1="66" y1="24" x2="76" y2="24" stroke="#00d4ff" stroke-width="2"/>
+              <text x="1" y="14" font-size="9" fill="#4a8fff" font-family="monospace">A</text>
+              <text x="1" y="36" font-size="9" fill="#4a8fff" font-family="monospace">B</text>
+              <text x="78" y="28" font-size="9" fill="#4a8fff" font-family="monospace">Z</text>
+            </svg>
+            <span class="gate-formula">Z = (A · B)′</span>
+          </div>
           <table>
             <thead><tr><th>A</th><th>B</th><th>OUT</th></tr></thead>
             <tbody>
@@ -166,6 +217,19 @@
 
         <section class="truth-card">
           <h3>NOR</h3>
+          <div class="gate-symbol-row">
+            <svg class="gate-svg" viewBox="0 0 86 48" xmlns="http://www.w3.org/2000/svg">
+              <path d="M6,4 Q26,4 52,24 Q26,44 6,44 Q18,24 6,4 Z" fill="rgba(0,212,255,0.08)" stroke="#00d4ff" stroke-width="2.5" stroke-linejoin="round"/>
+              <circle cx="59" cy="24" r="7" fill="rgba(4,12,24,0.85)" stroke="#00d4ff" stroke-width="2.5"/>
+              <line x1="0" y1="15" x2="11" y2="15" stroke="#00d4ff" stroke-width="2"/>
+              <line x1="0" y1="33" x2="11" y2="33" stroke="#00d4ff" stroke-width="2"/>
+              <line x1="66" y1="24" x2="76" y2="24" stroke="#00d4ff" stroke-width="2"/>
+              <text x="1" y="14" font-size="9" fill="#4a8fff" font-family="monospace">A</text>
+              <text x="1" y="36" font-size="9" fill="#4a8fff" font-family="monospace">B</text>
+              <text x="78" y="28" font-size="9" fill="#4a8fff" font-family="monospace">Z</text>
+            </svg>
+            <span class="gate-formula">Z = (A + B)′</span>
+          </div>
           <table>
             <thead><tr><th>A</th><th>B</th><th>OUT</th></tr></thead>
             <tbody>
@@ -179,6 +243,17 @@
 
         <section class="truth-card">
           <h3>NOT</h3>
+          <div class="gate-symbol-row">
+            <svg class="gate-svg" viewBox="0 0 80 48" xmlns="http://www.w3.org/2000/svg">
+              <polygon points="10,4 10,44 52,24" fill="rgba(0,212,255,0.08)" stroke="#00d4ff" stroke-width="2.5" stroke-linejoin="round"/>
+              <circle cx="59" cy="24" r="7" fill="rgba(4,12,24,0.85)" stroke="#00d4ff" stroke-width="2.5"/>
+              <line x1="0" y1="24" x2="10" y2="24" stroke="#00d4ff" stroke-width="2"/>
+              <line x1="66" y1="24" x2="76" y2="24" stroke="#00d4ff" stroke-width="2"/>
+              <text x="1" y="22" font-size="9" fill="#4a8fff" font-family="monospace">A</text>
+              <text x="78" y="28" font-size="9" fill="#4a8fff" font-family="monospace">Z</text>
+            </svg>
+            <span class="gate-formula">Z = Ā</span>
+          </div>
           <table>
             <thead><tr><th>A</th><th>OUT</th></tr></thead>
             <tbody>

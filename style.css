@@ -683,6 +683,25 @@ html, body {
   background: transparent;
 }
 
+/* Sequential/Flip-Flop Cards */
+.ff-info-card {
+  border-left: 3px solid #a060ff;
+  background: rgba(160, 96, 255, 0.05);
+}
+
+.ff-info-card h3 {
+  color: #c080ff;
+  letter-spacing: 2px;
+}
+
+.ff-desc {
+  font-size: 12px;
+  color: var(--text-dim);
+  margin: 8px 0;
+  font-style: italic;
+  line-height: 1.5;
+}
+
 #win-icon,
 #final-icon {
   font-size: 48px;

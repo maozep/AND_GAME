@@ -91,7 +91,16 @@ const State = (() => {
 
     setGate(nodeId, gate) {
       const node = _level.nodes.find(n => n.id === nodeId);
-      if (node && node.type === 'GATE_SLOT') node.gate = gate;
+      if (!node || node.type !== 'GATE_SLOT') return;
+      node.gate = gate;
+      // Propagate to all linked gate slots in the same group
+      if (node.linkedGroup) {
+        _level.nodes.forEach(n => {
+          if (n.type === 'GATE_SLOT' && n.linkedGroup === node.linkedGroup && n.id !== nodeId) {
+            n.gate = gate;
+          }
+        });
+      }
     },
 
     // Place a flip-flop type into an FF_SLOT node.
@@ -111,6 +120,7 @@ const State = (() => {
       if (!_level) return;
       _level.nodes.forEach(n => {
         if (n.type === 'GATE_SLOT') n.gate = null;
+        if (n.type === 'FF_SLOT') n.ffType = null;
       });
       _solved     = false;
       _evalResult = null;

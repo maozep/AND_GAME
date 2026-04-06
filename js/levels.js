@@ -15,109 +15,247 @@ const LEVELS = [
   // One to three gate slots. Introduces each gate type.
   // ════════════════════════════════════════════════════════════
 
-  // L1 — AND GATE
+  // L1 — AND GATE  (4 cases: all input combos, only AND satisfies all)
   {
     id: 1, name: 'AND GATE', difficulty: '1. Basics',
-    description: 'Output is 1 only when BOTH inputs are 1. Place the right gate.',
-    hint: 'Use AND: it outputs 1 only when A=1 AND B=1.',
+    description: 'Find the single gate that produces the correct output for ALL four input combinations.',
+    instruction: 'בחר את השער היחיד שמתאים לכל המקרים',
+    hint: 'AND outputs 1 ONLY when both inputs are 1. Check all four rows.',
     nodes: [
-      { id: 'in_A', type: 'INPUT',     x: 200, y: 320, fixedValue: 1, label: 'A' },
-      { id: 'in_B', type: 'INPUT',     x: 200, y: 480, fixedValue: 1, label: 'B' },
-      { id: 'g1',   type: 'GATE_SLOT', x: 550, y: 400 },
-      { id: 'out_Z',type: 'OUTPUT',    x: 900, y: 400, targetValue: 1, label: 'Z' },
+      // Case 1: A=0, B=0 → 0
+      { id: 'c1_A', type: 'INPUT',     x: 200, y: 140, fixedValue: 0, label: 'A' },
+      { id: 'c1_B', type: 'INPUT',     x: 200, y: 240, fixedValue: 0, label: 'B' },
+      { id: 'c1_g', type: 'GATE_SLOT', x: 550, y: 190, linkedGroup: 'main' },
+      { id: 'c1_Z', type: 'OUTPUT',    x: 900, y: 190, targetValue: 0, label: 'Z' },
+      // Case 2: A=0, B=1 → 0
+      { id: 'c2_A', type: 'INPUT',     x: 200, y: 310, fixedValue: 0, label: 'A' },
+      { id: 'c2_B', type: 'INPUT',     x: 200, y: 410, fixedValue: 1, label: 'B' },
+      { id: 'c2_g', type: 'GATE_SLOT', x: 550, y: 360, linkedGroup: 'main' },
+      { id: 'c2_Z', type: 'OUTPUT',    x: 900, y: 360, targetValue: 0, label: 'Z' },
+      // Case 3: A=1, B=0 → 0
+      { id: 'c3_A', type: 'INPUT',     x: 200, y: 480, fixedValue: 1, label: 'A' },
+      { id: 'c3_B', type: 'INPUT',     x: 200, y: 580, fixedValue: 0, label: 'B' },
+      { id: 'c3_g', type: 'GATE_SLOT', x: 550, y: 530, linkedGroup: 'main' },
+      { id: 'c3_Z', type: 'OUTPUT',    x: 900, y: 530, targetValue: 0, label: 'Z' },
+      // Case 4: A=1, B=1 → 1
+      { id: 'c4_A', type: 'INPUT',     x: 200, y: 650, fixedValue: 1, label: 'A' },
+      { id: 'c4_B', type: 'INPUT',     x: 200, y: 750, fixedValue: 1, label: 'B' },
+      { id: 'c4_g', type: 'GATE_SLOT', x: 550, y: 700, linkedGroup: 'main' },
+      { id: 'c4_Z', type: 'OUTPUT',    x: 900, y: 700, targetValue: 1, label: 'Z' },
     ],
     wires: [
-      { id: 'w1', sourceId: 'in_A', targetId: 'g1',    targetInputIndex: 0 },
-      { id: 'w2', sourceId: 'in_B', targetId: 'g1',    targetInputIndex: 1 },
-      { id: 'w3', sourceId: 'g1',   targetId: 'out_Z', targetInputIndex: 0 },
+      { id: 'c1w1', sourceId: 'c1_A', targetId: 'c1_g', targetInputIndex: 0 },
+      { id: 'c1w2', sourceId: 'c1_B', targetId: 'c1_g', targetInputIndex: 1 },
+      { id: 'c1w3', sourceId: 'c1_g', targetId: 'c1_Z', targetInputIndex: 0 },
+      { id: 'c2w1', sourceId: 'c2_A', targetId: 'c2_g', targetInputIndex: 0 },
+      { id: 'c2w2', sourceId: 'c2_B', targetId: 'c2_g', targetInputIndex: 1 },
+      { id: 'c2w3', sourceId: 'c2_g', targetId: 'c2_Z', targetInputIndex: 0 },
+      { id: 'c3w1', sourceId: 'c3_A', targetId: 'c3_g', targetInputIndex: 0 },
+      { id: 'c3w2', sourceId: 'c3_B', targetId: 'c3_g', targetInputIndex: 1 },
+      { id: 'c3w3', sourceId: 'c3_g', targetId: 'c3_Z', targetInputIndex: 0 },
+      { id: 'c4w1', sourceId: 'c4_A', targetId: 'c4_g', targetInputIndex: 0 },
+      { id: 'c4w2', sourceId: 'c4_B', targetId: 'c4_g', targetInputIndex: 1 },
+      { id: 'c4w3', sourceId: 'c4_g', targetId: 'c4_Z', targetInputIndex: 0 },
     ],
   },
 
-  // L2 — OR GATE
+  // L2 — OR GATE  (4 cases)
   {
     id: 2, name: 'OR GATE', difficulty: '1. Basics',
-    description: 'Output is 1 when AT LEAST ONE input is 1. Identify the gate.',
-    hint: 'Use OR: it outputs 1 when A=1 OR B=1 (or both).',
+    description: 'Find the single gate that produces the correct output for ALL four input combinations.',
+    instruction: 'בחר את השער היחיד שמתאים לכל המקרים',
+    hint: 'OR outputs 1 when at least one input is 1. Only OR matches all four rows.',
     nodes: [
-      { id: 'in_A', type: 'INPUT',     x: 200, y: 320, fixedValue: 0, label: 'A' },
-      { id: 'in_B', type: 'INPUT',     x: 200, y: 480, fixedValue: 1, label: 'B' },
-      { id: 'g1',   type: 'GATE_SLOT', x: 550, y: 400 },
-      { id: 'out_Z',type: 'OUTPUT',    x: 900, y: 400, targetValue: 1, label: 'Z' },
+      // Case 1: A=0, B=0 → 0
+      { id: 'c1_A', type: 'INPUT',     x: 200, y: 140, fixedValue: 0, label: 'A' },
+      { id: 'c1_B', type: 'INPUT',     x: 200, y: 240, fixedValue: 0, label: 'B' },
+      { id: 'c1_g', type: 'GATE_SLOT', x: 550, y: 190, linkedGroup: 'main' },
+      { id: 'c1_Z', type: 'OUTPUT',    x: 900, y: 190, targetValue: 0, label: 'Z' },
+      // Case 2: A=0, B=1 → 1
+      { id: 'c2_A', type: 'INPUT',     x: 200, y: 310, fixedValue: 0, label: 'A' },
+      { id: 'c2_B', type: 'INPUT',     x: 200, y: 410, fixedValue: 1, label: 'B' },
+      { id: 'c2_g', type: 'GATE_SLOT', x: 550, y: 360, linkedGroup: 'main' },
+      { id: 'c2_Z', type: 'OUTPUT',    x: 900, y: 360, targetValue: 1, label: 'Z' },
+      // Case 3: A=1, B=0 → 1
+      { id: 'c3_A', type: 'INPUT',     x: 200, y: 480, fixedValue: 1, label: 'A' },
+      { id: 'c3_B', type: 'INPUT',     x: 200, y: 580, fixedValue: 0, label: 'B' },
+      { id: 'c3_g', type: 'GATE_SLOT', x: 550, y: 530, linkedGroup: 'main' },
+      { id: 'c3_Z', type: 'OUTPUT',    x: 900, y: 530, targetValue: 1, label: 'Z' },
+      // Case 4: A=1, B=1 → 1
+      { id: 'c4_A', type: 'INPUT',     x: 200, y: 650, fixedValue: 1, label: 'A' },
+      { id: 'c4_B', type: 'INPUT',     x: 200, y: 750, fixedValue: 1, label: 'B' },
+      { id: 'c4_g', type: 'GATE_SLOT', x: 550, y: 700, linkedGroup: 'main' },
+      { id: 'c4_Z', type: 'OUTPUT',    x: 900, y: 700, targetValue: 1, label: 'Z' },
     ],
     wires: [
-      { id: 'w1', sourceId: 'in_A', targetId: 'g1',    targetInputIndex: 0 },
-      { id: 'w2', sourceId: 'in_B', targetId: 'g1',    targetInputIndex: 1 },
-      { id: 'w3', sourceId: 'g1',   targetId: 'out_Z', targetInputIndex: 0 },
+      { id: 'c1w1', sourceId: 'c1_A', targetId: 'c1_g', targetInputIndex: 0 },
+      { id: 'c1w2', sourceId: 'c1_B', targetId: 'c1_g', targetInputIndex: 1 },
+      { id: 'c1w3', sourceId: 'c1_g', targetId: 'c1_Z', targetInputIndex: 0 },
+      { id: 'c2w1', sourceId: 'c2_A', targetId: 'c2_g', targetInputIndex: 0 },
+      { id: 'c2w2', sourceId: 'c2_B', targetId: 'c2_g', targetInputIndex: 1 },
+      { id: 'c2w3', sourceId: 'c2_g', targetId: 'c2_Z', targetInputIndex: 0 },
+      { id: 'c3w1', sourceId: 'c3_A', targetId: 'c3_g', targetInputIndex: 0 },
+      { id: 'c3w2', sourceId: 'c3_B', targetId: 'c3_g', targetInputIndex: 1 },
+      { id: 'c3w3', sourceId: 'c3_g', targetId: 'c3_Z', targetInputIndex: 0 },
+      { id: 'c4w1', sourceId: 'c4_A', targetId: 'c4_g', targetInputIndex: 0 },
+      { id: 'c4w2', sourceId: 'c4_B', targetId: 'c4_g', targetInputIndex: 1 },
+      { id: 'c4w3', sourceId: 'c4_g', targetId: 'c4_Z', targetInputIndex: 0 },
     ],
   },
 
-  // L3 — NOT GATE
+  // L3 — NOT GATE  (2 cases: all input combos for single input)
   {
     id: 3, name: 'NOT GATE', difficulty: '1. Basics',
-    description: 'Flip the bit: 1 becomes 0, 0 becomes 1. Single input.',
-    hint: 'Use NOT: it inverts the input. NOT(1) = 0.',
+    description: 'Find the single gate that produces the correct output for ALL input combinations.',
+    instruction: 'בחר את השער היחיד שמתאים לכל המקרים',
+    hint: 'NOT inverts the input: 0→1, 1→0. It is the only single-input gate.',
     nodes: [
-      { id: 'in_A', type: 'INPUT',     x: 220, y: 400, fixedValue: 1, label: 'A' },
-      { id: 'g1',   type: 'GATE_SLOT', x: 560, y: 400 },
-      { id: 'out_Z',type: 'OUTPUT',    x: 900, y: 400, targetValue: 0, label: 'Z' },
+      // Case 1: A=0 → 1
+      { id: 'c1_A', type: 'INPUT',     x: 220, y: 300, fixedValue: 0, label: 'A' },
+      { id: 'c1_g', type: 'GATE_SLOT', x: 560, y: 300, linkedGroup: 'main' },
+      { id: 'c1_Z', type: 'OUTPUT',    x: 900, y: 300, targetValue: 1, label: 'Z' },
+      // Case 2: A=1 → 0
+      { id: 'c2_A', type: 'INPUT',     x: 220, y: 500, fixedValue: 1, label: 'A' },
+      { id: 'c2_g', type: 'GATE_SLOT', x: 560, y: 500, linkedGroup: 'main' },
+      { id: 'c2_Z', type: 'OUTPUT',    x: 900, y: 500, targetValue: 0, label: 'Z' },
     ],
     wires: [
-      { id: 'w1', sourceId: 'in_A', targetId: 'g1',    targetInputIndex: 0 },
-      { id: 'w2', sourceId: 'g1',   targetId: 'out_Z', targetInputIndex: 0 },
+      { id: 'c1w1', sourceId: 'c1_A', targetId: 'c1_g', targetInputIndex: 0 },
+      { id: 'c1w2', sourceId: 'c1_g', targetId: 'c1_Z', targetInputIndex: 0 },
+      { id: 'c2w1', sourceId: 'c2_A', targetId: 'c2_g', targetInputIndex: 0 },
+      { id: 'c2w2', sourceId: 'c2_g', targetId: 'c2_Z', targetInputIndex: 0 },
     ],
   },
 
-  // L4 — NAND GATE
+  // L4 — NAND GATE  (4 cases)
   {
     id: 4, name: 'NAND GATE', difficulty: '1. Basics',
-    description: 'AND followed by inversion. Output is LOW only when both inputs are HIGH.',
-    hint: 'Use NAND: output goes LOW only when A=1 AND B=1. Otherwise it stays HIGH.',
+    description: 'Find the single gate that produces the correct output for ALL four input combinations.',
+    instruction: 'בחר את השער היחיד שמתאים לכל המקרים',
+    hint: 'NAND is inverted AND: output is 0 ONLY when both inputs are 1.',
     nodes: [
-      { id: 'in_A', type: 'INPUT',     x: 200, y: 320, fixedValue: 1, label: 'A' },
-      { id: 'in_B', type: 'INPUT',     x: 200, y: 480, fixedValue: 1, label: 'B' },
-      { id: 'g1',   type: 'GATE_SLOT', x: 550, y: 400 },
-      { id: 'out_Z',type: 'OUTPUT',    x: 900, y: 400, targetValue: 0, label: 'Z' },
+      // Case 1: A=0, B=0 → 1
+      { id: 'c1_A', type: 'INPUT',     x: 200, y: 140, fixedValue: 0, label: 'A' },
+      { id: 'c1_B', type: 'INPUT',     x: 200, y: 240, fixedValue: 0, label: 'B' },
+      { id: 'c1_g', type: 'GATE_SLOT', x: 550, y: 190, linkedGroup: 'main' },
+      { id: 'c1_Z', type: 'OUTPUT',    x: 900, y: 190, targetValue: 1, label: 'Z' },
+      // Case 2: A=0, B=1 → 1
+      { id: 'c2_A', type: 'INPUT',     x: 200, y: 310, fixedValue: 0, label: 'A' },
+      { id: 'c2_B', type: 'INPUT',     x: 200, y: 410, fixedValue: 1, label: 'B' },
+      { id: 'c2_g', type: 'GATE_SLOT', x: 550, y: 360, linkedGroup: 'main' },
+      { id: 'c2_Z', type: 'OUTPUT',    x: 900, y: 360, targetValue: 1, label: 'Z' },
+      // Case 3: A=1, B=0 → 1
+      { id: 'c3_A', type: 'INPUT',     x: 200, y: 480, fixedValue: 1, label: 'A' },
+      { id: 'c3_B', type: 'INPUT',     x: 200, y: 580, fixedValue: 0, label: 'B' },
+      { id: 'c3_g', type: 'GATE_SLOT', x: 550, y: 530, linkedGroup: 'main' },
+      { id: 'c3_Z', type: 'OUTPUT',    x: 900, y: 530, targetValue: 1, label: 'Z' },
+      // Case 4: A=1, B=1 → 0
+      { id: 'c4_A', type: 'INPUT',     x: 200, y: 650, fixedValue: 1, label: 'A' },
+      { id: 'c4_B', type: 'INPUT',     x: 200, y: 750, fixedValue: 1, label: 'B' },
+      { id: 'c4_g', type: 'GATE_SLOT', x: 550, y: 700, linkedGroup: 'main' },
+      { id: 'c4_Z', type: 'OUTPUT',    x: 900, y: 700, targetValue: 0, label: 'Z' },
     ],
     wires: [
-      { id: 'w1', sourceId: 'in_A', targetId: 'g1',    targetInputIndex: 0 },
-      { id: 'w2', sourceId: 'in_B', targetId: 'g1',    targetInputIndex: 1 },
-      { id: 'w3', sourceId: 'g1',   targetId: 'out_Z', targetInputIndex: 0 },
+      { id: 'c1w1', sourceId: 'c1_A', targetId: 'c1_g', targetInputIndex: 0 },
+      { id: 'c1w2', sourceId: 'c1_B', targetId: 'c1_g', targetInputIndex: 1 },
+      { id: 'c1w3', sourceId: 'c1_g', targetId: 'c1_Z', targetInputIndex: 0 },
+      { id: 'c2w1', sourceId: 'c2_A', targetId: 'c2_g', targetInputIndex: 0 },
+      { id: 'c2w2', sourceId: 'c2_B', targetId: 'c2_g', targetInputIndex: 1 },
+      { id: 'c2w3', sourceId: 'c2_g', targetId: 'c2_Z', targetInputIndex: 0 },
+      { id: 'c3w1', sourceId: 'c3_A', targetId: 'c3_g', targetInputIndex: 0 },
+      { id: 'c3w2', sourceId: 'c3_B', targetId: 'c3_g', targetInputIndex: 1 },
+      { id: 'c3w3', sourceId: 'c3_g', targetId: 'c3_Z', targetInputIndex: 0 },
+      { id: 'c4w1', sourceId: 'c4_A', targetId: 'c4_g', targetInputIndex: 0 },
+      { id: 'c4w2', sourceId: 'c4_B', targetId: 'c4_g', targetInputIndex: 1 },
+      { id: 'c4w3', sourceId: 'c4_g', targetId: 'c4_Z', targetInputIndex: 0 },
     ],
   },
 
-  // L5 — NOR GATE
+  // L5 — NOR GATE  (4 cases)
   {
     id: 5, name: 'NOR GATE', difficulty: '1. Basics',
-    description: 'OR followed by inversion. Output is HIGH only when BOTH inputs are LOW.',
-    hint: 'Use NOR: output is 1 only when A=0 AND B=0. Any HIGH input pulls output LOW.',
+    description: 'Find the single gate that produces the correct output for ALL four input combinations.',
+    instruction: 'בחר את השער היחיד שמתאים לכל המקרים',
+    hint: 'NOR is inverted OR: output is 1 ONLY when both inputs are 0.',
     nodes: [
-      { id: 'in_A', type: 'INPUT',     x: 200, y: 320, fixedValue: 0, label: 'A' },
-      { id: 'in_B', type: 'INPUT',     x: 200, y: 480, fixedValue: 0, label: 'B' },
-      { id: 'g1',   type: 'GATE_SLOT', x: 550, y: 400 },
-      { id: 'out_Z',type: 'OUTPUT',    x: 900, y: 400, targetValue: 1, label: 'Z' },
+      // Case 1: A=0, B=0 → 1
+      { id: 'c1_A', type: 'INPUT',     x: 200, y: 140, fixedValue: 0, label: 'A' },
+      { id: 'c1_B', type: 'INPUT',     x: 200, y: 240, fixedValue: 0, label: 'B' },
+      { id: 'c1_g', type: 'GATE_SLOT', x: 550, y: 190, linkedGroup: 'main' },
+      { id: 'c1_Z', type: 'OUTPUT',    x: 900, y: 190, targetValue: 1, label: 'Z' },
+      // Case 2: A=0, B=1 → 0
+      { id: 'c2_A', type: 'INPUT',     x: 200, y: 310, fixedValue: 0, label: 'A' },
+      { id: 'c2_B', type: 'INPUT',     x: 200, y: 410, fixedValue: 1, label: 'B' },
+      { id: 'c2_g', type: 'GATE_SLOT', x: 550, y: 360, linkedGroup: 'main' },
+      { id: 'c2_Z', type: 'OUTPUT',    x: 900, y: 360, targetValue: 0, label: 'Z' },
+      // Case 3: A=1, B=0 → 0
+      { id: 'c3_A', type: 'INPUT',     x: 200, y: 480, fixedValue: 1, label: 'A' },
+      { id: 'c3_B', type: 'INPUT',     x: 200, y: 580, fixedValue: 0, label: 'B' },
+      { id: 'c3_g', type: 'GATE_SLOT', x: 550, y: 530, linkedGroup: 'main' },
+      { id: 'c3_Z', type: 'OUTPUT',    x: 900, y: 530, targetValue: 0, label: 'Z' },
+      // Case 4: A=1, B=1 → 0
+      { id: 'c4_A', type: 'INPUT',     x: 200, y: 650, fixedValue: 1, label: 'A' },
+      { id: 'c4_B', type: 'INPUT',     x: 200, y: 750, fixedValue: 1, label: 'B' },
+      { id: 'c4_g', type: 'GATE_SLOT', x: 550, y: 700, linkedGroup: 'main' },
+      { id: 'c4_Z', type: 'OUTPUT',    x: 900, y: 700, targetValue: 0, label: 'Z' },
     ],
     wires: [
-      { id: 'w1', sourceId: 'in_A', targetId: 'g1',    targetInputIndex: 0 },
-      { id: 'w2', sourceId: 'in_B', targetId: 'g1',    targetInputIndex: 1 },
-      { id: 'w3', sourceId: 'g1',   targetId: 'out_Z', targetInputIndex: 0 },
+      { id: 'c1w1', sourceId: 'c1_A', targetId: 'c1_g', targetInputIndex: 0 },
+      { id: 'c1w2', sourceId: 'c1_B', targetId: 'c1_g', targetInputIndex: 1 },
+      { id: 'c1w3', sourceId: 'c1_g', targetId: 'c1_Z', targetInputIndex: 0 },
+      { id: 'c2w1', sourceId: 'c2_A', targetId: 'c2_g', targetInputIndex: 0 },
+      { id: 'c2w2', sourceId: 'c2_B', targetId: 'c2_g', targetInputIndex: 1 },
+      { id: 'c2w3', sourceId: 'c2_g', targetId: 'c2_Z', targetInputIndex: 0 },
+      { id: 'c3w1', sourceId: 'c3_A', targetId: 'c3_g', targetInputIndex: 0 },
+      { id: 'c3w2', sourceId: 'c3_B', targetId: 'c3_g', targetInputIndex: 1 },
+      { id: 'c3w3', sourceId: 'c3_g', targetId: 'c3_Z', targetInputIndex: 0 },
+      { id: 'c4w1', sourceId: 'c4_A', targetId: 'c4_g', targetInputIndex: 0 },
+      { id: 'c4w2', sourceId: 'c4_B', targetId: 'c4_g', targetInputIndex: 1 },
+      { id: 'c4w3', sourceId: 'c4_g', targetId: 'c4_Z', targetInputIndex: 0 },
     ],
   },
 
-  // L6 — XOR GATE
+  // L6 — XOR GATE  (4 cases)
   {
     id: 6, name: 'XOR GATE', difficulty: '1. Basics',
-    description: 'Exclusive-OR: output is 1 when inputs DIFFER. The inequality detector.',
-    hint: 'Use XOR: output is 1 when exactly one input is 1. XOR(1,0)=1, XOR(1,1)=0.',
+    description: 'Find the single gate that produces the correct output for ALL four input combinations.',
+    instruction: 'בחר את השער היחיד שמתאים לכל המקרים',
+    hint: 'XOR outputs 1 when inputs differ. Only XOR matches all four rows.',
     nodes: [
-      { id: 'in_A', type: 'INPUT',     x: 200, y: 320, fixedValue: 1, label: 'A' },
-      { id: 'in_B', type: 'INPUT',     x: 200, y: 480, fixedValue: 0, label: 'B' },
-      { id: 'g1',   type: 'GATE_SLOT', x: 550, y: 400 },
-      { id: 'out_Z',type: 'OUTPUT',    x: 900, y: 400, targetValue: 1, label: 'Z' },
+      // Case 1: A=0, B=0 → 0
+      { id: 'c1_A', type: 'INPUT',     x: 200, y: 140, fixedValue: 0, label: 'A' },
+      { id: 'c1_B', type: 'INPUT',     x: 200, y: 240, fixedValue: 0, label: 'B' },
+      { id: 'c1_g', type: 'GATE_SLOT', x: 550, y: 190, linkedGroup: 'main' },
+      { id: 'c1_Z', type: 'OUTPUT',    x: 900, y: 190, targetValue: 0, label: 'Z' },
+      // Case 2: A=0, B=1 → 1
+      { id: 'c2_A', type: 'INPUT',     x: 200, y: 310, fixedValue: 0, label: 'A' },
+      { id: 'c2_B', type: 'INPUT',     x: 200, y: 410, fixedValue: 1, label: 'B' },
+      { id: 'c2_g', type: 'GATE_SLOT', x: 550, y: 360, linkedGroup: 'main' },
+      { id: 'c2_Z', type: 'OUTPUT',    x: 900, y: 360, targetValue: 1, label: 'Z' },
+      // Case 3: A=1, B=0 → 1
+      { id: 'c3_A', type: 'INPUT',     x: 200, y: 480, fixedValue: 1, label: 'A' },
+      { id: 'c3_B', type: 'INPUT',     x: 200, y: 580, fixedValue: 0, label: 'B' },
+      { id: 'c3_g', type: 'GATE_SLOT', x: 550, y: 530, linkedGroup: 'main' },
+      { id: 'c3_Z', type: 'OUTPUT',    x: 900, y: 530, targetValue: 1, label: 'Z' },
+      // Case 4: A=1, B=1 → 0
+      { id: 'c4_A', type: 'INPUT',     x: 200, y: 650, fixedValue: 1, label: 'A' },
+      { id: 'c4_B', type: 'INPUT',     x: 200, y: 750, fixedValue: 1, label: 'B' },
+      { id: 'c4_g', type: 'GATE_SLOT', x: 550, y: 700, linkedGroup: 'main' },
+      { id: 'c4_Z', type: 'OUTPUT',    x: 900, y: 700, targetValue: 0, label: 'Z' },
     ],
     wires: [
-      { id: 'w1', sourceId: 'in_A', targetId: 'g1',    targetInputIndex: 0 },
-      { id: 'w2', sourceId: 'in_B', targetId: 'g1',    targetInputIndex: 1 },
-      { id: 'w3', sourceId: 'g1',   targetId: 'out_Z', targetInputIndex: 0 },
+      { id: 'c1w1', sourceId: 'c1_A', targetId: 'c1_g', targetInputIndex: 0 },
+      { id: 'c1w2', sourceId: 'c1_B', targetId: 'c1_g', targetInputIndex: 1 },
+      { id: 'c1w3', sourceId: 'c1_g', targetId: 'c1_Z', targetInputIndex: 0 },
+      { id: 'c2w1', sourceId: 'c2_A', targetId: 'c2_g', targetInputIndex: 0 },
+      { id: 'c2w2', sourceId: 'c2_B', targetId: 'c2_g', targetInputIndex: 1 },
+      { id: 'c2w3', sourceId: 'c2_g', targetId: 'c2_Z', targetInputIndex: 0 },
+      { id: 'c3w1', sourceId: 'c3_A', targetId: 'c3_g', targetInputIndex: 0 },
+      { id: 'c3w2', sourceId: 'c3_B', targetId: 'c3_g', targetInputIndex: 1 },
+      { id: 'c3w3', sourceId: 'c3_g', targetId: 'c3_Z', targetInputIndex: 0 },
+      { id: 'c4w1', sourceId: 'c4_A', targetId: 'c4_g', targetInputIndex: 0 },
+      { id: 'c4w2', sourceId: 'c4_B', targetId: 'c4_g', targetInputIndex: 1 },
+      { id: 'c4w3', sourceId: 'c4_g', targetId: 'c4_Z', targetInputIndex: 0 },
     ],
   },
 

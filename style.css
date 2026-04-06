@@ -229,6 +229,68 @@ html, body {
   color: var(--text-dim);
 }
 
+/* Instruction Overlay */
+#instruction-overlay {
+  z-index: 250;
+}
+
+#instruction-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  padding: 52px 64px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-bright);
+  border-radius: 8px;
+  box-shadow:
+    0 0 80px rgba(0, 212, 255, 0.15),
+    0 0 160px rgba(0, 212, 255, 0.06),
+    inset 0 1px 0 rgba(255,255,255,0.04);
+  animation: slideUp 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  max-width: 520px;
+  text-align: center;
+}
+
+#instruction-level-name {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 6px;
+  color: #00d4ff;
+  text-transform: uppercase;
+}
+
+#instruction-text {
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.6;
+  color: var(--text-primary);
+  direction: rtl;
+}
+
+#btn-start {
+  margin-top: 8px;
+  padding: 12px 48px;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  color: #0a0e14;
+  background: #00d4ff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+
+#btn-start:hover {
+  background: #33e0ff;
+  transform: scale(1.04);
+}
+
+#btn-start:active {
+  transform: scale(0.97);
+}
+
 /* Gate Palette Chips */
 #gate-palette {
   display: flex;
@@ -309,7 +371,8 @@ html, body {
 #menu-overlay,
 #hint-overlay,
 #diagram-overlay,
-#info-overlay {
+#info-overlay,
+#instruction-overlay {
   position: fixed;
   inset: 0;
   z-index: 200;
@@ -326,7 +389,8 @@ html, body {
 #menu-overlay.hidden,
 #hint-overlay.hidden,
 #diagram-overlay.hidden,
-#info-overlay.hidden {
+#info-overlay.hidden,
+#instruction-overlay.hidden {
   display: none;
 }
 

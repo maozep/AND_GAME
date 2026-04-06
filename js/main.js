@@ -28,6 +28,10 @@
   const infoOverlay = document.getElementById('info-overlay');
   const btnInfo     = document.getElementById('btn-info');
   const btnInfoClose = document.getElementById('btn-info-close');
+  const instructionOverlay = document.getElementById('instruction-overlay');
+  const instructionLevelName = document.getElementById('instruction-level-name');
+  const instructionText = document.getElementById('instruction-text');
+  const btnStart = document.getElementById('btn-start');
   const diagramOverlay = document.getElementById('diagram-overlay');
   const diagramTitle = document.getElementById('diagram-title');
   const diagramSubtitle = document.getElementById('diagram-subtitle');
@@ -772,6 +776,14 @@
     updateHintButtonState();
     currentMenuDifficulty = levelDef.difficulty || 'Medium';
 
+    // Show instruction overlay if level has one (timer starts on START click)
+    const hasInstruction = !!levelDef.instruction;
+    if (hasInstruction) {
+      instructionLevelName.textContent = levelDef.name;
+      instructionText.textContent = levelDef.instruction;
+      instructionOverlay.classList.remove('hidden');
+    }
+
     // Show clock controls and FF palette only for sequential levels
     _stopAutoClock();
     const isSequential = State.isSequentialLevel();
@@ -786,10 +798,13 @@
     winOverlay.classList.add('hidden');
     finalOverlay.classList.add('hidden');
 
-    startTimer();
     renderLevelMenu();
-
     startLoop();
+
+    // Delay timer start until instruction overlay is dismissed
+    if (!hasInstruction) {
+      startTimer();
+    }
   }
 
   // ── Win Sequence ─────────────────────────────────────────
@@ -816,6 +831,11 @@
   }
 
   // ── Button Handlers ───────────────────────────────────────
+  btnStart.addEventListener('click', () => {
+    instructionOverlay.classList.add('hidden');
+    startTimer();
+  });
+
   btnNext.addEventListener('click', () => {
     winOverlay.classList.add('hidden');
     State.advanceLevel();

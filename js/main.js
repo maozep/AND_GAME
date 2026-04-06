@@ -32,11 +32,17 @@
   const btnRestart  = document.getElementById('btn-restart');
   const btnPlayAgain = document.getElementById('btn-play-again');
 
+  // ── Clock UI References ───────────────────────────────────
+  const clockControls = document.getElementById('clock-controls');
+  const btnStep       = document.getElementById('btn-step');
+  const btnAutoClk    = document.getElementById('btn-auto-clk');
+  const stepCountEl   = document.getElementById('step-count');
+
   const COMPLETED_LEVELS_KEY = 'and_game_completed_levels';
   const BEST_TIMES_KEY = 'and_game_best_times';
   const completedLevelIds = new Set(loadCompletedLevelIds());
   const bestTimes = loadBestTimes();
-  const DIFFICULTY_ORDER = ['Easy', 'Medium', 'Hard', 'Very Hard'];
+  const DIFFICULTY_ORDER = ['Easy', 'Medium', 'Hard', 'Very Hard', 'Sequential'];
   let currentMenuDifficulty = 'Easy';
 
   function colorizeTruthTableBits() {
@@ -279,12 +285,60 @@
     btnHint.disabled = !State.level;
   }
 
+  // ── Auto-clock state ─────────────────────────────────────
+  let _autoClkRunning  = false;
+  let _autoClkInterval = null;
+
+  function _updateStepCount() {
+    stepCountEl.textContent = `STEP: ${State.stepCount}`;
+  }
+
+  function _setClockControlsVisible(visible) {
+    clockControls.classList.toggle('hidden', !visible);
+  }
+
+  function _setFfPaletteVisible(visible) {
+    const ffPalette = document.getElementById('ff-palette');
+    const gatePalette = document.getElementById('gate-palette');
+    ffPalette.classList.toggle('hidden', !visible);
+    gatePalette.classList.toggle('hidden', visible);
+  }
+
+  function _stopAutoClock() {
+    if (_autoClkInterval) { clearInterval(_autoClkInterval); _autoClkInterval = null; }
+    _autoClkRunning = false;
+    btnAutoClk.classList.remove('running');
+    btnAutoClk.textContent = 'AUTO CLK';
+  }
+
+  function _startAutoClock() {
+    _autoClkRunning = true;
+    btnAutoClk.classList.add('running');
+    btnAutoClk.textContent = '■ STOP';
+    _autoClkInterval = setInterval(() => {
+      if (State.solved) { _stopAutoClock(); return; }
+      State.stepClock();
+      _updateStepCount();
+    }, 600);
+  }
+
+  btnStep.addEventListener('click', () => {
+    if (!State.isSequentialLevel() || State.solved) return;
+    State.stepClock();
+    _updateStepCount();
+  });
+
+  btnAutoClk.addEventListener('click', () => {
+    if (_autoClkRunning) _stopAutoClock();
+    else _startAutoClock();
+  });
+
   // ── Core: Evaluate + Render ───────────────────────────────
   function tick() {
     const level  = State.level;
     if (!level) return;
 
-    const result = Engine.evaluate(level);
+    const result = Engine.evaluate(level, State.getFfStates());
     State.setEvalResult(result);
 
     Renderer.render(level, result, State.hoveredNodeId, result.solved);
@@ -292,6 +346,7 @@
     // Trigger win sequence if newly solved
     if (result.solved && !_lastSolved) {
       _lastSolved = true;
+      _stopAutoClock();
       _onSolve();
     }
     if (!result.solved) {
@@ -325,6 +380,14 @@
     levelName.textContent = `${index + 1}. ${levelDef.name}`;
     updateHintButtonState();
     currentMenuDifficulty = levelDef.difficulty || 'Medium';
+
+    // Show clock controls and FF palette only for sequential levels
+    _stopAutoClock();
+    const isSequential = State.isSequentialLevel();
+    _setClockControlsVisible(isSequential);
+    _updateStepCount();
+    _setFfPaletteVisible(isSequential);
+    if (isSequential) Input.refreshChips();
 
     // Hide overlays
     closeMenuOverlay();

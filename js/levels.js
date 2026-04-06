@@ -771,6 +771,200 @@ const LEVELS = [
     e: 0,
     targets: [0, 0, 1, 1, 0, 1, 1, 1],
   }),
+  // ── Sequential Levels (Flip-Flops) ───────────────────────
+
+  // S1 — LATCH (id: 41)
+  // D flip-flop with D=1. Press STEP → Q captures D=1.
+  // Target: Q=1 after 1 rising edge. Win condition checked after each step.
+  {
+    id: 41,
+    name: 'LATCH',
+    category: 'sequential',
+    description: 'Store a bit with a D flip-flop. D=1 is wired in — press STEP to clock it.',
+    nodes: [
+      { id: 'in_D',  type: 'INPUT',      x: 180, y: 400, fixedValue: 1,  label: 'D' },
+      { id: 'clk_1', type: 'CLOCK',      x: 180, y: 520, value: 0,       label: null },
+      { id: 'ff_1',  type: 'FF_SLOT', ffType: null, x: 540, y: 460, label: 'FF1' },
+      { id: 'out_Q', type: 'OUTPUT',     x: 900, y: 460, targetValue: 1, label: 'Q' },
+    ],
+    wires: [
+      { id: 'w1',   sourceId: 'in_D',  targetId: 'ff_1',  targetInputIndex: 0 },
+      { id: 'wclk', sourceId: 'clk_1', targetId: 'ff_1',  targetInputIndex: 1, isClockWire: true },
+      { id: 'w2',   sourceId: 'ff_1',  targetId: 'out_Q', targetInputIndex: 0, sourceOutputIndex: 0 },
+    ],
+  },
+
+  // S2 — TOGGLE FLIP (id: 42)
+  // T flip-flop with T=1 (VCC). Press STEP twice → Q returns to 0.
+  // Target: Q=0 after 2 rising edges (starts 0, toggles to 1, toggles back to 0).
+  {
+    id: 42,
+    name: 'TOGGLE FLIP',
+    category: 'sequential',
+    description: 'T flip-flop with T=1 permanently. Watch Q toggle with each STEP.',
+    nodes: [
+      { id: 'in_T',  type: 'INPUT',      x: 180, y: 400, fixedValue: 1,  label: 'T' },
+      { id: 'clk_1', type: 'CLOCK',      x: 180, y: 520, value: 0,       label: null },
+      { id: 'ff_1',  type: 'FF_SLOT', ffType: null, x: 540, y: 460, label: 'FF1' },
+      { id: 'out_Q', type: 'OUTPUT',     x: 900, y: 460, targetValue: 0, label: 'Q' },
+    ],
+    wires: [
+      { id: 'w1',   sourceId: 'in_T',  targetId: 'ff_1',  targetInputIndex: 0 },
+      { id: 'wclk', sourceId: 'clk_1', targetId: 'ff_1',  targetInputIndex: 1, isClockWire: true },
+      { id: 'w2',   sourceId: 'ff_1',  targetId: 'out_Q', targetInputIndex: 0, sourceOutputIndex: 0 },
+    ],
+  },
+
+  // S3 — SET-RESET (id: 43)
+  // SR flip-flop: S=1, R=0 → should Set Q to 1.
+  {
+    id: 43,
+    name: 'SET-RESET',
+    category: 'sequential',
+    description: 'SR flip-flop: S=1, R=0. After one STEP the Set input captures. Q must be 1.',
+    nodes: [
+      { id: 'in_S',  type: 'INPUT',       x: 180, y: 360, fixedValue: 1,  label: 'S' },
+      { id: 'in_R',  type: 'INPUT',       x: 180, y: 480, fixedValue: 0,  label: 'R' },
+      { id: 'clk_1', type: 'CLOCK',       x: 180, y: 580, value: 0,       label: null },
+      { id: 'ff_1',  type: 'FF_SLOT', ffType: null, x: 560, y: 460, label: 'FF1' },
+      { id: 'out_Q', type: 'OUTPUT',      x: 920, y: 420, targetValue: 1, label: 'Q' },
+      { id: 'out_Qn',type: 'OUTPUT',      x: 920, y: 510, targetValue: 0, label: 'Q̄' },
+    ],
+    wires: [
+      { id: 'w1',   sourceId: 'in_S',  targetId: 'ff_1',   targetInputIndex: 0 },
+      { id: 'w2',   sourceId: 'in_R',  targetId: 'ff_1',   targetInputIndex: 1 },
+      { id: 'wclk', sourceId: 'clk_1', targetId: 'ff_1',   targetInputIndex: 2, isClockWire: true },
+      { id: 'w3',   sourceId: 'ff_1',  targetId: 'out_Q',  targetInputIndex: 0, sourceOutputIndex: 0 },
+      { id: 'w4',   sourceId: 'ff_1',  targetId: 'out_Qn', targetInputIndex: 0, sourceOutputIndex: 1 },
+    ],
+  },
+
+  // S4 — JK MASTER (id: 44)
+  // JK flip-flop: J=1, K=1 → Toggle mode. Q starts at 0, after 1 step → 1.
+  {
+    id: 44,
+    name: 'JK MASTER',
+    category: 'sequential',
+    description: 'JK flip-flop in toggle mode (J=K=1). One STEP should set Q=1.',
+    nodes: [
+      { id: 'in_J',  type: 'INPUT',       x: 180, y: 360, fixedValue: 1,  label: 'J' },
+      { id: 'in_K',  type: 'INPUT',       x: 180, y: 480, fixedValue: 1,  label: 'K' },
+      { id: 'clk_1', type: 'CLOCK',       x: 180, y: 580, value: 0,       label: null },
+      { id: 'ff_1',  type: 'FF_SLOT', ffType: null, x: 560, y: 460, label: 'FF1' },
+      { id: 'out_Q', type: 'OUTPUT',      x: 920, y: 460, targetValue: 1, label: 'Q' },
+    ],
+    wires: [
+      { id: 'w1',   sourceId: 'in_J',  targetId: 'ff_1',  targetInputIndex: 0 },
+      { id: 'w2',   sourceId: 'in_K',  targetId: 'ff_1',  targetInputIndex: 1 },
+      { id: 'wclk', sourceId: 'clk_1', targetId: 'ff_1',  targetInputIndex: 2, isClockWire: true },
+      { id: 'w3',   sourceId: 'ff_1',  targetId: 'out_Q', targetInputIndex: 0, sourceOutputIndex: 0 },
+    ],
+  },
+
+  // S5 — D GATE COMBO (id: 45)
+  // A combinational gate feeds the D input of a flip-flop.
+  // Inputs: A=1, B=1. Gate slot feeds D. Clock. Output: Q must be 1 after 1 step.
+  // Solution: AND(1,1)=1 → D=1 → Q=1
+  {
+    id: 45,
+    name: 'D GATE COMBO',
+    category: 'sequential',
+    description: 'Place a gate to produce D=1, then STEP to capture into the flip-flop.',
+    nodes: [
+      { id: 'in_A',  type: 'INPUT',      x: 160, y: 340, fixedValue: 1,  label: 'A' },
+      { id: 'in_B',  type: 'INPUT',      x: 160, y: 460, fixedValue: 1,  label: 'B' },
+      { id: 'gate_1',type: 'GATE_SLOT',  x: 420, y: 400, gate: null },
+      { id: 'clk_1', type: 'CLOCK',      x: 160, y: 560, value: 0,       label: null },
+      { id: 'ff_1',  type: 'FF_SLOT', ffType: null, x: 680, y: 460, label: 'FF1' },
+      { id: 'out_Q', type: 'OUTPUT',     x: 960, y: 460, targetValue: 1, label: 'Q' },
+    ],
+    wires: [
+      { id: 'w1',   sourceId: 'in_A',   targetId: 'gate_1', targetInputIndex: 0 },
+      { id: 'w2',   sourceId: 'in_B',   targetId: 'gate_1', targetInputIndex: 1 },
+      { id: 'w3',   sourceId: 'gate_1', targetId: 'ff_1',   targetInputIndex: 0 },
+      { id: 'wclk', sourceId: 'clk_1',  targetId: 'ff_1',   targetInputIndex: 1, isClockWire: true },
+      { id: 'w4',   sourceId: 'ff_1',   targetId: 'out_Q',  targetInputIndex: 0, sourceOutputIndex: 0 },
+    ],
+  },
+
+  // S6 — SHIFT REGISTER (id: 46)
+  // Two D flip-flops in series (shift register). D=1 enters FF1 on step 1,
+  // then propagates to FF2 on step 2. Target: out_Q2 = 1 (need 2 steps).
+  // out_Q1 target=0 after 2 steps (FF1 is now holding whatever D is on step 2).
+  // To keep it tractable: D stays 1. After step1: Q1=1, Q2=0. After step2: Q1=1, Q2=1.
+  // So: target Q2=1. Win after any step where both outputs correct.
+  {
+    id: 46,
+    name: 'SHIFT REGISTER',
+    category: 'sequential',
+    description: 'Two D flip-flops in series. Shift a 1 through — press STEP twice.',
+    nodes: [
+      { id: 'in_D',  type: 'INPUT',      x: 140, y: 400, fixedValue: 1,  label: 'D' },
+      { id: 'clk_1', type: 'CLOCK',      x: 140, y: 520, value: 0,       label: null },
+      { id: 'ff_1',  type: 'FF_SLOT', ffType: null, x: 420, y: 460, label: 'FF1' },
+      { id: 'ff_2',  type: 'FF_SLOT', ffType: null, x: 700, y: 460, label: 'FF2' },
+      { id: 'out_Q1',type: 'OUTPUT',     x: 970, y: 380, targetValue: 1, label: 'Q1' },
+      { id: 'out_Q2',type: 'OUTPUT',     x: 970, y: 540, targetValue: 1, label: 'Q2' },
+    ],
+    wires: [
+      { id: 'w1',    sourceId: 'in_D',  targetId: 'ff_1',   targetInputIndex: 0 },
+      { id: 'wclk1', sourceId: 'clk_1', targetId: 'ff_1',   targetInputIndex: 1, isClockWire: true },
+      { id: 'w2',    sourceId: 'ff_1',  targetId: 'ff_2',   targetInputIndex: 0, sourceOutputIndex: 0 },
+      { id: 'wclk2', sourceId: 'clk_1', targetId: 'ff_2',   targetInputIndex: 1, isClockWire: true },
+      { id: 'w3',    sourceId: 'ff_1',  targetId: 'out_Q1', targetInputIndex: 0, sourceOutputIndex: 0 },
+      { id: 'w4',    sourceId: 'ff_2',  targetId: 'out_Q2', targetInputIndex: 0, sourceOutputIndex: 0 },
+    ],
+  },
+
+  // S7 — QNot FEEDBACK (id: 37)
+  // D flip-flop with QNot wired back to D → acts like a T flip-flop.
+  // Target: After 1 step, Q=1 (starts at 0, QNot=1 feeds D, rising edge captures D=1).
+  {
+    id: 37,
+    name: 'QNOT FEEDBACK',
+    category: 'sequential',
+    description: 'Q̄ feeds back to D — the flip-flop self-toggles on every STEP.',
+    nodes: [
+      { id: 'clk_1', type: 'CLOCK',      x: 180, y: 540, value: 0,       label: null },
+      { id: 'ff_1',  type: 'FF_SLOT', ffType: null, x: 560, y: 460, label: 'FF1' },
+      { id: 'out_Q', type: 'OUTPUT',     x: 900, y: 420, targetValue: 1, label: 'Q' },
+      { id: 'out_Qn',type: 'OUTPUT',     x: 900, y: 510, targetValue: 0, label: 'Q̄' },
+    ],
+    wires: [
+      // QNot → D (feedback, sourceOutputIndex=1 = QNot output)
+      { id: 'wfb',  sourceId: 'ff_1',  targetId: 'ff_1',  targetInputIndex: 0, sourceOutputIndex: 1 },
+      { id: 'wclk', sourceId: 'clk_1', targetId: 'ff_1',  targetInputIndex: 1, isClockWire: true },
+      { id: 'w1',   sourceId: 'ff_1',  targetId: 'out_Q', targetInputIndex: 0, sourceOutputIndex: 0 },
+      { id: 'w2',   sourceId: 'ff_1',  targetId: 'out_Qn',targetInputIndex: 0, sourceOutputIndex: 1 },
+    ],
+  },
+
+  // S8 — SYNCHRONIZER (id: 38)
+  // Combinational stage (gate slot) feeds a D flip-flop.
+  // Inputs: A=1, B=0. Gate feeds D of FF. CLK. Targets: Q=0.
+  // Solution: AND(1,0)=0 → D=0 → Q=0 after step.
+  {
+    id: 38,
+    name: 'SYNCHRONIZER',
+    category: 'sequential',
+    description: 'Choose the gate that makes D=0, then STEP to capture it into the register.',
+    nodes: [
+      { id: 'in_A',  type: 'INPUT',      x: 160, y: 340, fixedValue: 1,  label: 'A' },
+      { id: 'in_B',  type: 'INPUT',      x: 160, y: 460, fixedValue: 0,  label: 'B' },
+      { id: 'gate_1',type: 'GATE_SLOT',  x: 420, y: 400, gate: null },
+      { id: 'clk_1', type: 'CLOCK',      x: 160, y: 560, value: 0,       label: null },
+      { id: 'ff_1',  type: 'FF_SLOT', ffType: null, x: 680, y: 460, label: 'FF1' },
+      { id: 'out_Q', type: 'OUTPUT',     x: 960, y: 460, targetValue: 0, label: 'Q' },
+    ],
+    wires: [
+      { id: 'w1',   sourceId: 'in_A',   targetId: 'gate_1', targetInputIndex: 0 },
+      { id: 'w2',   sourceId: 'in_B',   targetId: 'gate_1', targetInputIndex: 1 },
+      { id: 'w3',   sourceId: 'gate_1', targetId: 'ff_1',   targetInputIndex: 0 },
+      { id: 'wclk', sourceId: 'clk_1',  targetId: 'ff_1',   targetInputIndex: 1, isClockWire: true },
+      { id: 'w4',   sourceId: 'ff_1',   targetId: 'out_Q',  targetInputIndex: 0, sourceOutputIndex: 0 },
+    ],
+  },
+
 ];
 
 function deriveHint(level) {
@@ -844,6 +1038,31 @@ function deriveHint(level) {
     return 'OR becomes high when at least one input is high.';
   }
 
+  if (name.includes('LATCH')) {
+    return 'A D flip-flop captures its D input on the rising clock edge. D=1 is already wired — press STEP once to store it.';
+  }
+  if (name.includes('TOGGLE FLIP')) {
+    return 'With T=1, the flip-flop toggles on every rising edge. Q starts at 0 → after two STEPs it returns to 0.';
+  }
+  if (name.includes('SET-RESET')) {
+    return 'S=1, R=0 means Set. On the rising clock edge the FF will drive Q=1, Q̄=0.';
+  }
+  if (name.includes('JK MASTER')) {
+    return 'When J=K=1 the JK flip-flop is in Toggle mode. Q starts at 0 — one STEP will set it to 1.';
+  }
+  if (name.includes('D GATE COMBO')) {
+    return 'You need D=1 entering the flip-flop. AND(1,1)=1 will do the job. Place AND, then STEP.';
+  }
+  if (name.includes('SHIFT REGISTER')) {
+    return 'After the first STEP, Q1 captures D=1. After the second STEP, Q2 also captures what Q1 had. Press STEP twice.';
+  }
+  if (name.includes('QNOT FEEDBACK')) {
+    return 'Q̄ feeds back into D. The flip-flop self-oscillates: each STEP flips Q. Start at Q=0, one STEP → Q=1.';
+  }
+  if (name.includes('SYNCHRONIZER')) {
+    return 'You need D=0 entering the flip-flop. AND(1,0)=0 works. Place AND in the gate slot, then STEP once.';
+  }
+
   return 'Look at the target values and choose the gate behavior that matches the required output.';
 }
 
@@ -855,6 +1074,7 @@ function getDifficultyLabel(levelId) {
   if (levelId <= 10) return 'Easy';
   if (levelId <= 20) return 'Medium';
   if (levelId <= 30) return 'Hard';
+  if (levelId >= 41) return 'Sequential';
   return 'Very Hard';
 }
 

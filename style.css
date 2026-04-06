@@ -264,6 +264,44 @@ html, body {
   cursor: grabbing;
 }
 
+/* FF palette (sequential levels only) */
+#ff-palette {
+  margin-top: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: flex-end;
+}
+
+#ff-palette.hidden {
+  display: none;
+}
+
+#ff-palette-label {
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+}
+
+#ff-chips {
+  display: flex;
+  gap: 5px;
+}
+
+.ff-chip {
+  color: #c080ff;
+  border-color: #5a2a9a;
+  background: rgba(90, 42, 154, 0.12);
+}
+
+.ff-chip.active {
+  background: rgba(160, 96, 255, 0.2);
+  border-color: #a060ff;
+  color: #fff;
+  box-shadow: 0 0 8px rgba(160, 96, 255, 0.4);
+}
+
 /* ── Win Overlay ─────────────────────────────────────────── */
 
 #win-overlay,
@@ -773,6 +811,87 @@ button:active {
 
 #tooltip.hidden {
   display: none;
+}
+
+/* ── Clock Controls ─────────────────────────────────────── */
+
+#clock-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+  padding: 8px 14px;
+  border: 1px solid rgba(0, 212, 255, 0.25);
+  border-radius: 6px;
+  background: rgba(0, 40, 60, 0.35);
+  animation: fadeIn 0.3s ease;
+}
+
+#clock-controls.hidden {
+  display: none;
+}
+
+#clock-controls-label {
+  font-size: 8px;
+  letter-spacing: 3px;
+  color: var(--accent-cyan);
+  opacity: 0.7;
+  text-transform: uppercase;
+}
+
+#clock-controls-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+#btn-step {
+  font-family: var(--font);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  padding: 7px 16px;
+  border: 1px solid var(--accent-cyan);
+  border-radius: 4px;
+  background: rgba(0, 212, 255, 0.15);
+  color: var(--accent-cyan);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+#btn-step:hover {
+  background: rgba(0, 212, 255, 0.28);
+  box-shadow: 0 0 14px rgba(0, 212, 255, 0.35);
+  color: #fff;
+}
+
+#btn-step:active {
+  transform: scale(0.94);
+  background: rgba(0, 212, 255, 0.4);
+}
+
+#btn-auto-clk {
+  font-size: 9px;
+  padding: 5px 10px;
+}
+
+#btn-auto-clk.running {
+  border-color: #39ff14;
+  color: #39ff14;
+  background: rgba(57, 255, 20, 0.1);
+  box-shadow: 0 0 10px rgba(57, 255, 20, 0.25);
+  animation: pulse 1s ease infinite;
+}
+
+#step-count {
+  font-family: var(--font);
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--accent-cyan);
+  min-width: 60px;
+  text-align: right;
+  opacity: 0.8;
 }
 
 /* ── Animations ──────────────────────────────────────────── */

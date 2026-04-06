@@ -27,6 +27,15 @@
     <div id="hud-center">
       <div id="hud-title">AND_GAME</div>
       <div id="hud-subtitle">COMBINATIONAL LOGIC PUZZLES</div>
+      <!-- Clock controls — shown only on sequential levels -->
+      <div id="clock-controls" class="hidden">
+        <div id="clock-controls-label">SEQUENTIAL MODE</div>
+        <div id="clock-controls-row">
+          <button id="btn-step" title="Deliver one rising clock edge">▶ STEP</button>
+          <button id="btn-auto-clk" class="btn-secondary" title="Toggle automatic clock">AUTO CLK</button>
+          <div id="step-count">STEP: 0</div>
+        </div>
+      </div>
     </div>
     <div id="hud-right">
       <div id="gate-palette-label-row">
@@ -40,6 +49,15 @@
         <span class="gate-chip" data-gate="NAND" draggable="true">NAND</span>
         <span class="gate-chip" data-gate="NOR" draggable="true">NOR</span>
         <span class="gate-chip" data-gate="NOT" draggable="true">NOT</span>
+      </div>
+      <div id="ff-palette" class="hidden">
+        <div id="ff-palette-label">FLIP-FLOP PALETTE</div>
+        <div id="ff-chips">
+          <span class="gate-chip ff-chip" data-ff="D"  draggable="true">D-FF</span>
+          <span class="gate-chip ff-chip" data-ff="T"  draggable="true">T-FF</span>
+          <span class="gate-chip ff-chip" data-ff="SR" draggable="true">SR-FF</span>
+          <span class="gate-chip ff-chip" data-ff="JK" draggable="true">JK-FF</span>
+        </div>
       </div>
     </div>
   </div>

@@ -188,59 +188,62 @@
           </table>
         </section>
 
-        <!-- Sequential Elements (Flip-Flops) -->
-        <section class="truth-card ff-info-card">
-          <h3>D FLIP-FLOP</h3>
-          <p class="ff-desc">Captures input D on clock rising edge.</p>
-          <table>
-            <thead><tr><th>D</th><th>CLK ↑</th><th>Q</th></tr></thead>
-            <tbody>
-              <tr><td>0</td><td>↑</td><td>0</td></tr>
-              <tr><td>1</td><td>↑</td><td>1</td></tr>
-              <tr><td>X</td><td>—</td><td>Q (hold)</td></tr>
-            </tbody>
-          </table>
-        </section>
+        <!-- Sequential Elements (Flip-Flops) Section -->
+        <div id="ff-section">
+          <div class="ff-section-title">SEQUENTIAL ELEMENTS (FLIP-FLOPS)</div>
+          <section class="truth-card ff-info-card">
+            <h3>D FLIP-FLOP</h3>
+            <p class="ff-desc">Captures input D on clock rising edge.</p>
+            <table>
+              <thead><tr><th>D</th><th>CLK ↑</th><th>Q</th></tr></thead>
+              <tbody>
+                <tr><td>0</td><td>↑</td><td>0</td></tr>
+                <tr><td>1</td><td>↑</td><td>1</td></tr>
+                <tr><td>X</td><td>—</td><td>Q (hold)</td></tr>
+              </tbody>
+            </table>
+          </section>
 
-        <section class="truth-card ff-info-card">
-          <h3>T FLIP-FLOP (TOGGLE)</h3>
-          <p class="ff-desc">Toggles Q when T=1, holds when T=0.</p>
-          <table>
-            <thead><tr><th>T</th><th>CLK ↑</th><th>Q_next</th></tr></thead>
-            <tbody>
-              <tr><td>0</td><td>↑</td><td>Q (hold)</td></tr>
-              <tr><td>1</td><td>↑</td><td>Q̄ (toggle)</td></tr>
-            </tbody>
-          </table>
-        </section>
+          <section class="truth-card ff-info-card">
+            <h3>T FLIP-FLOP (TOGGLE)</h3>
+            <p class="ff-desc">Toggles Q when T=1, holds when T=0.</p>
+            <table>
+              <thead><tr><th>T</th><th>CLK ↑</th><th>Q_next</th></tr></thead>
+              <tbody>
+                <tr><td>0</td><td>↑</td><td>Q (hold)</td></tr>
+                <tr><td>1</td><td>↑</td><td>Q̄ (toggle)</td></tr>
+              </tbody>
+            </table>
+          </section>
 
-        <section class="truth-card ff-info-card">
-          <h3>SR FLIP-FLOP (SET-RESET)</h3>
-          <p class="ff-desc">S=Set, R=Reset. S=1 sets Q=1, R=1 sets Q=0.</p>
-          <table>
-            <thead><tr><th>S</th><th>R</th><th>CLK ↑</th><th>Q_next</th></tr></thead>
-            <tbody>
-              <tr><td>0</td><td>0</td><td>↑</td><td>Q (hold)</td></tr>
-              <tr><td>0</td><td>1</td><td>↑</td><td>0 (reset)</td></tr>
-              <tr><td>1</td><td>0</td><td>↑</td><td>1 (set)</td></tr>
-              <tr><td>1</td><td>1</td><td>↑</td><td>1 (S priority)</td></tr>
-            </tbody>
-          </table>
-        </section>
+          <section class="truth-card ff-info-card">
+            <h3>SR FLIP-FLOP (SET-RESET)</h3>
+            <p class="ff-desc">S=Set, R=Reset. S=1 sets Q=1, R=1 sets Q=0.</p>
+            <table>
+              <thead><tr><th>S</th><th>R</th><th>CLK ↑</th><th>Q_next</th></tr></thead>
+              <tbody>
+                <tr><td>0</td><td>0</td><td>↑</td><td>Q (hold)</td></tr>
+                <tr><td>0</td><td>1</td><td>↑</td><td>0 (reset)</td></tr>
+                <tr><td>1</td><td>0</td><td>↑</td><td>1 (set)</td></tr>
+                <tr><td>1</td><td>1</td><td>↑</td><td>1 (S priority)</td></tr>
+              </tbody>
+            </table>
+          </section>
 
-        <section class="truth-card ff-info-card">
-          <h3>JK FLIP-FLOP</h3>
-          <p class="ff-desc">Versatile FF: J=Set, K=Reset, J=K=1 toggles.</p>
-          <table>
-            <thead><tr><th>J</th><th>K</th><th>CLK ↑</th><th>Q_next</th></tr></thead>
-            <tbody>
-              <tr><td>0</td><td>0</td><td>↑</td><td>Q (hold)</td></tr>
-              <tr><td>0</td><td>1</td><td>↑</td><td>0 (reset)</td></tr>
-              <tr><td>1</td><td>0</td><td>↑</td><td>1 (set)</td></tr>
-              <tr><td>1</td><td>1</td><td>↑</td><td>Q̄ (toggle)</td></tr>
-            </tbody>
-          </table>
-        </section>
+          <section class="truth-card ff-info-card">
+            <h3>JK FLIP-FLOP</h3>
+            <p class="ff-desc">Versatile FF: J=Set, K=Reset, J=K=1 toggles.</p>
+            <table>
+              <thead><tr><th>J</th><th>K</th><th>CLK ↑</th><th>Q_next</th></tr></thead>
+              <tbody>
+                <tr><td>0</td><td>0</td><td>↑</td><td>Q (hold)</td></tr>
+                <tr><td>0</td><td>1</td><td>↑</td><td>0 (reset)</td></tr>
+                <tr><td>1</td><td>0</td><td>↑</td><td>1 (set)</td></tr>
+                <tr><td>1</td><td>1</td><td>↑</td><td>Q̄ (toggle)</td></tr>
+              </tbody>
+            </table>
+          </section>
+        </div>
       </div>
     </div>
   </div>

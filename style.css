@@ -346,8 +346,8 @@ html, body {
 }
 
 #info-box {
-  width: min(980px, calc(100vw - 32px));
-  max-height: min(760px, calc(100vh - 120px));
+  width: min(1500px, calc(100vw - 40px));
+  max-height: min(820px, calc(100vh - 100px));
   overflow: auto;
   background: var(--bg-panel);
   border: 1px solid var(--border-bright);
@@ -625,8 +625,8 @@ html, body {
 
 #truth-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 14px;
 }
 
 .truth-card {

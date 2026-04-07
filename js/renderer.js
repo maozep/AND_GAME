@@ -66,6 +66,10 @@ const Renderer = (() => {
   let canvas, ctx;
   let W, H;
 
+  // ── Vertical-layout centering ─────────────────────────────
+  let _currentLayout = null;
+  let _offsetX = 0, _offsetY = 0;
+
   function init(canvasEl) {
     canvas = canvasEl;
     ctx    = canvas.getContext('2d');
@@ -78,6 +82,21 @@ const Renderer = (() => {
     H = canvas.height = window.innerHeight;
   }
 
+  // ── Centering offset for all levels ─────────────────────────
+  function _computeCenterOffset(level) {
+    if (!level) { _currentLayout = null; _offsetX = 0; _offsetY = 0; return; }
+    _currentLayout = level.layout || null;
+    let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+    level.nodes.forEach(n => {
+      minX = Math.min(minX, n.x); maxX = Math.max(maxX, n.x);
+      minY = Math.min(minY, n.y); maxY = Math.max(maxY, n.y);
+    });
+    const levelCX = (minX + maxX) / 2;
+    const levelCY = (minY + maxY) / 2;
+    _offsetX = W / 2 - levelCX;
+    _offsetY = (56 + H) / 2 - levelCY;   // 56 = HUD height
+  }
+
   // ── Main Render ───────────────────────────────────────────
   function render(level, evalResult, hoveredNodeId, solved) {
     if (!ctx || !level) return;
@@ -86,6 +105,8 @@ const Renderer = (() => {
     _drawBackground();
     _drawGrid();
 
+    _computeCenterOffset(level);
+
     const { wireValues, nodeValues } = evalResult || {
       wireValues: new Map(),
       nodeValues:  new Map(),
@@ -93,8 +114,13 @@ const Renderer = (() => {
 
     const ffStates = State.getFfStates ? State.getFfStates() : new Map();
 
+    ctx.save();
+    if (_offsetX || _offsetY) ctx.translate(_offsetX, _offsetY);
+
     _drawWires(level, wireValues);
     _drawNodes(level, nodeValues, ffStates, hoveredNodeId, solved);
+
+    ctx.restore();
 
     if (solved) _drawSolvedHalo();
   }
@@ -186,12 +212,20 @@ const Renderer = (() => {
   }
 
   function _drawWirePath(src, dst) {
-    const mx = src.x + (dst.x - src.x) * 0.55;
     ctx.beginPath();
-    ctx.moveTo(src.x, src.y);
-    ctx.lineTo(mx,    src.y);
-    ctx.lineTo(mx,    dst.y);
-    ctx.lineTo(dst.x, dst.y);
+    if (_currentLayout === 'vertical') {
+      const my = src.y + (dst.y - src.y) * 0.55;
+      ctx.moveTo(src.x, src.y);
+      ctx.lineTo(src.x, my);
+      ctx.lineTo(dst.x, my);
+      ctx.lineTo(dst.x, dst.y);
+    } else {
+      const mx = src.x + (dst.x - src.x) * 0.55;
+      ctx.moveTo(src.x, src.y);
+      ctx.lineTo(mx,    src.y);
+      ctx.lineTo(mx,    dst.y);
+      ctx.lineTo(dst.x, dst.y);
+    }
   }
 
   function _drawSignalDot(x, y, val, wireW, isCLK) {
@@ -214,6 +248,15 @@ const Renderer = (() => {
   function _nodeOutputAnchor(node, outputIndex) {
     outputIndex = outputIndex || 0;
 
+    // ── Vertical layout: outputs go UP ──
+    if (_currentLayout === 'vertical') {
+      if (node.type === 'INPUT' || node.type === 'CLOCK')
+        return { x: node.x, y: node.y - NODE.inputR };
+      if (node.type === 'GATE_SLOT')
+        return { x: node.x, y: node.y - NODE.gateH / 2 };
+      return { x: node.x, y: node.y - 36 };   // larger output circle
+    }
+
     if (node.type === 'INPUT' || node.type === 'CLOCK') {
       return { x: node.x + NODE.inputR, y: node.y };
     }
@@ -226,12 +269,24 @@ const Renderer = (() => {
       const yOff = outputIndex === 1 ? 18 : -18;
       return { x: node.x + hw, y: node.y + yOff };
     }
-    return { x: node.x + NODE.outputR, y: node.y };
+    return { x: node.x + 36, y: node.y };
   }
 
   function _nodeInputAnchor(node, inputIndex, isClockWire) {
+    // ── Vertical layout: inputs come from BELOW ──
+    if (_currentLayout === 'vertical') {
+      if (node.type === 'OUTPUT')
+        return { x: node.x, y: node.y + 36 };   // larger output circle
+      if (node.type === 'GATE_SLOT') {
+        const spread  = 22;
+        const offsetX = (inputIndex - 0.5) * spread;
+        return { x: node.x + offsetX, y: node.y + NODE.gateH / 2 };
+      }
+      return { x: node.x, y: node.y + NODE.inputR };
+    }
+
     if (node.type === 'OUTPUT') {
-      return { x: node.x - NODE.outputR, y: node.y };
+      return { x: node.x - 36, y: node.y };
     }
     if (node.type === 'GATE_SLOT') {
       const spread  = 18;
@@ -419,7 +474,7 @@ const Renderer = (() => {
 
   // ── OUTPUT node ───────────────────────────────────────────
   function _drawOutputNode(node, val, hovered, solved) {
-    const r = NODE.outputR;
+    const r = 36;
     ctx.save();
 
     const correct = val !== null && val === node.targetValue;
@@ -445,18 +500,18 @@ const Renderer = (() => {
     ctx.setLineDash([]);
 
     ctx.fillStyle    = val === null ? C.wireNull : (val === 1 ? C.textHigh : C.textLow);
-    ctx.font         = 'bold 16px JetBrains Mono, monospace';
+    ctx.font         = 'bold 22px JetBrains Mono, monospace';
     ctx.textAlign    = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText(val !== null ? val.toString() : '?', node.x, node.y - 3);
+    ctx.fillText(val !== null ? val.toString() : '?', node.x, node.y - 5);
 
     ctx.fillStyle    = 'rgba(100,150,170,0.7)';
-    ctx.font         = 'bold 10px JetBrains Mono, monospace';
+    ctx.font         = 'bold 13px JetBrains Mono, monospace';
     ctx.textBaseline = 'middle';
-    ctx.fillText(`→${node.targetValue}`, node.x, node.y + 12);
+    ctx.fillText(`→${node.targetValue}`, node.x, node.y + 16);
 
     ctx.fillStyle    = C.textDim;
-    ctx.font         = '10px JetBrains Mono, monospace';
+    ctx.font         = '13px JetBrains Mono, monospace';
     ctx.textBaseline = 'alphabetic';
     ctx.fillText(node.label || '', node.x, node.y - r - 10);
     ctx.restore();
@@ -624,7 +679,9 @@ const Renderer = (() => {
   }
 
   // ── Hit Testing ───────────────────────────────────────────
-  function getNodeAtPoint(x, y, nodes) {
+  function getNodeAtPoint(px, py, nodes) {
+    const x = px - _offsetX;
+    const y = py - _offsetY;
     for (let i = nodes.length - 1; i >= 0; i--) {
       const n = nodes[i];
       if (n.type === 'GATE_SLOT') {

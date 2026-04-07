@@ -110,20 +110,24 @@ const LEVELS = [
     instruction: 'בחר את השער היחיד שמתאים לכל המקרים',
     hint: 'NOT inverts the input: 0→1, 1→0. It is the only single-input gate.',
     nodes: [
-      // Case 1: A=0 → 1
-      { id: 'c1_A', type: 'INPUT',     x: 220, y: 300, fixedValue: 0, label: 'A' },
+      // Case 1: A=0, B=1 → 1
+      { id: 'c1_A', type: 'INPUT',     x: 220, y: 260, fixedValue: 0, label: 'A' },
+      { id: 'c1_B', type: 'INPUT',     x: 220, y: 340, fixedValue: 1, label: 'B' },
       { id: 'c1_g', type: 'GATE_SLOT', x: 560, y: 300, linkedGroup: 'main' },
       { id: 'c1_Z', type: 'OUTPUT',    x: 900, y: 300, targetValue: 1, label: 'Z' },
-      // Case 2: A=1 → 0
-      { id: 'c2_A', type: 'INPUT',     x: 220, y: 500, fixedValue: 1, label: 'A' },
+      // Case 2: A=1, B=0 → 0
+      { id: 'c2_A', type: 'INPUT',     x: 220, y: 460, fixedValue: 1, label: 'A' },
+      { id: 'c2_B', type: 'INPUT',     x: 220, y: 540, fixedValue: 0, label: 'B' },
       { id: 'c2_g', type: 'GATE_SLOT', x: 560, y: 500, linkedGroup: 'main' },
       { id: 'c2_Z', type: 'OUTPUT',    x: 900, y: 500, targetValue: 0, label: 'Z' },
     ],
     wires: [
       { id: 'c1w1', sourceId: 'c1_A', targetId: 'c1_g', targetInputIndex: 0 },
-      { id: 'c1w2', sourceId: 'c1_g', targetId: 'c1_Z', targetInputIndex: 0 },
+      { id: 'c1w2', sourceId: 'c1_B', targetId: 'c1_g', targetInputIndex: 1 },
+      { id: 'c1w3', sourceId: 'c1_g', targetId: 'c1_Z', targetInputIndex: 0 },
       { id: 'c2w1', sourceId: 'c2_A', targetId: 'c2_g', targetInputIndex: 0 },
-      { id: 'c2w2', sourceId: 'c2_g', targetId: 'c2_Z', targetInputIndex: 0 },
+      { id: 'c2w2', sourceId: 'c2_B', targetId: 'c2_g', targetInputIndex: 1 },
+      { id: 'c2w3', sourceId: 'c2_g', targetId: 'c2_Z', targetInputIndex: 0 },
     ],
   },
 
@@ -259,108 +263,312 @@ const LEVELS = [
     ],
   },
 
-  // L7 — GATE CHAIN (2 gates in series)
-  // A=1,B=1,C=0 → g1(A,B) → g2(g1,C) → Z=1
-  // Solution: g1=AND(1,1)=1, g2=OR(1,0)=1  or  g1=OR(1,1)=1, g2=OR(1,0)=1
+  // L7 — GATE CHAIN (2 gates in series, 4 cases, vertical bottom-to-top)
+  // Unique solution: G1=NAND, G2=OR
+  // Case 1: A=1,B=1,C=0 → Z=0   Case 2: A=0,B=0,C=0 → Z=1
+  // Case 3: A=1,B=0,C=0 → Z=1   Case 4: A=0,B=1,C=1 → Z=1
   {
     id: 7, name: 'GATE CHAIN', difficulty: '1. Basics',
-    description: 'Two gates in series. The output of G1 becomes the first input of G2. Trace left to right.',
-    hint: 'Work left to right: choose G1 so its output is 1, then choose G2 so OR/AND of that 1 with C=0 gives 1.',
+    layout: 'vertical',
+    description: 'Two gates in series: G1 output feeds G2. Find the unique pair that satisfies ALL four cases.',
+    instruction: 'מצא את זוג השערים היחיד שנותן תוצאה נכונה בכל ארבעת המקרים',
+    hint: 'G1 gets (A,B), its output feeds G2 alongside C. Only one pair works for all cases.',
     nodes: [
-      { id: 'in_A', type: 'INPUT',     x: 180, y: 280, fixedValue: 1, label: 'A' },
-      { id: 'in_B', type: 'INPUT',     x: 180, y: 460, fixedValue: 1, label: 'B' },
-      { id: 'in_C', type: 'INPUT',     x: 180, y: 590, fixedValue: 0, label: 'C' },
-      { id: 'g1',   type: 'GATE_SLOT', x: 480, y: 360 },
-      { id: 'g2',   type: 'GATE_SLOT', x: 720, y: 460 },
-      { id: 'out_Z',type: 'OUTPUT',    x: 980, y: 460, targetValue: 1, label: 'Z' },
+      // Case 1: A=1, B=1, C=0 → Z=0   (cx = -420)
+      { id: 'c1_A',  type: 'INPUT',     x: -470, y: 260, fixedValue: 1, label: 'A' },
+      { id: 'c1_B',  type: 'INPUT',     x: -370, y: 260, fixedValue: 1, label: 'B' },
+      { id: 'c1_g1', type: 'GATE_SLOT', x: -420, y: 100, linkedGroup: 'g1' },
+      { id: 'c1_C',  type: 'INPUT',     x: -335, y: 50,  fixedValue: 0, label: 'C' },
+      { id: 'c1_g2', type: 'GATE_SLOT', x: -420, y: -70, linkedGroup: 'g2' },
+      { id: 'c1_Z',  type: 'OUTPUT',    x: -420, y: -240, targetValue: 0, label: 'Z' },
+      // Case 2: A=0, B=0, C=0 → Z=1   (cx = -140)
+      { id: 'c2_A',  type: 'INPUT',     x: -190, y: 260, fixedValue: 0, label: 'A' },
+      { id: 'c2_B',  type: 'INPUT',     x: -90,  y: 260, fixedValue: 0, label: 'B' },
+      { id: 'c2_g1', type: 'GATE_SLOT', x: -140, y: 100, linkedGroup: 'g1' },
+      { id: 'c2_C',  type: 'INPUT',     x: -55,  y: 50,  fixedValue: 0, label: 'C' },
+      { id: 'c2_g2', type: 'GATE_SLOT', x: -140, y: -70, linkedGroup: 'g2' },
+      { id: 'c2_Z',  type: 'OUTPUT',    x: -140, y: -240, targetValue: 1, label: 'Z' },
+      // Case 3: A=1, B=0, C=0 → Z=1   (cx = 140)
+      { id: 'c3_A',  type: 'INPUT',     x: 90,   y: 260, fixedValue: 1, label: 'A' },
+      { id: 'c3_B',  type: 'INPUT',     x: 190,  y: 260, fixedValue: 0, label: 'B' },
+      { id: 'c3_g1', type: 'GATE_SLOT', x: 140,  y: 100, linkedGroup: 'g1' },
+      { id: 'c3_C',  type: 'INPUT',     x: 225,  y: 50,  fixedValue: 0, label: 'C' },
+      { id: 'c3_g2', type: 'GATE_SLOT', x: 140,  y: -70, linkedGroup: 'g2' },
+      { id: 'c3_Z',  type: 'OUTPUT',    x: 140,  y: -240, targetValue: 1, label: 'Z' },
+      // Case 4: A=0, B=1, C=1 → Z=1   (cx = 420)
+      { id: 'c4_A',  type: 'INPUT',     x: 370,  y: 260, fixedValue: 0, label: 'A' },
+      { id: 'c4_B',  type: 'INPUT',     x: 470,  y: 260, fixedValue: 1, label: 'B' },
+      { id: 'c4_g1', type: 'GATE_SLOT', x: 420,  y: 100, linkedGroup: 'g1' },
+      { id: 'c4_C',  type: 'INPUT',     x: 505,  y: 50,  fixedValue: 1, label: 'C' },
+      { id: 'c4_g2', type: 'GATE_SLOT', x: 420,  y: -70, linkedGroup: 'g2' },
+      { id: 'c4_Z',  type: 'OUTPUT',    x: 420,  y: -240, targetValue: 1, label: 'Z' },
     ],
     wires: [
-      { id: 'w1', sourceId: 'in_A', targetId: 'g1',    targetInputIndex: 0 },
-      { id: 'w2', sourceId: 'in_B', targetId: 'g1',    targetInputIndex: 1 },
-      { id: 'w3', sourceId: 'g1',   targetId: 'g2',    targetInputIndex: 0 },
-      { id: 'w4', sourceId: 'in_C', targetId: 'g2',    targetInputIndex: 1 },
-      { id: 'w5', sourceId: 'g2',   targetId: 'out_Z', targetInputIndex: 0 },
+      // Case 1: A,B→g1 → g2(g1,C) → Z
+      { id: 'c1w1', sourceId: 'c1_A',  targetId: 'c1_g1', targetInputIndex: 0 },
+      { id: 'c1w2', sourceId: 'c1_B',  targetId: 'c1_g1', targetInputIndex: 1 },
+      { id: 'c1w3', sourceId: 'c1_g1', targetId: 'c1_g2', targetInputIndex: 0 },
+      { id: 'c1w4', sourceId: 'c1_C',  targetId: 'c1_g2', targetInputIndex: 1 },
+      { id: 'c1w5', sourceId: 'c1_g2', targetId: 'c1_Z',  targetInputIndex: 0 },
+      // Case 2
+      { id: 'c2w1', sourceId: 'c2_A',  targetId: 'c2_g1', targetInputIndex: 0 },
+      { id: 'c2w2', sourceId: 'c2_B',  targetId: 'c2_g1', targetInputIndex: 1 },
+      { id: 'c2w3', sourceId: 'c2_g1', targetId: 'c2_g2', targetInputIndex: 0 },
+      { id: 'c2w4', sourceId: 'c2_C',  targetId: 'c2_g2', targetInputIndex: 1 },
+      { id: 'c2w5', sourceId: 'c2_g2', targetId: 'c2_Z',  targetInputIndex: 0 },
+      // Case 3
+      { id: 'c3w1', sourceId: 'c3_A',  targetId: 'c3_g1', targetInputIndex: 0 },
+      { id: 'c3w2', sourceId: 'c3_B',  targetId: 'c3_g1', targetInputIndex: 1 },
+      { id: 'c3w3', sourceId: 'c3_g1', targetId: 'c3_g2', targetInputIndex: 0 },
+      { id: 'c3w4', sourceId: 'c3_C',  targetId: 'c3_g2', targetInputIndex: 1 },
+      { id: 'c3w5', sourceId: 'c3_g2', targetId: 'c3_Z',  targetInputIndex: 0 },
+      // Case 4
+      { id: 'c4w1', sourceId: 'c4_A',  targetId: 'c4_g1', targetInputIndex: 0 },
+      { id: 'c4w2', sourceId: 'c4_B',  targetId: 'c4_g1', targetInputIndex: 1 },
+      { id: 'c4w3', sourceId: 'c4_g1', targetId: 'c4_g2', targetInputIndex: 0 },
+      { id: 'c4w4', sourceId: 'c4_C',  targetId: 'c4_g2', targetInputIndex: 1 },
+      { id: 'c4w5', sourceId: 'c4_g2', targetId: 'c4_Z',  targetInputIndex: 0 },
     ],
   },
 
-  // L8 — FANOUT (A fans to two gates)
-  // A=1,B=1,C=0 → G1(A,B)→X=0, G2(A,C)→Y=1
-  // Solution: G1=NAND or XOR (gives 0 from 1,1), G2=OR or NAND (gives 1 from 1,0)
+  // L8 — FANOUT (A fans to two gates, 4 cases, vertical bottom-to-top)
+  // Unique solution: G1=NAND, G2=OR
+  // Case 1: A=1,B=1,C=0 → X=0,Y=1  Case 2: A=0,B=1,C=1 → X=1,Y=1
+  // Case 3: A=1,B=0,C=1 → X=1,Y=1  Case 4: A=0,B=0,C=0 → X=1,Y=0
   {
     id: 8, name: 'FANOUT', difficulty: '1. Basics',
-    description: 'Signal A feeds BOTH gates simultaneously. Two different targets from the same source.',
-    hint: 'A=1 fans out to both. G1 needs to output 0 from (A=1,B=1). G2 needs to output 1 from (A=1,C=0).',
+    layout: 'vertical',
+    description: 'Signal A feeds BOTH gates simultaneously. Find the unique pair of gates that satisfies ALL four cases.',
+    instruction: 'מצא את זוג השערים היחיד שנותן תוצאה נכונה בכל ארבעת המקרים',
+    hint: 'G1 gets (A,B), G2 gets (A,C). Only one pair of gates works for all four input combinations.',
     nodes: [
-      { id: 'in_A', type: 'INPUT',     x: 200, y: 300, fixedValue: 1, label: 'A' },
-      { id: 'in_B', type: 'INPUT',     x: 200, y: 430, fixedValue: 1, label: 'B' },
-      { id: 'in_C', type: 'INPUT',     x: 200, y: 580, fixedValue: 0, label: 'C' },
-      { id: 'g1',   type: 'GATE_SLOT', x: 540, y: 360 },
-      { id: 'g2',   type: 'GATE_SLOT', x: 540, y: 530 },
-      { id: 'out_X',type: 'OUTPUT',    x: 900, y: 360, targetValue: 0, label: 'X' },
-      { id: 'out_Y',type: 'OUTPUT',    x: 900, y: 530, targetValue: 1, label: 'Y' },
+      // Case 1: A=1, B=1, C=0 → X=0, Y=1   (cx = -435)
+      { id: 'c1_B',  type: 'INPUT',     x: -505, y: 200, fixedValue: 1, label: 'B' },
+      { id: 'c1_A',  type: 'INPUT',     x: -435, y: 250, fixedValue: 1, label: 'A' },
+      { id: 'c1_C',  type: 'INPUT',     x: -365, y: 200, fixedValue: 0, label: 'C' },
+      { id: 'c1_g1', type: 'GATE_SLOT', x: -505, y: 0,   linkedGroup: 'top' },
+      { id: 'c1_g2', type: 'GATE_SLOT', x: -365, y: 0,   linkedGroup: 'bot' },
+      { id: 'c1_X',  type: 'OUTPUT',    x: -505, y: -220, targetValue: 0, label: 'X' },
+      { id: 'c1_Y',  type: 'OUTPUT',    x: -365, y: -220, targetValue: 1, label: 'Y' },
+      // Case 2: A=0, B=1, C=1 → X=1, Y=1   (cx = -145)
+      { id: 'c2_B',  type: 'INPUT',     x: -215, y: 200, fixedValue: 1, label: 'B' },
+      { id: 'c2_A',  type: 'INPUT',     x: -145, y: 250, fixedValue: 0, label: 'A' },
+      { id: 'c2_C',  type: 'INPUT',     x: -75,  y: 200, fixedValue: 1, label: 'C' },
+      { id: 'c2_g1', type: 'GATE_SLOT', x: -215, y: 0,   linkedGroup: 'top' },
+      { id: 'c2_g2', type: 'GATE_SLOT', x: -75,  y: 0,   linkedGroup: 'bot' },
+      { id: 'c2_X',  type: 'OUTPUT',    x: -215, y: -220, targetValue: 1, label: 'X' },
+      { id: 'c2_Y',  type: 'OUTPUT',    x: -75,  y: -220, targetValue: 1, label: 'Y' },
+      // Case 3: A=1, B=0, C=1 → X=1, Y=1   (cx = 145)
+      { id: 'c3_B',  type: 'INPUT',     x: 75,   y: 200, fixedValue: 0, label: 'B' },
+      { id: 'c3_A',  type: 'INPUT',     x: 145,  y: 250, fixedValue: 1, label: 'A' },
+      { id: 'c3_C',  type: 'INPUT',     x: 215,  y: 200, fixedValue: 1, label: 'C' },
+      { id: 'c3_g1', type: 'GATE_SLOT', x: 75,   y: 0,   linkedGroup: 'top' },
+      { id: 'c3_g2', type: 'GATE_SLOT', x: 215,  y: 0,   linkedGroup: 'bot' },
+      { id: 'c3_X',  type: 'OUTPUT',    x: 75,   y: -220, targetValue: 1, label: 'X' },
+      { id: 'c3_Y',  type: 'OUTPUT',    x: 215,  y: -220, targetValue: 1, label: 'Y' },
+      // Case 4: A=0, B=0, C=0 → X=1, Y=0   (cx = 435)
+      { id: 'c4_B',  type: 'INPUT',     x: 365,  y: 200, fixedValue: 0, label: 'B' },
+      { id: 'c4_A',  type: 'INPUT',     x: 435,  y: 250, fixedValue: 0, label: 'A' },
+      { id: 'c4_C',  type: 'INPUT',     x: 505,  y: 200, fixedValue: 0, label: 'C' },
+      { id: 'c4_g1', type: 'GATE_SLOT', x: 365,  y: 0,   linkedGroup: 'top' },
+      { id: 'c4_g2', type: 'GATE_SLOT', x: 505,  y: 0,   linkedGroup: 'bot' },
+      { id: 'c4_X',  type: 'OUTPUT',    x: 365,  y: -220, targetValue: 1, label: 'X' },
+      { id: 'c4_Y',  type: 'OUTPUT',    x: 505,  y: -220, targetValue: 0, label: 'Y' },
     ],
     wires: [
-      { id: 'w1', sourceId: 'in_A', targetId: 'g1',    targetInputIndex: 0 },
-      { id: 'w2', sourceId: 'in_B', targetId: 'g1',    targetInputIndex: 1 },
-      { id: 'w3', sourceId: 'in_A', targetId: 'g2',    targetInputIndex: 0 },
-      { id: 'w4', sourceId: 'in_C', targetId: 'g2',    targetInputIndex: 1 },
-      { id: 'w5', sourceId: 'g1',   targetId: 'out_X', targetInputIndex: 0 },
-      { id: 'w6', sourceId: 'g2',   targetId: 'out_Y', targetInputIndex: 0 },
+      // Case 1 — B→g1[0], A→g1[1], A→g2[0], C→g2[1]
+      { id: 'c1w1', sourceId: 'c1_B',  targetId: 'c1_g1', targetInputIndex: 0 },
+      { id: 'c1w2', sourceId: 'c1_A',  targetId: 'c1_g1', targetInputIndex: 1 },
+      { id: 'c1w3', sourceId: 'c1_A',  targetId: 'c1_g2', targetInputIndex: 0 },
+      { id: 'c1w4', sourceId: 'c1_C',  targetId: 'c1_g2', targetInputIndex: 1 },
+      { id: 'c1w5', sourceId: 'c1_g1', targetId: 'c1_X',  targetInputIndex: 0 },
+      { id: 'c1w6', sourceId: 'c1_g2', targetId: 'c1_Y',  targetInputIndex: 0 },
+      // Case 2
+      { id: 'c2w1', sourceId: 'c2_B',  targetId: 'c2_g1', targetInputIndex: 0 },
+      { id: 'c2w2', sourceId: 'c2_A',  targetId: 'c2_g1', targetInputIndex: 1 },
+      { id: 'c2w3', sourceId: 'c2_A',  targetId: 'c2_g2', targetInputIndex: 0 },
+      { id: 'c2w4', sourceId: 'c2_C',  targetId: 'c2_g2', targetInputIndex: 1 },
+      { id: 'c2w5', sourceId: 'c2_g1', targetId: 'c2_X',  targetInputIndex: 0 },
+      { id: 'c2w6', sourceId: 'c2_g2', targetId: 'c2_Y',  targetInputIndex: 0 },
+      // Case 3
+      { id: 'c3w1', sourceId: 'c3_B',  targetId: 'c3_g1', targetInputIndex: 0 },
+      { id: 'c3w2', sourceId: 'c3_A',  targetId: 'c3_g1', targetInputIndex: 1 },
+      { id: 'c3w3', sourceId: 'c3_A',  targetId: 'c3_g2', targetInputIndex: 0 },
+      { id: 'c3w4', sourceId: 'c3_C',  targetId: 'c3_g2', targetInputIndex: 1 },
+      { id: 'c3w5', sourceId: 'c3_g1', targetId: 'c3_X',  targetInputIndex: 0 },
+      { id: 'c3w6', sourceId: 'c3_g2', targetId: 'c3_Y',  targetInputIndex: 0 },
+      // Case 4
+      { id: 'c4w1', sourceId: 'c4_B',  targetId: 'c4_g1', targetInputIndex: 0 },
+      { id: 'c4w2', sourceId: 'c4_A',  targetId: 'c4_g1', targetInputIndex: 1 },
+      { id: 'c4w3', sourceId: 'c4_A',  targetId: 'c4_g2', targetInputIndex: 0 },
+      { id: 'c4w4', sourceId: 'c4_C',  targetId: 'c4_g2', targetInputIndex: 1 },
+      { id: 'c4w5', sourceId: 'c4_g1', targetId: 'c4_X',  targetInputIndex: 0 },
+      { id: 'c4w6', sourceId: 'c4_g2', targetId: 'c4_Y',  targetInputIndex: 0 },
     ],
   },
 
-  // L9 — PARALLEL PATHS (2 independent gate paths)
-  // A=1,B=0 → G1 → X=1;  C=1,D=1 → G2 → Y=0
+  // L9 — SPLIT PATH (G1 output fans to Y directly AND chains through G2 to X)
+  // Unique solution: G1=OR, G2=NAND
+  // Case 1: A=1,B=0,C=1 → Y=1,X=0   Case 2: A=0,B=0,C=0 → Y=0,X=1
+  // Case 3: A=1,B=1,C=0 → Y=1,X=1   Case 4: A=0,B=1,C=1 → Y=1,X=0
   {
-    id: 9, name: 'PARALLEL PATHS', difficulty: '1. Basics',
-    description: 'Two completely independent gate paths. Both must hit their targets at the same time.',
-    hint: 'Top path: G1(A=1,B=0) must output 1. Bottom path: G2(C=1,D=1) must output 0. Solve each independently.',
+    id: 9, name: 'SPLIT PATH', difficulty: '1. Basics',
+    layout: 'vertical',
+    description: 'G1 output splits: directly to Y AND through G2 to X. Fan-out meets chaining.',
+    instruction: 'פלט G1 מתפצל — ישירות ל-Y ודרך G2 ל-X.\nמצא את זוג השערים היחיד שנותן תוצאה נכונה בכל ארבעת המקרים.',
+    hint: 'First find G1 from Y targets, then find G2 knowing G1 output.',
     nodes: [
-      { id: 'in_A', type: 'INPUT',     x: 200, y: 270, fixedValue: 1, label: 'A' },
-      { id: 'in_B', type: 'INPUT',     x: 200, y: 390, fixedValue: 0, label: 'B' },
-      { id: 'in_C', type: 'INPUT',     x: 200, y: 520, fixedValue: 1, label: 'C' },
-      { id: 'in_D', type: 'INPUT',     x: 200, y: 640, fixedValue: 1, label: 'D' },
-      { id: 'g1',   type: 'GATE_SLOT', x: 530, y: 330 },
-      { id: 'g2',   type: 'GATE_SLOT', x: 530, y: 580 },
-      { id: 'out_X',type: 'OUTPUT',    x: 900, y: 330, targetValue: 1, label: 'X' },
-      { id: 'out_Y',type: 'OUTPUT',    x: 900, y: 580, targetValue: 0, label: 'Y' },
+      // Case 1: A=1, B=0, C=1 → Y=1, X=0   (cx = -420)
+      { id: 'c1_A',  type: 'INPUT',     x: -470, y: 280, fixedValue: 1, label: 'A' },
+      { id: 'c1_B',  type: 'INPUT',     x: -370, y: 280, fixedValue: 0, label: 'B' },
+      { id: 'c1_g1', type: 'GATE_SLOT', x: -420, y: 100, linkedGroup: 'g1' },
+      { id: 'c1_C',  type: 'INPUT',     x: -325, y: 40,  fixedValue: 1, label: 'C' },
+      { id: 'c1_g2', type: 'GATE_SLOT', x: -440, y: -60, linkedGroup: 'g2' },
+      { id: 'c1_X',  type: 'OUTPUT',    x: -440, y: -230, targetValue: 0, label: 'X' },
+      { id: 'c1_Y',  type: 'OUTPUT',    x: -360, y: -230, targetValue: 1, label: 'Y' },
+      // Case 2: A=0, B=0, C=0 → Y=0, X=1   (cx = -140)
+      { id: 'c2_A',  type: 'INPUT',     x: -190, y: 280, fixedValue: 0, label: 'A' },
+      { id: 'c2_B',  type: 'INPUT',     x: -90,  y: 280, fixedValue: 0, label: 'B' },
+      { id: 'c2_g1', type: 'GATE_SLOT', x: -140, y: 100, linkedGroup: 'g1' },
+      { id: 'c2_C',  type: 'INPUT',     x: -45,  y: 40,  fixedValue: 0, label: 'C' },
+      { id: 'c2_g2', type: 'GATE_SLOT', x: -160, y: -60, linkedGroup: 'g2' },
+      { id: 'c2_X',  type: 'OUTPUT',    x: -160, y: -230, targetValue: 1, label: 'X' },
+      { id: 'c2_Y',  type: 'OUTPUT',    x: -80,  y: -230, targetValue: 0, label: 'Y' },
+      // Case 3: A=1, B=1, C=0 → Y=1, X=1   (cx = 140)
+      { id: 'c3_A',  type: 'INPUT',     x: 90,   y: 280, fixedValue: 1, label: 'A' },
+      { id: 'c3_B',  type: 'INPUT',     x: 190,  y: 280, fixedValue: 1, label: 'B' },
+      { id: 'c3_g1', type: 'GATE_SLOT', x: 140,  y: 100, linkedGroup: 'g1' },
+      { id: 'c3_C',  type: 'INPUT',     x: 235,  y: 40,  fixedValue: 0, label: 'C' },
+      { id: 'c3_g2', type: 'GATE_SLOT', x: 120,  y: -60, linkedGroup: 'g2' },
+      { id: 'c3_X',  type: 'OUTPUT',    x: 120,  y: -230, targetValue: 1, label: 'X' },
+      { id: 'c3_Y',  type: 'OUTPUT',    x: 200,  y: -230, targetValue: 1, label: 'Y' },
+      // Case 4: A=0, B=1, C=1 → Y=1, X=0   (cx = 420)
+      { id: 'c4_A',  type: 'INPUT',     x: 370,  y: 280, fixedValue: 0, label: 'A' },
+      { id: 'c4_B',  type: 'INPUT',     x: 470,  y: 280, fixedValue: 1, label: 'B' },
+      { id: 'c4_g1', type: 'GATE_SLOT', x: 420,  y: 100, linkedGroup: 'g1' },
+      { id: 'c4_C',  type: 'INPUT',     x: 515,  y: 40,  fixedValue: 1, label: 'C' },
+      { id: 'c4_g2', type: 'GATE_SLOT', x: 400,  y: -60, linkedGroup: 'g2' },
+      { id: 'c4_X',  type: 'OUTPUT',    x: 400,  y: -230, targetValue: 0, label: 'X' },
+      { id: 'c4_Y',  type: 'OUTPUT',    x: 480,  y: -230, targetValue: 1, label: 'Y' },
     ],
     wires: [
-      { id: 'w1', sourceId: 'in_A', targetId: 'g1',    targetInputIndex: 0 },
-      { id: 'w2', sourceId: 'in_B', targetId: 'g1',    targetInputIndex: 1 },
-      { id: 'w3', sourceId: 'in_C', targetId: 'g2',    targetInputIndex: 0 },
-      { id: 'w4', sourceId: 'in_D', targetId: 'g2',    targetInputIndex: 1 },
-      { id: 'w5', sourceId: 'g1',   targetId: 'out_X', targetInputIndex: 0 },
-      { id: 'w6', sourceId: 'g2',   targetId: 'out_Y', targetInputIndex: 0 },
+      // Case 1: A,B→G1; G1→G2[0], C→G2[1]; G2→X; G1→Y
+      { id: 'c1w1', sourceId: 'c1_A',  targetId: 'c1_g1', targetInputIndex: 0 },
+      { id: 'c1w2', sourceId: 'c1_B',  targetId: 'c1_g1', targetInputIndex: 1 },
+      { id: 'c1w3', sourceId: 'c1_g1', targetId: 'c1_g2', targetInputIndex: 0 },
+      { id: 'c1w4', sourceId: 'c1_C',  targetId: 'c1_g2', targetInputIndex: 1 },
+      { id: 'c1w5', sourceId: 'c1_g2', targetId: 'c1_X',  targetInputIndex: 0 },
+      { id: 'c1w6', sourceId: 'c1_g1', targetId: 'c1_Y',  targetInputIndex: 0 },
+      // Case 2
+      { id: 'c2w1', sourceId: 'c2_A',  targetId: 'c2_g1', targetInputIndex: 0 },
+      { id: 'c2w2', sourceId: 'c2_B',  targetId: 'c2_g1', targetInputIndex: 1 },
+      { id: 'c2w3', sourceId: 'c2_g1', targetId: 'c2_g2', targetInputIndex: 0 },
+      { id: 'c2w4', sourceId: 'c2_C',  targetId: 'c2_g2', targetInputIndex: 1 },
+      { id: 'c2w5', sourceId: 'c2_g2', targetId: 'c2_X',  targetInputIndex: 0 },
+      { id: 'c2w6', sourceId: 'c2_g1', targetId: 'c2_Y',  targetInputIndex: 0 },
+      // Case 3
+      { id: 'c3w1', sourceId: 'c3_A',  targetId: 'c3_g1', targetInputIndex: 0 },
+      { id: 'c3w2', sourceId: 'c3_B',  targetId: 'c3_g1', targetInputIndex: 1 },
+      { id: 'c3w3', sourceId: 'c3_g1', targetId: 'c3_g2', targetInputIndex: 0 },
+      { id: 'c3w4', sourceId: 'c3_C',  targetId: 'c3_g2', targetInputIndex: 1 },
+      { id: 'c3w5', sourceId: 'c3_g2', targetId: 'c3_X',  targetInputIndex: 0 },
+      { id: 'c3w6', sourceId: 'c3_g1', targetId: 'c3_Y',  targetInputIndex: 0 },
+      // Case 4
+      { id: 'c4w1', sourceId: 'c4_A',  targetId: 'c4_g1', targetInputIndex: 0 },
+      { id: 'c4w2', sourceId: 'c4_B',  targetId: 'c4_g1', targetInputIndex: 1 },
+      { id: 'c4w3', sourceId: 'c4_g1', targetId: 'c4_g2', targetInputIndex: 0 },
+      { id: 'c4w4', sourceId: 'c4_C',  targetId: 'c4_g2', targetInputIndex: 1 },
+      { id: 'c4w5', sourceId: 'c4_g2', targetId: 'c4_X',  targetInputIndex: 0 },
+      { id: 'c4w6', sourceId: 'c4_g1', targetId: 'c4_Y',  targetInputIndex: 0 },
     ],
   },
 
-  // L10 — THREE-GATE NETWORK
-  // A=1,B=0,C=1: A,B→G1; B,C→G2; G1,C→G3→P; G2→Q
-  // Target P=1,Q=1.  Solution: G1=OR(1,0)=1, G2=OR(0,1)=1, G3=AND(1,1)=1
+  // L10 — THREE-GATE NETWORK (4 cases, vertical bottom-to-top)
+  // Unique solution: G1=OR, G2=OR, G3=AND
+  // Structure: A,B→G1; B,C→G2; G1,C→G3→P; G2→Q
+  // Case 1: A=1,B=0,C=1 → P=1,Q=1   Case 2: A=0,B=0,C=0 → P=0,Q=0
+  // Case 3: A=1,B=1,C=1 → P=1,Q=1   Case 4: A=0,B=0,C=1 → P=0,Q=1
   {
     id: 10, name: 'THREE-GATE NETWORK', difficulty: '1. Basics',
-    description: 'Three gate slots, two outputs. Fan-out and chained logic combined for the first time.',
-    hint: 'G2(B=0,C=1) must give Q=1. G1(A=1,B=0) feeds G3 alongside C=1 to give P=1. Work backwards from the targets.',
+    layout: 'vertical',
+    description: 'Three gate slots, two outputs. Fan-out and chained logic combined.',
+    instruction: 'מצא את שלושת השערים שנותנים תוצאה נכונה בכל ארבעת המקרים',
+    hint: 'B fans to G1 and G2. C fans to G2 and G3. G1 chains to G3. Only one triple works.',
     nodes: [
-      { id: 'in_A', type: 'INPUT',     x: 160, y: 240, fixedValue: 1, label: 'A' },
-      { id: 'in_B', type: 'INPUT',     x: 160, y: 400, fixedValue: 0, label: 'B' },
-      { id: 'in_C', type: 'INPUT',     x: 160, y: 560, fixedValue: 1, label: 'C' },
-      { id: 'g1',   type: 'GATE_SLOT', x: 440, y: 320 },
-      { id: 'g2',   type: 'GATE_SLOT', x: 440, y: 500 },
-      { id: 'g3',   type: 'GATE_SLOT', x: 720, y: 320 },
-      { id: 'out_P',type: 'OUTPUT',    x: 980, y: 320, targetValue: 1, label: 'P' },
-      { id: 'out_Q',type: 'OUTPUT',    x: 980, y: 500, targetValue: 1, label: 'Q' },
+      // Case 1: A=1, B=0, C=1 → P=1, Q=1   (cx = -450)
+      { id: 'c1_A',  type: 'INPUT',     x: -520, y: 300, fixedValue: 1, label: 'A' },
+      { id: 'c1_B',  type: 'INPUT',     x: -450, y: 340, fixedValue: 0, label: 'B' },
+      { id: 'c1_C',  type: 'INPUT',     x: -380, y: 300, fixedValue: 1, label: 'C' },
+      { id: 'c1_g1', type: 'GATE_SLOT', x: -505, y: 110, linkedGroup: 'g1' },
+      { id: 'c1_g2', type: 'GATE_SLOT', x: -395, y: 110, linkedGroup: 'g2' },
+      { id: 'c1_g3', type: 'GATE_SLOT', x: -450, y: -60, linkedGroup: 'g3' },
+      { id: 'c1_P',  type: 'OUTPUT',    x: -450, y: -240, targetValue: 1, label: 'P' },
+      { id: 'c1_Q',  type: 'OUTPUT',    x: -395, y: -240, targetValue: 1, label: 'Q' },
+      // Case 2: A=0, B=0, C=0 → P=0, Q=0   (cx = -150)
+      { id: 'c2_A',  type: 'INPUT',     x: -220, y: 300, fixedValue: 0, label: 'A' },
+      { id: 'c2_B',  type: 'INPUT',     x: -150, y: 340, fixedValue: 0, label: 'B' },
+      { id: 'c2_C',  type: 'INPUT',     x: -80,  y: 300, fixedValue: 0, label: 'C' },
+      { id: 'c2_g1', type: 'GATE_SLOT', x: -205, y: 110, linkedGroup: 'g1' },
+      { id: 'c2_g2', type: 'GATE_SLOT', x: -95,  y: 110, linkedGroup: 'g2' },
+      { id: 'c2_g3', type: 'GATE_SLOT', x: -150, y: -60, linkedGroup: 'g3' },
+      { id: 'c2_P',  type: 'OUTPUT',    x: -150, y: -240, targetValue: 0, label: 'P' },
+      { id: 'c2_Q',  type: 'OUTPUT',    x: -95,  y: -240, targetValue: 0, label: 'Q' },
+      // Case 3: A=1, B=1, C=1 → P=1, Q=1   (cx = 150)
+      { id: 'c3_A',  type: 'INPUT',     x: 80,   y: 300, fixedValue: 1, label: 'A' },
+      { id: 'c3_B',  type: 'INPUT',     x: 150,  y: 340, fixedValue: 1, label: 'B' },
+      { id: 'c3_C',  type: 'INPUT',     x: 220,  y: 300, fixedValue: 1, label: 'C' },
+      { id: 'c3_g1', type: 'GATE_SLOT', x: 95,   y: 110, linkedGroup: 'g1' },
+      { id: 'c3_g2', type: 'GATE_SLOT', x: 205,  y: 110, linkedGroup: 'g2' },
+      { id: 'c3_g3', type: 'GATE_SLOT', x: 150,  y: -60, linkedGroup: 'g3' },
+      { id: 'c3_P',  type: 'OUTPUT',    x: 150,  y: -240, targetValue: 1, label: 'P' },
+      { id: 'c3_Q',  type: 'OUTPUT',    x: 205,  y: -240, targetValue: 1, label: 'Q' },
+      // Case 4: A=0, B=0, C=1 → P=0, Q=1   (cx = 450)
+      { id: 'c4_A',  type: 'INPUT',     x: 380,  y: 300, fixedValue: 0, label: 'A' },
+      { id: 'c4_B',  type: 'INPUT',     x: 450,  y: 340, fixedValue: 0, label: 'B' },
+      { id: 'c4_C',  type: 'INPUT',     x: 520,  y: 300, fixedValue: 1, label: 'C' },
+      { id: 'c4_g1', type: 'GATE_SLOT', x: 395,  y: 110, linkedGroup: 'g1' },
+      { id: 'c4_g2', type: 'GATE_SLOT', x: 505,  y: 110, linkedGroup: 'g2' },
+      { id: 'c4_g3', type: 'GATE_SLOT', x: 450,  y: -60, linkedGroup: 'g3' },
+      { id: 'c4_P',  type: 'OUTPUT',    x: 450,  y: -240, targetValue: 0, label: 'P' },
+      { id: 'c4_Q',  type: 'OUTPUT',    x: 505,  y: -240, targetValue: 1, label: 'Q' },
     ],
     wires: [
-      { id: 'w1', sourceId: 'in_A', targetId: 'g1',    targetInputIndex: 0 },
-      { id: 'w2', sourceId: 'in_B', targetId: 'g1',    targetInputIndex: 1 },
-      { id: 'w3', sourceId: 'in_B', targetId: 'g2',    targetInputIndex: 0 },
-      { id: 'w4', sourceId: 'in_C', targetId: 'g2',    targetInputIndex: 1 },
-      { id: 'w5', sourceId: 'g1',   targetId: 'g3',    targetInputIndex: 0 },
-      { id: 'w6', sourceId: 'in_C', targetId: 'g3',    targetInputIndex: 1 },
-      { id: 'w7', sourceId: 'g3',   targetId: 'out_P', targetInputIndex: 0 },
-      { id: 'w8', sourceId: 'g2',   targetId: 'out_Q', targetInputIndex: 0 },
+      // Case 1: A,B→G1; B,C→G2; G1,C→G3→P; G2→Q
+      { id: 'c1w1', sourceId: 'c1_A',  targetId: 'c1_g1', targetInputIndex: 0 },
+      { id: 'c1w2', sourceId: 'c1_B',  targetId: 'c1_g1', targetInputIndex: 1 },
+      { id: 'c1w3', sourceId: 'c1_B',  targetId: 'c1_g2', targetInputIndex: 0 },
+      { id: 'c1w4', sourceId: 'c1_C',  targetId: 'c1_g2', targetInputIndex: 1 },
+      { id: 'c1w5', sourceId: 'c1_g1', targetId: 'c1_g3', targetInputIndex: 0 },
+      { id: 'c1w6', sourceId: 'c1_C',  targetId: 'c1_g3', targetInputIndex: 1 },
+      { id: 'c1w7', sourceId: 'c1_g3', targetId: 'c1_P',  targetInputIndex: 0 },
+      { id: 'c1w8', sourceId: 'c1_g2', targetId: 'c1_Q',  targetInputIndex: 0 },
+      // Case 2
+      { id: 'c2w1', sourceId: 'c2_A',  targetId: 'c2_g1', targetInputIndex: 0 },
+      { id: 'c2w2', sourceId: 'c2_B',  targetId: 'c2_g1', targetInputIndex: 1 },
+      { id: 'c2w3', sourceId: 'c2_B',  targetId: 'c2_g2', targetInputIndex: 0 },
+      { id: 'c2w4', sourceId: 'c2_C',  targetId: 'c2_g2', targetInputIndex: 1 },
+      { id: 'c2w5', sourceId: 'c2_g1', targetId: 'c2_g3', targetInputIndex: 0 },
+      { id: 'c2w6', sourceId: 'c2_C',  targetId: 'c2_g3', targetInputIndex: 1 },
+      { id: 'c2w7', sourceId: 'c2_g3', targetId: 'c2_P',  targetInputIndex: 0 },
+      { id: 'c2w8', sourceId: 'c2_g2', targetId: 'c2_Q',  targetInputIndex: 0 },
+      // Case 3
+      { id: 'c3w1', sourceId: 'c3_A',  targetId: 'c3_g1', targetInputIndex: 0 },
+      { id: 'c3w2', sourceId: 'c3_B',  targetId: 'c3_g1', targetInputIndex: 1 },
+      { id: 'c3w3', sourceId: 'c3_B',  targetId: 'c3_g2', targetInputIndex: 0 },
+      { id: 'c3w4', sourceId: 'c3_C',  targetId: 'c3_g2', targetInputIndex: 1 },
+      { id: 'c3w5', sourceId: 'c3_g1', targetId: 'c3_g3', targetInputIndex: 0 },
+      { id: 'c3w6', sourceId: 'c3_C',  targetId: 'c3_g3', targetInputIndex: 1 },
+      { id: 'c3w7', sourceId: 'c3_g3', targetId: 'c3_P',  targetInputIndex: 0 },
+      { id: 'c3w8', sourceId: 'c3_g2', targetId: 'c3_Q',  targetInputIndex: 0 },
+      // Case 4
+      { id: 'c4w1', sourceId: 'c4_A',  targetId: 'c4_g1', targetInputIndex: 0 },
+      { id: 'c4w2', sourceId: 'c4_B',  targetId: 'c4_g1', targetInputIndex: 1 },
+      { id: 'c4w3', sourceId: 'c4_B',  targetId: 'c4_g2', targetInputIndex: 0 },
+      { id: 'c4w4', sourceId: 'c4_C',  targetId: 'c4_g2', targetInputIndex: 1 },
+      { id: 'c4w5', sourceId: 'c4_g1', targetId: 'c4_g3', targetInputIndex: 0 },
+      { id: 'c4w6', sourceId: 'c4_C',  targetId: 'c4_g3', targetInputIndex: 1 },
+      { id: 'c4w7', sourceId: 'c4_g3', targetId: 'c4_P',  targetInputIndex: 0 },
+      { id: 'c4w8', sourceId: 'c4_g2', targetId: 'c4_Q',  targetInputIndex: 0 },
     ],
   },
 
@@ -401,16 +609,16 @@ const LEVELS = [
     description: 'Extends the half adder with a carry-in input. The building block of all multi-bit adders. Five gate slots.',
     hint: 'Two stages: first XOR(A,B) for partial sum, then XOR with Cin for final SUM. AND both stages for carry bits, OR to merge into COUT.',
     nodes: [
-      { id: 'in_A',    type: 'INPUT',     x: 120, y: 240, fixedValue: 1, label: 'A' },
-      { id: 'in_B',    type: 'INPUT',     x: 120, y: 380, fixedValue: 1, label: 'B' },
-      { id: 'in_CIN',  type: 'INPUT',     x: 120, y: 520, fixedValue: 0, label: 'Cin' },
-      { id: 'g_xor1',  type: 'GATE_SLOT', x: 360, y: 300 },
-      { id: 'g_xor2',  type: 'GATE_SLOT', x: 600, y: 300 },
-      { id: 'g_and1',  type: 'GATE_SLOT', x: 360, y: 490 },
-      { id: 'g_and2',  type: 'GATE_SLOT', x: 600, y: 490 },
-      { id: 'g_or',    type: 'GATE_SLOT', x: 820, y: 490 },
-      { id: 'out_SUM', type: 'OUTPUT',    x: 990, y: 300, targetValue: 0, label: 'SUM' },
-      { id: 'out_CO',  type: 'OUTPUT',    x: 990, y: 490, targetValue: 1, label: 'COUT' },
+      { id: 'in_A',    type: 'INPUT',     x: 120, y: 160, fixedValue: 1, label: 'A' },
+      { id: 'in_B',    type: 'INPUT',     x: 120, y: 370, fixedValue: 1, label: 'B' },
+      { id: 'in_CIN',  type: 'INPUT',     x: 120, y: 580, fixedValue: 0, label: 'Cin' },
+      { id: 'g_xor1',  type: 'GATE_SLOT', x: 360, y: 240 },
+      { id: 'g_xor2',  type: 'GATE_SLOT', x: 600, y: 240 },
+      { id: 'g_and1',  type: 'GATE_SLOT', x: 360, y: 560 },
+      { id: 'g_and2',  type: 'GATE_SLOT', x: 600, y: 560 },
+      { id: 'g_or',    type: 'GATE_SLOT', x: 820, y: 560 },
+      { id: 'out_SUM', type: 'OUTPUT',    x: 990, y: 240, targetValue: 0, label: 'SUM' },
+      { id: 'out_CO',  type: 'OUTPUT',    x: 990, y: 560, targetValue: 1, label: 'COUT' },
     ],
     wires: [
       { id: 'w1',  sourceId: 'in_A',   targetId: 'g_xor1', targetInputIndex: 0 },

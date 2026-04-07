@@ -18,7 +18,7 @@ const LEVELS = [
   // L1 — AND GATE  (4 cases: all input combos, only AND satisfies all)
   {
     id: 1, name: 'AND GATE', difficulty: '1. Basics',
-    description: 'Find the single gate that produces the correct output for ALL four input combinations.',
+    description: 'AND Gate — שער AND מוציא 1 רק כאשר שני הכניסות הן 1. זהו השער הבסיסי ביותר בלוגיקה דיגיטלית, ומשמש בין היתר לבדיקת תנאים מרובים — האם כל התנאים מתקיימים בו-זמנית.',
     instruction: 'בחר את השער היחיד שמתאים לכל המקרים',
     hint: 'AND outputs 1 ONLY when both inputs are 1. Check all four rows.',
     truthTable: {
@@ -98,7 +98,7 @@ const LEVELS = [
   // L2 — OR GATE  (4 cases)
   {
     id: 2, name: 'OR GATE', difficulty: '1. Basics',
-    description: 'Find the single gate that produces the correct output for ALL four input combinations.',
+    description: 'OR Gate — שער OR מוציא 1 כאשר לפחות אחת מהכניסות היא 1. משמש לבדיקה האם תנאי כלשהו מתקיים — מספיק שאחד מהם נכון כדי לקבל פלט חיובי.',
     instruction: 'בחר את השער היחיד שמתאים לכל המקרים',
     hint: 'OR outputs 1 when at least one input is 1. Only OR matches all four rows.',
     truthTable: { inputs: ['A','B'], outputs: ['Z'], rows: [[[0,0],[0]],[[0,1],[1]],[[1,0],[1]],[[1,1],[1]]] },
@@ -149,7 +149,7 @@ const LEVELS = [
   // L3 — NOT GATE  (2 cases: all input combos for single input)
   {
     id: 3, name: 'NOT GATE', difficulty: '1. Basics',
-    description: 'Find the single gate that produces the correct output for ALL input combinations.',
+    description: 'NOT Gate — שער NOT (מהפך) הופך את ערך הכניסה: 0 הופך ל-1 ו-1 הופך ל-0. זהו השער היחיד עם כניסה אחת בלבד, ומשמש ליצירת השלילה הלוגית בכל מעגל דיגיטלי.',
     instruction: 'בחר את השער היחיד שמתאים לכל המקרים',
     hint: 'NOT inverts the input: 0→1, 1→0. It is the only single-input gate.',
     truthTable: { inputs: ['A'], outputs: ['Z'], rows: [[[0],[1]],[[1],[0]]] },
@@ -180,7 +180,7 @@ const LEVELS = [
   // L4 — NAND GATE  (4 cases)
   {
     id: 4, name: 'NAND GATE', difficulty: '1. Basics',
-    description: 'Find the single gate that produces the correct output for ALL four input combinations.',
+    description: 'NAND Gate — שער NAND הוא AND הפוך: מוציא 0 רק כששתי הכניסות הן 1. NAND הוא שער אוניברסלי — ניתן לבנות כל מעגל לוגי באמצעות שערי NAND בלבד.',
     instruction: 'בחר את השער היחיד שמתאים לכל המקרים',
     hint: 'NAND is inverted AND: output is 0 ONLY when both inputs are 1.',
     truthTable: { inputs: ['A','B'], outputs: ['Z'], rows: [[[0,0],[1]],[[0,1],[1]],[[1,0],[1]],[[1,1],[0]]] },
@@ -231,7 +231,7 @@ const LEVELS = [
   // L5 — NOR GATE  (4 cases)
   {
     id: 5, name: 'NOR GATE', difficulty: '1. Basics',
-    description: 'Find the single gate that produces the correct output for ALL four input combinations.',
+    description: 'NOR Gate — שער NOR הוא OR הפוך: מוציא 1 רק כששתי הכניסות הן 0. כמו NAND, גם NOR הוא שער אוניברסלי — ניתן לבנות כל מעגל לוגי באמצעות שערי NOR בלבד.',
     instruction: 'בחר את השער היחיד שמתאים לכל המקרים',
     hint: 'NOR is inverted OR: output is 1 ONLY when both inputs are 0.',
     truthTable: { inputs: ['A','B'], outputs: ['Z'], rows: [[[0,0],[1]],[[0,1],[0]],[[1,0],[0]],[[1,1],[0]]] },
@@ -282,7 +282,7 @@ const LEVELS = [
   // L6 — XOR GATE  (4 cases)
   {
     id: 6, name: 'XOR GATE', difficulty: '1. Basics',
-    description: 'Find the single gate that produces the correct output for ALL four input combinations.',
+    description: 'XOR Gate — שער XOR (או בלעדי) מוציא 1 רק כאשר הכניסות שונות זו מזו. משמש רבות בחישובי חיבור בינארי ובמעגלי בדיקת זוגיות (parity).',
     instruction: 'בחר את השער היחיד שמתאים לכל המקרים',
     hint: 'XOR outputs 1 when inputs differ. Only XOR matches all four rows.',
     truthTable: { inputs: ['A','B'], outputs: ['Z'], rows: [[[0,0],[0]],[[0,1],[1]],[[1,0],[1]],[[1,1],[0]]] },
@@ -337,7 +337,7 @@ const LEVELS = [
   {
     id: 7, name: 'GATE CHAIN', difficulty: '1. Basics',
     layout: 'vertical',
-    description: 'Two gates in series: G1 output feeds G2. Find the unique pair that satisfies ALL four cases.',
+    description: 'Gate Chain — שרשרת שערים: פלט השער הראשון מוזן כקלט לשער השני. זהו המבנה הבסיסי ביותר של שני שערים ברצף, ומדגים כיצד ניתן לבנות פונקציות לוגיות מורכבות משילוב שערים פשוטים.',
     instruction: 'שרשרת שערים: פלט G1 מוזן ל-G2 יחד עם C\nמצא את זוג השערים היחיד שנותן תוצאה נכונה בכל ארבעת המקרים',
     hint: 'G1 gets (A,B), its output feeds G2 alongside C. Only one pair works for all cases.',
     truthTable: { inputs: ['A','B','C'], outputs: ['Z'], rows: [[[0,0,0],[1]],[[0,0,1],[1]],[[0,1,0],[1]],[[0,1,1],[1]],[[1,0,0],[1]],[[1,0,1],[1]],[[1,1,0],[0]],[[1,1,1],[1]]] },
@@ -412,7 +412,7 @@ const LEVELS = [
   {
     id: 8, name: 'FANOUT', difficulty: '1. Basics',
     layout: 'vertical',
-    description: 'Signal A feeds BOTH gates simultaneously. Find the unique pair of gates that satisfies ALL four cases.',
+    description: 'Fanout — פיצול אות: אות A מוזן לשני שערים שונים בו-זמנית. זהו מבנה יסודי בעיצוב מעגלים — אות יחיד יכול להשפיע על מספר נתיבים במקביל, כמו אפיק נתונים שמחובר למספר רכיבים.',
     instruction: 'פיצול אות: A מוזן לשני השערים בו-זמנית\nמצא את זוג השערים היחיד שנותן תוצאה נכונה בכל ארבעת המקרים',
     hint: 'G1 gets (A,B), G2 gets (A,C). Only one pair of gates works for all four input combinations.',
     truthTable: { inputs: ['A','B','C'], outputs: ['X','Y'], rows: [[[0,0,0],[1,0]],[[0,0,1],[1,1]],[[0,1,0],[1,0]],[[0,1,1],[1,1]],[[1,0,0],[1,1]],[[1,0,1],[1,1]],[[1,1,0],[0,1]],[[1,1,1],[0,1]]] },
@@ -495,7 +495,7 @@ const LEVELS = [
   {
     id: 9, name: 'SPLIT PATH', difficulty: '1. Basics',
     layout: 'vertical',
-    description: 'G1 output splits: directly to Y AND through G2 to X. Fan-out meets chaining.',
+    description: 'Split Path — נתיב מפוצל: פלט G1 מתפצל לשני כיוונים — ישירות ליציאה Y ובמקביל כקלט ל-G2 שמוביל ל-X. מבנה זה משלב פיצול (fanout) עם שרשור (chaining) ומהווה גשר בין מעגלים מקביליים לרציפים.',
     instruction: 'נתיב מפוצל: פלט G1 מתפצל — ישירות ל-Y ודרך G2 ל-X\nמצא את זוג השערים היחיד שנותן תוצאה נכונה בכל ארבעת המקרים',
     hint: 'First find G1 from Y targets, then find G2 knowing G1 output.',
     truthTable: { inputs: ['A','B','C'], outputs: ['X','Y'], rows: [[[0,0,0],[1,0]],[[0,0,1],[1,0]],[[0,1,0],[1,1]],[[0,1,1],[0,1]],[[1,0,0],[1,1]],[[1,0,1],[0,1]],[[1,1,0],[1,1]],[[1,1,1],[0,1]]] },
@@ -579,7 +579,7 @@ const LEVELS = [
   {
     id: 10, name: 'THREE-GATE NETWORK', difficulty: '1. Basics',
     layout: 'vertical',
-    description: 'Three gate slots, two outputs. Fan-out and chained logic combined.',
+    description: 'Three-Gate Network — רשת שלושה שערים: B מתפצל ל-G1 ול-G2, C מתפצל ל-G2 ול-G3, ופלט G1 משורשר ל-G3. מבנה זה משלב לראשונה פיצול אותות עם שרשור שערים ברשת אחת — היסוד לכל מעגל משולב מורכב.',
     instruction: 'רשת שלושה שערים: פיצול ושרשור משולבים לראשונה\nמצא את שלושת השערים שנותנים תוצאה נכונה בכל ארבעת המקרים',
     hint: 'B fans to G1 and G2. C fans to G2 and G3. G1 chains to G3. Only one triple works.',
     truthTable: { inputs: ['A','B','C'], outputs: ['P','Q'], rows: [[[0,0,0],[0,0]],[[0,0,1],[0,1]],[[0,1,0],[0,1]],[[0,1,1],[1,1]],[[1,0,0],[0,0]],[[1,0,1],[1,1]],[[1,1,0],[0,1]],[[1,1,1],[1,1]]] },
@@ -678,7 +678,7 @@ const LEVELS = [
   {
     id: 11, name: 'HALF ADDER', difficulty: '2. Classic Circuits',
     layout: 'vertical',
-    description: 'The most fundamental arithmetic circuit. SUM and CARRY from two gate slots.',
+    description: 'Half Adder — חצי-מחבר הוא מעגל החיבור הפשוט ביותר. הוא מחבר שני ביטים בודדים: XOR מחשב את הסכום (SUM) ו-AND מחשב את הנשא (CARRY). זהו אבן הבניין של המחבר המלא.',
     instruction: 'חצי-מחבר: אחד מחשב סכום ואחד מחשב נשא\nמצא את שני השערים שנותנים תוצאה נכונה בכל ארבעת המקרים',
     hint: 'SUM uses XOR (adds without carry), CARRY uses AND (carry only when both are 1).',
     truthTable: { inputs: ['A','B'], outputs: ['SUM','CARRY'], rows: [[[0,0],[0,0]],[[0,1],[1,0]],[[1,0],[1,0]],[[1,1],[0,1]]] },
@@ -757,7 +757,7 @@ const LEVELS = [
   {
     id: 12, name: 'FULL ADDER', difficulty: '2. Classic Circuits',
     layout: 'vertical',
-    description: 'Extends the half adder with carry-in. The building block of all multi-bit adders. Five gate slots.',
+    description: 'Full Adder — מחבר מלא הוא אבן הבניין של כל מעגלי החיבור במעבדים. הוא מחבר שני ביטים (A ו-B) יחד עם ביט נשא נכנס (Cin), ומפיק סכום (SUM) ונשא יוצא (COUT). שרשור של מחברים מלאים מאפשר חיבור מספרים בני מספר ביטים.',
     instruction: 'מחבר מלא: חמישה שערים מחשבים SUM ו-COUT\nמצא את חמשת השערים שנותנים תוצאה נכונה בכל ארבעת המקרים',
     hint: 'XOR1(A,B)→XOR2(…,Cin)→SUM. AND stages for carry bits, OR merges into COUT.',
     truthTable: { inputs: ['A','B','Cin'], outputs: ['SUM','COUT'], rows: [[[0,0,0],[0,0]],[[0,0,1],[1,0]],[[0,1,0],[1,0]],[[0,1,1],[0,1]],[[1,0,0],[1,0]],[[1,0,1],[0,1]],[[1,1,0],[0,1]],[[1,1,1],[1,1]]] },
@@ -918,7 +918,7 @@ const LEVELS = [
   {
     id: 13, name: 'XNOR GATE', difficulty: '2. Classic Circuits',
     layout: 'vertical',
-    description: 'XNOR = XOR then NOT. Output is 1 when inputs are EQUAL. Core of equality detectors.',
+    description: 'XNOR Gate — שער XNOR מוציא 1 כאשר שתי הכניסות שוות (שתיהן 0 או שתיהן 1). הוא בנוי משרשרת XOR ואחריו NOT. משמש במעגלי השוואה ובדיקת שוויון ביטים.',
     instruction: 'XNOR: הראשון מעבד את הקלטים והשני הופך את התוצאה\nמצא את שני השערים שנותנים תוצאה נכונה בכל ארבעת המקרים',
     hint: 'XNOR is just XOR followed by NOT. Two gate slots chained.',
     truthTable: { inputs: ['A','B'], outputs: ['Z'], rows: [[[0,0],[1]],[[0,1],[0]],[[1,0],[0]],[[1,1],[1]]] },
@@ -989,7 +989,7 @@ const LEVELS = [
   {
     id: 14, name: '2:1 MUX', difficulty: '2. Classic Circuits',
     layout: 'vertical',
-    description: 'Multiplexer: S=0 routes D0 to output, S=1 routes D1. Foundation of all data selectors.',
+    description: '2:1 MUX — מרבב (Multiplexer) הוא בורר נתונים: קו הבחירה S קובע איזו כניסה (D0 או D1) תועבר ליציאה Y. מרבבים הם רכיבים מרכזיים בניתוב נתונים במעבדים ובזיכרונות.',
     instruction: 'מרבב 2:1: S בוחר בין D0 ל-D1\nמצא את ארבעת השערים שנותנים Y נכון בכל ארבעת המקרים',
     hint: 'Standard MUX: NOT the select, AND with each data path, then OR the results. Four gate slots.',
     truthTable: {
@@ -1097,7 +1097,7 @@ const LEVELS = [
   {
     id: 15, name: '1:2 DEMUX', difficulty: '2. Classic Circuits',
     layout: 'vertical',
-    description: 'Demultiplexer: routes single input D to either Y0 (S=0) or Y1 (S=1). Opposite of MUX.',
+    description: '1:2 DEMUX — דה-מרבב הוא ההפך ממרבב: הוא מנתב כניסה יחידה D לאחת משתי יציאות (Y0 או Y1) לפי קו הבחירה S. משמש בפיענוח כתובות ובניתוב אותות בזיכרונות.',
     instruction: 'דה-מרבב 1:2: מנתב את D ל-Y0 או ל-Y1 לפי S\nמצא את שלושת השערים שנותנים תוצאה נכונה בכל ארבעת המקרים',
     hint: 'Invert S, then AND D with !S for Y0, AND D with S for Y1. Three gate slots.',
     truthTable: { inputs: ['D','S'], outputs: ['Y0','Y1'], rows: [[[0,0],[0,0]],[[0,1],[0,0]],[[1,0],[1,0]],[[1,1],[0,1]]] },
@@ -1184,7 +1184,7 @@ const LEVELS = [
   {
     id: 16, name: '3-BIT ODD PARITY', difficulty: '2. Classic Circuits',
     layout: 'vertical',
-    description: 'Odd parity: P=1 when an ODD number of inputs are HIGH. Used in error detection. Chain two XOR gates.',
+    description: 'Odd Parity — בדיקת זוגיות אי-זוגית: שרשרת שערי XOR סופרת האם מספר הכניסות הדולקות הוא אי-זוגי. משמש בגילוי שגיאות בתקשורת נתונים ובזיכרונות.',
     instruction: 'זוגיות אי-זוגית: P דולק כשמספר אי-זוגי של כניסות דולק\nמצא את שני השערים שנותנים P נכון בכל ארבעת המקרים',
     hint: 'Parity is always a chain of XOR gates: XOR(XOR(A,B),C). Each XOR accumulates the "odd count" flag.',
     truthTable: { inputs: ['A','B','C'], outputs: ['P'], rows: [[[0,0,0],[0]],[[0,0,1],[1]],[[0,1,0],[1]],[[0,1,1],[0]],[[1,0,0],[1]],[[1,0,1],[0]],[[1,1,0],[0]],[[1,1,1],[1]]] },
@@ -1259,7 +1259,7 @@ const LEVELS = [
   {
     id: 17, name: 'MAJORITY-OF-3', difficulty: '2. Classic Circuits',
     layout: 'vertical',
-    description: 'Output is 1 when at least 2 of 3 inputs are HIGH. F = AB+BC+AC.',
+    description: 'Majority-of-3 — מעגל רוב: הפלט דולק כשלפחות 2 מתוך 3 כניסות דולקות. מחשב AB+BC+AC באמצעות שלושה שערי AND לזוגות ושני שערי OR למיזוג. משמש בלוגיקת הצבעה ובמערכות עמידות לתקלות.',
     instruction: 'רוב מ-3: הפלט דולק כשלפחות 2 מתוך 3 כניסות דולקות\nמצא את חמשת השערים שנותנים M נכון בכל ארבעת המקרים',
     hint: 'Compute all three pairwise ANDs (AB, BC, AC), then OR them together in a two-level OR tree.',
     truthTable: { inputs: ['A','B','C'], outputs: ['M'], rows: [[[0,0,0],[0]],[[0,0,1],[0]],[[0,1,0],[0]],[[0,1,1],[1]],[[1,0,0],[0]],[[1,0,1],[1]],[[1,1,0],[1]],[[1,1,1],[1]]] },
@@ -1370,7 +1370,7 @@ const LEVELS = [
   {
     id: 18, name: '2-TO-4 DECODER', difficulty: '2. Classic Circuits',
     layout: 'vertical',
-    description: 'Decodes a 2-bit address: exactly ONE of four outputs is HIGH.',
+    description: '2-to-4 Decoder — מפענח: ממיר כתובת בינארית של 2 ביטים לאחת מ-4 יציאות. בדיוק יציאה אחת דולקת בכל רגע. משמש בפיענוח כתובות זיכרון ובבחירת רכיבים על לוח אם.',
     instruction: 'מפענח 2-ל-4: בדיוק פלט אחד דולק לפי כתובת הכניסה\nמצא את ששת השערים שנותנים תוצאה נכונה בכל ארבעת המקרים',
     hint: 'Invert both select lines first. Each output AND gate takes the appropriate true/complemented versions of S1,S0.',
     truthTable: { inputs: ['S0','S1'], outputs: ['Y0','Y1','Y2','Y3'], rows: [[[0,0],[1,0,0,0]],[[1,0],[0,1,0,0]],[[0,1],[0,0,1,0]],[[1,1],[0,0,0,1]]] },
@@ -1505,7 +1505,7 @@ const LEVELS = [
   {
     id: 19, name: '1-BIT COMPARATOR', difficulty: '2. Classic Circuits',
     layout: 'vertical',
-    description: 'Compares single bits A and B. GT=1 when A>B, EQ=1 when A=B.',
+    description: '1-Bit Comparator — משווה ביטים: GT (גדול מ) דולק כש-A=1 ו-B=0, ו-EQ (שווה) דולק כשהביטים זהים. GT נבנה מ-AND(A, NOT B), ו-EQ מ-NOT(XOR(A,B)). משמש ב-ALU ובמעגלי מיון.',
     instruction: 'משווה 1-ביט: GT דולק כש-A גדול מ-B, EQ דולק כשהם שווים\nמצא את ארבעת השערים שנותנים תוצאה נכונה בכל ארבעת המקרים',
     hint: 'GT = A AND NOT(B). EQ = NOT(XOR(A,B)). Four gate slots total.',
     truthTable: { inputs: ['A','B'], outputs: ['GT','EQ'], rows: [[[0,0],[0,1]],[[0,1],[0,0]],[[1,0],[1,0]],[[1,1],[0,1]]] },
@@ -1604,7 +1604,7 @@ const LEVELS = [
   {
     id: 20, name: 'PRIORITY ENCODER', difficulty: '2. Classic Circuits',
     layout: 'vertical',
-    description: 'A has priority over B. VALID=1 if any input is active. CODE=1 if only B is active.',
+    description: 'Priority Encoder — מקודד עדיפות: VALID דולק כשיש לפחות כניסה פעילה אחת. CODE מציין את הכניסה הפעילה בעלת העדיפות הנמוכה (B פעיל רק אם A לא פעיל). משמש בטיפול בפסיקות (interrupts) ובתורי עדיפויות בחומרה.',
     instruction: 'מקודד עדיפות: VALID דולק אם יש כניסה פעילה, CODE מציין איזו\nמצא את שלושת השערים שנותנים תוצאה נכונה בכל ארבעת המקרים',
     hint: 'VALID = A OR B. CODE = NOT(A) AND B.',
     truthTable: { inputs: ['A','B'], outputs: ['VALID','CODE'], rows: [[[0,0],[0,0]],[[0,1],[1,1]],[[1,0],[1,0]],[[1,1],[1,0]]] },

@@ -417,8 +417,8 @@ html, body {
 
 /* ── Truth Table Overlay ─────────────────────────────────── */
 #truth-box {
-  width: min(600px, calc(100vw - 40px));
-  max-height: min(700px, calc(100vh - 80px));
+  width: min(750px, calc(100vw - 40px));
+  max-height: min(800px, calc(100vh - 60px));
   overflow: auto;
   background: linear-gradient(180deg, rgba(15,21,32,0.98) 0%, rgba(10,14,20,0.98) 100%);
   border: 1px solid var(--border-bright);
@@ -441,7 +441,7 @@ html, body {
 }
 
 #truth-title {
-  font-size: 20px;
+  font-size: 24px;
   letter-spacing: 3px;
   color: var(--accent-cyan);
   font-weight: 700;
@@ -452,22 +452,22 @@ html, body {
   width: 100%;
   border-collapse: collapse;
   font-family: 'JetBrains Mono', monospace;
-  font-size: 14px;
+  font-size: 18px;
   direction: ltr;
 }
 
 #truth-table-container th {
-  padding: 10px 14px;
+  padding: 12px 18px;
   text-align: center;
   font-weight: 700;
   letter-spacing: 2px;
   color: var(--accent-cyan);
   border-bottom: 2px solid var(--border-bright);
-  font-size: 13px;
+  font-size: 17px;
 }
 
 #truth-table-container td {
-  padding: 10px 14px;
+  padding: 12px 18px;
   text-align: center;
   border-bottom: 1px solid rgba(42, 64, 96, 0.3);
   font-weight: 600;
@@ -567,11 +567,11 @@ html, body {
 
 
 #truth-table-container .truth-objective {
-  margin: 14px 2px 0;
-  padding-top: 12px;
+  margin: 16px 2px 0;
+  padding-top: 14px;
   border-top: 1px solid rgba(42, 64, 96, 0.45);
   color: var(--text-secondary);
-  font-size: 13px;
+  font-size: 15px;
   line-height: 1.5;
   direction: rtl;
   text-align: right;

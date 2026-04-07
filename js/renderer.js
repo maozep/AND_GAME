@@ -360,8 +360,13 @@ const Renderer = (() => {
     ctx.fillText(val !== null ? val.toString() : '?', node.x, node.y);
 
     ctx.fillStyle    = C.textDim;
-    ctx.font         = '10px JetBrains Mono, monospace';
-    ctx.fillText(node.label || '', node.x, node.y - r - 10);
+    ctx.font         = 'bold 15px JetBrains Mono, monospace';
+    if (_currentLayout === 'vertical') {
+      ctx.textBaseline = 'top';
+      ctx.fillText(node.label || '', node.x, node.y + r + 6);
+    } else {
+      ctx.fillText(node.label || '', node.x, node.y - r - 12);
+    }
     ctx.restore();
   }
 
@@ -511,9 +516,14 @@ const Renderer = (() => {
     ctx.fillText(`→${node.targetValue}`, node.x, node.y + 16);
 
     ctx.fillStyle    = C.textDim;
-    ctx.font         = '13px JetBrains Mono, monospace';
-    ctx.textBaseline = 'alphabetic';
-    ctx.fillText(node.label || '', node.x, node.y - r - 10);
+    ctx.font         = 'bold 16px JetBrains Mono, monospace';
+    if (_currentLayout === 'vertical') {
+      ctx.textBaseline = 'alphabetic';
+      ctx.fillText(node.label || '', node.x, node.y - r - 14);
+    } else {
+      ctx.textBaseline = 'alphabetic';
+      ctx.fillText(node.label || '', node.x, node.y - r - 12);
+    }
     ctx.restore();
   }
 

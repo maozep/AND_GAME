@@ -21,6 +21,7 @@
       </div>
       <div id="hud-actions">
         <button id="btn-levels" class="btn-secondary">STAGES</button>
+        <button id="btn-truth" class="btn-secondary hidden">טבלת אמת נדרשת</button>
         <button id="btn-hint" class="btn-secondary">HINT</button>
       </div>
     </div>
@@ -41,6 +42,7 @@
       <div id="gate-palette-label-row">
         <div id="gate-palette-label">GATE PALETTE</div>
         <button id="btn-info" aria-label="Open gate truth tables" title="Gate Truth Tables">i</button>
+        <button id="btn-clear-gates" title="נקה את כל השערים וחשוב מחדש">CLEAR ALL</button>
       </div>
       <div id="gate-palette">
         <span class="gate-chip" data-gate="AND" draggable="true">AND</span>
@@ -80,6 +82,17 @@
     </div>
   </div>
 
+  <!-- Truth Table Overlay -->
+  <div id="truth-overlay" class="hidden">
+    <div id="truth-box">
+      <div id="truth-header">
+        <div id="truth-title">טבלת אמת נדרשת</div>
+        <button id="btn-truth-close" class="btn-close">✕</button>
+      </div>
+      <div id="truth-table-container"></div>
+    </div>
+  </div>
+
   <!-- Instruction Overlay (shown at start of level) -->
   <div id="instruction-overlay" class="hidden">
     <div id="instruction-box">
@@ -92,14 +105,32 @@
   <!-- Win Overlay -->
   <div id="win-overlay" class="hidden">
     <div id="win-box">
-      <div id="win-icon">✓</div>
-      <div id="win-title">CIRCUIT SOLVED</div>
+      <div id="win-title"><span id="win-icon">✓</span> CIRCUIT SOLVED</div>
       <div id="win-level"></div>
-      <div id="win-time"></div>
-      <div id="win-best"></div>
-      <button id="btn-next">NEXT LEVEL →</button>
-      <button id="btn-restart" class="btn-secondary">RESTART</button>
-      <button id="btn-win-stages" class="btn-secondary">STAGES</button>
+      <div id="win-stats">
+        <div id="win-time"></div>
+        <div id="win-best"></div>
+      </div>
+      <!-- Solution section (shown only for levels with solution data) -->
+      <div id="win-solution" class="hidden">
+        <div id="solution-diagrams">
+          <div class="solution-diagram">
+            <div class="solution-diagram-label">תרשים בלוק — כניסות ויציאות</div>
+            <div id="solution-block"></div>
+          </div>
+          <div class="solution-diagram">
+            <div class="solution-diagram-label">תרשים מעגל — פתרון עם שערים לוגיים</div>
+            <div id="solution-circuit"></div>
+          </div>
+        </div>
+        <div id="solution-explanation"></div>
+        <div id="solution-gates"></div>
+      </div>
+      <div id="win-buttons">
+        <button id="btn-next">NEXT LEVEL →</button>
+        <button id="btn-restart" class="btn-secondary">RESTART</button>
+        <button id="btn-win-stages" class="btn-secondary">STAGES</button>
+      </div>
     </div>
   </div>
 

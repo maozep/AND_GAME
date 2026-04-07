@@ -32,6 +32,14 @@
   const instructionLevelName = document.getElementById('instruction-level-name');
   const instructionText = document.getElementById('instruction-text');
   const btnStart = document.getElementById('btn-start');
+  const btnTruth      = document.getElementById('btn-truth');
+  const truthOverlay  = document.getElementById('truth-overlay');
+  const truthContainer = document.getElementById('truth-table-container');
+  const btnTruthClose = document.getElementById('btn-truth-close');
+  const winSolution     = document.getElementById('win-solution');
+  const solutionBlock   = document.getElementById('solution-block');
+  const solutionCircuit = document.getElementById('solution-circuit');
+  const solutionGates   = document.getElementById('solution-gates');
   const diagramOverlay = document.getElementById('diagram-overlay');
   const diagramTitle = document.getElementById('diagram-title');
   const diagramSubtitle = document.getElementById('diagram-subtitle');
@@ -53,7 +61,41 @@
   const completedLevelIds = new Set(loadCompletedLevelIds());
   const bestTimes = loadBestTimes();
   const DIFFICULTY_ORDER = ['1. Basics', '2. Classic Circuits', '3. Advanced Circuits', '4. Flip-Flops', '5. Sequential Logic'];
+  const TRUTH_OBJECTIVES = {
+    1: 'מטרת השלב: להבין ששער AND מוציא 1 רק כששתי הכניסות הן 1.',
+    2: 'מטרת השלב: להבין ששער OR מוציא 1 כשלפחות אחת מהכניסות היא 1.',
+    3: 'מטרת השלב: להבין ששער NOT הופך את הערך בכניסה (0 ל-1, 1 ל-0).',
+    4: 'מטרת השלב: להבין ש-NAND הוא AND הפוך, ולכן רק במקרה 11 הפלט הוא 0.',
+    5: 'מטרת השלב: להבין ש-NOR הוא OR הפוך, ולכן רק במקרה 00 הפלט הוא 1.',
+    6: 'מטרת השלב: להבין ששער XOR מוציא 1 רק כשהכניסות שונות.',
+    7: 'מטרת השלב: להבין איך שרשור שערים משנה את הלוגיקה הסופית של המערכת.',
+    8: 'מטרת השלב: להבין פיצול אות (Fanout) והזנה של אותה כניסה למספר מסלולים.',
+    9: 'מטרת השלב: להבין מסלולים מתפצלים ואיך כל ענף משפיע על הפלטים.',
+    10: 'מטרת השלב: להבין רשת של שלושה שערים ואת ההשפעה המצטברת שלהם על הפלט.',
+    11: 'מטרת השלב: להבין שחצי-מחבר (Half Adder) מפיק Sum ו-Carry עבור שני ביטים.',
+    12: 'מטרת השלב: להבין שפול אאדר (Full Adder) מחבר A,B ו-Carry-in ומחזיר Sum ו-Carry-out.',
+    13: 'מטרת השלב: להבין ש-XNOR מחזיר 1 כשהכניסות שוות ו-0 כשהן שונות.',
+    14: 'מטרת השלב: להבין שמוקס 2 על 1 בוחר איזה קלט עובר לפלט לפי ביט הבחירה S.',
+    15: 'מטרת השלב: להבין שדמולטיפלקסר 1 על 2 מנתב קלט יחיד לאחד משני פלטים לפי S.',
+    16: 'מטרת השלב: להבין פריות אי-זוגית ל-3 ביטים: הפלט 1 כשמספר ה-1-ים אי-זוגי.',
+    17: 'מטרת השלב: להבין פונקציית Majority: הפלט 1 כשיש לפחות שני 1 בכניסות.',
+    18: 'מטרת השלב: להבין דקודר 2 ל-4 שמדליק בדיוק פלט אחד לפי ערך S1,S0.',
+    19: 'מטרת השלב: להבין משווה 1-ביט שמסמן גדול/שווה/קטן בין שני קלטים.',
+    20: 'מטרת השלב: להבין מקודד עדיפויות שמחזיר את האינדקס של הקלט הפעיל בעדיפות הגבוהה.',
+  };
   let currentMenuDifficulty = LEVELS[0] ? LEVELS[0].difficulty : '1. Basics';
+
+  function _escapeHtml(text) {
+    return String(text)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+  }
+
+  function _getTruthObjective(levelDef) {
+    if (!levelDef || levelDef.id > 20) return '';
+    return TRUTH_OBJECTIVES[levelDef.id] || `מטרת השלב: להבין את הפעולה של ${levelDef.name}.`;
+  }
 
   function colorizeTruthTableBits() {
     const cells = document.querySelectorAll('#truth-grid td');
@@ -776,6 +818,14 @@
     updateHintButtonState();
     currentMenuDifficulty = levelDef.difficulty || 'Medium';
 
+    // Show / hide truth table button
+    if (levelDef.truthTable) {
+      btnTruth.classList.remove('hidden');
+      _buildTruthTable(levelDef.truthTable, _getTruthObjective(levelDef));
+    } else {
+      btnTruth.classList.add('hidden');
+    }
+
     // Show instruction overlay if level has one (timer starts on START click)
     const hasInstruction = !!levelDef.instruction;
     if (hasInstruction) {
@@ -820,6 +870,18 @@
       winTimeEl.textContent = `TIME: ${formatTime(_elapsedMs)}`;
       const best = getBestTime(levelDef.id);
       winBestEl.textContent = `BEST: ${formatTime(best)}`;
+      // Show solution inside win overlay if available
+      if (levelDef.solution) {
+        const sol = levelDef.solution;
+        solutionBlock.innerHTML = sol.blockSvg;
+        solutionCircuit.innerHTML = sol.circuitSvg;
+        solutionExplanation.textContent = sol.explanation || '';
+        const gateList = sol.gatesUsed.join(', ');
+        solutionGates.innerHTML = `השערים הלוגיים שנעשה בהם שימוש: <span>${gateList}</span>`;
+        winSolution.classList.remove('hidden');
+      } else {
+        winSolution.classList.add('hidden');
+      }
       winOverlay.classList.remove('hidden');
       renderLevelMenu();
     }, 900);   // short delay so player sees the green flash first
@@ -830,11 +892,51 @@
     finalOverlay.classList.remove('hidden');
   }
 
+  // ── Truth Table ─────────────────────────────────────────────
+  function _buildTruthTable(tt, objectiveText = '') {
+    const { inputs, outputs, rows } = tt;
+    let html = '<table><thead><tr>';
+    inputs.forEach(name => { html += `<th>${name}</th>`; });
+    html += '<th class="tt-sep"></th>';
+    outputs.forEach(name => { html += `<th>${name}</th>`; });
+    html += '</tr></thead><tbody>';
+    rows.forEach(([ins, outs]) => {
+      html += '<tr>';
+      ins.forEach(v => {
+        html += `<td class="tt-input tt-val-${v}">${v}</td>`;
+      });
+      html += '<td class="tt-sep"></td>';
+      outs.forEach(v => {
+        html += `<td class="tt-output tt-val-${v}">${v}</td>`;
+      });
+      html += '</tr>';
+    });
+    html += '</tbody></table>';
+    if (objectiveText) {
+      html += `<p class="truth-objective">${_escapeHtml(objectiveText)}</p>`;
+    }
+    truthContainer.innerHTML = html;
+  }
+
+  btnTruth.addEventListener('click', () => {
+    truthOverlay.classList.remove('hidden');
+  });
+
+  btnTruthClose.addEventListener('click', () => {
+    truthOverlay.classList.add('hidden');
+  });
+
+  truthOverlay.addEventListener('click', (e) => {
+    if (e.target === truthOverlay) truthOverlay.classList.add('hidden');
+  });
+
   // ── Button Handlers ───────────────────────────────────────
   btnStart.addEventListener('click', () => {
     instructionOverlay.classList.add('hidden');
     startTimer();
   });
+
+  const solutionExplanation = document.getElementById('solution-explanation');
 
   btnNext.addEventListener('click', () => {
     winOverlay.classList.add('hidden');
@@ -845,6 +947,10 @@
   btnRestart.addEventListener('click', () => {
     winOverlay.classList.add('hidden');
     loadLevel(State.currentLevelIndex);
+  });
+
+  document.getElementById('btn-clear-gates').addEventListener('click', () => {
+    State.resetLevel();
   });
 
   btnWinStages.addEventListener('click', () => {

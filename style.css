@@ -133,6 +133,24 @@ html, body {
   outline-offset: 2px;
 }
 
+#btn-clear-gates {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  padding: 5px 12px;
+  border: 1px solid #c62828;
+  border-radius: 4px;
+  background: rgba(198, 40, 40, 0.12);
+  color: #ff5252;
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+
+#btn-clear-gates:hover {
+  background: rgba(198, 40, 40, 0.3);
+  box-shadow: 0 0 12px rgba(198, 40, 40, 0.3);
+}
+
 #level-status-row {
   display: flex;
   align-items: center;
@@ -266,6 +284,7 @@ html, body {
   line-height: 1.6;
   color: var(--text-primary);
   direction: rtl;
+  white-space: pre-line;
 }
 
 #btn-start {
@@ -372,6 +391,7 @@ html, body {
 #hint-overlay,
 #diagram-overlay,
 #info-overlay,
+#truth-overlay,
 #instruction-overlay {
   position: fixed;
   inset: 0;
@@ -390,8 +410,171 @@ html, body {
 #hint-overlay.hidden,
 #diagram-overlay.hidden,
 #info-overlay.hidden,
+#truth-overlay.hidden,
 #instruction-overlay.hidden {
   display: none;
+}
+
+/* ── Truth Table Overlay ─────────────────────────────────── */
+#truth-box {
+  width: min(600px, calc(100vw - 40px));
+  max-height: min(700px, calc(100vh - 80px));
+  overflow: auto;
+  background: linear-gradient(180deg, rgba(15,21,32,0.98) 0%, rgba(10,14,20,0.98) 100%);
+  border: 1px solid var(--border-bright);
+  border-radius: 10px;
+  padding: 28px;
+  box-shadow:
+    0 0 60px rgba(0, 0, 0, 0.6),
+    0 0 24px rgba(0, 212, 255, 0.12);
+  animation: slideUp 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+#truth-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding-bottom: 16px;
+  margin-bottom: 18px;
+  border-bottom: 1px solid var(--border);
+}
+
+#truth-title {
+  font-size: 20px;
+  letter-spacing: 3px;
+  color: var(--accent-cyan);
+  font-weight: 700;
+  direction: rtl;
+}
+
+#truth-table-container table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  direction: ltr;
+}
+
+#truth-table-container th {
+  padding: 10px 14px;
+  text-align: center;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--accent-cyan);
+  border-bottom: 2px solid var(--border-bright);
+  font-size: 13px;
+}
+
+#truth-table-container td {
+  padding: 10px 14px;
+  text-align: center;
+  border-bottom: 1px solid rgba(42, 64, 96, 0.3);
+  font-weight: 600;
+}
+
+#truth-table-container tr:last-child td {
+  border-bottom: none;
+}
+
+#truth-table-container .tt-input {
+  color: var(--text-primary);
+}
+
+#truth-table-container .tt-output {
+  font-weight: 700;
+}
+
+#truth-table-container .tt-val-1 {
+  color: #39ff14;
+}
+
+#truth-table-container .tt-val-0 {
+  color: #c62828;
+}
+
+#truth-table-container .tt-sep {
+  width: 2px;
+  padding: 0;
+  background: var(--border-bright);
+}
+
+#truth-table-container th.tt-sep {
+  border-bottom-color: var(--border-bright);
+}
+
+/* ── Solution (inside win overlay) ────────────────────────── */
+#solution-diagrams {
+  display: flex;
+  gap: 28px;
+  justify-content: center;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.solution-diagram {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-width: 280px;
+}
+
+.solution-diagram-label {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--text-dim);
+  direction: rtl;
+  text-align: center;
+}
+
+.solution-diagram svg {
+  background: rgba(5, 10, 18, 0.7);
+  border: 1px solid rgba(42, 64, 96, 0.4);
+  border-radius: 8px;
+  max-width: 100%;
+  height: auto;
+}
+
+#solution-explanation {
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--text-primary);
+  direction: rtl;
+  text-align: center;
+  max-width: 900px;
+  padding: 0 10px;
+}
+
+#solution-gates {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-primary);
+  direction: rtl;
+  text-align: center;
+  padding: 12px 20px;
+  background: rgba(0, 212, 255, 0.06);
+  border: 1px solid rgba(0, 212, 255, 0.2);
+  border-radius: 6px;
+  letter-spacing: 1px;
+}
+
+#solution-gates span {
+  color: var(--accent-cyan);
+}
+
+
+#truth-table-container .truth-objective {
+  margin: 14px 2px 0;
+  padding-top: 12px;
+  border-top: 1px solid rgba(42, 64, 96, 0.45);
+  color: var(--text-secondary);
+  font-size: 13px;
+  line-height: 1.5;
+  direction: rtl;
+  text-align: right;
 }
 
 #win-box,
@@ -400,7 +583,7 @@ html, body {
   flex-direction: column;
   align-items: center;
   gap: 16px;
-  padding: 48px 56px;
+  padding: 36px 44px;
   background: var(--bg-panel);
   border: 1px solid var(--border-bright);
   border-radius: 6px;
@@ -409,6 +592,36 @@ html, body {
     0 0 120px rgba(57, 255, 20, 0.05),
     inset 0 1px 0 rgba(255,255,255,0.04);
   animation: slideUp 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  max-width: calc(100vw - 24px);
+  max-height: calc(100vh - 24px);
+  overflow: auto;
+}
+
+#win-stats {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+#win-buttons {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+#win-solution.hidden { display: none; }
+
+#win-solution {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  width: 100%;
+  padding-top: 16px;
+  margin-top: 4px;
+  border-top: 1px solid var(--border);
 }
 
 #info-box {
@@ -952,11 +1165,10 @@ html, body {
 
 #win-icon,
 #final-icon {
-  font-size: 48px;
+  font-size: 28px;
   line-height: 1;
   filter: drop-shadow(0 0 16px var(--neon-green));
   color: var(--neon-green);
-  animation: pulse 1.5s ease infinite;
 }
 
 #final-icon {
@@ -1046,6 +1258,24 @@ button:active {
   color: var(--text-primary);
   box-shadow: none;
   border-color: var(--text-dim);
+}
+
+#btn-truth {
+  border-color: rgba(0, 212, 255, 0.4);
+  background: rgba(0, 212, 255, 0.08);
+  color: var(--accent-cyan);
+  direction: rtl;
+  font-size: 10px;
+}
+
+#btn-truth:hover {
+  background: rgba(0, 212, 255, 0.18);
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 12px rgba(0, 212, 255, 0.2);
+}
+
+#btn-truth.hidden {
+  display: none;
 }
 
 #btn-play-again {

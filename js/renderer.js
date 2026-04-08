@@ -82,19 +82,29 @@ const Renderer = (() => {
     H = canvas.height = window.innerHeight;
   }
 
-  // ── Centering offset for all levels ─────────────────────────
+  // ── Centering + auto-scale for all levels ───────────────────
+  let _scale = 1;
+
   function _computeCenterOffset(level) {
-    if (!level) { _currentLayout = null; _offsetX = 0; _offsetY = 0; return; }
+    if (!level) { _currentLayout = null; _offsetX = 0; _offsetY = 0; _scale = 1; return; }
     _currentLayout = level.layout || null;
     let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
     level.nodes.forEach(n => {
       minX = Math.min(minX, n.x); maxX = Math.max(maxX, n.x);
       minY = Math.min(minY, n.y); maxY = Math.max(maxY, n.y);
     });
+    // Add padding around the bounding box
+    const pad = 100;
+    const levelW = (maxX - minX) + pad * 2;
+    const levelH = (maxY - minY) + pad * 2;
+    const availW = W;
+    const availH = H - 56;   // 56 = HUD height
+    // Scale down if the level is too big, never scale up beyond 1
+    _scale = Math.min(1, availW / levelW, availH / levelH);
     const levelCX = (minX + maxX) / 2;
     const levelCY = (minY + maxY) / 2;
-    _offsetX = W / 2 - levelCX;
-    _offsetY = (56 + H) / 2 - levelCY;   // 56 = HUD height
+    _offsetX = W / 2 - levelCX * _scale;
+    _offsetY = (56 + H) / 2 - levelCY * _scale;
   }
 
   // ── Main Render ───────────────────────────────────────────
@@ -115,7 +125,8 @@ const Renderer = (() => {
     const ffStates = State.getFfStates ? State.getFfStates() : new Map();
 
     ctx.save();
-    if (_offsetX || _offsetY) ctx.translate(_offsetX, _offsetY);
+    ctx.translate(_offsetX, _offsetY);
+    if (_scale !== 1) ctx.scale(_scale, _scale);
 
     _drawWires(level, wireValues);
     _drawNodes(level, nodeValues, ffStates, hoveredNodeId, solved);
@@ -690,8 +701,8 @@ const Renderer = (() => {
 
   // ── Hit Testing ───────────────────────────────────────────
   function getNodeAtPoint(px, py, nodes) {
-    const x = px - _offsetX;
-    const y = py - _offsetY;
+    const x = (px - _offsetX) / _scale;
+    const y = (py - _offsetY) / _scale;
     for (let i = nodes.length - 1; i >= 0; i--) {
       const n = nodes[i];
       if (n.type === 'GATE_SLOT') {

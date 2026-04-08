@@ -370,6 +370,9 @@ html, body {
   gap: 5px;
 }
 
+.ff-chip.hidden {
+  display: none;
+}
 .ff-chip {
   color: #c080ff;
   border-color: #5a2a9a;
@@ -691,6 +694,55 @@ html, body {
   width: 100%;
   height: auto;
   display: block;
+}
+
+/* FF info popup truth table */
+.ff-popup-truth {
+  width: 100%;
+  margin-bottom: 16px;
+  text-align: center;
+}
+.ff-popup-truth h4 {
+  color: #c080ff;
+  font-size: 16px;
+  margin: 0 0 6px;
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 1px;
+}
+.ff-popup-desc {
+  color: #8ab4cc;
+  font-size: 13px;
+  margin: 0 0 12px;
+  line-height: 1.5;
+  direction: rtl;
+}
+.ff-popup-table {
+  margin: 0 auto 8px;
+  border-collapse: collapse;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+}
+.ff-popup-table th {
+  background: rgba(0, 212, 255, 0.12);
+  color: #00d4ff;
+  padding: 6px 14px;
+  border: 1px solid #1a3060;
+  font-weight: bold;
+}
+.ff-popup-table td {
+  padding: 5px 14px;
+  border: 1px solid #1a3060;
+  color: #c8d8f0;
+  text-align: center;
+}
+.ff-popup-structure-label {
+  color: #c080ff;
+  font-size: 14px;
+  font-family: 'JetBrains Mono', monospace;
+  margin: 12px 0 8px;
+  text-align: center;
+  direction: rtl;
+  letter-spacing: 0.5px;
 }
 
 #menu-box {

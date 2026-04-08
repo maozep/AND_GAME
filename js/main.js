@@ -60,7 +60,7 @@
   const BEST_TIMES_KEY = 'and_game_best_times';
   const completedLevelIds = new Set(loadCompletedLevelIds());
   const bestTimes = loadBestTimes();
-  const DIFFICULTY_ORDER = ['1. Basics', '2. Classic Circuits', '3. Advanced Circuits', '4. Flip-Flops', '5. Sequential Logic'];
+  const DIFFICULTY_ORDER = ['Fundamentals', 'Building Blocks', 'Advanced Circuits', 'Flip-Flops', 'Sequential Logic'];
   const TRUTH_OBJECTIVES = {
     1: 'מטרת השלב: להבין ששער AND מוציא 1 רק כששתי הכניסות הן 1.',
     2: 'מטרת השלב: להבין ששער OR מוציא 1 כשלפחות אחת מהכניסות היא 1.',
@@ -83,7 +83,7 @@
     19: 'מטרת השלב: להבין משווה 1-ביט שמסמן גדול/שווה/קטן בין שני קלטים.',
     20: 'מטרת השלב: להבין מקודד עדיפויות שמחזיר את האינדקס של הקלט הפעיל בעדיפות הגבוהה.',
   };
-  let currentMenuDifficulty = LEVELS[0] ? LEVELS[0].difficulty : '1. Basics';
+  let currentMenuDifficulty = LEVELS[0] ? LEVELS[0].difficulty : 'Fundamentals';
 
   function _escapeHtml(text) {
     return String(text)
@@ -93,8 +93,10 @@
   }
 
   function _getTruthObjective(levelDef) {
-    if (!levelDef || levelDef.id > 20) return '';
-    return TRUTH_OBJECTIVES[levelDef.id] || `מטרת השלב: להבין את הפעולה של ${levelDef.name}.`;
+    if (!levelDef) return '';
+    if (TRUTH_OBJECTIVES[levelDef.id]) return TRUTH_OBJECTIVES[levelDef.id];
+    if (levelDef.description) return levelDef.description;
+    return `מטרת השלב: להבין את הפעולה של ${levelDef.name}.`;
   }
 
   function colorizeTruthTableBits() {
@@ -352,75 +354,201 @@
 
     // ── FLIP-FLOPS (structural block diagrams) ────────────────
     case 'D':
-      return SHELL('D FLIP-FLOP','Master-slave latch pair  ·  ~20 transistors total',`
-        ${BLK(80,130,240,180,'MASTER','samples D on CLK=1',NC)}
-        ${BLK(400,130,240,180,'SLAVE','transfers to Q on CLK=0',PC)}
-        ${IN(40,220,'D')}${L(57,220,80,220,AC,2.5)}
-        ${L(320,220,400,220,OC,2.5)}
-        <text x="330" y="212" fill="${OC}" font-size="11" font-family="monospace">X</text>
-        ${L(640,220,690,220,OC,2.5)}<circle cx="690" cy="220" r="7" fill="${OC}"/>
-        <text x="706" y="225" fill="${OC}" font-size="14" font-family="monospace" font-weight="bold">Q</text>
-        ${IN(240,390,'CLK')}
-        ${L(240,373,240,310,AC,2)}${L(240,310,280,310,AC,2)}
-        <polygon points="280,304 280,316 292,310" fill="${AC}"/>
-        ${L(292,310,520,310,AC,2)}${L(520,310,520,310,AC,2)}
-        <polygon points="520,304 520,316 532,310" fill="${AC}"/>
-        <text x="296" y="306" fill="${DC}" font-size="9" font-family="monospace">CLK  →  MASTER</text>
-        <text x="364" y="332" fill="${DC}" font-size="9" font-family="monospace">CLK̄  →  SLAVE</text>
-        ${NOTE('Master latch samples D while CLK=1. Slave transfers to Q on falling edge.')}
+      return SHELL('D FLIP-FLOP','8 NAND gates + 2 NOT gates  ·  Master-Slave',`
+        <!-- ── MASTER LATCH (left) ── -->
+        <rect x="56" y="78" width="240" height="210" rx="10" fill="none" stroke="${NC}" stroke-width="1.5" stroke-dasharray="6,4" opacity="0.5"/>
+        <text x="176" y="96" text-anchor="middle" fill="${NC}" font-size="11" font-family="monospace" font-weight="bold">MASTER</text>
+
+        <!-- ── SLAVE LATCH (right) ── -->
+        <rect x="390" y="78" width="240" height="210" rx="10" fill="none" stroke="${PC}" stroke-width="1.5" stroke-dasharray="6,4" opacity="0.5"/>
+        <text x="510" y="96" text-anchor="middle" fill="${PC}" font-size="11" font-family="monospace" font-weight="bold">SLAVE</text>
+
+        <!-- Gate blocks - Master -->
+        ${BLK(80,110,70,42,'NAND','',NC)}
+        ${BLK(80,210,70,42,'NAND','',NC)}
+        ${BLK(210,110,70,42,'NAND','',NC)}
+        ${BLK(210,210,70,42,'NAND','',NC)}
+
+        <!-- Gate blocks - Slave -->
+        ${BLK(410,110,70,42,'NAND','',PC)}
+        ${BLK(410,210,70,42,'NAND','',PC)}
+        ${BLK(540,110,70,42,'NAND','',PC)}
+        ${BLK(540,210,70,42,'NAND','',PC)}
+
+        <!-- D input -->
+        ${IN(20,131,'D')}
+        ${L(37,131,80,131,AC,2.5)}
+        <!-- D branch down to NOT -->
+        ${DOT(58,131,AC)}
+        ${BLK(58,163,42,28,'NOT','',AC)}
+        <!-- D̄ → NAND2 -->
+        ${L(58,191,58,221,AC,1.5)}${L(58,221,80,221,AC,1.5)}
+        <text x="62" y="218" fill="${DC}" font-size="8" font-family="monospace">D̄</text>
+
+        <!-- CLK input -->
+        ${IN(20,370,'CLK')}
+        <!-- CLK → up to NAND1 + NAND2 -->
+        ${L(37,370,50,370,AC,2)}
+        ${L(50,370,50,241,AC,1.5)}${L(50,241,80,241,AC,1.5)}
+        ${DOT(50,320,AC)}
+        ${L(50,320,50,141,AC,1.5)}${L(50,141,80,141,AC,1.5)}
+
+        <!-- CLK → NOT → CLK̄ -->
+        ${L(50,370,330,370,AC,1.5)}
+        ${BLK(330,354,50,32,'NOT','',AC)}
+        ${L(380,370,398,370,AC,1.5)}
+        <text x="384" y="365" fill="${DC}" font-size="8" font-family="monospace">CLK̄</text>
+        <!-- CLK̄ → up to NAND5 + NAND6 -->
+        ${L(398,370,398,241,AC,1.5)}${L(398,241,410,241,AC,1.5)}
+        ${DOT(398,320,AC)}
+        ${L(398,320,398,141,AC,1.5)}${L(398,141,410,141,AC,1.5)}
+
+        <!-- NAND1 → NAND3 -->
+        ${L(150,131,210,131,OC,1.5)}
+        <!-- NAND2 → NAND4 -->
+        ${L(150,231,210,231,OC,1.5)}
+
+        <!-- Master cross-coupling: NAND3 ⇄ NAND4 -->
+        ${L(280,131,296,131,OC,1.5)}${DOT(296,131,OC)}
+        ${L(296,131,296,156,OC,1.5)}${L(296,156,195,156,OC,1.5)}${L(195,156,195,231,OC,1.5)}${L(195,231,210,231,OC,1.5)}
+        ${L(280,231,296,231,WC,1.5)}${DOT(296,231,WC)}
+        ${L(296,231,296,188,WC,1.5)}${L(296,188,195,188,WC,1.5)}${L(195,188,195,141,WC,1.5)}${L(195,141,210,141,WC,1.5)}
+
+        <!-- X, X̄ labels + wires to slave -->
+        <text x="310" y="127" fill="${OC}" font-size="10" font-family="monospace" font-weight="bold">X</text>
+        <text x="310" y="243" fill="${WC}" font-size="10" font-family="monospace" font-weight="bold">X̄</text>
+        ${L(296,131,410,121,OC,1.8)}
+        ${L(296,231,410,221,WC,1.8)}
+
+        <!-- Slave cross-coupling: NAND7 ⇄ NAND8 -->
+        ${L(610,131,626,131,OC,1.5)}${DOT(626,131,OC)}
+        ${L(626,131,626,156,OC,1.5)}${L(626,156,525,156,OC,1.5)}${L(525,156,525,231,OC,1.5)}${L(525,231,540,231,OC,1.5)}
+        ${L(610,231,626,231,WC,1.5)}${DOT(626,231,WC)}
+        ${L(626,231,626,188,WC,1.5)}${L(626,188,525,188,WC,1.5)}${L(525,188,525,141,WC,1.5)}${L(525,141,540,141,WC,1.5)}
+
+        <!-- Q output -->
+        ${L(626,131,680,131,OC,2.5)}<circle cx="680" cy="131" r="7" fill="${OC}"/>
+        <text x="696" y="136" fill="${OC}" font-size="14" font-family="monospace" font-weight="bold">Q</text>
+        <!-- Q̄ output -->
+        ${L(626,231,680,231,WC,2.5)}<circle cx="680" cy="231" r="7" fill="${WC}"/>
+        <text x="696" y="236" fill="${WC}" font-size="13" font-family="monospace" font-weight="bold">Q̄</text>
+
+        ${NOTE('CLK=1: Master follows D, Slave holds. CLK↓: Master locks, Slave captures X → Q. Edge-triggered.')}
       `);
 
     case 'T':
       return SHELL('T FLIP-FLOP','D-FF with XOR feedback  ·  ~22 transistors total',`
-        ${BLK(110,145,180,170,'XOR','T ⊕ Q_prev',WC)}
-        ${BLK(390,125,240,190,'D  FF','captures on CLK ↑',NC)}
-        ${IN(55,230,'T')}${L(72,230,110,230,AC,2.5)}
-        ${L(290,230,390,230,OC,2.5)}
-        ${L(630,230,690,230,OC,2.5)}<circle cx="690" cy="230" r="7" fill="${OC}"/>
-        <text x="706" y="235" fill="${OC}" font-size="14" font-family="monospace" font-weight="bold">Q</text>
-        <path d="M 690 230 C 760 230 760 380 200 380 C 160 380 145 325 145 315" fill="none" stroke="${WC}" stroke-width="2" stroke-dasharray="6,4"/>
-        ${DOT(145,315,WC)}
-        <text x="680" y="350" fill="${DC}" font-size="11" font-family="monospace">Q feedback →</text>
-        ${IN(240,390,'CLK')}${L(240,373,240,315,AC,2)}${L(240,315,510,315,AC,2)}
-        <polygon points="510,309 510,321 522,315" fill="${AC}"/>
-        ${NOTE('T=0 → Q holds. T=1 → Q toggles. The XOR computes D = T ⊕ Q_prev each cycle.')}
+        <!-- XOR gate -->
+        ${BLK(160,100,160,110,'XOR','T ⊕ Q_prev',WC)}
+        <!-- D Flip-Flop -->
+        ${BLK(420,90,200,140,'D  FF','captures on CLK ↑',NC)}
+
+        <!-- T input → XOR -->
+        ${IN(50,135,'T')}${L(67,135,160,135,AC,2.5)}
+
+        <!-- XOR out → D FF in -->
+        ${L(320,155,420,155,OC,2.5)}
+        <text x="350" y="148" fill="${DC}" font-size="10" font-family="monospace">D</text>
+
+        <!-- Q output -->
+        ${L(620,135,670,135,OC,2.5)}<circle cx="670" cy="135" r="7" fill="${OC}"/>
+        <text x="686" y="140" fill="${OC}" font-size="14" font-family="monospace" font-weight="bold">Q</text>
+        <!-- Q̄ output -->
+        ${L(620,195,670,195,WC,2.5)}<circle cx="670" cy="195" r="7" fill="${WC}"/>
+        <text x="686" y="200" fill="${WC}" font-size="13" font-family="monospace" font-weight="bold">Q̄</text>
+
+        <!-- CLK → D FF -->
+        ${IN(520,370,'CLK')}
+        ${L(520,353,520,280,AC,2)}${L(520,280,520,230,AC,2.5)}
+        <polygon points="514,234 526,234 520,224" fill="${AC}"/>
+        <text x="530" y="270" fill="${DC}" font-size="10" font-family="monospace">CLK</text>
+
+        <!-- Feedback: Q → XOR -->
+        ${DOT(670,135,OC)}
+        <path d="M 670,135 L 700,135 L 700,390 L 130,390 L 130,185 L 160,185"
+              fill="none" stroke="${OC}" stroke-width="2" stroke-dasharray="6,3"/>
+        <text x="320" y="404" fill="${OC}" font-size="10" font-family="monospace" font-weight="bold">Q feedback → XOR</text>
+
+        ${NOTE('T=0 → XOR(0,Q)=Q → D=Q → Q holds. T=1 → XOR(1,Q)=Q̄ → D=Q̄ → Q toggles.')}
       `);
 
     case 'SR':
       return SHELL('SR FLIP-FLOP','Cross-coupled NAND latch  ·  8 transistors',`
-        ${BLK(268,108,192,148,'NAND 1','S input + Q̄ feedback',PC)}
-        ${BLK(268,284,192,148,'NAND 2','R input + Q feedback',NC)}
-        ${IN(55,182,'S')}${L(72,182,268,182,AC,2.5)}
-        ${IN(55,358,'R')}${L(72,358,268,358,AC,2.5)}
-        ${L(460,182,590,182,OC,2.5)}<circle cx="590" cy="182" r="7" fill="${OC}"/>
-        <text x="604" y="187" fill="${OC}" font-size="14" font-family="monospace" font-weight="bold">Q</text>
-        ${L(460,358,590,358,WC,2.5)}<circle cx="590" cy="358" r="7" fill="${WC}"/>
-        <text x="604" y="363" fill="${WC}" font-size="13" font-family="monospace" font-weight="bold">Q̄</text>
-        <path d="M 590 182 C 660 182 660 440 240 440 C 218 440 210 415 210 405" fill="none" stroke="${OC}" stroke-width="2" stroke-dasharray="5,4"/>
-        ${DOT(210,405,OC)}
-        <path d="M 590 358 C 670 358 670 70 240 70 C 218 70 210 95 210 108" fill="none" stroke="${WC}" stroke-width="2" stroke-dasharray="5,4"/>
-        ${DOT(210,108,WC)}
-        <text x="282" y="274" fill="${DC}" font-size="11" font-family="monospace">← Q̄ feeds back to NAND1</text>
-        <text x="282" y="102" fill="${DC}" font-size="11" font-family="monospace">← Q feeds back to NAND2</text>
+        <!-- NAND 1: S + Q̄ feedback → Q -->
+        ${BLK(250,100,180,100,'NAND 1','S + Q̄ → Q',PC)}
+        <!-- NAND 2: R + Q feedback → Q̄ -->
+        ${BLK(250,290,180,100,'NAND 2','R + Q → Q̄',NC)}
+
+        <!-- S input → NAND1 -->
+        ${IN(50,130,'S')}${L(67,130,250,130,AC,2.5)}
+        <!-- R input → NAND2 -->
+        ${IN(50,340,'R')}${L(67,340,250,340,AC,2.5)}
+
+        <!-- Q output -->
+        ${L(430,150,590,150,OC,2.5)}<circle cx="590" cy="150" r="7" fill="${OC}"/>
+        <text x="606" y="155" fill="${OC}" font-size="14" font-family="monospace" font-weight="bold">Q</text>
+        <!-- Q̄ output -->
+        ${L(430,340,590,340,WC,2.5)}<circle cx="590" cy="340" r="7" fill="${WC}"/>
+        <text x="606" y="345" fill="${WC}" font-size="13" font-family="monospace" font-weight="bold">Q̄</text>
+
+        <!-- Feedback: Q → NAND2 (bottom) -->
+        ${DOT(540,150,OC)}
+        <path d="M 540,150 L 540,410 L 220,410 L 220,360 L 250,360"
+              fill="none" stroke="${OC}" stroke-width="2" stroke-dasharray="6,3"/>
+        <text x="320" y="424" fill="${OC}" font-size="10" font-family="monospace" font-weight="bold">Q feedback → NAND2</text>
+
+        <!-- Feedback: Q̄ → NAND1 (top) -->
+        ${DOT(540,340,WC)}
+        <path d="M 540,340 L 560,340 L 560,78 L 220,78 L 220,170 L 250,170"
+              fill="none" stroke="${WC}" stroke-width="2" stroke-dasharray="6,3"/>
+        <text x="300" y="74" fill="${WC}" font-size="10" font-family="monospace" font-weight="bold">Q̄ feedback → NAND1</text>
+
         ${NOTE('S=1,R=0 → Q=1. S=0,R=1 → Q=0. S=R=1 → Q=1 (S priority). Latches state via cross-coupling.')}
       `);
 
     case 'JK':
-      return SHELL('JK FLIP-FLOP','SR latch with output feedback gating  ·  ~24 transistors',`
-        ${BLK(110,116,192,155,'AND 1','J · Q̄  (Set gate)',PC)}
-        ${BLK(110,299,192,155,'AND 2','K · Q  (Reset gate)',NC)}
-        ${BLK(406,136,220,192,'SR LATCH','(NAND-based)',WC)}
-        ${IN(50,194,'J')}${L(67,194,110,194,AC,2.5)}
-        ${IN(50,377,'K')}${L(67,377,110,377,AC,2.5)}
-        ${L(302,194,406,210,OC,2.5)}
-        ${L(302,377,406,262,WC,2.5)}
-        ${L(626,236,690,236,OC,2.5)}<circle cx="690" cy="236" r="7" fill="${OC}"/>
-        <text x="706" y="241" fill="${OC}" font-size="14" font-family="monospace" font-weight="bold">Q</text>
-        ${L(626,296,690,296,WC,2.5)}<circle cx="690" cy="296" r="7" fill="${WC}"/>
-        <text x="706" y="301" fill="${WC}" font-size="13" font-family="monospace" font-weight="bold">Q̄</text>
-        <path d="M 690 296 C 780 296 780 450 50 450 C 28 450 22 415 22 400" fill="none" stroke="${WC}" stroke-width="1.5" stroke-dasharray="5,4"/>
-        <path d="M 690 236 C 790 236 790 462 45 462 C 22 462 16 428 16 412" fill="none" stroke="${OC}" stroke-width="1.5" stroke-dasharray="5,4"/>
-        ${IN(248,285,'CLK')}${L(248,268,248,194,AC,2)}${L(248,194,302,194,AC,1.5)}
+      return SHELL('JK FLIP-FLOP','AND gates + SR latch + output feedback  ·  ~24 transistors',`
+        <!-- AND 1: J · Q̄ → S -->
+        ${BLK(140,90,160,80,'AND 1','J · Q̄ → S',PC)}
+        <!-- AND 2: K · Q → R -->
+        ${BLK(140,310,160,80,'AND 2','K · Q → R',NC)}
+        <!-- SR LATCH -->
+        ${BLK(410,140,200,200,'SR LATCH','NAND-based',WC)}
+
+        <!-- J input → AND1 -->
+        ${IN(42,110,'J')}${L(59,110,140,110,AC,2.5)}
+        <!-- K input → AND2 -->
+        ${IN(42,350,'K')}${L(59,350,140,350,AC,2.5)}
+        <!-- CLK → SR LATCH -->
+        ${IN(410,410,'CLK')}${L(410,393,410,340,AC,2.5)}
+        <polygon points="404,344 416,344 410,334" fill="${AC}"/>
+
+        <!-- AND1 out → SR LATCH S input -->
+        ${L(300,130,410,190,OC,2.5)}
+        <text x="330" y="148" fill="${DC}" font-size="10" font-family="monospace">S</text>
+        <!-- AND2 out → SR LATCH R input -->
+        ${L(300,350,410,290,WC,2.5)}
+        <text x="330" y="338" fill="${DC}" font-size="10" font-family="monospace">R</text>
+
+        <!-- Q output -->
+        ${L(610,200,670,200,OC,2.5)}<circle cx="670" cy="200" r="7" fill="${OC}"/>
+        <text x="686" y="205" fill="${OC}" font-size="14" font-family="monospace" font-weight="bold">Q</text>
+        <!-- Q̄ output -->
+        ${L(610,280,670,280,WC,2.5)}<circle cx="670" cy="280" r="7" fill="${WC}"/>
+        <text x="686" y="285" fill="${WC}" font-size="13" font-family="monospace" font-weight="bold">Q̄</text>
+
+        <!-- Feedback: Q̄ → AND1 (top) -->
+        ${DOT(670,280,WC)}
+        <path d="M 670,280 L 700,280 L 700,78 L 120,78 L 120,150 L 140,150"
+              fill="none" stroke="${WC}" stroke-width="2" stroke-dasharray="6,3"/>
+        <text x="380" y="74" fill="${WC}" font-size="10" font-family="monospace" font-weight="bold">Q̄ feedback</text>
+
+        <!-- Feedback: Q → AND2 (bottom) -->
+        ${DOT(670,200,OC)}
+        <path d="M 670,200 L 710,200 L 710,402 L 120,402 L 120,330 L 140,330"
+              fill="none" stroke="${OC}" stroke-width="2" stroke-dasharray="6,3"/>
+        <text x="380" y="416" fill="${OC}" font-size="10" font-family="monospace" font-weight="bold">Q feedback</text>
+
         ${NOTE('J=K=1 → toggle. J=1,K=0 → set Q=1. J=0,K=1 → reset Q=0. J=K=0 → hold.')}
       `);
 
@@ -429,10 +557,62 @@
     }
   }
 
+  // FF truth table HTML for the info popup
+  const FF_TRUTH_TABLES = {
+    D: `<div class="ff-popup-truth">
+      <h4>טבלת אמת — D Flip-Flop</h4>
+      <p class="ff-popup-desc">פליפלופ D (Data) לוכד את הערך שבכניסת D בעליית השעון. Q תמיד שווה ל-D לאחר פעימת שעון.</p>
+      <table class="ff-popup-table"><thead><tr><th>D</th><th>CLK</th><th>Q<sub>next</sub></th><th>Q̄<sub>next</sub></th></tr></thead>
+      <tbody>
+        <tr><td>0</td><td>↑</td><td>0</td><td>1</td></tr>
+        <tr><td>1</td><td>↑</td><td>1</td><td>0</td></tr>
+        <tr><td>X</td><td>—</td><td>Q (hold)</td><td>Q̄ (hold)</td></tr>
+      </tbody></table>
+    </div>`,
+    T: `<div class="ff-popup-truth">
+      <h4>טבלת אמת — T Flip-Flop</h4>
+      <p class="ff-popup-desc">פליפלופ T (Toggle) מחליף את Q בכל עליית שעון כאשר T=1. כאשר T=0, Q נשאר ללא שינוי.</p>
+      <table class="ff-popup-table"><thead><tr><th>T</th><th>CLK</th><th>Q<sub>next</sub></th></tr></thead>
+      <tbody>
+        <tr><td>0</td><td>↑</td><td>Q (hold)</td></tr>
+        <tr><td>1</td><td>↑</td><td>Q̄ (toggle)</td></tr>
+      </tbody></table>
+    </div>`,
+    SR: `<div class="ff-popup-truth">
+      <h4>טבלת אמת — SR Flip-Flop</h4>
+      <p class="ff-popup-desc">פליפלופ SR (Set/Reset) מאפשר לקבוע (SET) או לאפס (RESET) את Q בנפרד. S=R=1 הוא מצב מיוחד (כאן SET גובר).</p>
+      <table class="ff-popup-table"><thead><tr><th>S</th><th>R</th><th>CLK</th><th>Q<sub>next</sub></th></tr></thead>
+      <tbody>
+        <tr><td>0</td><td>0</td><td>↑</td><td>Q (hold)</td></tr>
+        <tr><td>0</td><td>1</td><td>↑</td><td>0 (reset)</td></tr>
+        <tr><td>1</td><td>0</td><td>↑</td><td>1 (set)</td></tr>
+        <tr><td>1</td><td>1</td><td>↑</td><td>1 (S priority)</td></tr>
+      </tbody></table>
+    </div>`,
+    JK: `<div class="ff-popup-truth">
+      <h4>טבלת אמת — JK Flip-Flop</h4>
+      <p class="ff-popup-desc">פליפלופ JK הוא הגמיש ביותר. J=Set, K=Reset, J=K=1 מצב Toggle (Q מתהפך). אין לו מצב אסור כמו SR.</p>
+      <table class="ff-popup-table"><thead><tr><th>J</th><th>K</th><th>CLK</th><th>Q<sub>next</sub></th></tr></thead>
+      <tbody>
+        <tr><td>0</td><td>0</td><td>↑</td><td>Q (hold)</td></tr>
+        <tr><td>0</td><td>1</td><td>↑</td><td>0 (reset)</td></tr>
+        <tr><td>1</td><td>0</td><td>↑</td><td>1 (set)</td></tr>
+        <tr><td>1</td><td>1</td><td>↑</td><td>Q̄ (toggle)</td></tr>
+      </tbody></table>
+    </div>`,
+  };
+
   function openComponentDiagram(componentKey, title) {
     diagramTitle.textContent = title;
-    diagramSubtitle.textContent = 'Simplified transistor schematic';
-    diagramContent.innerHTML = renderComponentDiagram(componentKey);
+    const isFF = ['D','T','SR','JK'].includes(componentKey);
+    diagramSubtitle.textContent = isFF
+      ? 'טבלת אמת ומבנה מתוך שערים לוגיים'
+      : 'Simplified transistor schematic';
+    const truthHtml = isFF ? (FF_TRUTH_TABLES[componentKey] || '') : '';
+    const structureLabel = isFF
+      ? '<div class="ff-popup-structure-label">מבנה מתוך שערים לוגיים:</div>'
+      : '';
+    diagramContent.innerHTML = truthHtml + structureLabel + renderComponentDiagram(componentKey);
     diagramOverlay.classList.remove('hidden');
     diagramOverlay.setAttribute('aria-hidden', 'false');
   }
@@ -450,10 +630,10 @@
       ['NAND', { key: 'NAND', label: 'NAND' }],
       ['NOR', { key: 'NOR', label: 'NOR' }],
       ['NOT', { key: 'NOT', label: 'NOT' }],
-      ['D FLIP-FLOP', { key: 'D', label: 'D FLIP-FLOP' }],
-      ['T FLIP-FLOP (TOGGLE)', { key: 'T', label: 'T FLIP-FLOP' }],
-      ['SR FLIP-FLOP (SET-RESET)', { key: 'SR', label: 'SR FLIP-FLOP' }],
-      ['JK FLIP-FLOP', { key: 'JK', label: 'JK FLIP-FLOP' }],
+      ['D', { key: 'D', label: 'D FLIP-FLOP' }],
+      ['T', { key: 'T', label: 'T FLIP-FLOP' }],
+      ['SR', { key: 'SR', label: 'SR FLIP-FLOP' }],
+      ['JK', { key: 'JK', label: 'JK FLIP-FLOP' }],
     ]);
 
     document.querySelectorAll('.truth-card h3').forEach((h3) => {
@@ -734,6 +914,18 @@
     const gatePalette = document.getElementById('gate-palette');
     ffPalette.classList.toggle('hidden', !visible);
     gatePalette.classList.toggle('hidden', visible);
+    // Filter FF chips based on level's allowedFFs
+    if (visible) {
+      const level = LEVELS[State.currentLevelIndex];
+      const allowed = level && level.allowedFFs;
+      document.querySelectorAll('.ff-chip').forEach(chip => {
+        if (allowed) {
+          chip.classList.toggle('hidden', !allowed.includes(chip.dataset.ff));
+        } else {
+          chip.classList.remove('hidden');
+        }
+      });
+    }
   }
 
   function _stopAutoClock() {
@@ -876,8 +1068,15 @@
         solutionBlock.innerHTML = sol.blockSvg;
         solutionCircuit.innerHTML = sol.circuitSvg;
         solutionExplanation.textContent = sol.explanation || '';
-        const gateList = sol.gatesUsed.join(', ');
-        solutionGates.innerHTML = `השערים הלוגיים שנעשה בהם שימוש: <span>${gateList}</span>`;
+        const gateList = sol.gatesUsed ? sol.gatesUsed.join(', ') : '';
+        const ffList = sol.ffsUsed ? sol.ffsUsed.join(', ') : '';
+        if (gateList && ffList) {
+          solutionGates.innerHTML = `שערים: <span>${gateList}</span> | פליפלופים: <span>${ffList}</span>`;
+        } else if (ffList) {
+          solutionGates.innerHTML = `הפליפלופים שנעשה בהם שימוש: <span>${ffList}</span>`;
+        } else {
+          solutionGates.innerHTML = `השערים הלוגיים שנעשה בהם שימוש: <span>${gateList}</span>`;
+        }
         winSolution.classList.remove('hidden');
       } else {
         winSolution.classList.add('hidden');

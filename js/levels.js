@@ -3467,25 +3467,73 @@ const LEVELS = [
   // ════════════════════════════════════════════════════════════
 
   // L41 — SYNCHRONIZE (easy: 1 gate + D-FF)
-  // AND(A=1,B=1)=1 → D-FF → Q=1 after 1 STEP
+  // Gate computes value, D-FF latches it on clock edge.
   {
     id: 41, name: 'SYNCHRONIZE', difficulty: 'Sequential Logic',
-    description: 'A logic gate computes the value to store. Choose the gate that produces D=1, then STEP to latch it.',
-    hint: 'AND(1,1)=1 feeds D. Place AND in the gate slot, then place D-FF and press STEP.',
+    minSteps: 3,
+    description: 'סנכרון — שער לוגי מחשב ערך שמשתנה לאורך זמן, פליפלופ מגיב בכל פעימת שעון. הכניסות משתנות ב-3 צעדים — מצא את השער והפליפלופ שנותנים Z=0 ו-Q=1 בסוף.',
+    instruction: 'שים שער ופליפלופ ולחץ STEP שלוש פעמים',
+    hint: 'עקוב אחרי פלט השער בכל צעד. Z צריך להיות 0 בסוף (A=1,B=0). Q צריך להיות 1 — איזה פליפלופ מחליף מצב כשהכניסה 1?',
+    solution: {
+      gatesUsed: ['AND'],
+      ffsUsed: ['T-FF'],
+      explanation: 'AND + T-FF — השער מוציא 1 רק כש-A=B=1 (צעד 2). T-FF מחליף מצב פעם אחת ונשאר Q=1. בצעד 3 השער חוזר ל-0 (Z=0) אבל T-FF שומר על Q=1. זהו הבסיס של מעגל שמגיב לאירוע חד-פעמי.',
+      blockSvg: `<svg viewBox="0 0 520 200" width="630" height="245">
+        <text x="8" y="25" font-family="JetBrains Mono,monospace" font-size="11" fill="#888">STEP 1: A=0,B=1 | STEP 2: A=1,B=1 | STEP 3: A=1,B=0</text>
+        <text x="8" y="72" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#39ff14">A</text>
+        <text x="8" y="102" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#39ff14">B</text>
+        <line x1="25" y1="68" x2="80" y2="68" stroke="#39ff14" stroke-width="2.5"/>
+        <line x1="25" y1="98" x2="80" y2="98" stroke="#39ff14" stroke-width="2.5"/>
+        <rect x="80" y="50" width="80" height="65" rx="8" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/>
+        <text x="120" y="90" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="18" font-weight="bold" fill="#00d4ff">AND</text>
+        <line x1="160" y1="82" x2="200" y2="82" stroke="#39ff14" stroke-width="2"/>
+        <line x1="200" y1="82" x2="200" y2="62" stroke="#39ff14" stroke-width="2"/>
+        <line x1="200" y1="62" x2="250" y2="62" stroke="#c8d8f0" stroke-width="2"/>
+        <text x="258" y="67" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#c8d8f0">Z=0</text>
+        <line x1="200" y1="82" x2="240" y2="100" stroke="#39ff14" stroke-width="2"/>
+        <rect x="240" y="80" width="90" height="55" rx="8" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/>
+        <text x="285" y="113" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="18" font-weight="bold" fill="#00d4ff">T-FF</text>
+        <line x1="330" y1="107" x2="380" y2="107" stroke="#c8d8f0" stroke-width="2.5"/>
+        <text x="388" y="112" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#c8d8f0">Q=1</text>
+        <text x="8" y="160" font-family="JetBrains Mono,monospace" font-size="11" fill="#888">AND: 0→1→0 | T-FF toggles at STEP 2 → Q stays 1</text>
+      </svg>`,
+      circuitSvg: `<svg viewBox="0 0 520 200" width="630" height="245">
+        <text x="8" y="18" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">STEP 1: AND(0,1)=0 → hold | STEP 2: AND(1,1)=1 → toggle! | STEP 3: AND(1,0)=0 → hold</text>
+        <text x="8" y="62" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#39ff14">A: 0→1→1</text>
+        <text x="8" y="92" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#39ff14">B: 1→1→0</text>
+        <line x1="95" y1="58" x2="140" y2="62" stroke="#39ff14" stroke-width="2"/>
+        <line x1="95" y1="88" x2="140" y2="78" stroke="#39ff14" stroke-width="2"/>
+        <rect x="140" y="45" width="70" height="50" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="175" y="75" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">AND</text>
+        <line x1="210" y1="70" x2="240" y2="70" stroke="#39ff14" stroke-width="2"/>
+        <line x1="240" y1="70" x2="240" y2="55" stroke="#39ff14" stroke-width="2"/>
+        <line x1="240" y1="55" x2="280" y2="55" stroke="#39ff14" stroke-width="2"/>
+        <text x="288" y="60" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#39ff14">Z=0</text>
+        <line x1="240" y1="70" x2="280" y2="90" stroke="#39ff14" stroke-width="2"/>
+        <rect x="280" y="75" width="80" height="45" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="320" y="103" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">T-FF</text>
+        <line x1="360" y1="97" x2="400" y2="97" stroke="#39ff14" stroke-width="2"/>
+        <text x="408" y="102" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#39ff14">Q=1</text>
+        <text x="8" y="150" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#ffcc00">CLK ×3</text>
+        <text x="8" y="175" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">Q: 0 → 0 → 1 → 1 (toggle only when AND=1)</text>
+      </svg>`,
+    },
     nodes: [
-      { id: 'in_A',   type: 'INPUT',     x: 160, y: 340, fixedValue: 1, label: 'A' },
-      { id: 'in_B',   type: 'INPUT',     x: 160, y: 460, fixedValue: 1, label: 'B' },
-      { id: 'g1',     type: 'GATE_SLOT', x: 420, y: 400 },
-      { id: 'clk_1',  type: 'CLOCK',     x: 160, y: 560, value: 0,      label: null },
-      { id: 'ff_1',   type: 'FF_SLOT',   ffType: null, x: 680, y: 460, label: 'FF' },
-      { id: 'out_Q',  type: 'OUTPUT',    x: 960, y: 460, targetValue: 1, label: 'Q' },
+      { id: 'in_A',   type: 'INPUT',     x: 160, y: 380, fixedValue: 0, stepValues: [0, 1, 1], label: 'A' },
+      { id: 'in_B',   type: 'INPUT',     x: 160, y: 500, fixedValue: 1, stepValues: [1, 1, 0], label: 'B' },
+      { id: 'g1',     type: 'GATE_SLOT', x: 420, y: 440 },
+      { id: 'clk_1',  type: 'CLOCK',     x: 160, y: 600, value: 0,      label: null },
+      { id: 'ff_1',   type: 'FF_SLOT',   ffType: null, x: 680, y: 500, initialQ: 0, label: 'FF' },
+      { id: 'out_Z',  type: 'OUTPUT',    x: 680, y: 360, targetValue: 0, stepTargets: [0, 1, 0], label: 'Z' },
+      { id: 'out_Q',  type: 'OUTPUT',    x: 960, y: 500, targetValue: 1, stepTargets: [0, 1, 1], label: 'Q' },
     ],
     wires: [
       { id: 'w1',   sourceId: 'in_A',  targetId: 'g1',    targetInputIndex: 0 },
       { id: 'w2',   sourceId: 'in_B',  targetId: 'g1',    targetInputIndex: 1 },
       { id: 'w3',   sourceId: 'g1',    targetId: 'ff_1',  targetInputIndex: 0 },
+      { id: 'w4',   sourceId: 'g1',    targetId: 'out_Z', targetInputIndex: 0 },
       { id: 'wclk', sourceId: 'clk_1', targetId: 'ff_1',  targetInputIndex: 1, isClockWire: true },
-      { id: 'w4',   sourceId: 'ff_1',  targetId: 'out_Q', targetInputIndex: 0, sourceOutputIndex: 0 },
+      { id: 'w5',   sourceId: 'ff_1',  targetId: 'out_Q', targetInputIndex: 0, sourceOutputIndex: 0 },
     ],
   },
 

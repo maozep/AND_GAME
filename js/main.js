@@ -1209,8 +1209,85 @@
     if (e.target === diagramOverlay) closeComponentDiagram();
   });
 
+  // ── Dev Auto-Solve (Ctrl+Shift+S) ────────────────────────
+  function _devAutoSolve() {
+    const level = State.level;
+    if (!level) return;
+    const levelDef = LEVELS[State.currentLevelIndex];
+    if (!levelDef || !levelDef.solution) return;
+    const sol = levelDef.solution;
+
+    // Reset first
+    State.resetLevel();
+    _stopAutoClock();
+    _updateStepCount();
+
+    // Place gates
+    if (sol.gatesUsed) {
+      const gateSlots = level.nodes.filter(n => n.type === 'GATE_SLOT');
+      // For linked groups, track which groups already got a gate
+      const linkedDone = new Set();
+      let gi = 0;
+      for (const slot of gateSlots) {
+        if (slot.linkedGroup && linkedDone.has(slot.linkedGroup)) continue;
+        if (gi < sol.gatesUsed.length) {
+          State.setGate(slot.id, sol.gatesUsed[gi]);
+          if (slot.linkedGroup) linkedDone.add(slot.linkedGroup);
+          gi++;
+        }
+      }
+    }
+
+    // Place flip-flops
+    if (sol.ffsUsed) {
+      const ffMap = { 'D-FF': 'D', 'T-FF': 'T', 'SR-FF': 'SR', 'JK-FF': 'JK' };
+      const ffSlots = level.nodes.filter(n => n.type === 'FF_SLOT');
+      const linkedDone = new Set();
+      let fi = 0;
+      for (const slot of ffSlots) {
+        if (slot.linkedGroup && linkedDone.has(slot.linkedGroup)) continue;
+        if (fi < sol.ffsUsed.length) {
+          State.setFfType(slot.id, ffMap[sol.ffsUsed[fi]] || sol.ffsUsed[fi]);
+          if (slot.linkedGroup) linkedDone.add(slot.linkedGroup);
+          fi++;
+        }
+      }
+    }
+
+    // Run required STEPs (use minSteps or detect from stepValues)
+    const minSteps = levelDef.minSteps || 0;
+    const maxStepValues = level.nodes.reduce((max, n) => {
+      return n.stepValues ? Math.max(max, n.stepValues.length) : max;
+    }, 0);
+    const stepsNeeded = Math.max(minSteps, maxStepValues, State.isSequentialLevel() ? 1 : 0);
+
+    let stepsDone = 0;
+    function doStep() {
+      if (stepsDone >= stepsNeeded || State.solved) return;
+      State.stepClock();
+      _updateStepCount();
+      stepsDone++;
+      setTimeout(doStep, 150);
+    }
+    setTimeout(doStep, 100);
+  }
+
   // Keyboard accessibility
   window.addEventListener('keydown', (e) => {
+    // Dev auto-solve: Ctrl+Shift+S
+    if (e.ctrlKey && e.shiftKey && e.key === 'S') {
+      e.preventDefault();
+      _devAutoSolve();
+      return;
+    }
+    // Clear all (reset level): Ctrl+Shift+R
+    if (e.ctrlKey && e.shiftKey && e.key === 'R') {
+      e.preventDefault();
+      State.resetLevel();
+      _stopAutoClock();
+      _updateStepCount();
+      return;
+    }
     if (e.key === 'Escape' && !diagramOverlay.classList.contains('hidden')) {
       closeComponentDiagram();
       return;

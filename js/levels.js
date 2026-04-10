@@ -3508,14 +3508,14 @@ const LEVELS = [
         <line x1="210" y1="70" x2="240" y2="70" stroke="#39ff14" stroke-width="2"/>
         <line x1="240" y1="70" x2="240" y2="55" stroke="#39ff14" stroke-width="2"/>
         <line x1="240" y1="55" x2="280" y2="55" stroke="#39ff14" stroke-width="2"/>
-        <text x="288" y="60" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#39ff14">Z=0</text>
+        <text x="288" y="60" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#c8d8f0">Z: 0→1→0</text>
         <line x1="240" y1="70" x2="280" y2="90" stroke="#39ff14" stroke-width="2"/>
         <rect x="280" y="75" width="80" height="45" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
         <text x="320" y="103" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">T-FF</text>
         <line x1="360" y1="97" x2="400" y2="97" stroke="#39ff14" stroke-width="2"/>
-        <text x="408" y="102" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#39ff14">Q=1</text>
+        <text x="408" y="102" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#c8d8f0">Q: 0→1→1</text>
         <text x="8" y="150" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#ffcc00">CLK ×3</text>
-        <text x="8" y="175" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">Q: 0 → 0 → 1 → 1 (toggle only when AND=1)</text>
+        <text x="8" y="175" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">T-FF toggles only at STEP 2 (AND=1) → Q stays 1</text>
       </svg>`,
     },
     nodes: [
@@ -3537,26 +3537,75 @@ const LEVELS = [
     ],
   },
 
-  // L42 — FILTER ZERO (easy: 1 gate captures 0)
-  // NAND(A=1,B=1)=0 → D-FF → Q=0 after 1 STEP
+  // L42 — FILTER ZERO (gate + FF over 3 steps with changing inputs)
+  // A:[1,1,0] B:[0,1,0]. NAND→[1,0,1]. T-FF: toggle,hold,toggle→Q=0.
+  // Target: Z=1, Q=0 after 3 steps. Unique: NAND + T-FF.
   {
     id: 42, name: 'FILTER ZERO', difficulty: 'Sequential Logic',
-    description: 'This time the target is Q=0. Choose a gate that produces D=0 from A=1,B=1, then latch it.',
-    hint: 'NAND(1,1)=0. Place NAND in the gate slot, D-FF in the FF slot, press STEP.',
+    minSteps: 3,
+    description: 'סינון אפס — שער לוגי מעבד כניסות שמשתנות לאורך 3 צעדים, פליפלופ מגיב. מצא את השילוב שנותן Z=1 ו-Q=0 בסוף.',
+    instruction: 'שים שער ופליפלופ ולחץ STEP שלוש פעמים',
+    hint: 'עקוב אחרי הפלט בכל צעד. Z צריך להיות 1 בסוף. Q צריך להיות 0 — מי מתהפך פעמיים וחוזר למקום?',
+    solution: {
+      gatesUsed: ['NAND'],
+      ffsUsed: ['T-FF'],
+      explanation: 'NAND + T-FF — NAND מוציא [1,0,1]. T-FF מתהפך בצעד 1 (Q=1), שומר בצעד 2, מתהפך שוב בצעד 3 (Q=0). שני היפוכים מחזירים ל-0. Z=NAND(0,0)=1.',
+      blockSvg: `<svg viewBox="0 0 520 200" width="630" height="245">
+        <text x="8" y="25" font-family="JetBrains Mono,monospace" font-size="11" fill="#888">STEP 1: A=1,B=0 | STEP 2: A=1,B=1 | STEP 3: A=0,B=0</text>
+        <text x="8" y="72" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#39ff14">A</text>
+        <text x="8" y="102" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#39ff14">B</text>
+        <line x1="25" y1="68" x2="80" y2="68" stroke="#39ff14" stroke-width="2.5"/>
+        <line x1="25" y1="98" x2="80" y2="98" stroke="#39ff14" stroke-width="2.5"/>
+        <rect x="80" y="50" width="80" height="65" rx="8" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/>
+        <text x="120" y="90" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#00d4ff">NAND</text>
+        <line x1="160" y1="82" x2="200" y2="82" stroke="#39ff14" stroke-width="2"/>
+        <line x1="200" y1="82" x2="200" y2="62" stroke="#39ff14" stroke-width="2"/>
+        <line x1="200" y1="62" x2="250" y2="62" stroke="#c8d8f0" stroke-width="2"/>
+        <text x="258" y="67" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#c8d8f0">Z=1</text>
+        <line x1="200" y1="82" x2="240" y2="100" stroke="#39ff14" stroke-width="2"/>
+        <rect x="240" y="80" width="90" height="55" rx="8" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/>
+        <text x="285" y="113" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="18" font-weight="bold" fill="#00d4ff">T-FF</text>
+        <line x1="330" y1="107" x2="380" y2="107" stroke="#c8d8f0" stroke-width="2.5"/>
+        <text x="388" y="112" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#c8d8f0">Q=0</text>
+        <text x="8" y="160" font-family="JetBrains Mono,monospace" font-size="11" fill="#888">NAND: 1→0→1 | T-FF toggles twice → back to 0</text>
+      </svg>`,
+      circuitSvg: `<svg viewBox="0 0 520 200" width="630" height="245">
+        <text x="8" y="18" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">STEP 1: NAND(1,0)=1 → toggle! | STEP 2: NAND(1,1)=0 → hold | STEP 3: NAND(0,0)=1 → toggle!</text>
+        <text x="8" y="62" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#39ff14">A: 1→1→0</text>
+        <text x="8" y="92" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#39ff14">B: 0→1→0</text>
+        <line x1="95" y1="58" x2="140" y2="62" stroke="#39ff14" stroke-width="2"/>
+        <line x1="95" y1="88" x2="140" y2="78" stroke="#39ff14" stroke-width="2"/>
+        <rect x="140" y="45" width="80" height="50" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="180" y="75" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#a0c8ff">NAND</text>
+        <line x1="220" y1="70" x2="250" y2="70" stroke="#39ff14" stroke-width="2"/>
+        <line x1="250" y1="70" x2="250" y2="55" stroke="#39ff14" stroke-width="2"/>
+        <line x1="250" y1="55" x2="290" y2="55" stroke="#39ff14" stroke-width="2"/>
+        <text x="298" y="60" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#c8d8f0">Z: 1→0→1</text>
+        <line x1="250" y1="70" x2="290" y2="90" stroke="#39ff14" stroke-width="2"/>
+        <rect x="290" y="75" width="80" height="45" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="330" y="103" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">T-FF</text>
+        <line x1="370" y1="97" x2="410" y2="97" stroke="#39ff14" stroke-width="2"/>
+        <text x="418" y="102" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#c8d8f0">Q: 1→1→0</text>
+        <text x="8" y="150" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#ffcc00">CLK ×3</text>
+        <text x="8" y="175" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">T-FF: toggle(1)→hold(0)→toggle(1) → back to 0</text>
+      </svg>`,
+    },
     nodes: [
-      { id: 'in_A',   type: 'INPUT',     x: 160, y: 340, fixedValue: 1, label: 'A' },
-      { id: 'in_B',   type: 'INPUT',     x: 160, y: 460, fixedValue: 1, label: 'B' },
-      { id: 'g1',     type: 'GATE_SLOT', x: 420, y: 400 },
-      { id: 'clk_1',  type: 'CLOCK',     x: 160, y: 560, value: 0,      label: null },
-      { id: 'ff_1',   type: 'FF_SLOT',   ffType: null, x: 680, y: 460, label: 'FF' },
-      { id: 'out_Q',  type: 'OUTPUT',    x: 960, y: 460, targetValue: 0, label: 'Q' },
+      { id: 'in_A',   type: 'INPUT',     x: 160, y: 380, fixedValue: 1, stepValues: [1, 1, 0], label: 'A' },
+      { id: 'in_B',   type: 'INPUT',     x: 160, y: 500, fixedValue: 0, stepValues: [0, 1, 0], label: 'B' },
+      { id: 'g1',     type: 'GATE_SLOT', x: 420, y: 440 },
+      { id: 'clk_1',  type: 'CLOCK',     x: 160, y: 600, value: 0,      label: null },
+      { id: 'ff_1',   type: 'FF_SLOT',   ffType: null, x: 680, y: 500, initialQ: 0, label: 'FF' },
+      { id: 'out_Z',  type: 'OUTPUT',    x: 680, y: 360, targetValue: 1, stepTargets: [1, 0, 1], label: 'Z' },
+      { id: 'out_Q',  type: 'OUTPUT',    x: 960, y: 500, targetValue: 0, stepTargets: [1, 1, 0], label: 'Q' },
     ],
     wires: [
       { id: 'w1',   sourceId: 'in_A',  targetId: 'g1',    targetInputIndex: 0 },
       { id: 'w2',   sourceId: 'in_B',  targetId: 'g1',    targetInputIndex: 1 },
       { id: 'w3',   sourceId: 'g1',    targetId: 'ff_1',  targetInputIndex: 0 },
+      { id: 'w4',   sourceId: 'g1',    targetId: 'out_Z', targetInputIndex: 0 },
       { id: 'wclk', sourceId: 'clk_1', targetId: 'ff_1',  targetInputIndex: 1, isClockWire: true },
-      { id: 'w4',   sourceId: 'ff_1',  targetId: 'out_Q', targetInputIndex: 0, sourceOutputIndex: 0 },
+      { id: 'w5',   sourceId: 'ff_1',  targetId: 'out_Q', targetInputIndex: 0, sourceOutputIndex: 0 },
     ],
   },
 

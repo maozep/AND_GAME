@@ -569,12 +569,17 @@ const Renderer = (() => {
     ctx.save();
 
     const correct = val !== null && val === node.targetValue;
+    const hasTimeline = node.stepTargets && node.stepTargets.length > 1;
     if (correct) { ctx.shadowColor = C.wireHighGlow; ctx.shadowBlur = solved ? 30 : 20; }
 
     ctx.beginPath();
     ctx.arc(node.x, node.y, r, 0, Math.PI * 2);
-    ctx.fillStyle = correct ? 'rgba(10,50,10,0.96)'
-                            : (val === null ? 'rgba(10,14,20,0.96)' : 'rgba(40,10,10,0.96)');
+    if (hasTimeline) {
+      ctx.fillStyle = 'rgba(8,16,24,0.75)';
+    } else {
+      ctx.fillStyle = correct ? 'rgba(10,50,10,0.96)'
+                              : (val === null ? 'rgba(10,14,20,0.96)' : 'rgba(40,10,10,0.96)');
+    }
     ctx.fill();
 
     ctx.strokeStyle = correct ? '#39ff14' : (hovered ? '#00d4ff' : '#1e3a50');
@@ -591,7 +596,7 @@ const Renderer = (() => {
     ctx.setLineDash([]);
 
     // Dynamic output with stepTargets: show timeline of expected values
-    if (node.stepTargets && node.stepTargets.length > 1) {
+    if (hasTimeline) {
       const steps = node.stepTargets;
       const n = steps.length;
       const activeIdx = Math.min(_stepCount, n) - 1;

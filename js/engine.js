@@ -56,7 +56,7 @@ const Engine = (() => {
   // ── Main Evaluate Function ─────────────────────────────────
   // ffStates: Map<nodeId, { q, qNot, prevClkValue }>  (mutable, updated in-place)
   // Returns: { nodeValues, wireValues, ffUpdated, solved }
-  function evaluate(level, ffStates) {
+  function evaluate(level, ffStates, stepCount) {
     const { nodes, wires } = level;
     ffStates = ffStates || new Map();
 
@@ -151,7 +151,13 @@ const Engine = (() => {
       } else if (node.type === 'OUTPUT') {
         const inputSlots = inputs.get(id);
         if (inputSlots.length > 0) {
-          value = nodeValues.get(inputSlots[0].sourceId) ?? null;
+          const slot = inputSlots[0];
+          const outIdx = slot.wire.sourceOutputIndex || 0;
+          if (outIdx === 1 && FF_TYPES.has(nodeMap.get(slot.sourceId).type)) {
+            value = nodeValues.get(slot.sourceId + '__qnot') ?? null;
+          } else {
+            value = nodeValues.get(slot.sourceId) ?? null;
+          }
         }
       }
 
@@ -246,7 +252,13 @@ const Engine = (() => {
         } else if (node.type === 'OUTPUT') {
           const inputSlots = inputs.get(id);
           if (inputSlots.length > 0) {
-            value = nodeValues.get(inputSlots[0].sourceId) ?? null;
+            const slot = inputSlots[0];
+            const outIdx = slot.wire.sourceOutputIndex || 0;
+            if (outIdx === 1 && FF_TYPES.has(nodeMap.get(slot.sourceId).type)) {
+              value = nodeValues.get(slot.sourceId + '__qnot') ?? null;
+            } else {
+              value = nodeValues.get(slot.sourceId) ?? null;
+            }
           }
         }
 
@@ -256,8 +268,10 @@ const Engine = (() => {
     }
 
     // ── Win Condition ─────────────────────────────────────
+    const minSteps = level.minSteps || 0;
     const outputNodes = nodes.filter(n => n.type === 'OUTPUT');
-    const solved = outputNodes.length > 0 && outputNodes.every(n => {
+    const solved = (stepCount || 0) >= minSteps &&
+      outputNodes.length > 0 && outputNodes.every(n => {
       const computed = nodeValues.get(n.id);
       return computed !== null && computed === n.targetValue;
     });

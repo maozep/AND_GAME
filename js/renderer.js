@@ -108,7 +108,9 @@ const Renderer = (() => {
   }
 
   // ── Main Render ───────────────────────────────────────────
-  function render(level, evalResult, hoveredNodeId, solved) {
+  let _stepCount = 0;
+  function render(level, evalResult, hoveredNodeId, solved, stepCount) {
+    _stepCount = stepCount || 0;
     if (!ctx || !level) return;
 
     ctx.clearRect(0, 0, W, H);
@@ -575,7 +577,14 @@ const Renderer = (() => {
       ctx.font         = 'bold 18px JetBrains Mono, monospace';
       ctx.textAlign    = 'center';
       ctx.textBaseline = 'middle';
-      ctx.fillText('FF?', node.x, node.y);
+      ctx.fillText('FF?', node.x, node.initialQ != null ? node.y - 10 : node.y);
+
+      // Show initial Q state if defined
+      if (node.initialQ != null) {
+        ctx.fillStyle = node.initialQ === 1 ? '#39ff14' : '#ff4444';
+        ctx.font      = 'bold 12px JetBrains Mono, monospace';
+        ctx.fillText('Q\u2080=' + node.initialQ, node.x, node.y + 12);
+      }
 
       if (hovered) {
         ctx.fillStyle    = '#a060ff';
@@ -586,6 +595,15 @@ const Renderer = (() => {
     } else {
       // Placed — delegate to full FF drawing
       _drawFlipFlopNode(node, ffState, false);
+
+      // Show initial Q below the FF until first STEP
+      if (node.initialQ != null && _stepCount === 0) {
+        ctx.fillStyle = node.initialQ === 1 ? '#39ff14' : '#ff4444';
+        ctx.font      = 'bold 12px JetBrains Mono, monospace';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'top';
+        ctx.fillText('Q\u2080=' + node.initialQ, node.x, y + h + 6);
+      }
     }
 
     ctx.restore();

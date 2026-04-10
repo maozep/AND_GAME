@@ -962,7 +962,7 @@
     const level  = State.level;
     if (!level) return;
 
-    const result = Engine.evaluate(level, State.getFfStates());
+    const result = Engine.evaluate(level, State.getFfStates(), State.stepCount);
     State.setEvalResult(result);
 
     // Lower the clock after evaluation so the rising edge is detected exactly once.
@@ -970,7 +970,7 @@
       State.lowerClock();
     }
 
-    Renderer.render(level, result, State.hoveredNodeId, result.solved);
+    Renderer.render(level, result, State.hoveredNodeId, result.solved, State.stepCount);
 
     // Trigger win sequence if newly solved
     if (result.solved && !_lastSolved) {
@@ -1169,6 +1169,7 @@
   hintOverlay.addEventListener('click', (e) => {
     if (e.target === hintOverlay) closeHintOverlay();
   });
+
 
   btnLevels.addEventListener('click', () => {
     openMenuOverlay();

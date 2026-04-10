@@ -2727,67 +2727,18 @@ const LEVELS = [
   // L35–L40: Combine multiple FFs — moderate complexity
   // ════════════════════════════════════════════════════════════
 
-  // L31 — D FLIP-FLOP (Data capture)
-  // D=1 → Q=1, Q̄=0 after 1 STEP
-  {
-    id: 31, name: 'D FLIP-FLOP', difficulty: 'Flip-Flops',
-    description: 'D Flip-Flop — פליפלופ D (Data) לוכד את הערך שנמצא בכניסת D ברגע עליית השעון. D=1 מחובר — לחץ STEP כדי ללכוד את הערך.',
-    instruction: 'שים פליפלופ D במקום המסומן ולחץ STEP\nהפליפלופ לוכד את ערך D בעליית השעון',
-    hint: 'D=1, אז בעליית שעון Q ילכוד 1 ו-Q̄ יהפוך ל-0. לחץ STEP פעם אחת.',
-    solution: {
-      ffsUsed: ['D-FF'],
-      explanation: 'D Flip-Flop — פליפלופ D (Data) לוכד את הערך שנמצא בכניסת D ברגע עליית השעון. אם D=1, אז Q=1. אם D=0, אז Q=0. זהו הפליפלופ הנפוץ ביותר — משמש לאחסון ביט בודד.',
-      blockSvg: `<svg viewBox="0 0 360 180" width="440" height="220">
-        <text x="12" y="62" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">D</text>
-        <line x1="30" y1="57" x2="100" y2="57" stroke="#39ff14" stroke-width="2.5"/>
-        <text x="12" y="142" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#ffcc00">CLK</text>
-        <line x1="45" y1="137" x2="100" y2="137" stroke="#ffcc00" stroke-width="2.5"/>
-        <rect x="100" y="30" width="160" height="130" rx="8" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/>
-        <text x="180" y="100" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="26" font-weight="bold" fill="#00d4ff">D-FF</text>
-        <line x1="260" y1="62" x2="320" y2="62" stroke="#c8d8f0" stroke-width="2.5"/>
-        <text x="328" y="67" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Q</text>
-        <line x1="260" y1="132" x2="320" y2="132" stroke="#c8d8f0" stroke-width="2.5"/>
-        <text x="328" y="137" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Q̄</text>
-      </svg>`,
-      circuitSvg: `<svg viewBox="0 0 380 180" width="460" height="220">
-        <text x="18" y="52" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">D=1</text>
-        <text x="18" y="142" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#ffcc00">CLK</text>
-        <rect x="120" y="30" width="120" height="130" rx="6" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
-        <text x="180" y="100" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="18" font-weight="bold" fill="#a0c8ff">D-FF</text>
-        <text x="310" y="67" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Q=1</text>
-        <text x="310" y="137" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Q̄=0</text>
-        <line x1="58" y1="48" x2="120" y2="62" stroke="#39ff14" stroke-width="2"/>
-        <line x1="50" y1="138" x2="120" y2="138" stroke="#ffcc00" stroke-width="2"/>
-        <line x1="240" y1="62" x2="300" y2="62" stroke="#39ff14" stroke-width="2"/>
-        <line x1="240" y1="132" x2="300" y2="132" stroke="#39ff14" stroke-width="2"/>
-      </svg>`,
-    },
-    nodes: [
-      { id: 'in_D',   type: 'INPUT',   x: 180, y: 400, fixedValue: 1, label: 'D' },
-      { id: 'clk_1',  type: 'CLOCK',   x: 180, y: 520, value: 0,      label: null },
-      { id: 'ff_1',   type: 'FF_SLOT', ffType: null, x: 540, y: 460, label: 'FF' },
-      { id: 'out_Q',  type: 'OUTPUT',  x: 900, y: 420, targetValue: 1, label: 'Q' },
-      { id: 'out_Qn', type: 'OUTPUT',  x: 900, y: 510, targetValue: 0, label: 'Q̄' },
-    ],
-    wires: [
-      { id: 'w1',   sourceId: 'in_D',  targetId: 'ff_1',   targetInputIndex: 0 },
-      { id: 'wclk', sourceId: 'clk_1', targetId: 'ff_1',   targetInputIndex: 1, isClockWire: true },
-      { id: 'w2',   sourceId: 'ff_1',  targetId: 'out_Q',  targetInputIndex: 0, sourceOutputIndex: 0 },
-      { id: 'w3',   sourceId: 'ff_1',  targetId: 'out_Qn', targetInputIndex: 0, sourceOutputIndex: 1 },
-    ],
-  },
-
-  // L32 — T FLIP-FLOP (Toggle)
+  // L31 — T FLIP-FLOP (Toggle)
   // T=1 → Q toggles from 0 to 1 on first STEP
   {
-    id: 32, name: 'T FLIP-FLOP', difficulty: 'Flip-Flops',
+    id: 31, name: 'T FLIP-FLOP', difficulty: 'Flip-Flops',
 
-    description: 'T Flip-Flop — פליפלופ T (Toggle) הופך את Q בכל עליית שעון כאשר T=1. אם T=0, Q נשאר ללא שינוי. Q מתחיל ב-0.',
-    instruction: 'שים פליפלופ T במקום המסומן ולחץ STEP\nכאשר T=1, הפליפלופ מחליף את Q בכל פעימת שעון',
-    hint: 'T=1 אז Q יתהפך מ-0 ל-1 בעליית השעון. לחץ STEP פעם אחת.',
+
+    description: 'כניסה=1, Q מתחיל ב-1. מצא את הפליפלופ שמשנה את Q ל-0 בעליית השעון.',
+    instruction: 'בחר את הפליפלופ הנכון ולחץ STEP',
+    hint: 'כניסה=1, Q₀=1. D-FF ילכוד 1 (Q נשאר 1). SR/JK עושים SET (Q נשאר 1). רק פליפלופ שמחליף (toggle) ייתן Q=0.',
     solution: {
       ffsUsed: ['T-FF'],
-      explanation: 'T Flip-Flop — פליפלופ T (Toggle) הופך את Q בכל עליית שעון כאשר T=1. לחיצה נוספת על STEP תחזיר את Q ל-0. משמש לבניית מונים (counters) ומחלקי תדר.',
+      explanation: 'T Flip-Flop — פליפלופ T (Toggle) הופך את Q בכל עליית שעון כאשר T=1. כש-Q=1 ו-T=1, Q מתהפך ל-0. כל השאר (D, SR, JK) משאירים Q=1. משמש לבניית מונים ומחלקי תדר.',
       blockSvg: `<svg viewBox="0 0 360 180" width="440" height="220">
         <text x="12" y="62" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">T</text>
         <line x1="30" y1="57" x2="100" y2="57" stroke="#39ff14" stroke-width="2.5"/>
@@ -2801,9 +2752,10 @@ const LEVELS = [
       circuitSvg: `<svg viewBox="0 0 380 180" width="460" height="220">
         <text x="18" y="52" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">T=1</text>
         <text x="18" y="142" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#ffcc00">CLK</text>
+        <text x="18" y="100" font-family="JetBrains Mono,monospace" font-size="12" fill="#888">Q₀=1</text>
         <rect x="120" y="30" width="120" height="130" rx="6" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
         <text x="180" y="100" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="18" font-weight="bold" fill="#a0c8ff">T-FF</text>
-        <text x="310" y="100" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Q=1</text>
+        <text x="310" y="100" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">Q=0</text>
         <line x1="52" y1="48" x2="120" y2="62" stroke="#39ff14" stroke-width="2"/>
         <line x1="50" y1="138" x2="120" y2="138" stroke="#ffcc00" stroke-width="2"/>
         <line x1="240" y1="95" x2="300" y2="95" stroke="#39ff14" stroke-width="2"/>
@@ -2812,8 +2764,8 @@ const LEVELS = [
     nodes: [
       { id: 'in_T',   type: 'INPUT',   x: 180, y: 400, fixedValue: 1, label: 'T' },
       { id: 'clk_1',  type: 'CLOCK',   x: 180, y: 520, value: 0,      label: null },
-      { id: 'ff_1',   type: 'FF_SLOT', ffType: null, x: 540, y: 460, label: 'FF' },
-      { id: 'out_Q',  type: 'OUTPUT',  x: 900, y: 460, targetValue: 1, label: 'Q' },
+      { id: 'ff_1',   type: 'FF_SLOT', ffType: null, x: 540, y: 460, initialQ: 1, label: 'FF' },
+      { id: 'out_Q',  type: 'OUTPUT',  x: 900, y: 460, targetValue: 0, label: 'Q' },
     ],
     wires: [
       { id: 'w1',   sourceId: 'in_T',  targetId: 'ff_1',  targetInputIndex: 0 },
@@ -2821,18 +2773,83 @@ const LEVELS = [
       { id: 'w2',   sourceId: 'ff_1',  targetId: 'out_Q', targetInputIndex: 0, sourceOutputIndex: 0 },
     ],
   },
-
-  // L33 — SR FLIP-FLOP (Set / Reset)
-  // S=1, R=0 → Q=1, Q̄=0 after 1 STEP
+  // L32 — D FLIP-FLOP (Two parallel cases — only D-FF satisfies both)
+  // Case 1: D=1, Q₀=0 → after STEP Q must be 1 (all FFs do this)
+  // Case 2: D=0, Q₀=1 → after STEP Q must be 0 (only D-FF captures the 0)
+  {
+    id: 32, name: 'D FLIP-FLOP', difficulty: 'Flip-Flops',
+    description: 'D Flip-Flop — פליפלופ D (Data) לוכד את הערך שנמצא בכניסת D ברגע עליית השעון. שני מקרים במקביל — רק פליפלופ אחד מתאים לשניהם.',
+    instruction: 'בחר את הפליפלופ שמתאים לשני המקרים ולחץ STEP',
+    hint: 'מקרה 1: כל פליפלופ עם כניסה 1 ייתן Q=1. אבל מקרה 2: רק פליפלופ שלוכד את ערך הכניסה (0) יאפס את Q מ-1 ל-0.',
+    solution: {
+      ffsUsed: ['D-FF'],
+      explanation: 'D Flip-Flop — פליפלופ D (Data) לוכד את הערך שנמצא בכניסת D ברגע עליית השעון. D=1→Q=1, D=0→Q=0. זהו הפליפלופ היחיד שתמיד לוכד את ערך הכניסה — T מחליף, SR ו-JK עושים hold כשהכניסה 0.',
+      blockSvg: `<svg viewBox="0 0 360 180" width="440" height="220">
+        <text x="12" y="62" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">D</text>
+        <line x1="30" y1="57" x2="100" y2="57" stroke="#39ff14" stroke-width="2.5"/>
+        <text x="12" y="142" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#ffcc00">CLK</text>
+        <line x1="45" y1="137" x2="100" y2="137" stroke="#ffcc00" stroke-width="2.5"/>
+        <rect x="100" y="30" width="160" height="130" rx="8" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/>
+        <text x="180" y="100" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="26" font-weight="bold" fill="#00d4ff">D-FF</text>
+        <line x1="260" y1="62" x2="320" y2="62" stroke="#c8d8f0" stroke-width="2.5"/>
+        <text x="328" y="67" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Q</text>
+        <line x1="260" y1="132" x2="320" y2="132" stroke="#c8d8f0" stroke-width="2.5"/>
+        <text x="328" y="137" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Q̄</text>
+      </svg>`,
+      circuitSvg: `<svg viewBox="0 0 420 310" width="510" height="380">
+        <!-- Case 1 -->
+        <text x="10" y="20" font-family="JetBrains Mono,monospace" font-size="12" fill="#888">CASE 1: Q₀=0</text>
+        <text x="18" y="62" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">D=1</text>
+        <rect x="120" y="30" width="120" height="100" rx="6" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="180" y="85" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="18" font-weight="bold" fill="#a0c8ff">D-FF</text>
+        <text x="280" y="67" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#39ff14">Q=1</text>
+        <line x1="58" y1="58" x2="120" y2="58" stroke="#39ff14" stroke-width="2"/>
+        <line x1="240" y1="62" x2="270" y2="62" stroke="#39ff14" stroke-width="2"/>
+        <!-- Case 2 -->
+        <text x="10" y="170" font-family="JetBrains Mono,monospace" font-size="12" fill="#888">CASE 2: Q₀=1</text>
+        <text x="18" y="212" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#ff4444">D=0</text>
+        <rect x="120" y="180" width="120" height="100" rx="6" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="180" y="235" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="18" font-weight="bold" fill="#a0c8ff">D-FF</text>
+        <text x="280" y="217" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#39ff14">Q=0</text>
+        <line x1="58" y1="208" x2="120" y2="208" stroke="#ff4444" stroke-width="2"/>
+        <line x1="240" y1="212" x2="270" y2="212" stroke="#39ff14" stroke-width="2"/>
+      </svg>`,
+    },
+    nodes: [
+      // Case 1: D=1, Q starts at 0 → target Q=1
+      { id: 'c1_D',   type: 'INPUT',   x: 180, y: 300, fixedValue: 1, label: 'D' },
+      { id: 'c1_clk', type: 'CLOCK',   x: 180, y: 400, value: 0,     label: null },
+      { id: 'c1_ff',  type: 'FF_SLOT', ffType: null, x: 540, y: 350, linkedGroup: 'main', initialQ: 0, label: 'FF' },
+      { id: 'c1_Q',   type: 'OUTPUT',  x: 900, y: 350, targetValue: 1, label: 'Q' },
+      // Case 2: D=0, Q starts at 1 → target Q=0
+      { id: 'c2_D',   type: 'INPUT',   x: 180, y: 530, fixedValue: 0, label: 'D' },
+      { id: 'c2_clk', type: 'CLOCK',   x: 180, y: 630, value: 0,     label: null },
+      { id: 'c2_ff',  type: 'FF_SLOT', ffType: null, x: 540, y: 580, linkedGroup: 'main', initialQ: 1, label: 'FF' },
+      { id: 'c2_Q',   type: 'OUTPUT',  x: 900, y: 580, targetValue: 0, label: 'Q' },
+    ],
+    wires: [
+      // Case 1 wiring
+      { id: 'c1_w1',   sourceId: 'c1_D',   targetId: 'c1_ff', targetInputIndex: 0 },
+      { id: 'c1_wclk', sourceId: 'c1_clk', targetId: 'c1_ff', targetInputIndex: 1, isClockWire: true },
+      { id: 'c1_w2',   sourceId: 'c1_ff',  targetId: 'c1_Q',  targetInputIndex: 0, sourceOutputIndex: 0 },
+      // Case 2 wiring
+      { id: 'c2_w1',   sourceId: 'c2_D',   targetId: 'c2_ff', targetInputIndex: 0 },
+      { id: 'c2_wclk', sourceId: 'c2_clk', targetId: 'c2_ff', targetInputIndex: 1, isClockWire: true },
+      { id: 'c2_w2',   sourceId: 'c2_ff',  targetId: 'c2_Q',  targetInputIndex: 0, sourceOutputIndex: 0 },
+    ],
+  },
+  // L33 — SR FLIP-FLOP (3 parallel cases — only SR-FF satisfies all)
+  // Case 1: S=0,R=1,Q₀=1 → RESET→Q=0  (eliminates T: hold→1)
+  // Case 2: S=0,R=0,Q₀=1 → HOLD→Q=1   (eliminates D: captures 0)
+  // Case 3: S=1,R=1,Q₀=1 → SET→Q=1    (eliminates JK: toggle→0, T: toggle→0)
   {
     id: 33, name: 'SR FLIP-FLOP', difficulty: 'Flip-Flops',
-
-    description: 'SR Flip-Flop — פליפלופ SR (Set/Reset) מאפשר לקבוע את Q ל-1 (SET) או ל-0 (RESET) בנפרד. S=1,R=0 מפעיל SET.',
-    instruction: 'שים פליפלופ SR במקום המסומן ולחץ STEP\nS=1 ו-R=0 מפעילים את פעולת ה-SET',
-    hint: 'S=1, R=0 → מצב SET. Q יעלה ל-1 ו-Q̄ ירד ל-0. לחץ STEP פעם אחת.',
+    description: 'SR Flip-Flop — פליפלופ SR (Set/Reset) מאפשר לקבוע את Q ל-1 (SET), ל-0 (RESET), או לשמור (HOLD). שלושה מקרים — רק פליפלופ אחד מתאים לכולם.',
+    instruction: 'בחר את הפליפלופ שמתאים לשלושת המקרים ולחץ STEP',
+    hint: 'מקרה 1: RESET (S=0,R=1). מקרה 2: HOLD (S=0,R=0). מקרה 3: S=1,R=1 — רק פליפלופ שבו SET גובר ייתן Q=1.',
     solution: {
       ffsUsed: ['SR-FF'],
-      explanation: 'SR Flip-Flop — פליפלופ SR (Set/Reset) הוא הפליפלופ הבסיסי ביותר. S=1,R=0 → SET (Q=1). S=0,R=1 → RESET (Q=0). S=0,R=0 → HOLD. S=1,R=1 → מצב אסור (בפליפלופ זה SET גובר).',
+      explanation: 'SR Flip-Flop — פליפלופ SR (Set/Reset) הוא הפליפלופ הבסיסי ביותר. S=1,R=0 → SET (Q=1). S=0,R=1 → RESET (Q=0). S=0,R=0 → HOLD. S=1,R=1 → SET גובר (Q=1). T מחליף במקום RESET, D לוכד S בלבד, JK מחליף כש-J=K=1.',
       blockSvg: `<svg viewBox="0 0 360 200" width="440" height="245">
         <text x="12" y="52" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">S</text>
         <line x1="30" y1="47" x2="100" y2="47" stroke="#39ff14" stroke-width="2.5"/>
@@ -2847,49 +2864,89 @@ const LEVELS = [
         <line x1="260" y1="137" x2="320" y2="137" stroke="#c8d8f0" stroke-width="2.5"/>
         <text x="328" y="142" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Q̄</text>
       </svg>`,
-      circuitSvg: `<svg viewBox="0 0 400 200" width="480" height="245">
-        <text x="18" y="42" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">S=1</text>
-        <text x="18" y="92" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">R=0</text>
-        <text x="18" y="162" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#ffcc00">CLK</text>
-        <rect x="130" y="25" width="120" height="150" rx="6" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
-        <text x="190" y="110" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="17" font-weight="bold" fill="#a0c8ff">SR-FF</text>
-        <text x="325" y="67" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Q=1</text>
-        <text x="325" y="142" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Q̄=0</text>
-        <line x1="55" y1="38" x2="130" y2="50" stroke="#39ff14" stroke-width="2"/>
-        <line x1="55" y1="88" x2="130" y2="100" stroke="#39ff14" stroke-width="2"/>
-        <line x1="50" y1="158" x2="130" y2="158" stroke="#ffcc00" stroke-width="2"/>
-        <line x1="250" y1="62" x2="315" y2="62" stroke="#39ff14" stroke-width="2"/>
-        <line x1="250" y1="137" x2="315" y2="137" stroke="#39ff14" stroke-width="2"/>
+      circuitSvg: `<svg viewBox="0 0 420 420" width="510" height="510">
+        <!-- Case 1: RESET -->
+        <text x="10" y="20" font-family="JetBrains Mono,monospace" font-size="11" fill="#888">CASE 1: RESET (Q₀=1)</text>
+        <text x="18" y="52" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#ff4444">S=0</text>
+        <text x="18" y="82" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">R=1</text>
+        <line x1="55" y1="48" x2="120" y2="50" stroke="#ff4444" stroke-width="2"/>
+        <line x1="55" y1="78" x2="120" y2="72" stroke="#39ff14" stroke-width="2"/>
+        <rect x="120" y="30" width="100" height="75" rx="6" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="170" y="73" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">SR-FF</text>
+        <line x1="220" y1="67" x2="250" y2="67" stroke="#39ff14" stroke-width="2"/>
+        <text x="260" y="73" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">Q=0</text>
+        <!-- Case 2: HOLD -->
+        <text x="10" y="140" font-family="JetBrains Mono,monospace" font-size="11" fill="#888">CASE 2: HOLD (Q₀=1)</text>
+        <text x="18" y="172" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#ff4444">S=0</text>
+        <text x="18" y="202" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#ff4444">R=0</text>
+        <line x1="55" y1="168" x2="120" y2="170" stroke="#ff4444" stroke-width="2"/>
+        <line x1="55" y1="198" x2="120" y2="192" stroke="#ff4444" stroke-width="2"/>
+        <rect x="120" y="150" width="100" height="75" rx="6" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="170" y="193" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">SR-FF</text>
+        <line x1="220" y1="187" x2="250" y2="187" stroke="#39ff14" stroke-width="2"/>
+        <text x="260" y="193" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">Q=1</text>
+        <!-- Case 3: SET dominates -->
+        <text x="10" y="260" font-family="JetBrains Mono,monospace" font-size="11" fill="#888">CASE 3: S=R=1 (Q₀=1)</text>
+        <text x="18" y="292" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">S=1</text>
+        <text x="18" y="322" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">R=1</text>
+        <line x1="55" y1="288" x2="120" y2="290" stroke="#39ff14" stroke-width="2"/>
+        <line x1="55" y1="318" x2="120" y2="312" stroke="#39ff14" stroke-width="2"/>
+        <rect x="120" y="270" width="100" height="75" rx="6" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="170" y="313" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">SR-FF</text>
+        <line x1="220" y1="307" x2="250" y2="307" stroke="#39ff14" stroke-width="2"/>
+        <text x="260" y="313" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">Q=1</text>
       </svg>`,
     },
     nodes: [
-      { id: 'in_S',   type: 'INPUT',   x: 180, y: 360, fixedValue: 1, label: 'S' },
-      { id: 'in_R',   type: 'INPUT',   x: 180, y: 480, fixedValue: 0, label: 'R' },
-      { id: 'clk_1',  type: 'CLOCK',   x: 180, y: 580, value: 0,      label: null },
-      { id: 'ff_1',   type: 'FF_SLOT', ffType: null, x: 560, y: 460, label: 'FF' },
-      { id: 'out_Q',  type: 'OUTPUT',  x: 920, y: 420, targetValue: 1, label: 'Q' },
-      { id: 'out_Qn', type: 'OUTPUT',  x: 920, y: 510, targetValue: 0, label: 'Q̄' },
+      // Case 1: S=0, R=1, Q₀=1 → RESET → Q=0
+      { id: 'c1_S',   type: 'INPUT',   x: 140, y: 260, fixedValue: 0, label: 'S' },
+      { id: 'c1_R',   type: 'INPUT',   x: 140, y: 350, fixedValue: 1, label: 'R' },
+      { id: 'c1_clk', type: 'CLOCK',   x: 140, y: 440, value: 0,     label: null },
+      { id: 'c1_ff',  type: 'FF_SLOT', ffType: null, x: 500, y: 340, linkedGroup: 'main', initialQ: 1, label: 'FF' },
+      { id: 'c1_Q',   type: 'OUTPUT',  x: 860, y: 340, targetValue: 0, label: 'Q' },
+      // Case 2: S=0, R=0, Q₀=1 → HOLD → Q=1
+      { id: 'c2_S',   type: 'INPUT',   x: 140, y: 530, fixedValue: 0, label: 'S' },
+      { id: 'c2_R',   type: 'INPUT',   x: 140, y: 620, fixedValue: 0, label: 'R' },
+      { id: 'c2_clk', type: 'CLOCK',   x: 140, y: 710, value: 0,     label: null },
+      { id: 'c2_ff',  type: 'FF_SLOT', ffType: null, x: 500, y: 610, linkedGroup: 'main', initialQ: 1, label: 'FF' },
+      { id: 'c2_Q',   type: 'OUTPUT',  x: 860, y: 610, targetValue: 1, label: 'Q' },
+      // Case 3: S=1, R=1, Q₀=1 → SET dominates → Q=1
+      { id: 'c3_S',   type: 'INPUT',   x: 140, y: 800, fixedValue: 1, label: 'S' },
+      { id: 'c3_R',   type: 'INPUT',   x: 140, y: 890, fixedValue: 1, label: 'R' },
+      { id: 'c3_clk', type: 'CLOCK',   x: 140, y: 980, value: 0,     label: null },
+      { id: 'c3_ff',  type: 'FF_SLOT', ffType: null, x: 500, y: 880, linkedGroup: 'main', initialQ: 1, label: 'FF' },
+      { id: 'c3_Q',   type: 'OUTPUT',  x: 860, y: 880, targetValue: 1, label: 'Q' },
     ],
     wires: [
-      { id: 'w1',   sourceId: 'in_S',  targetId: 'ff_1',   targetInputIndex: 0 },
-      { id: 'w2',   sourceId: 'in_R',  targetId: 'ff_1',   targetInputIndex: 1 },
-      { id: 'wclk', sourceId: 'clk_1', targetId: 'ff_1',   targetInputIndex: 2, isClockWire: true },
-      { id: 'w3',   sourceId: 'ff_1',  targetId: 'out_Q',  targetInputIndex: 0, sourceOutputIndex: 0 },
-      { id: 'w4',   sourceId: 'ff_1',  targetId: 'out_Qn', targetInputIndex: 0, sourceOutputIndex: 1 },
+      // Case 1
+      { id: 'c1_w1',   sourceId: 'c1_S',   targetId: 'c1_ff', targetInputIndex: 0 },
+      { id: 'c1_w2',   sourceId: 'c1_R',   targetId: 'c1_ff', targetInputIndex: 1 },
+      { id: 'c1_wclk', sourceId: 'c1_clk', targetId: 'c1_ff', targetInputIndex: 2, isClockWire: true },
+      { id: 'c1_w3',   sourceId: 'c1_ff',  targetId: 'c1_Q',  targetInputIndex: 0, sourceOutputIndex: 0 },
+      // Case 2
+      { id: 'c2_w1',   sourceId: 'c2_S',   targetId: 'c2_ff', targetInputIndex: 0 },
+      { id: 'c2_w2',   sourceId: 'c2_R',   targetId: 'c2_ff', targetInputIndex: 1 },
+      { id: 'c2_wclk', sourceId: 'c2_clk', targetId: 'c2_ff', targetInputIndex: 2, isClockWire: true },
+      { id: 'c2_w3',   sourceId: 'c2_ff',  targetId: 'c2_Q',  targetInputIndex: 0, sourceOutputIndex: 0 },
+      // Case 3
+      { id: 'c3_w1',   sourceId: 'c3_S',   targetId: 'c3_ff', targetInputIndex: 0 },
+      { id: 'c3_w2',   sourceId: 'c3_R',   targetId: 'c3_ff', targetInputIndex: 1 },
+      { id: 'c3_wclk', sourceId: 'c3_clk', targetId: 'c3_ff', targetInputIndex: 2, isClockWire: true },
+      { id: 'c3_w3',   sourceId: 'c3_ff',  targetId: 'c3_Q',  targetInputIndex: 0, sourceOutputIndex: 0 },
     ],
   },
-
-  // L34 — JK FLIP-FLOP (Toggle mode)
-  // J=1, K=1 → toggle → Q=1 after 1 STEP (from Q=0)
+  // L34 — JK FLIP-FLOP (3 parallel cases — only JK-FF satisfies all)
+  // Case 1: J=1,K=1,Q₀=1 → TOGGLE→Q=0  (eliminates SR: set→1, D: D=1→1)
+  // Case 2: J=1,K=0,Q₀=1 → SET→Q=1     (eliminates T: toggle→0)
+  // Case 3: J=0,K=0,Q₀=1 → HOLD→Q=1    (eliminates D: D=0→0)
   {
     id: 34, name: 'JK FLIP-FLOP', difficulty: 'Flip-Flops',
-
-    description: 'JK Flip-Flop — פליפלופ JK הוא הגמיש ביותר. J=K=1 → מצב TOGGLE (Q מתהפך). J=1,K=0 → SET. J=0,K=1 → RESET. אין לו מצב אסור כמו SR.',
-    instruction: 'שים פליפלופ JK במקום המסומן ולחץ STEP\nJ=K=1 מפעילים את מצב ה-TOGGLE — Q מתהפך בכל פעימה',
-    hint: 'J=1, K=1 → מצב Toggle. Q מתחיל ב-0, אחרי STEP יתהפך ל-1.',
+    description: 'JK Flip-Flop — הפליפלופ הגמיש ביותר. J=K=1 → TOGGLE, J=1,K=0 → SET, J=0,K=1 → RESET, J=K=0 → HOLD. שלושה מקרים — רק פליפלופ אחד מתאים לכולם.',
+    instruction: 'בחר את הפליפלופ שמתאים לשלושת המקרים ולחץ STEP',
+    hint: 'מקרה 1: J=K=1 → רק TOGGLE ייתן Q=0. מקרה 2: J=1,K=0 → SET. מקרה 3: J=K=0 → HOLD. רק פליפלופ עם כל 4 המצבים מתאים.',
     solution: {
       ffsUsed: ['JK-FF'],
-      explanation: 'JK Flip-Flop — פליפלופ JK הוא הגמיש ביותר מבין הפליפלופים. במצב Toggle (J=K=1) Q מתהפך בכל פעימת שעון. בשונה מ-SR, אין לו מצב אסור. משמש לבניית מונים ומכונות מצב.',
+      explanation: 'JK Flip-Flop — הפליפלופ הגמיש ביותר. J=K=1→TOGGLE (Q מתהפך), J=1,K=0→SET, J=0,K=1→RESET, J=K=0→HOLD. בשונה מ-SR, כש-J=K=1 JK מחליף במקום SET. משמש למונים ומכונות מצב.',
       blockSvg: `<svg viewBox="0 0 360 200" width="440" height="245">
         <text x="12" y="52" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">J</text>
         <line x1="30" y1="47" x2="100" y2="47" stroke="#39ff14" stroke-width="2.5"/>
@@ -2904,213 +2961,86 @@ const LEVELS = [
         <line x1="260" y1="137" x2="320" y2="137" stroke="#c8d8f0" stroke-width="2.5"/>
         <text x="328" y="142" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Q̄</text>
       </svg>`,
-      circuitSvg: `<svg viewBox="0 0 400 200" width="480" height="245">
-        <text x="18" y="42" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">J=1</text>
-        <text x="18" y="92" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">K=1</text>
-        <text x="18" y="162" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#ffcc00">CLK</text>
-        <rect x="130" y="25" width="120" height="150" rx="6" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
-        <text x="190" y="110" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="17" font-weight="bold" fill="#a0c8ff">JK-FF</text>
-        <text x="325" y="67" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Q=1</text>
-        <text x="325" y="142" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Q̄=0</text>
-        <line x1="55" y1="38" x2="130" y2="50" stroke="#39ff14" stroke-width="2"/>
-        <line x1="55" y1="88" x2="130" y2="100" stroke="#39ff14" stroke-width="2"/>
-        <line x1="50" y1="158" x2="130" y2="158" stroke="#ffcc00" stroke-width="2"/>
-        <line x1="250" y1="62" x2="315" y2="62" stroke="#39ff14" stroke-width="2"/>
-        <line x1="250" y1="137" x2="315" y2="137" stroke="#39ff14" stroke-width="2"/>
+      circuitSvg: `<svg viewBox="0 0 420 420" width="510" height="510">
+        <!-- Case 1: TOGGLE -->
+        <text x="10" y="20" font-family="JetBrains Mono,monospace" font-size="11" fill="#888">CASE 1: TOGGLE (Q₀=1)</text>
+        <text x="18" y="52" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">J=1</text>
+        <text x="18" y="82" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">K=1</text>
+        <line x1="55" y1="48" x2="120" y2="50" stroke="#39ff14" stroke-width="2"/>
+        <line x1="55" y1="78" x2="120" y2="72" stroke="#39ff14" stroke-width="2"/>
+        <rect x="120" y="30" width="100" height="75" rx="6" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="170" y="73" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">JK-FF</text>
+        <line x1="220" y1="67" x2="250" y2="67" stroke="#39ff14" stroke-width="2"/>
+        <text x="260" y="73" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">Q=0</text>
+        <!-- Case 2: SET -->
+        <text x="10" y="140" font-family="JetBrains Mono,monospace" font-size="11" fill="#888">CASE 2: SET (Q₀=1)</text>
+        <text x="18" y="172" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">J=1</text>
+        <text x="18" y="202" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#ff4444">K=0</text>
+        <line x1="55" y1="168" x2="120" y2="170" stroke="#39ff14" stroke-width="2"/>
+        <line x1="55" y1="198" x2="120" y2="192" stroke="#ff4444" stroke-width="2"/>
+        <rect x="120" y="150" width="100" height="75" rx="6" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="170" y="193" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">JK-FF</text>
+        <line x1="220" y1="187" x2="250" y2="187" stroke="#39ff14" stroke-width="2"/>
+        <text x="260" y="193" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">Q=1</text>
+        <!-- Case 3: HOLD -->
+        <text x="10" y="260" font-family="JetBrains Mono,monospace" font-size="11" fill="#888">CASE 3: HOLD (Q₀=1)</text>
+        <text x="18" y="292" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#ff4444">J=0</text>
+        <text x="18" y="322" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#ff4444">K=0</text>
+        <line x1="55" y1="288" x2="120" y2="290" stroke="#ff4444" stroke-width="2"/>
+        <line x1="55" y1="318" x2="120" y2="312" stroke="#ff4444" stroke-width="2"/>
+        <rect x="120" y="270" width="100" height="75" rx="6" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="170" y="313" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">JK-FF</text>
+        <line x1="220" y1="307" x2="250" y2="307" stroke="#39ff14" stroke-width="2"/>
+        <text x="260" y="313" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">Q=1</text>
       </svg>`,
     },
     nodes: [
-      { id: 'in_J',   type: 'INPUT',   x: 180, y: 360, fixedValue: 1, label: 'J' },
-      { id: 'in_K',   type: 'INPUT',   x: 180, y: 480, fixedValue: 1, label: 'K' },
-      { id: 'clk_1',  type: 'CLOCK',   x: 180, y: 580, value: 0,      label: null },
-      { id: 'ff_1',   type: 'FF_SLOT', ffType: null, x: 560, y: 460, label: 'FF' },
-      { id: 'out_Q',  type: 'OUTPUT',  x: 920, y: 420, targetValue: 1, label: 'Q' },
-      { id: 'out_Qn', type: 'OUTPUT',  x: 920, y: 510, targetValue: 0, label: 'Q̄' },
+      // Case 1: J=1, K=1, Q₀=1 → TOGGLE → Q=0
+      { id: 'c1_J',   type: 'INPUT',   x: 140, y: 260, fixedValue: 1, label: 'J' },
+      { id: 'c1_K',   type: 'INPUT',   x: 140, y: 350, fixedValue: 1, label: 'K' },
+      { id: 'c1_clk', type: 'CLOCK',   x: 140, y: 440, value: 0,     label: null },
+      { id: 'c1_ff',  type: 'FF_SLOT', ffType: null, x: 500, y: 340, linkedGroup: 'main', initialQ: 1, label: 'FF' },
+      { id: 'c1_Q',   type: 'OUTPUT',  x: 860, y: 340, targetValue: 0, label: 'Q' },
+      // Case 2: J=1, K=0, Q₀=1 → SET → Q=1
+      { id: 'c2_J',   type: 'INPUT',   x: 140, y: 530, fixedValue: 1, label: 'J' },
+      { id: 'c2_K',   type: 'INPUT',   x: 140, y: 620, fixedValue: 0, label: 'K' },
+      { id: 'c2_clk', type: 'CLOCK',   x: 140, y: 710, value: 0,     label: null },
+      { id: 'c2_ff',  type: 'FF_SLOT', ffType: null, x: 500, y: 610, linkedGroup: 'main', initialQ: 1, label: 'FF' },
+      { id: 'c2_Q',   type: 'OUTPUT',  x: 860, y: 610, targetValue: 1, label: 'Q' },
+      // Case 3: J=0, K=0, Q₀=1 → HOLD → Q=1
+      { id: 'c3_J',   type: 'INPUT',   x: 140, y: 800, fixedValue: 0, label: 'J' },
+      { id: 'c3_K',   type: 'INPUT',   x: 140, y: 890, fixedValue: 0, label: 'K' },
+      { id: 'c3_clk', type: 'CLOCK',   x: 140, y: 980, value: 0,     label: null },
+      { id: 'c3_ff',  type: 'FF_SLOT', ffType: null, x: 500, y: 880, linkedGroup: 'main', initialQ: 1, label: 'FF' },
+      { id: 'c3_Q',   type: 'OUTPUT',  x: 860, y: 880, targetValue: 1, label: 'Q' },
     ],
     wires: [
-      { id: 'w1',   sourceId: 'in_J',  targetId: 'ff_1',  targetInputIndex: 0 },
-      { id: 'w2',   sourceId: 'in_K',  targetId: 'ff_1',  targetInputIndex: 1 },
-      { id: 'wclk', sourceId: 'clk_1', targetId: 'ff_1',  targetInputIndex: 2, isClockWire: true },
-      { id: 'w3',   sourceId: 'ff_1',  targetId: 'out_Q',  targetInputIndex: 0, sourceOutputIndex: 0 },
-      { id: 'w4',   sourceId: 'ff_1',  targetId: 'out_Qn', targetInputIndex: 0, sourceOutputIndex: 1 },
+      // Case 1
+      { id: 'c1_w1',   sourceId: 'c1_J',   targetId: 'c1_ff', targetInputIndex: 0 },
+      { id: 'c1_w2',   sourceId: 'c1_K',   targetId: 'c1_ff', targetInputIndex: 1 },
+      { id: 'c1_wclk', sourceId: 'c1_clk', targetId: 'c1_ff', targetInputIndex: 2, isClockWire: true },
+      { id: 'c1_w3',   sourceId: 'c1_ff',  targetId: 'c1_Q',  targetInputIndex: 0, sourceOutputIndex: 0 },
+      // Case 2
+      { id: 'c2_w1',   sourceId: 'c2_J',   targetId: 'c2_ff', targetInputIndex: 0 },
+      { id: 'c2_w2',   sourceId: 'c2_K',   targetId: 'c2_ff', targetInputIndex: 1 },
+      { id: 'c2_wclk', sourceId: 'c2_clk', targetId: 'c2_ff', targetInputIndex: 2, isClockWire: true },
+      { id: 'c2_w3',   sourceId: 'c2_ff',  targetId: 'c2_Q',  targetInputIndex: 0, sourceOutputIndex: 0 },
+      // Case 3
+      { id: 'c3_w1',   sourceId: 'c3_J',   targetId: 'c3_ff', targetInputIndex: 0 },
+      { id: 'c3_w2',   sourceId: 'c3_K',   targetId: 'c3_ff', targetInputIndex: 1 },
+      { id: 'c3_wclk', sourceId: 'c3_clk', targetId: 'c3_ff', targetInputIndex: 2, isClockWire: true },
+      { id: 'c3_w3',   sourceId: 'c3_ff',  targetId: 'c3_Q',  targetInputIndex: 0, sourceOutputIndex: 0 },
     ],
   },
-
-  // L35 — D FF CAPTURE ZERO (D=0 → Q=0, Q̄=1)
-  // Complements L31. Player sees D FF capturing 0.
-  {
-    id: 35, name: 'D — CAPTURE ZERO', difficulty: 'Flip-Flops',
-
-    description: 'פליפלופ D לוכד כל ערך שנמצא ב-D. הפעם D=0 — Q ילכוד 0 ו-Q̄ יהיה 1. שני הפלטים חייבים להיות נכונים.',
-    instruction: 'שים פליפלופ D ולחץ STEP\nD=0 אז Q ילכוד 0 ו-Q̄ יהיה 1',
-    hint: 'D=0 → Q=0, Q̄=1 אחרי STEP אחד.',
-    solution: {
-      ffsUsed: ['D-FF'],
-      explanation: 'פליפלופ D לוכד את הערך D בעליית השעון. D=0 → Q=0, Q̄=1. שימו לב ש-Q ו-Q̄ תמיד מנוגדים זה לזה.',
-      blockSvg: `<svg viewBox="0 0 360 180" width="440" height="220">
-        <text x="12" y="62" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">D=0</text>
-        <line x1="55" y1="57" x2="100" y2="57" stroke="#39ff14" stroke-width="2.5"/>
-        <text x="12" y="142" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#ffcc00">CLK</text>
-        <line x1="45" y1="137" x2="100" y2="137" stroke="#ffcc00" stroke-width="2.5"/>
-        <rect x="100" y="30" width="160" height="130" rx="8" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/>
-        <text x="180" y="100" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="26" font-weight="bold" fill="#00d4ff">D-FF</text>
-        <line x1="260" y1="62" x2="320" y2="62" stroke="#c8d8f0" stroke-width="2.5"/>
-        <text x="328" y="67" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Q=0</text>
-        <line x1="260" y1="132" x2="320" y2="132" stroke="#c8d8f0" stroke-width="2.5"/>
-        <text x="328" y="137" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Q̄=1</text>
-      </svg>`,
-      circuitSvg: `<svg viewBox="0 0 380 180" width="460" height="220">
-        <text x="18" y="52" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">D=0</text>
-        <text x="18" y="142" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#ffcc00">CLK</text>
-        <rect x="120" y="30" width="120" height="130" rx="6" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
-        <text x="180" y="100" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="18" font-weight="bold" fill="#a0c8ff">D-FF</text>
-        <text x="310" y="67" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Q=0</text>
-        <text x="310" y="137" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Q̄=1</text>
-        <line x1="55" y1="48" x2="120" y2="62" stroke="#39ff14" stroke-width="2"/>
-        <line x1="50" y1="138" x2="120" y2="138" stroke="#ffcc00" stroke-width="2"/>
-        <line x1="240" y1="62" x2="300" y2="62" stroke="#39ff14" stroke-width="2"/>
-        <line x1="240" y1="132" x2="300" y2="132" stroke="#39ff14" stroke-width="2"/>
-      </svg>`,
-    },
-    nodes: [
-      { id: 'in_D',   type: 'INPUT',   x: 180, y: 380, fixedValue: 0, label: 'D' },
-      { id: 'clk_1',  type: 'CLOCK',   x: 180, y: 520, value: 0,      label: null },
-      { id: 'ff_1',   type: 'FF_SLOT', ffType: null, x: 540, y: 460, label: 'FF' },
-      { id: 'out_Q',  type: 'OUTPUT',  x: 900, y: 420, targetValue: 0, label: 'Q' },
-      { id: 'out_Qn', type: 'OUTPUT',  x: 900, y: 510, targetValue: 1, label: 'Q̄' },
-    ],
-    wires: [
-      { id: 'w1',   sourceId: 'in_D',  targetId: 'ff_1',   targetInputIndex: 0 },
-      { id: 'wclk', sourceId: 'clk_1', targetId: 'ff_1',   targetInputIndex: 1, isClockWire: true },
-      { id: 'w2',   sourceId: 'ff_1',  targetId: 'out_Q',  targetInputIndex: 0, sourceOutputIndex: 0 },
-      { id: 'w3',   sourceId: 'ff_1',  targetId: 'out_Qn', targetInputIndex: 0, sourceOutputIndex: 1 },
-    ],
-  },
-
-  // L36 — SR RESET MODE (S=0, R=1 → Q=0, Q̄=1)
-  // Complements L33 (which was SET). Now the player sees RESET.
-  {
-    id: 36, name: 'SR — RESET', difficulty: 'Flip-Flops',
-
-    description: 'פליפלופ SR במצב RESET: S=0, R=1. פעולת ה-RESET מאפסת את Q ל-0. השלם שליטה בשני המצבים של SR.',
-    instruction: 'שים פליפלופ SR ולחץ STEP\nS=0 ו-R=1 → מצב RESET: Q יורד ל-0',
-    hint: 'S=0, R=1 → RESET. Q=0, Q̄=1 אחרי STEP אחד.',
-    solution: {
-      ffsUsed: ['SR-FF'],
-      explanation: 'במצב RESET (S=0, R=1), פליפלופ SR מאפס את Q ל-0. עכשיו למדת את שני המצבים העיקריים: SET (S=1,R=0→Q=1) ו-RESET (S=0,R=1→Q=0).',
-      blockSvg: `<svg viewBox="0 0 360 200" width="440" height="245">
-        <text x="12" y="52" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">S=0</text>
-        <line x1="55" y1="47" x2="100" y2="47" stroke="#39ff14" stroke-width="2.5"/>
-        <text x="12" y="102" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">R=1</text>
-        <line x1="55" y1="97" x2="100" y2="97" stroke="#39ff14" stroke-width="2.5"/>
-        <text x="12" y="162" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#ffcc00">CLK</text>
-        <line x1="45" y1="157" x2="100" y2="157" stroke="#ffcc00" stroke-width="2.5"/>
-        <rect x="100" y="25" width="160" height="150" rx="8" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/>
-        <text x="180" y="110" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="24" font-weight="bold" fill="#00d4ff">SR-FF</text>
-        <line x1="260" y1="62" x2="320" y2="62" stroke="#c8d8f0" stroke-width="2.5"/>
-        <text x="328" y="67" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Q=0</text>
-        <line x1="260" y1="137" x2="320" y2="137" stroke="#c8d8f0" stroke-width="2.5"/>
-        <text x="328" y="142" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Q̄=1</text>
-      </svg>`,
-      circuitSvg: `<svg viewBox="0 0 400 200" width="480" height="245">
-        <text x="18" y="42" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">S=0</text>
-        <text x="18" y="92" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">R=1</text>
-        <text x="18" y="162" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#ffcc00">CLK</text>
-        <rect x="130" y="25" width="120" height="150" rx="6" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
-        <text x="190" y="110" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="17" font-weight="bold" fill="#a0c8ff">SR-FF</text>
-        <text x="325" y="67" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Q=0</text>
-        <text x="325" y="142" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Q̄=1</text>
-        <line x1="55" y1="38" x2="130" y2="50" stroke="#39ff14" stroke-width="2"/>
-        <line x1="55" y1="88" x2="130" y2="100" stroke="#39ff14" stroke-width="2"/>
-        <line x1="50" y1="158" x2="130" y2="158" stroke="#ffcc00" stroke-width="2"/>
-        <line x1="250" y1="62" x2="315" y2="62" stroke="#39ff14" stroke-width="2"/>
-        <line x1="250" y1="137" x2="315" y2="137" stroke="#39ff14" stroke-width="2"/>
-      </svg>`,
-    },
-    nodes: [
-      { id: 'in_S',   type: 'INPUT',   x: 180, y: 360, fixedValue: 0, label: 'S' },
-      { id: 'in_R',   type: 'INPUT',   x: 180, y: 480, fixedValue: 1, label: 'R' },
-      { id: 'clk_1',  type: 'CLOCK',   x: 180, y: 580, value: 0,      label: null },
-      { id: 'ff_1',   type: 'FF_SLOT', ffType: null, x: 560, y: 460, label: 'FF' },
-      { id: 'out_Q',  type: 'OUTPUT',  x: 920, y: 420, targetValue: 0, label: 'Q' },
-      { id: 'out_Qn', type: 'OUTPUT',  x: 920, y: 510, targetValue: 1, label: 'Q̄' },
-    ],
-    wires: [
-      { id: 'w1',   sourceId: 'in_S',  targetId: 'ff_1',   targetInputIndex: 0 },
-      { id: 'w2',   sourceId: 'in_R',  targetId: 'ff_1',   targetInputIndex: 1 },
-      { id: 'wclk', sourceId: 'clk_1', targetId: 'ff_1',   targetInputIndex: 2, isClockWire: true },
-      { id: 'w3',   sourceId: 'ff_1',  targetId: 'out_Q',  targetInputIndex: 0, sourceOutputIndex: 0 },
-      { id: 'w4',   sourceId: 'ff_1',  targetId: 'out_Qn', targetInputIndex: 0, sourceOutputIndex: 1 },
-    ],
-  },
-
-  // L37 — SHIFT REGISTER (2 D-FFs in series)
-  // D=1 → FF1 → FF2. Step 1: Q1=1,Q2=0. Step 2: Q1=1,Q2=1.
-  {
-    id: 37, name: 'SHIFT REGISTER', difficulty: 'Flip-Flops',
-
-    description: 'רגיסטר הזזה — שני פליפלופי D בטור. הנתון "זז" שלב אחד קדימה בכל פעימת שעון. לחץ STEP פעמיים כדי לדחוף את ה-1 דרך שני השלבים.',
-    instruction: 'שים D-FF בשני המקומות ולחץ STEP פעמיים\nהנתון עובר שלב אחד בכל פעימת שעון',
-    hint: 'אחרי STEP 1: Q1=1, Q2=0 (FF2 לכד Q1 הישן=0). אחרי STEP 2: Q1=1, Q2=1.',
-    solution: {
-      ffsUsed: ['D-FF', 'D-FF'],
-      explanation: 'רגיסטר הזזה (Shift Register) — שני פליפלופי D בטור. בכל פעימת שעון, הנתון עובר שלב אחד קדימה. זהו אבן הבניין של תקשורת סריאלית ועיבוד נתונים.',
-      blockSvg: `<svg viewBox="0 0 500 160" width="600" height="195">
-        <text x="12" y="62" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">D=1</text>
-        <line x1="55" y1="57" x2="100" y2="57" stroke="#39ff14" stroke-width="2.5"/>
-        <rect x="100" y="30" width="120" height="100" rx="8" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/>
-        <text x="160" y="88" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="20" font-weight="bold" fill="#00d4ff">D-FF1</text>
-        <line x1="220" y1="57" x2="270" y2="57" stroke="#39ff14" stroke-width="2.5"/>
-        <rect x="270" y="30" width="120" height="100" rx="8" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/>
-        <text x="330" y="88" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="20" font-weight="bold" fill="#00d4ff">D-FF2</text>
-        <line x1="390" y1="42" x2="440" y2="42" stroke="#c8d8f0" stroke-width="2.5"/>
-        <text x="448" y="47" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">Q1</text>
-        <line x1="390" y1="100" x2="440" y2="100" stroke="#c8d8f0" stroke-width="2.5"/>
-        <text x="448" y="105" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">Q2</text>
-      </svg>`,
-      circuitSvg: `<svg viewBox="0 0 520 180" width="630" height="220">
-        <text x="18" y="72" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">D=1</text>
-        <text x="18" y="152" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#ffcc00">CLK</text>
-        <rect x="110" y="40" width="100" height="80" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
-        <text x="160" y="86" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#a0c8ff">D-FF1</text>
-        <rect x="290" y="40" width="100" height="80" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
-        <text x="340" y="86" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#a0c8ff">D-FF2</text>
-        <text x="460" y="57" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">Q1=1</text>
-        <text x="460" y="107" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">Q2=1</text>
-        <line x1="55" y1="68" x2="110" y2="68" stroke="#39ff14" stroke-width="2"/>
-        <line x1="210" y1="68" x2="290" y2="68" stroke="#39ff14" stroke-width="2"/>
-        <line x1="50" y1="148" x2="110" y2="110" stroke="#ffcc00" stroke-width="2"/>
-        <line x1="50" y1="148" x2="290" y2="110" stroke="#ffcc00" stroke-width="2"/>
-        <line x1="390" y1="52" x2="450" y2="52" stroke="#39ff14" stroke-width="2"/>
-        <line x1="390" y1="102" x2="450" y2="102" stroke="#39ff14" stroke-width="2"/>
-      </svg>`,
-    },
-    nodes: [
-      { id: 'in_D',   type: 'INPUT',   x: 140, y: 400, fixedValue: 1, label: 'D' },
-      { id: 'clk_1',  type: 'CLOCK',   x: 140, y: 520, value: 0,      label: null },
-      { id: 'ff_1',   type: 'FF_SLOT', ffType: null, x: 420, y: 460, label: 'FF1' },
-      { id: 'ff_2',   type: 'FF_SLOT', ffType: null, x: 700, y: 460, label: 'FF2' },
-      { id: 'out_Q1', type: 'OUTPUT',  x: 970, y: 380, targetValue: 1, label: 'Q1' },
-      { id: 'out_Q2', type: 'OUTPUT',  x: 970, y: 540, targetValue: 1, label: 'Q2' },
-    ],
-    wires: [
-      { id: 'w1',    sourceId: 'in_D',  targetId: 'ff_1',   targetInputIndex: 0 },
-      { id: 'wclk1', sourceId: 'clk_1', targetId: 'ff_1',   targetInputIndex: 1, isClockWire: true },
-      { id: 'w2',    sourceId: 'ff_1',  targetId: 'ff_2',   targetInputIndex: 0, sourceOutputIndex: 0 },
-      { id: 'wclk2', sourceId: 'clk_1', targetId: 'ff_2',   targetInputIndex: 1, isClockWire: true },
-      { id: 'w3',    sourceId: 'ff_1',  targetId: 'out_Q1', targetInputIndex: 0, sourceOutputIndex: 0 },
-      { id: 'w4',    sourceId: 'ff_2',  targetId: 'out_Q2', targetInputIndex: 0, sourceOutputIndex: 0 },
-    ],
-  },
-
-  // L38 — RIPPLE COUNTER (2 T-FFs in series)
+  // L35 — RIPPLE COUNTER (2 T-FFs in series)
   // FF1: T=1. FF2: T=Q1. After 2 steps: Q1=0, Q2=1.
   {
-    id: 38, name: 'RIPPLE COUNTER', difficulty: 'Flip-Flops',
+    id: 35, name: 'RIPPLE COUNTER', difficulty: 'Flip-Flops',
 
-    description: 'מונה אדווה — שני פליפלופי T בטור. FF1 מחליף בכל פעימה, Q1 מזין את T של FF2. אחרי 2 פעימות: Q1=0, Q2=1.',
-    instruction: 'שים T-FF בשני המקומות ולחץ STEP פעמיים\nFF1 סופר מהר, FF2 סופר לאט (חצי מהתדר)',
-    hint: 'STEP 1: Q1=1,Q2=0. STEP 2: Q1=0(toggle),Q2=1(T2 ראה Q1=1). יעד: Q1=0,Q2=1.',
+
+    description: 'מונה אדווה — שני פליפלופים בטור. FF1 מקבל כניסה קבועה, Q1 מזין את FF2. אחרי 2 פעימות צריך להגיע ליעד.',
+    instruction: 'שים את הפליפלופ הנכון בשני המקומות ולחץ STEP פעמיים',
+    hint: 'STEP 1: Q1=1, Q2=0. STEP 2: Q1 חוזר ל-0, Q2 עולה ל-1. איזה פליפלופ מחליף מצב כשהכניסה 1?',
     solution: {
       ffsUsed: ['T-FF', 'T-FF'],
       explanation: 'מונה אדווה (Ripple Counter) — שני פליפלופי T יוצרים מונה בינארי 2-ביט. כל פליפלופ מחלק את התדר ב-2. זהו הבסיס לכל המונים הדיגיטליים.',
@@ -3147,8 +3077,8 @@ const LEVELS = [
     nodes: [
       { id: 'in_T1',  type: 'INPUT',   x: 140, y: 400, fixedValue: 1, label: 'T=1' },
       { id: 'clk_1',  type: 'CLOCK',   x: 140, y: 520, value: 0,      label: null },
-      { id: 'ff_1',   type: 'FF_SLOT', ffType: null, x: 420, y: 460, label: 'FF1' },
-      { id: 'ff_2',   type: 'FF_SLOT', ffType: null, x: 700, y: 460, label: 'FF2' },
+      { id: 'ff_1',   type: 'FF_SLOT', ffType: null, x: 420, y: 460, linkedGroup: 'main', initialQ: 0, label: 'FF1' },
+      { id: 'ff_2',   type: 'FF_SLOT', ffType: null, x: 700, y: 460, linkedGroup: 'main', initialQ: 0, label: 'FF2' },
       { id: 'out_Q1', type: 'OUTPUT',  x: 970, y: 380, targetValue: 0, label: 'Q1' },
       { id: 'out_Q2', type: 'OUTPUT',  x: 970, y: 540, targetValue: 1, label: 'Q2' },
     ],
@@ -3161,114 +3091,375 @@ const LEVELS = [
       { id: 'w4',    sourceId: 'ff_2',  targetId: 'out_Q2', targetInputIndex: 0, sourceOutputIndex: 0 },
     ],
   },
-
-  // L39 — DIVIDE-BY-2 (D-FF with Q̄ → D feedback)
-  // Q̄ starts at 1, feeds D. Step 1: D=1→Q=1,Q̄=0.
+  // L36 — DIVIDE-BY-4 (Johnson Counter: 2 D-FFs, Q̄2 → D1 feedback)
+  // State sequence: 00→10→11→01→00 (period=4). Target after 2 STEPs: Q1=1,Q2=1.
   {
-    id: 39, name: 'DIVIDE BY 2', difficulty: 'Flip-Flops',
-
-    description: 'מחלק תדר — Q̄ מוזן חזרה לכניסת D. הפליפלופ מחליף מצב בכל פעימה בדיוק כמו T-FF. זהו מעגל חלוקת תדר ב-2 קלאסי.',
-    instruction: 'שים D-FF ולחץ STEP\nQ̄ מוזן חזרה ל-D — הפליפלופ מתהפך בכל פעימה',
-    hint: 'Q̄ מתחיל ב-1, מוזן ל-D. STEP → Q לוכד D=1 → Q=1, Q̄=0.',
+    id: 36, name: 'DIVIDE BY 4', difficulty: 'Flip-Flops',
+    minSteps: 2,
+    description: 'מחלק תדר ב-4 (Johnson Counter) — שני פליפלופים בטור עם Q̄ של האחרון מוזן חזרה לראשון. המצבים מסתובבים במחזור של 4 פעימות.',
+    instruction: 'שים את הפליפלופ הנכון בשני המקומות ולחץ STEP פעמיים',
+    hint: 'Q̄2 מתחיל ב-1, מוזן ל-FF1. FF2 מקבל את Q1. איזה פליפלופ תמיד לוכד את מה שבכניסה?',
     solution: {
-      ffsUsed: ['D-FF'],
-      explanation: 'מחלק תדר ב-2 (Divide-by-2) — חיבור Q̄ חזרה ל-D יוצר מעגל שמחליף מצב בכל פעימת שעון. תדר הפלט הוא חצי מתדר השעון. טריק קלאסי בעיצוב דיגיטלי.',
-      blockSvg: `<svg viewBox="0 0 400 200" width="480" height="245">
-        <rect x="120" y="30" width="160" height="140" rx="8" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/>
-        <text x="200" y="110" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="26" font-weight="bold" fill="#00d4ff">D-FF</text>
-        <text x="12" y="152" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#ffcc00">CLK</text>
-        <line x1="45" y1="147" x2="120" y2="147" stroke="#ffcc00" stroke-width="2.5"/>
-        <line x1="280" y1="62" x2="340" y2="62" stroke="#c8d8f0" stroke-width="2.5"/>
-        <text x="348" y="67" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Q</text>
-        <line x1="280" y1="140" x2="340" y2="140" stroke="#c8d8f0" stroke-width="2.5"/>
-        <text x="348" y="145" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Q̄</text>
-        <polyline points="340,140 370,140 370,10 80,10 80,52 120,52" stroke="#ff6b6b" stroke-width="2.5" fill="none" stroke-dasharray="6,3"/>
-        <text x="200" y="18" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#ff6b6b">FEEDBACK</text>
+      ffsUsed: ['D-FF', 'D-FF'],
+      explanation: 'Johnson Counter (Twisted Ring) — שני D-FF בטור עם Q̄→D feedback. יוצר 4 מצבים ייחודיים (חילוק ב-4). משמש ליצירת תזמון מדויק, מונים ללא glitch, ומחלקי תדר.',
+      blockSvg: `<svg viewBox="0 0 500 180" width="600" height="220">
+        <rect x="100" y="30" width="110" height="80" rx="8" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/>
+        <text x="155" y="77" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="18" font-weight="bold" fill="#00d4ff">D-FF1</text>
+        <line x1="210" y1="60" x2="250" y2="60" stroke="#39ff14" stroke-width="2.5"/>
+        <rect x="250" y="30" width="110" height="80" rx="8" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/>
+        <text x="305" y="77" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="18" font-weight="bold" fill="#00d4ff">D-FF2</text>
+        <line x1="360" y1="60" x2="400" y2="60" stroke="#c8d8f0" stroke-width="2.5"/>
+        <text x="408" y="50" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#c8d8f0">Q1</text>
+        <text x="408" y="70" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#c8d8f0">Q2</text>
+        <polyline points="360,90 390,90 390,145 60,145 60,50 100,50" stroke="#ff6b6b" stroke-width="2.5" fill="none" stroke-dasharray="6,3"/>
+        <text x="220" y="160" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#ff6b6b">Q̄2 → D1 FEEDBACK</text>
+        <text x="12" y="125" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#ffcc00">CLK</text>
       </svg>`,
-      circuitSvg: `<svg viewBox="0 0 420 200" width="510" height="245">
-        <text x="18" y="162" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#ffcc00">CLK</text>
-        <rect x="140" y="35" width="120" height="130" rx="6" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
-        <text x="200" y="110" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="18" font-weight="bold" fill="#a0c8ff">D-FF</text>
-        <text x="330" y="67" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Q=1</text>
-        <text x="330" y="142" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Q̄=0</text>
-        <line x1="50" y1="158" x2="140" y2="158" stroke="#ffcc00" stroke-width="2"/>
-        <line x1="260" y1="62" x2="320" y2="62" stroke="#39ff14" stroke-width="2"/>
-        <line x1="260" y1="137" x2="320" y2="137" stroke="#39ff14" stroke-width="2"/>
-        <polyline points="320,137 370,137 370,15 100,15 100,55 140,55" stroke="#ff6b6b" stroke-width="2" fill="none" stroke-dasharray="6,3"/>
-        <text x="200" y="12" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#ff6b6b">Q̄ → D</text>
+      circuitSvg: `<svg viewBox="0 0 500 200" width="600" height="245">
+        <text x="12" y="20" font-family="JetBrains Mono,monospace" font-size="11" fill="#888">00 → 10 → 11 → 01 → 00 (period=4)</text>
+        <rect x="100" y="35" width="100" height="70" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="150" y="77" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">D-FF1</text>
+        <line x1="200" y1="60" x2="240" y2="60" stroke="#39ff14" stroke-width="2"/>
+        <rect x="240" y="35" width="100" height="70" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="290" y="77" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">D-FF2</text>
+        <text x="370" y="55" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">Q1=1</text>
+        <text x="370" y="75" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">Q2=1</text>
+        <line x1="340" y1="50" x2="360" y2="50" stroke="#39ff14" stroke-width="2"/>
+        <line x1="340" y1="70" x2="360" y2="70" stroke="#39ff14" stroke-width="2"/>
+        <polyline points="340,90 380,90 380,145 60,145 60,55 100,55" stroke="#ff6b6b" stroke-width="2" fill="none" stroke-dasharray="6,3"/>
+        <text x="220" y="160" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ff6b6b">Q̄2 → D1</text>
+        <text x="12" y="125" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#ffcc00">CLK</text>
       </svg>`,
     },
     nodes: [
-      { id: 'clk_1',  type: 'CLOCK',   x: 180, y: 520, value: 0,      label: null },
-      { id: 'ff_1',   type: 'FF_SLOT', ffType: null, x: 560, y: 460, label: 'FF' },
-      { id: 'out_Q',  type: 'OUTPUT',  x: 900, y: 420, targetValue: 1, label: 'Q' },
-      { id: 'out_Qn', type: 'OUTPUT',  x: 900, y: 510, targetValue: 0, label: 'Q̄' },
+      { id: 'clk_1',  type: 'CLOCK',   x: 140, y: 580, value: 0,     label: null },
+      { id: 'ff_1',   type: 'FF_SLOT', ffType: null, x: 400, y: 460, initialQ: 0, label: 'FF1' },
+      { id: 'ff_2',   type: 'FF_SLOT', ffType: null, x: 650, y: 460, initialQ: 0, label: 'FF2' },
+      { id: 'out_Q1', type: 'OUTPUT',  x: 920, y: 400, targetValue: 1, label: 'Q1' },
+      { id: 'out_Q2', type: 'OUTPUT',  x: 920, y: 520, targetValue: 1, label: 'Q2' },
     ],
     wires: [
-      { id: 'wfb',  sourceId: 'ff_1',  targetId: 'ff_1',   targetInputIndex: 0, sourceOutputIndex: 1 },
-      { id: 'wclk', sourceId: 'clk_1', targetId: 'ff_1',   targetInputIndex: 1, isClockWire: true },
-      { id: 'w1',   sourceId: 'ff_1',  targetId: 'out_Q',  targetInputIndex: 0, sourceOutputIndex: 0 },
-      { id: 'w2',   sourceId: 'ff_1',  targetId: 'out_Qn', targetInputIndex: 0, sourceOutputIndex: 1 },
+      // Q̄2 → D1 (feedback)
+      { id: 'wfb',   sourceId: 'ff_2',  targetId: 'ff_1',   targetInputIndex: 0, sourceOutputIndex: 1 },
+      // Q1 → D2
+      { id: 'w12',   sourceId: 'ff_1',  targetId: 'ff_2',   targetInputIndex: 0, sourceOutputIndex: 0 },
+      // Clock
+      { id: 'wclk1', sourceId: 'clk_1', targetId: 'ff_1',   targetInputIndex: 1, isClockWire: true },
+      { id: 'wclk2', sourceId: 'clk_1', targetId: 'ff_2',   targetInputIndex: 1, isClockWire: true },
+      // Outputs
+      { id: 'wo1',   sourceId: 'ff_1',  targetId: 'out_Q1', targetInputIndex: 0, sourceOutputIndex: 0 },
+      { id: 'wo2',   sourceId: 'ff_2',  targetId: 'out_Q2', targetInputIndex: 0, sourceOutputIndex: 0 },
     ],
   },
-
-  // L40 — JK SET MODE (J=1, K=0 → Q=1, stable)
-  // Unlike toggle mode (L34), SET mode keeps Q=1 regardless of additional steps.
+  // L37 — 4-BIT SHIFT REGISTER (4 D-FFs in series)
+  // D=1 → FF1 → FF2 → FF3 → FF4. After 4 STEPs all Q=1.
+  // Data "shifts" one stage per clock. Classic serial-to-parallel converter.
   {
-    id: 40, name: 'JK — SET MODE', difficulty: 'Flip-Flops',
-
-    description: 'JK במצב SET: J=1, K=0. Q עולה ל-1 ונשאר שם — בשונה ממצב Toggle, לחיצות STEP נוספות לא ישנו את Q.',
-    instruction: 'שים פליפלופ JK ולחץ STEP\nJ=1, K=0 → מצב SET. Q עולה ל-1 ונשאר יציב',
-    hint: 'J=1, K=0 → SET. Q=1 אחרי STEP אחד. לחיצות נוספות לא משנות.',
+    id: 37, name: '4-BIT SHIFT REGISTER', difficulty: 'Flip-Flops',
+    description: 'רגיסטר הזזה 4-ביט — ארבעה פליפלופים בטור. הנתון "זז" שלב אחד קדימה בכל פעימת שעון. לחץ STEP ארבע פעמים כדי למלא את כל הרגיסטר.',
+    instruction: 'שים את הפליפלופ הנכון בכל ארבעת המקומות ולחץ STEP 4 פעמים',
+    hint: 'כל STEP דוחף את הנתון שלב אחד קדימה. איזה פליפלופ תמיד לוכד את הכניסה שלו?',
     solution: {
-      ffsUsed: ['JK-FF'],
-      explanation: 'JK במצב SET (J=1, K=0) — Q עולה ל-1 ונשאר יציב. זה שונה ממצב Toggle (J=K=1) שבו Q מתהפך. המצבים של JK: J=1,K=0→SET, J=0,K=1→RESET, J=K=1→TOGGLE, J=K=0→HOLD.',
+      ffsUsed: ['D-FF', 'D-FF', 'D-FF', 'D-FF'],
+      explanation: '4-Bit Shift Register — ארבעה פליפלופי D בטור. בכל פעימת שעון, כל FF לוכד את הערך של ה-FF שלפניו. זהו הבסיס של תקשורת סריאלית (UART, SPI) ושל ממיר סריאלי→מקבילי.',
+      blockSvg: `<svg viewBox="0 0 700 120" width="850" height="150">
+        <text x="8" y="52" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">D=1</text>
+        <line x1="50" y1="47" x2="80" y2="47" stroke="#39ff14" stroke-width="2.5"/>
+        <rect x="80" y="25" width="90" height="60" rx="6" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2"/>
+        <text x="125" y="60" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#00d4ff">D-FF1</text>
+        <line x1="170" y1="47" x2="210" y2="47" stroke="#39ff14" stroke-width="2"/>
+        <rect x="210" y="25" width="90" height="60" rx="6" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2"/>
+        <text x="255" y="60" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#00d4ff">D-FF2</text>
+        <line x1="300" y1="47" x2="340" y2="47" stroke="#39ff14" stroke-width="2"/>
+        <rect x="340" y="25" width="90" height="60" rx="6" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2"/>
+        <text x="385" y="60" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#00d4ff">D-FF3</text>
+        <line x1="430" y1="47" x2="470" y2="47" stroke="#39ff14" stroke-width="2"/>
+        <rect x="470" y="25" width="90" height="60" rx="6" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2"/>
+        <text x="515" y="60" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#00d4ff">D-FF4</text>
+        <line x1="560" y1="47" x2="590" y2="47" stroke="#c8d8f0" stroke-width="2"/>
+        <text x="598" y="52" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#c8d8f0">Q4</text>
+      </svg>`,
+      circuitSvg: `<svg viewBox="0 0 700 140" width="850" height="170">
+        <text x="12" y="52" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">D=1</text>
+        <text x="12" y="120" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#ffcc00">CLK</text>
+        <line x1="50" y1="48" x2="80" y2="48" stroke="#39ff14" stroke-width="2"/>
+        <rect x="80" y="25" width="80" height="55" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="120" y="57" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#a0c8ff">D-FF1</text>
+        <line x1="160" y1="48" x2="200" y2="48" stroke="#39ff14" stroke-width="2"/>
+        <rect x="200" y="25" width="80" height="55" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="240" y="57" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#a0c8ff">D-FF2</text>
+        <line x1="280" y1="48" x2="320" y2="48" stroke="#39ff14" stroke-width="2"/>
+        <rect x="320" y="25" width="80" height="55" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="360" y="57" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#a0c8ff">D-FF3</text>
+        <line x1="400" y1="48" x2="440" y2="48" stroke="#39ff14" stroke-width="2"/>
+        <rect x="440" y="25" width="80" height="55" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="480" y="57" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#a0c8ff">D-FF4</text>
+        <line x1="520" y1="48" x2="550" y2="48" stroke="#39ff14" stroke-width="2"/>
+        <text x="555" y="35" font-family="JetBrains Mono,monospace" font-size="11" fill="#39ff14">Q1=1</text>
+        <text x="555" y="50" font-family="JetBrains Mono,monospace" font-size="11" fill="#39ff14">Q2=1</text>
+        <text x="555" y="65" font-family="JetBrains Mono,monospace" font-size="11" fill="#39ff14">Q3=1</text>
+        <text x="555" y="80" font-family="JetBrains Mono,monospace" font-size="11" fill="#39ff14">Q4=1</text>
+      </svg>`,
+    },
+    nodes: [
+      { id: 'in_D',   type: 'INPUT',   x: 100, y: 460, fixedValue: 1, label: 'D' },
+      { id: 'clk_1',  type: 'CLOCK',   x: 100, y: 580, value: 0,     label: null },
+      { id: 'ff_1',   type: 'FF_SLOT', ffType: null, x: 320, y: 460, linkedGroup: 'pair_a', initialQ: 0, label: 'FF1' },
+      { id: 'ff_2',   type: 'FF_SLOT', ffType: null, x: 520, y: 460, linkedGroup: 'pair_a', initialQ: 0, label: 'FF2' },
+      { id: 'ff_3',   type: 'FF_SLOT', ffType: null, x: 720, y: 460, linkedGroup: 'pair_b', initialQ: 0, label: 'FF3' },
+      { id: 'ff_4',   type: 'FF_SLOT', ffType: null, x: 920, y: 460, linkedGroup: 'pair_b', initialQ: 0, label: 'FF4' },
+      { id: 'out_Q1', type: 'OUTPUT',  x: 1120, y: 340, targetValue: 1, label: 'Q1' },
+      { id: 'out_Q2', type: 'OUTPUT',  x: 1120, y: 420, targetValue: 1, label: 'Q2' },
+      { id: 'out_Q3', type: 'OUTPUT',  x: 1120, y: 500, targetValue: 1, label: 'Q3' },
+      { id: 'out_Q4', type: 'OUTPUT',  x: 1120, y: 580, targetValue: 1, label: 'Q4' },
+    ],
+    wires: [
+      { id: 'w1',    sourceId: 'in_D',  targetId: 'ff_1',   targetInputIndex: 0 },
+      { id: 'wclk1', sourceId: 'clk_1', targetId: 'ff_1',   targetInputIndex: 1, isClockWire: true },
+      { id: 'w2',    sourceId: 'ff_1',  targetId: 'ff_2',   targetInputIndex: 0, sourceOutputIndex: 0 },
+      { id: 'wclk2', sourceId: 'clk_1', targetId: 'ff_2',   targetInputIndex: 1, isClockWire: true },
+      { id: 'w3',    sourceId: 'ff_2',  targetId: 'ff_3',   targetInputIndex: 0, sourceOutputIndex: 0 },
+      { id: 'wclk3', sourceId: 'clk_1', targetId: 'ff_3',   targetInputIndex: 1, isClockWire: true },
+      { id: 'w4',    sourceId: 'ff_3',  targetId: 'ff_4',   targetInputIndex: 0, sourceOutputIndex: 0 },
+      { id: 'wclk4', sourceId: 'clk_1', targetId: 'ff_4',   targetInputIndex: 1, isClockWire: true },
+      { id: 'w5',    sourceId: 'ff_1',  targetId: 'out_Q1', targetInputIndex: 0, sourceOutputIndex: 0 },
+      { id: 'w6',    sourceId: 'ff_2',  targetId: 'out_Q2', targetInputIndex: 0, sourceOutputIndex: 0 },
+      { id: 'w7',    sourceId: 'ff_3',  targetId: 'out_Q3', targetInputIndex: 0, sourceOutputIndex: 0 },
+      { id: 'w8',    sourceId: 'ff_4',  targetId: 'out_Q4', targetInputIndex: 0, sourceOutputIndex: 0 },
+    ],
+  },
+  // L38 — HOLD MODE (SET→HOLD concept, 2 cases — only SR-FF satisfies both)
+  // Case 1: S goes 1→0, R=0. Q₀=0, target Q=1 after 2 steps. SET then HOLD.
+  //   SR: SET→Q=1, HOLD→Q=1 ✓ | JK: SET→Q=1, HOLD→Q=1 ✓ | T: toggle→1, hold→1 ✓ | D: cap 1→1, cap 0→0 ✗
+  // Case 2: S=1, R=1, Q₀=1, target Q=1 after 1 step.
+  //   SR: SET dominates→Q=1 ✓ | JK: TOGGLE→Q=0 ✗ | T: toggle→0 ✗ | D: cap 1→1 ✓
+  // Combined: only SR passes both.
+  {
+    id: 38, name: 'HOLD MODE', difficulty: 'Flip-Flops',
+    minSteps: 2,
+    description: 'מצב HOLD — פליפלופ יכול לשמור ערך גם כשהכניסה משתנה. מקרה 1: SET ואז HOLD. מקרה 2: כשהשניים דולקים — מי גובר?',
+    instruction: 'בחר את הפליפלופ שמתאים לשני המקרים ולחץ STEP פעמיים',
+    hint: 'מקרה 1: S=1 מדליק, ואז S=0 — הפליפלופ צריך לזכור. מקרה 2: S=R=1 — רק פליפלופ שבו SET גובר שומר Q=1.',
+    solution: {
+      ffsUsed: ['SR-FF'],
+      explanation: 'SR Flip-Flop שומר ערך כש-S=R=0 (HOLD). D-FF לא יכול לשמור — הוא תמיד לוכד את הכניסה. JK ו-T מחליפים כש-J=K=1. רק SR עושה SET→HOLD ומחזיק את הזיכרון.',
       blockSvg: `<svg viewBox="0 0 360 200" width="440" height="245">
-        <text x="12" y="52" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">J=1</text>
-        <line x1="55" y1="47" x2="100" y2="47" stroke="#39ff14" stroke-width="2.5"/>
-        <text x="12" y="102" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">K=0</text>
-        <line x1="55" y1="97" x2="100" y2="97" stroke="#39ff14" stroke-width="2.5"/>
+        <text x="12" y="52" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">S</text>
+        <line x1="30" y1="47" x2="100" y2="47" stroke="#39ff14" stroke-width="2.5"/>
+        <text x="12" y="102" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">R</text>
+        <line x1="30" y1="97" x2="100" y2="97" stroke="#39ff14" stroke-width="2.5"/>
         <text x="12" y="162" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#ffcc00">CLK</text>
         <line x1="45" y1="157" x2="100" y2="157" stroke="#ffcc00" stroke-width="2.5"/>
         <rect x="100" y="25" width="160" height="150" rx="8" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/>
-        <text x="180" y="110" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="24" font-weight="bold" fill="#00d4ff">JK-FF</text>
+        <text x="180" y="110" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="24" font-weight="bold" fill="#00d4ff">SR-FF</text>
         <line x1="260" y1="62" x2="320" y2="62" stroke="#c8d8f0" stroke-width="2.5"/>
-        <text x="328" y="67" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Q=1</text>
+        <text x="328" y="67" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Q</text>
         <line x1="260" y1="137" x2="320" y2="137" stroke="#c8d8f0" stroke-width="2.5"/>
-        <text x="328" y="142" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Q̄=0</text>
+        <text x="328" y="142" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Q̄</text>
       </svg>`,
-      circuitSvg: `<svg viewBox="0 0 400 200" width="480" height="245">
-        <text x="18" y="42" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">J=1</text>
-        <text x="18" y="92" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">K=0</text>
-        <text x="18" y="162" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#ffcc00">CLK</text>
-        <rect x="130" y="25" width="120" height="150" rx="6" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
-        <text x="190" y="110" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="17" font-weight="bold" fill="#a0c8ff">JK-FF</text>
-        <text x="325" y="67" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Q=1</text>
-        <text x="325" y="142" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Q̄=0</text>
-        <line x1="55" y1="38" x2="130" y2="50" stroke="#39ff14" stroke-width="2"/>
-        <line x1="55" y1="88" x2="130" y2="100" stroke="#39ff14" stroke-width="2"/>
-        <line x1="50" y1="158" x2="130" y2="158" stroke="#ffcc00" stroke-width="2"/>
-        <line x1="250" y1="62" x2="315" y2="62" stroke="#39ff14" stroke-width="2"/>
-        <line x1="250" y1="137" x2="315" y2="137" stroke="#39ff14" stroke-width="2"/>
+      circuitSvg: `<svg viewBox="0 0 420 310" width="510" height="380">
+        <!-- Case 1: SET then HOLD -->
+        <text x="10" y="20" font-family="JetBrains Mono,monospace" font-size="11" fill="#888">CASE 1: SET → HOLD (Q₀=0)</text>
+        <text x="18" y="52" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">S: 1→0</text>
+        <text x="18" y="82" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#ff4444">R=0</text>
+        <line x1="75" y1="48" x2="120" y2="50" stroke="#39ff14" stroke-width="2"/>
+        <line x1="55" y1="78" x2="120" y2="72" stroke="#ff4444" stroke-width="2"/>
+        <rect x="120" y="30" width="100" height="75" rx="6" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="170" y="73" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">SR-FF</text>
+        <line x1="220" y1="67" x2="250" y2="67" stroke="#39ff14" stroke-width="2"/>
+        <text x="260" y="73" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">Q=1</text>
+        <!-- Case 2: S=R=1, SET dominates -->
+        <text x="10" y="150" font-family="JetBrains Mono,monospace" font-size="11" fill="#888">CASE 2: S=R=1 (Q₀=0)</text>
+        <text x="18" y="182" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">S=1</text>
+        <text x="18" y="212" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">R=1</text>
+        <line x1="55" y1="178" x2="120" y2="180" stroke="#39ff14" stroke-width="2"/>
+        <line x1="55" y1="208" x2="120" y2="202" stroke="#39ff14" stroke-width="2"/>
+        <rect x="120" y="160" width="100" height="75" rx="6" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="170" y="203" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">SR-FF</text>
+        <line x1="220" y1="197" x2="250" y2="197" stroke="#39ff14" stroke-width="2"/>
+        <text x="260" y="203" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">Q=1</text>
       </svg>`,
     },
     nodes: [
-      { id: 'in_J',   type: 'INPUT',   x: 180, y: 360, fixedValue: 1, label: 'J' },
-      { id: 'in_K',   type: 'INPUT',   x: 180, y: 480, fixedValue: 0, label: 'K' },
-      { id: 'clk_1',  type: 'CLOCK',   x: 180, y: 580, value: 0,      label: null },
-      { id: 'ff_1',   type: 'FF_SLOT', ffType: null, x: 560, y: 460, label: 'FF' },
-      { id: 'out_Q',  type: 'OUTPUT',  x: 920, y: 420, targetValue: 1, label: 'Q' },
-      { id: 'out_Qn', type: 'OUTPUT',  x: 920, y: 510, targetValue: 0, label: 'Q̄' },
+      // Case 1: S goes 1→0, R=0, Q₀=0 → SET then HOLD → target Q=1
+      { id: 'c1_S',   type: 'INPUT',   x: 140, y: 280, fixedValue: 1, stepValues: [1, 0], label: 'S' },
+      { id: 'c1_R',   type: 'INPUT',   x: 140, y: 370, fixedValue: 0, label: 'R' },
+      { id: 'c1_clk', type: 'CLOCK',   x: 140, y: 460, value: 0,     label: null },
+      { id: 'c1_ff',  type: 'FF_SLOT', ffType: null, x: 500, y: 370, linkedGroup: 'main', initialQ: 0, label: 'FF' },
+      { id: 'c1_Q',   type: 'OUTPUT',  x: 860, y: 370, targetValue: 1, label: 'Q' },
+      // Case 2: S=1, R=1, Q₀=0 → SET dominates → target Q=1 (after 2 steps JK/T toggle back to 0)
+      { id: 'c2_S',   type: 'INPUT',   x: 140, y: 580, fixedValue: 1, label: 'S' },
+      { id: 'c2_R',   type: 'INPUT',   x: 140, y: 670, fixedValue: 1, label: 'R' },
+      { id: 'c2_clk', type: 'CLOCK',   x: 140, y: 760, value: 0,     label: null },
+      { id: 'c2_ff',  type: 'FF_SLOT', ffType: null, x: 500, y: 660, linkedGroup: 'main', initialQ: 0, label: 'FF' },
+      { id: 'c2_Q',   type: 'OUTPUT',  x: 860, y: 660, targetValue: 1, label: 'Q' },
     ],
     wires: [
-      { id: 'w1',   sourceId: 'in_J',  targetId: 'ff_1',  targetInputIndex: 0 },
-      { id: 'w2',   sourceId: 'in_K',  targetId: 'ff_1',  targetInputIndex: 1 },
-      { id: 'wclk', sourceId: 'clk_1', targetId: 'ff_1',  targetInputIndex: 2, isClockWire: true },
-      { id: 'w3',   sourceId: 'ff_1',  targetId: 'out_Q',  targetInputIndex: 0, sourceOutputIndex: 0 },
-      { id: 'w4',   sourceId: 'ff_1',  targetId: 'out_Qn', targetInputIndex: 0, sourceOutputIndex: 1 },
+      // Case 1
+      { id: 'c1_w1',   sourceId: 'c1_S',   targetId: 'c1_ff', targetInputIndex: 0 },
+      { id: 'c1_w2',   sourceId: 'c1_R',   targetId: 'c1_ff', targetInputIndex: 1 },
+      { id: 'c1_wclk', sourceId: 'c1_clk', targetId: 'c1_ff', targetInputIndex: 2, isClockWire: true },
+      { id: 'c1_w3',   sourceId: 'c1_ff',  targetId: 'c1_Q',  targetInputIndex: 0, sourceOutputIndex: 0 },
+      // Case 2
+      { id: 'c2_w1',   sourceId: 'c2_S',   targetId: 'c2_ff', targetInputIndex: 0 },
+      { id: 'c2_w2',   sourceId: 'c2_R',   targetId: 'c2_ff', targetInputIndex: 1 },
+      { id: 'c2_wclk', sourceId: 'c2_clk', targetId: 'c2_ff', targetInputIndex: 2, isClockWire: true },
+      { id: 'c2_w3',   sourceId: 'c2_ff',  targetId: 'c2_Q',  targetInputIndex: 0, sourceOutputIndex: 0 },
     ],
   },
-
+  // L39 — RING COUNTER (4 D-FFs in a ring, Q4→D1 feedback)
+  // Initial: Q1=1,Q2=0,Q3=0,Q4=0. The "1" circulates around the ring.
+  // After 3 STEPs: Q1=0,Q2=0,Q3=0,Q4=1. After 4 STEPs: back to start.
+  {
+    id: 39, name: 'RING COUNTER', difficulty: 'Flip-Flops',
+    description: 'מונה טבעת — ארבעה פליפלופים במעגל סגור. ביט אחד "רץ" סביב הטבעת, שלב אחד בכל פעימת שעון. משמש ליצירת תזמון סדרתי ולבקרת מכונות מצב.',
+    instruction: 'שים את הפליפלופ הנכון בכל המקומות ולחץ STEP 3 פעמים',
+    hint: 'הפלט של FF4 מוזן חזרה לכניסת FF1. הביט זז: 1000→0100→0010→0001. איזה פליפלופ מעביר נתון הלאה?',
+    solution: {
+      ffsUsed: ['D-FF', 'D-FF', 'D-FF', 'D-FF'],
+      explanation: 'Ring Counter — ארבעה D-FF במעגל סגור. ה-1 מסתובב בטבעת שלב אחד בכל פעימת שעון. משמש לתזמון רב-פאזי, בקרת מכונות מצב, ויצירת דפוסי LED.',
+      blockSvg: `<svg viewBox="0 0 400 280" width="480" height="340">
+        <rect x="100" y="20" width="80" height="50" rx="6" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/>
+        <text x="140" y="50" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#00d4ff">D-FF1</text>
+        <rect x="260" y="80" width="80" height="50" rx="6" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/>
+        <text x="300" y="110" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#00d4ff">D-FF2</text>
+        <rect x="200" y="180" width="80" height="50" rx="6" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/>
+        <text x="240" y="210" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#00d4ff">D-FF3</text>
+        <rect x="60" y="120" width="80" height="50" rx="6" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/>
+        <text x="100" y="150" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#00d4ff">D-FF4</text>
+        <line x1="180" y1="40" x2="260" y2="95" stroke="#39ff14" stroke-width="2"/>
+        <line x1="300" y1="130" x2="270" y2="180" stroke="#39ff14" stroke-width="2"/>
+        <line x1="200" y1="205" x2="140" y2="160" stroke="#39ff14" stroke-width="2"/>
+        <polyline points="60,140 30,140 30,30 100,30" stroke="#ff6b6b" stroke-width="2" fill="none" stroke-dasharray="6,3"/>
+        <text x="20" y="85" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ff6b6b">Q4→D1</text>
+      </svg>`,
+      circuitSvg: `<svg viewBox="0 0 700 140" width="850" height="170">
+        <text x="12" y="52" font-family="JetBrains Mono,monospace" font-size="12" fill="#888">Q₀=1</text>
+        <rect x="60" y="25" width="80" height="55" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="100" y="57" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#a0c8ff">D-FF1</text>
+        <line x1="140" y1="48" x2="180" y2="48" stroke="#39ff14" stroke-width="2"/>
+        <text x="152" y="38" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">Q₀=0</text>
+        <rect x="180" y="25" width="80" height="55" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="220" y="57" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#a0c8ff">D-FF2</text>
+        <line x1="260" y1="48" x2="300" y2="48" stroke="#39ff14" stroke-width="2"/>
+        <text x="272" y="38" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">Q₀=0</text>
+        <rect x="300" y="25" width="80" height="55" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="340" y="57" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#a0c8ff">D-FF3</text>
+        <line x1="380" y1="48" x2="420" y2="48" stroke="#39ff14" stroke-width="2"/>
+        <text x="392" y="38" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">Q₀=0</text>
+        <rect x="420" y="25" width="80" height="55" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="460" y="57" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#a0c8ff">D-FF4</text>
+        <text x="520" y="52" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#39ff14">Q4=1</text>
+        <polyline points="500,55 540,55 540,100 30,100 30,48 60,48" stroke="#ff6b6b" stroke-width="2" fill="none" stroke-dasharray="6,3"/>
+        <text x="280" y="115" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ff6b6b">Q4 → D1 FEEDBACK</text>
+      </svg>`,
+    },
+    minSteps: 3,
+    nodes: [
+      { id: 'clk_1',  type: 'CLOCK',   x: 100, y: 580, value: 0,     label: null },
+      { id: 'ff_1',   type: 'FF_SLOT', ffType: null, x: 280, y: 460, linkedGroup: 'pair_a', initialQ: 1, label: 'FF1' },
+      { id: 'ff_2',   type: 'FF_SLOT', ffType: null, x: 460, y: 460, linkedGroup: 'pair_a', initialQ: 0, label: 'FF2' },
+      { id: 'ff_3',   type: 'FF_SLOT', ffType: null, x: 640, y: 460, linkedGroup: 'pair_b', initialQ: 0, label: 'FF3' },
+      { id: 'ff_4',   type: 'FF_SLOT', ffType: null, x: 820, y: 460, linkedGroup: 'pair_b', initialQ: 0, label: 'FF4' },
+      { id: 'out_Q1', type: 'OUTPUT',  x: 1020, y: 340, targetValue: 0, label: 'Q1' },
+      { id: 'out_Q2', type: 'OUTPUT',  x: 1020, y: 410, targetValue: 0, label: 'Q2' },
+      { id: 'out_Q3', type: 'OUTPUT',  x: 1020, y: 480, targetValue: 0, label: 'Q3' },
+      { id: 'out_Q4', type: 'OUTPUT',  x: 1020, y: 550, targetValue: 1, label: 'Q4' },
+    ],
+    wires: [
+      // Ring: Q4→D1, Q1→D2, Q2→D3, Q3→D4
+      { id: 'wfb',   sourceId: 'ff_4',  targetId: 'ff_1',   targetInputIndex: 0, sourceOutputIndex: 0 },
+      { id: 'w12',   sourceId: 'ff_1',  targetId: 'ff_2',   targetInputIndex: 0, sourceOutputIndex: 0 },
+      { id: 'w23',   sourceId: 'ff_2',  targetId: 'ff_3',   targetInputIndex: 0, sourceOutputIndex: 0 },
+      { id: 'w34',   sourceId: 'ff_3',  targetId: 'ff_4',   targetInputIndex: 0, sourceOutputIndex: 0 },
+      // All share same clock
+      { id: 'wclk1', sourceId: 'clk_1', targetId: 'ff_1',   targetInputIndex: 1, isClockWire: true },
+      { id: 'wclk2', sourceId: 'clk_1', targetId: 'ff_2',   targetInputIndex: 1, isClockWire: true },
+      { id: 'wclk3', sourceId: 'clk_1', targetId: 'ff_3',   targetInputIndex: 1, isClockWire: true },
+      { id: 'wclk4', sourceId: 'clk_1', targetId: 'ff_4',   targetInputIndex: 1, isClockWire: true },
+      // Outputs
+      { id: 'wo1',   sourceId: 'ff_1',  targetId: 'out_Q1', targetInputIndex: 0, sourceOutputIndex: 0 },
+      { id: 'wo2',   sourceId: 'ff_2',  targetId: 'out_Q2', targetInputIndex: 0, sourceOutputIndex: 0 },
+      { id: 'wo3',   sourceId: 'ff_3',  targetId: 'out_Q3', targetInputIndex: 0, sourceOutputIndex: 0 },
+      { id: 'wo4',   sourceId: 'ff_4',  targetId: 'out_Q4', targetInputIndex: 0, sourceOutputIndex: 0 },
+    ],
+  },
+  // L40 — PROGRAM COUNTER (4 D-FFs in parallel, inputs simulate binary counting via stepValues)
+  // Inputs change each step: step1=0001, step2=0010, step3=0011.
+  // After 3 STEPs: Q = 0011 (binary 3). D-FFs capture the current "address".
+  {
+    id: 40, name: 'PROGRAM COUNTER', difficulty: 'Flip-Flops',
+    minSteps: 3,
+    description: 'מונה פקודות (PC) — ארבעה פליפלופים במקביל מאחסנים את כתובת הפקודה הנוכחית. הכתובת מתעדכנת בכל פעימת שעון. זהו הרגיסטר החשוב ביותר במעבד.',
+    instruction: 'שים את הפליפלופ הנכון בכל המקומות ולחץ STEP 3 פעמים',
+    hint: 'הכניסות משתנות כל צעד כמו מונה בינארי. איזה פליפלופ תמיד לוכד את מה שבכניסה? אחרי 3 צעדים: כתובת 011 (=3).',
+    solution: {
+      ffsUsed: ['D-FF', 'D-FF', 'D-FF', 'D-FF'],
+      explanation: 'Program Counter — ארבעה D-FF במקביל שומרים כתובת 4-ביט. בכל פעימת שעון הם לוכדים את הכתובת הבאה. במעבד אמיתי, מעגל חיצוני מחשב PC+1 והרגיסטר רק שומר את התוצאה.',
+      blockSvg: `<svg viewBox="0 0 500 220" width="600" height="270">
+        <text x="8" y="22" font-family="JetBrains Mono,monospace" font-size="12" fill="#888">ADDRESS BUS</text>
+        <text x="8" y="52" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#39ff14">D0: 1→0→1</text>
+        <text x="8" y="82" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#39ff14">D1: 0→1→1</text>
+        <text x="8" y="112" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#ff4444">D2: 0</text>
+        <text x="8" y="142" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#ff4444">D3: 0</text>
+        <rect x="140" y="30" width="200" height="130" rx="8" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/>
+        <text x="240" y="85" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="18" font-weight="bold" fill="#00d4ff">4×D-FF</text>
+        <text x="240" y="105" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="12" fill="#00d4ff">PROGRAM COUNTER</text>
+        <text x="370" y="52" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#c8d8f0">Q0=1</text>
+        <text x="370" y="82" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#c8d8f0">Q1=1</text>
+        <text x="370" y="112" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#c8d8f0">Q2=0</text>
+        <text x="370" y="142" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#c8d8f0">Q3=0</text>
+        <text x="370" y="175" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#ffcc00">= ADDRESS 3</text>
+      </svg>`,
+      circuitSvg: `<svg viewBox="0 0 600 200" width="720" height="245">
+        <text x="12" y="22" font-family="JetBrains Mono,monospace" font-size="11" fill="#888">STEP 1: 0001 | STEP 2: 0010 | STEP 3: 0011</text>
+        <rect x="60" y="40" width="80" height="50" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="100" y="70" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#a0c8ff">D-FF0</text>
+        <rect x="170" y="40" width="80" height="50" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="210" y="70" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#a0c8ff">D-FF1</text>
+        <rect x="280" y="40" width="80" height="50" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="320" y="70" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#a0c8ff">D-FF2</text>
+        <rect x="390" y="40" width="80" height="50" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="430" y="70" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#a0c8ff">D-FF3</text>
+        <text x="500" y="55" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#39ff14">Q=0011</text>
+        <text x="500" y="75" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#ffcc00">ADDR=3</text>
+        <text x="12" y="120" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#ffcc00">CLK</text>
+      </svg>`,
+    },
+    nodes: [
+      // D0 (LSB): alternates 1,0,1 for counts 1,2,3
+      { id: 'in_D0',  type: 'INPUT',   x: 100, y: 320, fixedValue: 0, stepValues: [1, 0, 1], label: 'D0' },
+      // D1: 0,1,1 for counts 1,2,3
+      { id: 'in_D1',  type: 'INPUT',   x: 100, y: 420, fixedValue: 0, stepValues: [0, 1, 1], label: 'D1' },
+      // D2: always 0 for counts 1-3
+      { id: 'in_D2',  type: 'INPUT',   x: 100, y: 520, fixedValue: 0, label: 'D2' },
+      // D3: always 0 for counts 1-3
+      { id: 'in_D3',  type: 'INPUT',   x: 100, y: 620, fixedValue: 0, label: 'D3' },
+      { id: 'clk_1',  type: 'CLOCK',   x: 100, y: 740, value: 0,     label: null },
+      { id: 'ff_0',   type: 'FF_SLOT', ffType: null, x: 380, y: 350, linkedGroup: 'main', initialQ: 0, label: 'FF0' },
+      { id: 'ff_1',   type: 'FF_SLOT', ffType: null, x: 380, y: 450, linkedGroup: 'main', initialQ: 0, label: 'FF1' },
+      { id: 'ff_2',   type: 'FF_SLOT', ffType: null, x: 380, y: 550, linkedGroup: 'main', initialQ: 0, label: 'FF2' },
+      { id: 'ff_3',   type: 'FF_SLOT', ffType: null, x: 380, y: 650, linkedGroup: 'main', initialQ: 0, label: 'FF3' },
+      { id: 'out_Q0', type: 'OUTPUT',  x: 660, y: 350, targetValue: 1, label: 'Q0' },
+      { id: 'out_Q1', type: 'OUTPUT',  x: 660, y: 450, targetValue: 1, label: 'Q1' },
+      { id: 'out_Q2', type: 'OUTPUT',  x: 660, y: 550, targetValue: 0, label: 'Q2' },
+      { id: 'out_Q3', type: 'OUTPUT',  x: 660, y: 650, targetValue: 0, label: 'Q3' },
+    ],
+    wires: [
+      { id: 'w0',    sourceId: 'in_D0', targetId: 'ff_0',   targetInputIndex: 0 },
+      { id: 'w1',    sourceId: 'in_D1', targetId: 'ff_1',   targetInputIndex: 0 },
+      { id: 'w2',    sourceId: 'in_D2', targetId: 'ff_2',   targetInputIndex: 0 },
+      { id: 'w3',    sourceId: 'in_D3', targetId: 'ff_3',   targetInputIndex: 0 },
+      { id: 'wclk0', sourceId: 'clk_1', targetId: 'ff_0',   targetInputIndex: 1, isClockWire: true },
+      { id: 'wclk1', sourceId: 'clk_1', targetId: 'ff_1',   targetInputIndex: 1, isClockWire: true },
+      { id: 'wclk2', sourceId: 'clk_1', targetId: 'ff_2',   targetInputIndex: 1, isClockWire: true },
+      { id: 'wclk3', sourceId: 'clk_1', targetId: 'ff_3',   targetInputIndex: 1, isClockWire: true },
+      { id: 'wo0',   sourceId: 'ff_0',  targetId: 'out_Q0', targetInputIndex: 0, sourceOutputIndex: 0 },
+      { id: 'wo1',   sourceId: 'ff_1',  targetId: 'out_Q1', targetInputIndex: 0, sourceOutputIndex: 0 },
+      { id: 'wo2',   sourceId: 'ff_2',  targetId: 'out_Q2', targetInputIndex: 0, sourceOutputIndex: 0 },
+      { id: 'wo3',   sourceId: 'ff_3',  targetId: 'out_Q3', targetInputIndex: 0, sourceOutputIndex: 0 },
+    ],
+  },
   // ════════════════════════════════════════════════════════════
   // TAB 5 — 5. Sequential Logic  (IDs 41–50)
   // Flip-flops combined with combinational gate slots.

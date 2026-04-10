@@ -24,7 +24,8 @@ const State = (() => {
     _ffStates = new Map();
     (nodes || []).forEach(n => {
       if (Engine.FF_TYPES.has(n.type)) {
-        _ffStates.set(n.id, { q: 0, qNot: 1, prevClkValue: null });
+        const q0 = (n.initialQ != null) ? n.initialQ : 0;
+        _ffStates.set(n.id, { q: q0, qNot: q0 ^ 1, prevClkValue: null });
       }
     });
   }
@@ -32,7 +33,9 @@ const State = (() => {
   // Also re-init a single FF_SLOT when a type is placed (so state starts fresh)
   function _ensureFfState(nodeId) {
     if (!_ffStates.has(nodeId)) {
-      _ffStates.set(nodeId, { q: 0, qNot: 1, prevClkValue: null });
+      const node = _level.nodes.find(n => n.id === nodeId);
+      const q0 = (node && node.initialQ != null) ? node.initialQ : 0;
+      _ffStates.set(nodeId, { q: q0, qNot: q0 ^ 1, prevClkValue: null });
     }
   }
 
@@ -110,6 +113,16 @@ const State = (() => {
       node.ffType = ffType || null;
       if (ffType) _ensureFfState(nodeId);
       else _ffStates.delete(nodeId);
+      // Propagate to all linked FF slots in the same group
+      if (node.linkedGroup) {
+        _level.nodes.forEach(n => {
+          if (n.type === 'FF_SLOT' && n.linkedGroup === node.linkedGroup && n.id !== nodeId) {
+            n.ffType = ffType || null;
+            if (ffType) _ensureFfState(n.id);
+            else _ffStates.delete(n.id);
+          }
+        });
+      }
     },
 
     advanceLevel() {
@@ -121,6 +134,7 @@ const State = (() => {
       _level.nodes.forEach(n => {
         if (n.type === 'GATE_SLOT') n.gate = null;
         if (n.type === 'FF_SLOT') n.ffType = null;
+        if (n.type === 'INPUT' && n.stepValues) n.fixedValue = n.stepValues[0];
       });
       _solved     = false;
       _evalResult = null;
@@ -137,6 +151,13 @@ const State = (() => {
     stepClock() {
       if (!_level || _solved) return;
       _stepCount++;
+      // Update inputs that have per-step values (stepValues array)
+      _level.nodes.forEach(n => {
+        if (n.type === 'INPUT' && n.stepValues) {
+          const idx = Math.min(_stepCount, n.stepValues.length) - 1;
+          n.fixedValue = n.stepValues[idx];
+        }
+      });
       _clockHigh = true;
       _setClockValue(1);
       // tick() in main.js will call evaluate() while CLK=1 (detecting the rising edge),

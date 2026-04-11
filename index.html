@@ -21,7 +21,7 @@
       </div>
       <div id="hud-actions">
         <button id="btn-levels" class="btn-secondary">STAGES</button>
-        <button id="btn-truth" class="btn-secondary hidden">טבלת אמת נדרשת</button>
+        <button id="btn-truth" class="btn-secondary hidden">TRUTH TABLE</button>
         <button id="btn-hint" class="btn-secondary">HINT</button>
       </div>
     </div>
@@ -42,7 +42,7 @@
       <div id="gate-palette-label-row">
         <div id="gate-palette-label">GATE PALETTE</div>
         <button id="btn-info" aria-label="Open gate truth tables" title="Gate Truth Tables">i</button>
-        <button id="btn-clear-gates" title="נקה את כל השערים וחשוב מחדש">CLEAR ALL</button>
+        <button id="btn-clear-gates" title="Clear all gates and rethink">CLEAR ALL</button>
       </div>
       <div id="gate-palette">
         <span class="gate-chip" data-gate="AND" draggable="true">AND</span>
@@ -86,7 +86,7 @@
   <div id="truth-overlay" class="hidden">
     <div id="truth-box">
       <div id="truth-header">
-        <div id="truth-title">טבלת אמת נדרשת</div>
+        <div id="truth-title">REQUIRED TRUTH TABLE</div>
         <button id="btn-truth-close" class="btn-close">✕</button>
       </div>
       <div id="truth-table-container"></div>
@@ -105,9 +105,9 @@
   <!-- Fail Overlay -->
   <div id="fail-overlay" class="hidden">
     <div id="fail-box">
-      <div id="fail-title">✗ לא הצלחת</div>
-      <div id="fail-message">התוצאה לא תואמת את היעד. נסה שילוב אחר!</div>
-      <button id="btn-fail-retry">התחל מההתחלה</button>
+      <div id="fail-title">✗ INCORRECT</div>
+      <div id="fail-message">The output doesn't match the target. Try a different combination!</div>
+      <button id="btn-fail-retry">START OVER</button>
     </div>
   </div>
 
@@ -124,11 +124,11 @@
       <div id="win-solution" class="hidden">
         <div id="solution-diagrams">
           <div class="solution-diagram">
-            <div class="solution-diagram-label">תרשים בלוק — כניסות ויציאות</div>
+            <div class="solution-diagram-label">Block Diagram — Inputs & Outputs</div>
             <div id="solution-block"></div>
           </div>
           <div class="solution-diagram">
-            <div class="solution-diagram-label">תרשים מעגל — פתרון אפשרי עם שערים לוגיים</div>
+            <div class="solution-diagram-label">Circuit Diagram — Solution with Logic Gates</div>
             <div id="solution-circuit"></div>
           </div>
         </div>

@@ -62,26 +62,26 @@
   const bestTimes = loadBestTimes();
   const DIFFICULTY_ORDER = ['Fundamentals', 'Building Blocks', 'Advanced Circuits', 'Flip-Flops', 'Sequential Logic'];
   const TRUTH_OBJECTIVES = {
-    1: 'מטרת השלב: להבין ששער AND מוציא 1 רק כששתי הכניסות הן 1.',
-    2: 'מטרת השלב: להבין ששער OR מוציא 1 כשלפחות אחת מהכניסות היא 1.',
-    3: 'מטרת השלב: להבין ששער NOT הופך את הערך בכניסה (0 ל-1, 1 ל-0).',
-    4: 'מטרת השלב: להבין ש-NAND הוא AND הפוך, ולכן רק במקרה 11 הפלט הוא 0.',
-    5: 'מטרת השלב: להבין ש-NOR הוא OR הפוך, ולכן רק במקרה 00 הפלט הוא 1.',
-    6: 'מטרת השלב: להבין ששער XOR מוציא 1 רק כשהכניסות שונות.',
-    7: 'מטרת השלב: להבין איך שרשור שערים משנה את הלוגיקה הסופית של המערכת.',
-    8: 'מטרת השלב: להבין פיצול אות (Fanout) והזנה של אותה כניסה למספר מסלולים.',
-    9: 'מטרת השלב: להבין מסלולים מתפצלים ואיך כל ענף משפיע על הפלטים.',
-    10: 'מטרת השלב: להבין רשת של שלושה שערים ואת ההשפעה המצטברת שלהם על הפלט.',
-    11: 'מטרת השלב: להבין שחצי-מחבר (Half Adder) מפיק Sum ו-Carry עבור שני ביטים.',
-    12: 'מטרת השלב: להבין שפול אאדר (Full Adder) מחבר A,B ו-Carry-in ומחזיר Sum ו-Carry-out.',
-    13: 'מטרת השלב: להבין ש-XNOR מחזיר 1 כשהכניסות שוות ו-0 כשהן שונות.',
-    14: 'מטרת השלב: להבין שמוקס 2 על 1 בוחר איזה קלט עובר לפלט לפי ביט הבחירה S.',
-    15: 'מטרת השלב: להבין שדמולטיפלקסר 1 על 2 מנתב קלט יחיד לאחד משני פלטים לפי S.',
-    16: 'מטרת השלב: להבין פריות אי-זוגית ל-3 ביטים: הפלט 1 כשמספר ה-1-ים אי-זוגי.',
-    17: 'מטרת השלב: להבין פונקציית Majority: הפלט 1 כשיש לפחות שני 1 בכניסות.',
-    18: 'מטרת השלב: להבין דקודר 2 ל-4 שמדליק בדיוק פלט אחד לפי ערך S1,S0.',
-    19: 'מטרת השלב: להבין משווה 1-ביט שמסמן גדול/שווה/קטן בין שני קלטים.',
-    20: 'מטרת השלב: להבין מקודד עדיפויות שמחזיר את האינדקס של הקלט הפעיל בעדיפות הגבוהה.',
+    1: 'Goal: Understand that an AND gate outputs 1 only when both inputs are 1.',
+    2: 'Goal: Understand that an OR gate outputs 1 when at least one input is 1.',
+    3: 'Goal: Understand that a NOT gate inverts the input value (0 to 1, 1 to 0).',
+    4: 'Goal: Understand that NAND is an inverted AND, so only for input 11 the output is 0.',
+    5: 'Goal: Understand that NOR is an inverted OR, so only for input 00 the output is 1.',
+    6: 'Goal: Understand that an XOR gate outputs 1 only when the inputs are different.',
+    7: 'Goal: Understand how chaining gates changes the final logic of the system.',
+    8: 'Goal: Understand signal fanout and feeding the same input to multiple paths.',
+    9: 'Goal: Understand branching paths and how each branch affects the outputs.',
+    10: 'Goal: Understand a network of three gates and their cumulative effect on the output.',
+    11: 'Goal: Understand that a Half Adder produces Sum and Carry for two bits.',
+    12: 'Goal: Understand that a Full Adder adds A, B, and Carry-in and returns Sum and Carry-out.',
+    13: 'Goal: Understand that XNOR returns 1 when inputs are equal and 0 when they differ.',
+    14: 'Goal: Understand that a 2-to-1 MUX selects which input passes to the output based on select bit S.',
+    15: 'Goal: Understand that a 1-to-2 DEMUX routes a single input to one of two outputs based on S.',
+    16: 'Goal: Understand odd parity for 3 bits: the output is 1 when the number of 1s is odd.',
+    17: 'Goal: Understand the Majority function: the output is 1 when at least two inputs are 1.',
+    18: 'Goal: Understand a 2-to-4 decoder that activates exactly one output based on S1,S0.',
+    19: 'Goal: Understand a 1-bit comparator that indicates greater/equal/less between two inputs.',
+    20: 'Goal: Understand a priority encoder that returns the index of the highest-priority active input.',
   };
   let currentMenuDifficulty = LEVELS[0] ? LEVELS[0].difficulty : 'Fundamentals';
 
@@ -96,7 +96,7 @@
     if (!levelDef) return '';
     if (TRUTH_OBJECTIVES[levelDef.id]) return TRUTH_OBJECTIVES[levelDef.id];
     if (levelDef.description) return levelDef.description;
-    return `מטרת השלב: להבין את הפעולה של ${levelDef.name}.`;
+    return `Goal: Understand the operation of ${levelDef.name}.`;
   }
 
   function colorizeTruthTableBits() {
@@ -560,8 +560,8 @@
   // FF truth table HTML for the info popup
   const FF_TRUTH_TABLES = {
     D: `<div class="ff-popup-truth">
-      <h4>טבלת אמת — D Flip-Flop</h4>
-      <p class="ff-popup-desc">פליפלופ D (Data) לוכד את הערך שבכניסת D בעליית השעון. Q תמיד שווה ל-D לאחר פעימת שעון.</p>
+      <h4>Truth Table — D Flip-Flop</h4>
+      <p class="ff-popup-desc">D (Data) Flip-Flop captures the value at input D on the rising clock edge. Q always equals D after a clock pulse.</p>
       <table class="ff-popup-table"><thead><tr><th>D</th><th>CLK</th><th>Q<sub>next</sub></th><th>Q̄<sub>next</sub></th></tr></thead>
       <tbody>
         <tr><td>0</td><td>↑</td><td>0</td><td>1</td></tr>
@@ -570,8 +570,8 @@
       </tbody></table>
     </div>`,
     T: `<div class="ff-popup-truth">
-      <h4>טבלת אמת — T Flip-Flop</h4>
-      <p class="ff-popup-desc">פליפלופ T (Toggle) מחליף את Q בכל עליית שעון כאשר T=1. כאשר T=0, Q נשאר ללא שינוי.</p>
+      <h4>Truth Table — T Flip-Flop</h4>
+      <p class="ff-popup-desc">T (Toggle) Flip-Flop toggles Q on every rising clock edge when T=1. When T=0, Q remains unchanged.</p>
       <table class="ff-popup-table"><thead><tr><th>T</th><th>CLK</th><th>Q<sub>next</sub></th></tr></thead>
       <tbody>
         <tr><td>0</td><td>↑</td><td>Q (hold)</td></tr>
@@ -579,8 +579,8 @@
       </tbody></table>
     </div>`,
     SR: `<div class="ff-popup-truth">
-      <h4>טבלת אמת — SR Flip-Flop</h4>
-      <p class="ff-popup-desc">פליפלופ SR (Set/Reset) מאפשר לקבוע (SET) או לאפס (RESET) את Q בנפרד. S=R=1 הוא מצב מיוחד (כאן SET גובר).</p>
+      <h4>Truth Table — SR Flip-Flop</h4>
+      <p class="ff-popup-desc">SR (Set/Reset) Flip-Flop allows setting (SET) or resetting (RESET) Q independently. S=R=1 is a special case (here SET takes priority).</p>
       <table class="ff-popup-table"><thead><tr><th>S</th><th>R</th><th>CLK</th><th>Q<sub>next</sub></th></tr></thead>
       <tbody>
         <tr><td>0</td><td>0</td><td>↑</td><td>Q (hold)</td></tr>
@@ -590,8 +590,8 @@
       </tbody></table>
     </div>`,
     JK: `<div class="ff-popup-truth">
-      <h4>טבלת אמת — JK Flip-Flop</h4>
-      <p class="ff-popup-desc">פליפלופ JK הוא הגמיש ביותר. J=Set, K=Reset, J=K=1 מצב Toggle (Q מתהפך). אין לו מצב אסור כמו SR.</p>
+      <h4>Truth Table — JK Flip-Flop</h4>
+      <p class="ff-popup-desc">JK Flip-Flop is the most versatile. J=Set, K=Reset, J=K=1 is Toggle mode (Q inverts). It has no forbidden state like SR.</p>
       <table class="ff-popup-table"><thead><tr><th>J</th><th>K</th><th>CLK</th><th>Q<sub>next</sub></th></tr></thead>
       <tbody>
         <tr><td>0</td><td>0</td><td>↑</td><td>Q (hold)</td></tr>
@@ -606,11 +606,11 @@
     diagramTitle.textContent = title;
     const isFF = ['D','T','SR','JK'].includes(componentKey);
     diagramSubtitle.textContent = isFF
-      ? 'טבלת אמת ומבנה מתוך שערים לוגיים'
+      ? 'Truth table and gate-level structure'
       : 'Simplified transistor schematic';
     const truthHtml = isFF ? (FF_TRUTH_TABLES[componentKey] || '') : '';
     const structureLabel = isFF
-      ? '<div class="ff-popup-structure-label">מבנה מתוך שערים לוגיים:</div>'
+      ? '<div class="ff-popup-structure-label">Gate-level structure:</div>'
       : '';
     diagramContent.innerHTML = truthHtml + structureLabel + renderComponentDiagram(componentKey);
     diagramOverlay.classList.remove('hidden');
@@ -1118,11 +1118,11 @@
         const gateList = sol.gatesUsed ? sol.gatesUsed.join(', ') : '';
         const ffList = sol.ffsUsed ? sol.ffsUsed.join(', ') : '';
         if (gateList && ffList) {
-          solutionGates.innerHTML = `שערים: <span>${gateList}</span> | פליפלופים: <span>${ffList}</span>`;
+          solutionGates.innerHTML = `Gates: <span>${gateList}</span> | Flip-Flops: <span>${ffList}</span>`;
         } else if (ffList) {
-          solutionGates.innerHTML = `הפליפלופים שנעשה בהם שימוש: <span>${ffList}</span>`;
+          solutionGates.innerHTML = `Flip-Flops used: <span>${ffList}</span>`;
         } else {
-          solutionGates.innerHTML = `השערים הלוגיים שנעשה בהם שימוש: <span>${gateList}</span>`;
+          solutionGates.innerHTML = `Logic gates used: <span>${gateList}</span>`;
         }
         winSolution.classList.remove('hidden');
       } else {

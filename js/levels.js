@@ -18,13 +18,13 @@ const LEVELS = [
   // L1 — NOT GATE  (2 cases: all input combos for single input)
   {
     id: 1, name: 'NOT GATE', difficulty: 'Fundamentals',
-    description: 'NOT Gate — שער NOT (מהפך) הופך את ערך הכניסה: 0 הופך ל-1 ו-1 הופך ל-0. זהו השער היחיד עם כניסה אחת בלבד, ומשמש ליצירת השלילה הלוגית בכל מעגל דיגיטלי.',
-    instruction: 'בחר את השער היחיד שמתאים לכל המקרים',
+    description: 'NOT Gate — The NOT gate (inverter) flips the input value: 0 becomes 1 and 1 becomes 0. It is the only single-input gate and is used to create logical negation in any digital circuit.',
+    instruction: 'Choose the single gate that matches all cases',
     hint: 'NOT inverts the input: 0→1, 1→0. It is the only single-input gate.',
     truthTable: { inputs: ['A'], outputs: ['Z'], rows: [[[0],[1]],[[1],[0]]] },
     solution: {
       gatesUsed: ['NOT'],
-      explanation: 'NOT Gate — שער NOT (מהפך) הופך את ערך הכניסה: 0 הופך ל-1 ו-1 הופך ל-0. זהו השער היחיד עם כניסה אחת בלבד, ומשמש ליצירת השלילה הלוגית בכל מעגל דיגיטלי.',
+      explanation: 'NOT Gate — The NOT gate (inverter) flips the input value: 0 becomes 1 and 1 becomes 0. It is the only single-input gate and is used to create logical negation in any digital circuit.',
       blockSvg: `<svg viewBox="0 0 320 120" width="400" height="150"><text x="12" y="67" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text><line x1="30" y1="62" x2="90" y2="62" stroke="#39ff14" stroke-width="2.5"/><rect x="90" y="30" width="140" height="65" rx="8" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/><text x="160" y="72" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="28" font-weight="bold" fill="#00d4ff">NOT</text><line x1="230" y1="62" x2="285" y2="62" stroke="#c8d8f0" stroke-width="2.5"/><text x="293" y="67" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Z</text></svg>`,
       circuitSvg: `<svg viewBox="0 0 340 120" width="420" height="150"><text x="18" y="67" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text><rect x="110" y="40" width="100" height="45" rx="6" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="160" y="68" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="18" font-weight="bold" fill="#a0c8ff">NOT</text><text x="295" y="67" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Z</text><line x1="36" y1="62" x2="110" y2="62" stroke="#39ff14" stroke-width="2"/><line x1="210" y1="62" x2="285" y2="62" stroke="#39ff14" stroke-width="2"/></svg>`,
     },
@@ -49,8 +49,8 @@ const LEVELS = [
   // L2 — AND GATE  (4 cases: all input combos, only AND satisfies all)
   {
     id: 2, name: 'AND GATE', difficulty: 'Fundamentals',
-    description: 'AND Gate — שער AND מוציא 1 רק כאשר שני הכניסות הן 1. זהו השער הבסיסי ביותר בלוגיקה דיגיטלית, ומשמש בין היתר לבדיקת תנאים מרובים — האם כל התנאים מתקיימים בו-זמנית.',
-    instruction: 'בחר את השער היחיד שמתאים לכל המקרים',
+    description: 'AND Gate — The AND gate outputs 1 only when both inputs are 1. It is the most basic gate in digital logic, used to check whether multiple conditions are all true simultaneously.',
+    instruction: 'Choose the single gate that matches all cases',
     hint: 'AND outputs 1 ONLY when both inputs are 1. Check all four rows.',
     truthTable: {
       inputs: ['A', 'B'], outputs: ['Z'],
@@ -58,7 +58,7 @@ const LEVELS = [
     },
     solution: {
       gatesUsed: ['AND'],
-      explanation: 'AND Gate — שער AND מוציא 1 רק כאשר שני הכניסות הן 1. זהו השער הבסיסי ביותר בלוגיקה דיגיטלית, ומשמש בין היתר לבדיקת תנאים מרובים — האם כל התנאים מתקיימים בו-זמנית.',
+      explanation: 'AND Gate — The AND gate outputs 1 only when both inputs are 1. It is the most basic gate in digital logic, used to check whether multiple conditions are all true simultaneously.',
       blockSvg: `<svg viewBox="0 0 360 160" width="440" height="195">
         <!-- A input from left -->
         <text x="12" y="62" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text>
@@ -129,13 +129,13 @@ const LEVELS = [
   // L3 — OR GATE  (4 cases)
   {
     id: 3, name: 'OR GATE', difficulty: 'Fundamentals',
-    description: 'OR Gate — שער OR מוציא 1 כאשר לפחות אחת מהכניסות היא 1. משמש לבדיקה האם תנאי כלשהו מתקיים — מספיק שאחד מהם נכון כדי לקבל פלט חיובי.',
-    instruction: 'בחר את השער היחיד שמתאים לכל המקרים',
+    description: 'OR Gate — The OR gate outputs 1 when at least one input is 1. Used to check whether any condition is met — a single true input is enough to produce a positive output.',
+    instruction: 'Choose the single gate that matches all cases',
     hint: 'OR outputs 1 when at least one input is 1. Only OR matches all four rows.',
     truthTable: { inputs: ['A','B'], outputs: ['Z'], rows: [[[0,0],[0]],[[0,1],[1]],[[1,0],[1]],[[1,1],[1]]] },
     solution: {
       gatesUsed: ['OR'],
-      explanation: 'OR Gate — שער OR מוציא 1 כאשר לפחות אחת מהכניסות היא 1. משמש לבדיקה האם תנאי כלשהו מתקיים — מספיק שאחד מהם נכון כדי לקבל פלט חיובי.',
+      explanation: 'OR Gate — The OR gate outputs 1 when at least one input is 1. Used to check whether any condition is met — a single true input is enough to produce a positive output.',
       blockSvg: `<svg viewBox="0 0 360 160" width="440" height="195"><text x="12" y="62" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text><line x1="30" y1="57" x2="100" y2="57" stroke="#39ff14" stroke-width="2.5"/><text x="12" y="112" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">B</text><line x1="30" y1="107" x2="100" y2="107" stroke="#39ff14" stroke-width="2.5"/><rect x="100" y="30" width="160" height="105" rx="8" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/><text x="180" y="92" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="28" font-weight="bold" fill="#00d4ff">OR</text><line x1="260" y1="82" x2="320" y2="82" stroke="#c8d8f0" stroke-width="2.5"/><text x="328" y="87" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Z</text></svg>`,
       circuitSvg: `<svg viewBox="0 0 380 160" width="460" height="195"><text x="18" y="52" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text><text x="18" y="122" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">B</text><rect x="120" y="50" width="100" height="60" rx="6" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="170" y="86" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="18" font-weight="bold" fill="#a0c8ff">OR</text><text x="310" y="85" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Z</text><line x1="36" y1="48" x2="120" y2="68" stroke="#39ff14" stroke-width="2"/><line x1="36" y1="118" x2="120" y2="92" stroke="#39ff14" stroke-width="2"/><line x1="220" y1="80" x2="300" y2="80" stroke="#39ff14" stroke-width="2"/></svg>`,
     },
@@ -180,13 +180,13 @@ const LEVELS = [
   // L4 — NAND GATE  (4 cases)
   {
     id: 4, name: 'NAND GATE', difficulty: 'Fundamentals',
-    description: 'NAND Gate — שער NAND הוא AND הפוך: מוציא 0 רק כששתי הכניסות הן 1. NAND הוא שער אוניברסלי — ניתן לבנות כל מעגל לוגי באמצעות שערי NAND בלבד.',
-    instruction: 'בחר את השער היחיד שמתאים לכל המקרים',
+    description: 'NAND Gate — The NAND gate is an inverted AND: it outputs 0 only when both inputs are 1. NAND is a universal gate — any logic circuit can be built using NAND gates alone.',
+    instruction: 'Choose the single gate that matches all cases',
     hint: 'NAND is inverted AND: output is 0 ONLY when both inputs are 1.',
     truthTable: { inputs: ['A','B'], outputs: ['Z'], rows: [[[0,0],[1]],[[0,1],[1]],[[1,0],[1]],[[1,1],[0]]] },
     solution: {
       gatesUsed: ['NAND'],
-      explanation: 'NAND Gate — שער NAND הוא AND הפוך: מוציא 0 רק כששתי הכניסות הן 1. NAND הוא שער אוניברסלי — ניתן לבנות כל מעגל לוגי באמצעות שערי NAND בלבד.',
+      explanation: 'NAND Gate — The NAND gate is an inverted AND: it outputs 0 only when both inputs are 1. NAND is a universal gate — any logic circuit can be built using NAND gates alone.',
       blockSvg: `<svg viewBox="0 0 360 160" width="440" height="195"><text x="12" y="62" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text><line x1="30" y1="57" x2="100" y2="57" stroke="#39ff14" stroke-width="2.5"/><text x="12" y="112" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">B</text><line x1="30" y1="107" x2="100" y2="107" stroke="#39ff14" stroke-width="2.5"/><rect x="100" y="30" width="160" height="105" rx="8" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/><text x="180" y="92" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="26" font-weight="bold" fill="#00d4ff">NAND</text><line x1="260" y1="82" x2="320" y2="82" stroke="#c8d8f0" stroke-width="2.5"/><text x="328" y="87" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Z</text></svg>`,
       circuitSvg: `<svg viewBox="0 0 380 160" width="460" height="195"><text x="18" y="52" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text><text x="18" y="122" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">B</text><rect x="120" y="50" width="100" height="60" rx="6" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="170" y="86" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#a0c8ff">NAND</text><text x="310" y="85" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Z</text><line x1="36" y1="48" x2="120" y2="68" stroke="#39ff14" stroke-width="2"/><line x1="36" y1="118" x2="120" y2="92" stroke="#39ff14" stroke-width="2"/><line x1="220" y1="80" x2="300" y2="80" stroke="#39ff14" stroke-width="2"/></svg>`,
     },
@@ -231,13 +231,13 @@ const LEVELS = [
   // L5 — NOR GATE  (4 cases)
   {
     id: 5, name: 'NOR GATE', difficulty: 'Fundamentals',
-    description: 'NOR Gate — שער NOR הוא OR הפוך: מוציא 1 רק כששתי הכניסות הן 0. כמו NAND, גם NOR הוא שער אוניברסלי — ניתן לבנות כל מעגל לוגי באמצעות שערי NOR בלבד.',
-    instruction: 'בחר את השער היחיד שמתאים לכל המקרים',
+    description: 'NOR Gate — The NOR gate is an inverted OR: it outputs 1 only when both inputs are 0. Like NAND, NOR is also a universal gate — any logic circuit can be built using NOR gates alone.',
+    instruction: 'Choose the single gate that matches all cases',
     hint: 'NOR is inverted OR: output is 1 ONLY when both inputs are 0.',
     truthTable: { inputs: ['A','B'], outputs: ['Z'], rows: [[[0,0],[1]],[[0,1],[0]],[[1,0],[0]],[[1,1],[0]]] },
     solution: {
       gatesUsed: ['NOR'],
-      explanation: 'NOR Gate — שער NOR הוא OR הפוך: מוציא 1 רק כששתי הכניסות הן 0. כמו NAND, גם NOR הוא שער אוניברסלי — ניתן לבנות כל מעגל לוגי באמצעות שערי NOR בלבד.',
+      explanation: 'NOR Gate — The NOR gate is an inverted OR: it outputs 1 only when both inputs are 0. Like NAND, NOR is also a universal gate — any logic circuit can be built using NOR gates alone.',
       blockSvg: `<svg viewBox="0 0 360 160" width="440" height="195"><text x="12" y="62" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text><line x1="30" y1="57" x2="100" y2="57" stroke="#39ff14" stroke-width="2.5"/><text x="12" y="112" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">B</text><line x1="30" y1="107" x2="100" y2="107" stroke="#39ff14" stroke-width="2.5"/><rect x="100" y="30" width="160" height="105" rx="8" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/><text x="180" y="92" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="28" font-weight="bold" fill="#00d4ff">NOR</text><line x1="260" y1="82" x2="320" y2="82" stroke="#c8d8f0" stroke-width="2.5"/><text x="328" y="87" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Z</text></svg>`,
       circuitSvg: `<svg viewBox="0 0 380 160" width="460" height="195"><text x="18" y="52" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text><text x="18" y="122" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">B</text><rect x="120" y="50" width="100" height="60" rx="6" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="170" y="86" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="18" font-weight="bold" fill="#a0c8ff">NOR</text><text x="310" y="85" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Z</text><line x1="36" y1="48" x2="120" y2="68" stroke="#39ff14" stroke-width="2"/><line x1="36" y1="118" x2="120" y2="92" stroke="#39ff14" stroke-width="2"/><line x1="220" y1="80" x2="300" y2="80" stroke="#39ff14" stroke-width="2"/></svg>`,
     },
@@ -282,13 +282,13 @@ const LEVELS = [
   // L6 — XOR GATE  (4 cases)
   {
     id: 6, name: 'XOR GATE', difficulty: 'Fundamentals',
-    description: 'XOR Gate — שער XOR (או בלעדי) מוציא 1 רק כאשר הכניסות שונות זו מזו. משמש רבות בחישובי חיבור בינארי ובמעגלי בדיקת זוגיות (parity).',
-    instruction: 'בחר את השער היחיד שמתאים לכל המקרים',
+    description: 'XOR Gate — The XOR (exclusive OR) gate outputs 1 only when the inputs differ from each other. Widely used in binary addition and parity checking circuits.',
+    instruction: 'Choose the single gate that matches all cases',
     hint: 'XOR outputs 1 when inputs differ. Only XOR matches all four rows.',
     truthTable: { inputs: ['A','B'], outputs: ['Z'], rows: [[[0,0],[0]],[[0,1],[1]],[[1,0],[1]],[[1,1],[0]]] },
     solution: {
       gatesUsed: ['XOR'],
-      explanation: 'XOR Gate — שער XOR (או בלעדי) מוציא 1 רק כאשר הכניסות שונות זו מזו. משמש רבות בחישובי חיבור בינארי ובמעגלי בדיקת זוגיות (parity).',
+      explanation: 'XOR Gate — The XOR (exclusive OR) gate outputs 1 only when the inputs differ from each other. Widely used in binary addition and parity checking circuits.',
       blockSvg: `<svg viewBox="0 0 360 160" width="440" height="195"><text x="12" y="62" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text><line x1="30" y1="57" x2="100" y2="57" stroke="#39ff14" stroke-width="2.5"/><text x="12" y="112" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">B</text><line x1="30" y1="107" x2="100" y2="107" stroke="#39ff14" stroke-width="2.5"/><rect x="100" y="30" width="160" height="105" rx="8" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/><text x="180" y="92" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="28" font-weight="bold" fill="#00d4ff">XOR</text><line x1="260" y1="82" x2="320" y2="82" stroke="#c8d8f0" stroke-width="2.5"/><text x="328" y="87" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Z</text></svg>`,
       circuitSvg: `<svg viewBox="0 0 380 160" width="460" height="195"><text x="18" y="52" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text><text x="18" y="122" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">B</text><rect x="120" y="50" width="100" height="60" rx="6" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="170" y="86" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="18" font-weight="bold" fill="#a0c8ff">XOR</text><text x="310" y="85" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Z</text><line x1="36" y1="48" x2="120" y2="68" stroke="#39ff14" stroke-width="2"/><line x1="36" y1="118" x2="120" y2="92" stroke="#39ff14" stroke-width="2"/><line x1="220" y1="80" x2="300" y2="80" stroke="#39ff14" stroke-width="2"/></svg>`,
     },
@@ -337,13 +337,13 @@ const LEVELS = [
   {
     id: 7, name: 'GATE CHAIN', difficulty: 'Fundamentals',
     layout: 'vertical',
-    description: 'Gate Chain — שרשרת שערים: פלט השער הראשון מוזן כקלט לשער השני. זהו המבנה הבסיסי ביותר של שני שערים ברצף, ומדגים כיצד ניתן לבנות פונקציות לוגיות מורכבות משילוב שערים פשוטים.',
-    instruction: 'שרשרת שערים: פלט G1 מוזן ל-G2 יחד עם C\nמצא את זוג השערים היחיד שנותן תוצאה נכונה בכל ארבעת המקרים',
+    description: 'Gate Chain — A gate chain feeds the output of the first gate as input to the second. This is the most basic two-gate series structure, demonstrating how complex logic functions can be built by combining simple gates.',
+    instruction: 'Gate chain: G1 output feeds into G2 along with C\nFind the only gate pair that produces correct results in all four cases',
     hint: 'G1 gets (A,B), its output feeds G2 alongside C. Only one pair works for all cases.',
     truthTable: { inputs: ['A','B','C'], outputs: ['Z'], rows: [[[0,0,0],[1]],[[0,0,1],[1]],[[0,1,0],[1]],[[0,1,1],[1]],[[1,0,0],[1]],[[1,0,1],[1]],[[1,1,0],[0]],[[1,1,1],[1]]] },
     solution: {
       gatesUsed: ['NAND', 'OR'],
-      explanation: 'Gate Chain — שרשרת שערים: פלט השער הראשון מוזן כקלט לשער השני. זהו המבנה הבסיסי ביותר של שני שערים ברצף, ומדגים כיצד ניתן לבנות פונקציות לוגיות מורכבות משילוב שערים פשוטים.',
+      explanation: 'Gate Chain — A gate chain feeds the output of the first gate as input to the second. This is the most basic two-gate series structure, demonstrating how complex logic functions can be built by combining simple gates.',
       blockSvg: `<svg viewBox="0 0 440 160" width="520" height="190"><text x="12" y="52" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text><line x1="30" y1="47" x2="90" y2="47" stroke="#39ff14" stroke-width="2.5"/><text x="12" y="82" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">B</text><line x1="30" y1="77" x2="90" y2="77" stroke="#39ff14" stroke-width="2.5"/><text x="12" y="127" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">C</text><line x1="30" y1="122" x2="90" y2="122" stroke="#39ff14" stroke-width="2.5"/><rect x="90" y="25" width="240" height="115" rx="8" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/><text x="210" y="92" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="20" font-weight="bold" fill="#00d4ff">GATE CHAIN</text><line x1="330" y1="82" x2="390" y2="82" stroke="#c8d8f0" stroke-width="2.5"/><text x="398" y="87" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Z</text></svg>`,
       circuitSvg: `<svg viewBox="0 0 520 180" width="640" height="220"><text x="18" y="42" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text><text x="18" y="92" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">B</text><text x="18" y="152" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">C</text><rect x="110" y="40" width="90" height="44" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="155" y="68" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">NAND</text><rect x="290" y="70" width="80" height="44" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="330" y="98" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">OR</text><text x="455" y="97" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Z</text><line x1="36" y1="38" x2="110" y2="52" stroke="#39ff14" stroke-width="2"/><line x1="36" y1="88" x2="110" y2="74" stroke="#39ff14" stroke-width="2"/><line x1="200" y1="62" x2="290" y2="82" stroke="#39ff14" stroke-width="2"/><line x1="36" y1="148" x2="290" y2="104" stroke="#39ff14" stroke-width="2"/><line x1="370" y1="92" x2="445" y2="92" stroke="#39ff14" stroke-width="2"/></svg>`,
     },
@@ -412,13 +412,13 @@ const LEVELS = [
   {
     id: 8, name: 'FANOUT', difficulty: 'Fundamentals',
     layout: 'vertical',
-    description: 'Fanout — פיצול אות: אות A מוזן לשני שערים שונים בו-זמנית. זהו מבנה יסודי בעיצוב מעגלים — אות יחיד יכול להשפיע על מספר נתיבים במקביל, כמו אפיק נתונים שמחובר למספר רכיבים.',
-    instruction: 'פיצול אות: A מוזן לשני השערים בו-זמנית\nמצא את זוג השערים היחיד שנותן תוצאה נכונה בכל ארבעת המקרים',
+    description: 'Fanout — Signal fanout: signal A feeds two different gates simultaneously. This is a fundamental structure in circuit design — a single signal can affect multiple paths in parallel, like a data bus connected to multiple components.',
+    instruction: 'Signal fanout: A feeds both gates simultaneously\nFind the only gate pair that produces correct results in all four cases',
     hint: 'G1 gets (A,B), G2 gets (A,C). Only one pair of gates works for all four input combinations.',
     truthTable: { inputs: ['A','B','C'], outputs: ['X','Y'], rows: [[[0,0,0],[1,0]],[[0,0,1],[1,1]],[[0,1,0],[1,0]],[[0,1,1],[1,1]],[[1,0,0],[1,1]],[[1,0,1],[1,1]],[[1,1,0],[0,1]],[[1,1,1],[0,1]]] },
     solution: {
       gatesUsed: ['NAND', 'OR'],
-      explanation: 'Fanout — פיצול אות: אות A מוזן לשני שערים שונים בו-זמנית. זהו מבנה יסודי בעיצוב מעגלים — אות יחיד יכול להשפיע על מספר נתיבים במקביל, כמו אפיק נתונים שמחובר למספר רכיבים.',
+      explanation: 'Fanout — Signal fanout: signal A feeds two different gates simultaneously. This is a fundamental structure in circuit design — a single signal can affect multiple paths in parallel, like a data bus connected to multiple components.',
       blockSvg: `<svg viewBox="0 0 440 180" width="520" height="210"><text x="12" y="52" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text><line x1="30" y1="47" x2="90" y2="47" stroke="#39ff14" stroke-width="2.5"/><text x="12" y="92" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">B</text><line x1="30" y1="87" x2="90" y2="87" stroke="#39ff14" stroke-width="2.5"/><text x="12" y="137" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">C</text><line x1="30" y1="132" x2="90" y2="132" stroke="#39ff14" stroke-width="2.5"/><rect x="90" y="22" width="230" height="135" rx="8" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/><text x="205" y="98" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="22" font-weight="bold" fill="#00d4ff">FANOUT</text><line x1="320" y1="62" x2="380" y2="62" stroke="#c8d8f0" stroke-width="2.5"/><text x="388" y="67" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">X</text><line x1="320" y1="117" x2="380" y2="117" stroke="#c8d8f0" stroke-width="2.5"/><text x="388" y="122" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Y</text></svg>`,
       circuitSvg: `<svg viewBox="0 0 520 200" width="640" height="245"><text x="18" y="52" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text><text x="18" y="102" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">B</text><text x="18" y="172" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">C</text><rect x="160" y="30" width="90" height="44" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="205" y="58" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#a0c8ff">NAND</text><rect x="160" y="130" width="90" height="44" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="205" y="158" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">OR</text><text x="455" y="57" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">X</text><text x="455" y="157" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Y</text><polyline points="36,48 80,48 80,38 160,38" stroke="#39ff14" stroke-width="2" fill="none"/><line x1="36" y1="98" x2="160" y2="62" stroke="#39ff14" stroke-width="2"/><polyline points="80,48 80,138 160,138" stroke="#39ff14" stroke-width="2" fill="none"/><line x1="36" y1="168" x2="160" y2="164" stroke="#39ff14" stroke-width="2"/><line x1="250" y1="52" x2="445" y2="52" stroke="#39ff14" stroke-width="2"/><line x1="250" y1="152" x2="445" y2="152" stroke="#39ff14" stroke-width="2"/></svg>`,
     },
@@ -495,13 +495,13 @@ const LEVELS = [
   {
     id: 9, name: 'SPLIT PATH', difficulty: 'Fundamentals',
     layout: 'vertical',
-    description: 'Split Path — נתיב מפוצל: פלט G1 מתפצל לשני כיוונים — ישירות ליציאה Y ובמקביל כקלט ל-G2 שמוביל ל-X. מבנה זה משלב פיצול (fanout) עם שרשור (chaining) ומהווה גשר בין מעגלים מקביליים לרציפים.',
-    instruction: 'נתיב מפוצל: פלט G1 מתפצל — ישירות ל-Y ודרך G2 ל-X\nמצא את זוג השערים היחיד שנותן תוצאה נכונה בכל ארבעת המקרים',
+    description: 'Split Path — The output of G1 splits in two directions — directly to output Y and simultaneously as input to G2 leading to X. This structure combines fanout with chaining, bridging parallel and sequential circuits.',
+    instruction: 'Split path: G1 output splits — directly to Y and through G2 to X\nFind the only gate pair that produces correct results in all four cases',
     hint: 'First find G1 from Y targets, then find G2 knowing G1 output.',
     truthTable: { inputs: ['A','B','C'], outputs: ['X','Y'], rows: [[[0,0,0],[1,0]],[[0,0,1],[1,0]],[[0,1,0],[1,1]],[[0,1,1],[0,1]],[[1,0,0],[1,1]],[[1,0,1],[0,1]],[[1,1,0],[1,1]],[[1,1,1],[0,1]]] },
     solution: {
       gatesUsed: ['OR', 'NAND'],
-      explanation: 'Split Path — נתיב מפוצל: פלט G1 מתפצל לשני כיוונים — ישירות ליציאה Y ובמקביל כקלט ל-G2 שמוביל ל-X. מבנה זה משלב פיצול (fanout) עם שרשור (chaining) ומהווה גשר בין מעגלים מקביליים לרציפים.',
+      explanation: 'Split Path — The output of G1 splits in two directions — directly to output Y and simultaneously as input to G2 leading to X. This structure combines fanout with chaining, bridging parallel and sequential circuits.',
       blockSvg: `<svg viewBox="0 0 440 180" width="520" height="210"><text x="12" y="55" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text><line x1="30" y1="50" x2="90" y2="50" stroke="#39ff14" stroke-width="2.5"/><text x="12" y="95" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">B</text><line x1="30" y1="90" x2="90" y2="90" stroke="#39ff14" stroke-width="2.5"/><text x="12" y="140" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">C</text><line x1="30" y1="135" x2="90" y2="135" stroke="#39ff14" stroke-width="2.5"/><rect x="90" y="22" width="230" height="140" rx="8" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/><text x="205" y="80" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="18" font-weight="bold" fill="#00d4ff">SPLIT PATH</text><text x="205" y="105" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" fill="#4a6080">G1→Y, G1+C→G2→X</text><line x1="320" y1="62" x2="380" y2="62" stroke="#c8d8f0" stroke-width="2.5"/><text x="388" y="67" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">X</text><line x1="320" y1="122" x2="380" y2="122" stroke="#c8d8f0" stroke-width="2.5"/><text x="388" y="127" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Y</text></svg>`,
       circuitSvg: `<svg viewBox="0 0 540 200" width="660" height="245"><text x="18" y="52" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text><text x="18" y="112" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">B</text><text x="18" y="172" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">C</text><rect x="130" y="50" width="80" height="44" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="170" y="78" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">OR</text><rect x="310" y="80" width="90" height="44" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="355" y="108" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#a0c8ff">NAND</text><text x="478" y="107" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">X</text><text x="478" y="57" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Y</text><line x1="36" y1="48" x2="130" y2="62" stroke="#39ff14" stroke-width="2"/><line x1="36" y1="108" x2="130" y2="82" stroke="#39ff14" stroke-width="2"/><polyline points="210,72 250,72 250,52 468,52" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="250,72 250,90 310,90" stroke="#39ff14" stroke-width="2" fill="none"/><line x1="36" y1="168" x2="310" y2="114" stroke="#39ff14" stroke-width="2"/><line x1="400" y1="102" x2="468" y2="102" stroke="#39ff14" stroke-width="2"/></svg>`,
     },
@@ -579,13 +579,13 @@ const LEVELS = [
   {
     id: 10, name: 'THREE-GATE NETWORK', difficulty: 'Fundamentals',
     layout: 'vertical',
-    description: 'Three-Gate Network — רשת שלושה שערים: B מתפצל ל-G1 ול-G2, C מתפצל ל-G2 ול-G3, ופלט G1 משורשר ל-G3. מבנה זה משלב לראשונה פיצול אותות עם שרשור שערים ברשת אחת — היסוד לכל מעגל משולב מורכב.',
-    instruction: 'רשת שלושה שערים: פיצול ושרשור משולבים לראשונה\nמצא את שלושת השערים שנותנים תוצאה נכונה בכל ארבעת המקרים',
+    description: 'Three-Gate Network — B fans out to G1 and G2, C fans out to G2 and G3, and G1 output chains into G3. This structure combines signal fanout with gate chaining in a single network for the first time — the foundation of any complex combinational circuit.',
+    instruction: 'Three-gate network: fanout and chaining combined for the first time\nFind the three gates that produce correct results in all four cases',
     hint: 'B fans to G1 and G2. C fans to G2 and G3. G1 chains to G3. Only one triple works.',
     truthTable: { inputs: ['A','B','C'], outputs: ['P','Q'], rows: [[[0,0,0],[0,0]],[[0,0,1],[0,1]],[[0,1,0],[0,1]],[[0,1,1],[1,1]],[[1,0,0],[0,0]],[[1,0,1],[1,1]],[[1,1,0],[0,1]],[[1,1,1],[1,1]]] },
     solution: {
       gatesUsed: ['OR', 'OR', 'AND'],
-      explanation: 'Three-Gate Network — רשת שלושה שערים: B מתפצל ל-G1 ול-G2, C מתפצל ל-G2 ול-G3, ופלט G1 משורשר ל-G3. מבנה זה משלב לראשונה פיצול אותות עם שרשור שערים ברשת אחת — היסוד לכל מעגל משולב מורכב.',
+      explanation: 'Three-Gate Network — B fans out to G1 and G2, C fans out to G2 and G3, and G1 output chains into G3. This structure combines signal fanout with gate chaining in a single network for the first time — the foundation of any complex combinational circuit.',
       blockSvg: `<svg viewBox="0 0 440 180" width="520" height="210"><text x="12" y="55" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text><line x1="30" y1="50" x2="90" y2="50" stroke="#39ff14" stroke-width="2.5"/><text x="12" y="95" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">B</text><line x1="30" y1="90" x2="90" y2="90" stroke="#39ff14" stroke-width="2.5"/><text x="12" y="140" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">C</text><line x1="30" y1="135" x2="90" y2="135" stroke="#39ff14" stroke-width="2.5"/><rect x="90" y="22" width="230" height="140" rx="8" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/><text x="205" y="80" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#00d4ff">THREE-GATE</text><text x="205" y="105" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#00d4ff">NETWORK</text><line x1="320" y1="62" x2="380" y2="62" stroke="#c8d8f0" stroke-width="2.5"/><text x="388" y="67" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">P</text><line x1="320" y1="122" x2="380" y2="122" stroke="#c8d8f0" stroke-width="2.5"/><text x="388" y="127" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Q</text></svg>`,
       circuitSvg: `<svg viewBox="0 0 580 220" width="700" height="270"><text x="12" y="42" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text><text x="12" y="112" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">B</text><text x="12" y="192" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">C</text><rect x="130" y="22" width="80" height="44" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="170" y="50" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">OR</text><rect x="130" y="132" width="80" height="44" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="170" y="160" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">OR</text><rect x="310" y="52" width="80" height="44" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="350" y="80" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">AND</text><text x="510" y="79" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">P</text><text x="510" y="159" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Q</text><line x1="30" y1="38" x2="130" y2="34" stroke="#39ff14" stroke-width="2"/><polyline points="30,108 80,108 80,54 130,54" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="80,108 80,142 130,142" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="30,188 100,188 100,164 130,164" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="210,44 260,44 260,62 310,62" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="100,188 100,86 310,86" stroke="#39ff14" stroke-width="2" fill="none"/><line x1="390" y1="74" x2="500" y2="74" stroke="#39ff14" stroke-width="2"/><line x1="210" y1="154" x2="500" y2="154" stroke="#39ff14" stroke-width="2"/></svg>`,
     },
@@ -679,13 +679,13 @@ const LEVELS = [
   {
     id: 11, name: 'XNOR GATE', difficulty: 'Building Blocks',
     layout: 'vertical',
-    description: 'XNOR Gate — שער XNOR מוציא 1 כאשר שתי הכניסות שוות (שתיהן 0 או שתיהן 1). הוא בנוי משרשרת XOR ואחריו NOT. משמש במעגלי השוואה ובדיקת שוויון ביטים.',
-    instruction: 'XNOR: הראשון מעבד את הקלטים והשני הופך את התוצאה\nמצא את שני השערים שנותנים תוצאה נכונה בכל ארבעת המקרים',
+    description: 'XNOR Gate — The XNOR gate outputs 1 when both inputs are equal (both 0 or both 1). It is built by chaining XOR followed by NOT. Used in comparison circuits and bit equality checking.',
+    instruction: 'XNOR: the first gate processes the inputs, the second inverts the result\nFind the two gates that produce the correct output for all four cases',
     hint: 'XNOR is just XOR followed by NOT. Two gate slots chained.',
     truthTable: { inputs: ['A','B'], outputs: ['Z'], rows: [[[0,0],[1]],[[0,1],[0]],[[1,0],[0]],[[1,1],[1]]] },
     solution: {
       gatesUsed: ['XOR', 'NOT'],
-      explanation: 'XNOR Gate — שער XNOR מוציא 1 כאשר שתי הכניסות שוות (שתיהן 0 או שתיהן 1). הוא בנוי משרשרת XOR ואחריו NOT. משמש במעגלי השוואה ובדיקת שוויון ביטים.',
+      explanation: 'XNOR Gate — The XNOR gate outputs 1 when both inputs are equal (both 0 or both 1). It is built by chaining XOR followed by NOT. Used in comparison circuits and bit equality checking.',
       blockSvg: `<svg viewBox="0 0 380 160" width="460" height="195"><text x="12" y="55" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text><line x1="30" y1="50" x2="95" y2="50" stroke="#39ff14" stroke-width="2.5"/><text x="12" y="110" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">B</text><line x1="30" y1="105" x2="95" y2="105" stroke="#39ff14" stroke-width="2.5"/><rect x="95" y="25" width="180" height="110" rx="8" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/><text x="185" y="88" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="26" font-weight="bold" fill="#00d4ff">XNOR</text><line x1="275" y1="80" x2="340" y2="80" stroke="#c8d8f0" stroke-width="2.5"/><text x="348" y="85" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Z</text></svg>`,
       circuitSvg: `<svg viewBox="0 0 480 170" width="580" height="205"><text x="18" y="52" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text><text x="18" y="132" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">B</text><rect x="120" y="50" width="90" height="44" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="165" y="78" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">XOR</text><rect x="290" y="55" width="80" height="40" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="330" y="81" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">NOT</text><text x="435" y="80" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Z</text><line x1="36" y1="48" x2="120" y2="62" stroke="#39ff14" stroke-width="2"/><line x1="36" y1="128" x2="120" y2="84" stroke="#39ff14" stroke-width="2"/><line x1="210" y1="72" x2="290" y2="75" stroke="#39ff14" stroke-width="2"/><line x1="370" y1="75" x2="425" y2="75" stroke="#39ff14" stroke-width="2"/></svg>`,
     },
@@ -749,13 +749,13 @@ const LEVELS = [
   {
     id: 12, name: 'HALF ADDER', difficulty: 'Building Blocks',
     layout: 'vertical',
-    description: 'Half Adder — חצי-מחבר הוא מעגל החיבור הפשוט ביותר. הוא מחבר שני ביטים בודדים: XOR מחשב את הסכום (SUM) ו-AND מחשב את הנשא (CARRY). זהו אבן הבניין של המחבר המלא.',
-    instruction: 'חצי-מחבר: אחד מחשב סכום ואחד מחשב נשא\nמצא את שני השערים שנותנים תוצאה נכונה בכל ארבעת המקרים',
+    description: 'Half Adder — The half adder is the simplest addition circuit. It adds two single bits: XOR computes the SUM and AND computes the CARRY. It is the building block of the full adder.',
+    instruction: 'Half adder: one gate computes the sum, the other computes the carry\nFind the two gates that produce the correct output for all four cases',
     hint: 'SUM uses XOR (adds without carry), CARRY uses AND (carry only when both are 1).',
     truthTable: { inputs: ['A','B'], outputs: ['SUM','CARRY'], rows: [[[0,0],[0,0]],[[0,1],[1,0]],[[1,0],[1,0]],[[1,1],[0,1]]] },
     solution: {
       gatesUsed: ['XOR', 'AND'],
-      explanation: 'Half Adder — חצי-מחבר הוא מעגל החיבור הפשוט ביותר. הוא מחבר שני ביטים בודדים: XOR מחשב את הסכום (SUM) ו-AND מחשב את הנשא (CARRY). זהו אבן הבניין של המחבר המלא.',
+      explanation: 'Half Adder — The half adder is the simplest addition circuit. It adds two single bits: XOR computes the SUM and AND computes the CARRY. It is the building block of the full adder.',
       blockSvg: `<svg viewBox="0 0 400 160" width="480" height="195"><text x="12" y="55" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text><line x1="30" y1="50" x2="90" y2="50" stroke="#39ff14" stroke-width="2.5"/><text x="12" y="110" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">B</text><line x1="30" y1="105" x2="90" y2="105" stroke="#39ff14" stroke-width="2.5"/><rect x="90" y="25" width="200" height="110" rx="8" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/><text x="190" y="88" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="26" font-weight="bold" fill="#00d4ff">H.A.</text><line x1="290" y1="55" x2="345" y2="55" stroke="#c8d8f0" stroke-width="2.5"/><text x="352" y="60" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">SUM</text><line x1="290" y1="105" x2="345" y2="105" stroke="#c8d8f0" stroke-width="2.5"/><text x="352" y="110" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#c8d8f0">CARRY</text></svg>`,
       circuitSvg: `<svg viewBox="0 0 480 190" width="580" height="230"><text x="18" y="52" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text><text x="18" y="152" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">B</text><rect x="150" y="30" width="90" height="44" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="195" y="58" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">XOR</text><rect x="150" y="120" width="90" height="44" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="195" y="148" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">AND</text><text x="390" y="57" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">SUM</text><text x="390" y="147" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#c8d8f0">CARRY</text><polyline points="36,48 80,48 80,40 150,40" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="80,48 80,130 150,130" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="36,148 100,148 100,62 150,62" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="100,148 100,152 150,152" stroke="#39ff14" stroke-width="2" fill="none"/><line x1="240" y1="52" x2="380" y2="52" stroke="#39ff14" stroke-width="2"/><line x1="240" y1="142" x2="380" y2="142" stroke="#39ff14" stroke-width="2"/></svg>`,
     },
@@ -828,13 +828,13 @@ const LEVELS = [
   {
     id: 13, name: '3-BIT ODD PARITY', difficulty: 'Building Blocks',
     layout: 'vertical',
-    description: 'Odd Parity — בדיקת זוגיות אי-זוגית: שרשרת שערי XOR סופרת האם מספר הכניסות הדולקות הוא אי-זוגי. משמש בגילוי שגיאות בתקשורת נתונים ובזיכרונות.',
-    instruction: 'זוגיות אי-זוגית: P דולק כשמספר אי-זוגי של כניסות דולק\nמצא את שני השערים שנותנים P נכון בכל ארבעת המקרים',
+    description: 'Odd Parity — A chain of XOR gates counts whether the number of active inputs is odd. Used for error detection in data communication and memory systems.',
+    instruction: 'Odd parity: P is active when an odd number of inputs are active\nFind the two gates that produce the correct P for all four cases',
     hint: 'Parity is always a chain of XOR gates: XOR(XOR(A,B),C). Each XOR accumulates the "odd count" flag.',
     truthTable: { inputs: ['A','B','C'], outputs: ['P'], rows: [[[0,0,0],[0]],[[0,0,1],[1]],[[0,1,0],[1]],[[0,1,1],[0]],[[1,0,0],[1]],[[1,0,1],[0]],[[1,1,0],[0]],[[1,1,1],[1]]] },
     solution: {
       gatesUsed: ['XOR', 'XOR'],
-      explanation: 'Odd Parity — בדיקת זוגיות אי-זוגית: שרשרת שערי XOR סופרת האם מספר הכניסות הדולקות הוא אי-זוגי. משמש בגילוי שגיאות בתקשורת נתונים ובזיכרונות.',
+      explanation: 'Odd Parity — A chain of XOR gates counts whether the number of active inputs is odd. Used for error detection in data communication and memory systems.',
       blockSvg: `<svg viewBox="0 0 440 180" width="520" height="215"><text x="12" y="52" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text><line x1="28" y1="47" x2="90" y2="47" stroke="#39ff14" stroke-width="2.5"/><text x="12" y="92" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">B</text><line x1="28" y1="87" x2="90" y2="87" stroke="#39ff14" stroke-width="2.5"/><text x="12" y="137" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">C</text><line x1="28" y1="132" x2="90" y2="132" stroke="#39ff14" stroke-width="2.5"/><rect x="90" y="22" width="230" height="135" rx="8" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/><text x="205" y="98" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="20" font-weight="bold" fill="#00d4ff">ODD PARITY</text><line x1="320" y1="90" x2="385" y2="90" stroke="#c8d8f0" stroke-width="2.5"/><text x="393" y="95" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">P</text></svg>`,
       circuitSvg: `<svg viewBox="0 0 520 180" width="640" height="220"><text x="18" y="42" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text><text x="18" y="102" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">B</text><text x="18" y="152" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">C</text><rect x="120" y="40" width="90" height="44" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="165" y="68" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">XOR</text><rect x="300" y="70" width="90" height="44" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="345" y="98" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">XOR</text><text x="460" y="97" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">P</text><line x1="36" y1="38" x2="120" y2="52" stroke="#39ff14" stroke-width="2"/><line x1="36" y1="98" x2="120" y2="74" stroke="#39ff14" stroke-width="2"/><line x1="210" y1="62" x2="300" y2="82" stroke="#39ff14" stroke-width="2"/><line x1="36" y1="148" x2="300" y2="104" stroke="#39ff14" stroke-width="2"/><line x1="390" y1="92" x2="450" y2="92" stroke="#39ff14" stroke-width="2"/></svg>`,
     },
@@ -900,9 +900,9 @@ const LEVELS = [
   // B2=1,B1=1,B0=0 → G2=B2=1 (direct), G1=XOR(1,1)=0, G0=XOR(1,0)=1
   {
     id: 14, name: 'BINARY TO GRAY CODE', difficulty: 'Building Blocks',
-    description: 'Binary to Gray Code — המרה מבינארי לקוד גריי. בקוד גריי, שני מספרים עוקבים שונים רק בביט אחד. G2=B2 (עובר ישירות), G1=B2⊕B1, G0=B1⊕B0.',
-    instruction: 'המר בינארי לקוד גריי: G2 עובר ישיר, G1 ו-G0 דרך שערים\nמצא את שני השערים שנותנים תוצאה נכונה',
-    hint: 'G2=B2 ישירות. G1=XOR(B2,B1). G0=XOR(B1,B0). שני שערים מאותו סוג.',
+    description: 'Binary to Gray Code — Conversion from binary to Gray code. In Gray code, two consecutive numbers differ by only one bit. G2=B2 (passed directly), G1=B2 XOR B1, G0=B1 XOR B0.',
+    instruction: 'Convert binary to Gray code: G2 passes directly, G1 and G0 go through gates\nFind the two gates that produce the correct output',
+    hint: 'G2=B2 directly. G1=XOR(B2,B1). G0=XOR(B1,B0). Both gates are the same type.',
     truthTable: {
       inputs: ['B2','B1','B0'], outputs: ['G2','G1','G0'],
       rows: [
@@ -912,7 +912,7 @@ const LEVELS = [
     },
     solution: {
       gatesUsed: ['XOR', 'XOR'],
-      explanation: 'Binary to Gray Code — המרה מבינארי לקוד גריי באמצעות XOR בין ביטים סמוכים. קוד גריי משמש בתקשורת ובחיישנים כי שגיאות מוגבלות לביט אחד. הנוסחה: Gi = Bi+1 ⊕ Bi, כאשר הביט העליון עובר ישירות.',
+      explanation: 'Binary to Gray Code — Conversion from binary to Gray code using XOR between adjacent bits. Gray code is used in communication and sensors because errors are limited to one bit. Formula: Gi = Bi+1 XOR Bi, where the MSB passes directly.',
       blockSvg: `<svg viewBox="0 0 380 180" width="460" height="220">
         <text x="12" y="47" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#39ff14">B2</text><line x1="38" y1="42" x2="90" y2="42" stroke="#39ff14" stroke-width="2.5"/>
         <text x="12" y="92" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#39ff14">B1</text><line x1="38" y1="87" x2="90" y2="87" stroke="#39ff14" stroke-width="2.5"/>
@@ -988,9 +988,9 @@ const LEVELS = [
   // G2=1,G1=0,G0=1 → B2=G2=1, B1=XOR(G2,G1)=XOR(1,0)=1, B0=XOR(B1,G0)=XOR(1,1)=0
   {
     id: 15, name: 'GRAY TO BINARY', difficulty: 'Building Blocks',
-    description: 'Gray to Binary — ההמרה ההפוכה: מקוד גריי חזרה לבינארי. B2=G2 (ישירות), B1=G2⊕G1, B0=B1⊕G0. שים לב: B0 תלוי ב-B1 המחושב, לא ב-G1 — זו שרשרת (cascade).',
-    instruction: 'המר קוד גריי לבינארי: B2 ישיר, B1 ו-B0 דרך שערים\nמצא את שני השערים — שים לב ש-B0 תלוי ב-B1 המחושב',
-    hint: 'B2=G2 ישירות. B1=XOR(G2,G1). B0=XOR(B1,G0) — B0 מקבל את B1 שחושב בשער הקודם.',
+    description: 'Gray to Binary — The reverse conversion: from Gray code back to binary. B2=G2 (directly), B1=G2 XOR G1, B0=B1 XOR G0. Note: B0 depends on the computed B1, not on G1 — this is a cascade.',
+    instruction: 'Convert Gray code to binary: B2 is direct, B1 and B0 go through gates\nFind the two gates — note that B0 depends on the computed B1',
+    hint: 'B2=G2 directly. B1=XOR(G2,G1). B0=XOR(B1,G0) — B0 receives B1 computed by the previous gate.',
     truthTable: {
       inputs: ['G2','G1','G0'], outputs: ['B2','B1','B0'],
       rows: [
@@ -1000,7 +1000,7 @@ const LEVELS = [
     },
     solution: {
       gatesUsed: ['XOR', 'XOR'],
-      explanation: 'Gray to Binary — ההמרה ההפוכה מקוד גריי לבינארי. הנוסחה: Bi = Bi+1 ⊕ Gi (כאשר Bn=Gn). בשונה מההמרה לגריי, כאן יש תלות שרשרתית — B0 תלוי ב-B1 המחושב. זו דוגמה לנתיב קריטי במעגלים.',
+      explanation: 'Gray to Binary — The reverse conversion from Gray code to binary. Formula: Bi = Bi+1 XOR Gi (where Bn=Gn). Unlike binary-to-Gray, this has a cascade dependency — B0 depends on the computed B1. This is an example of a critical path in circuits.',
       blockSvg: `<svg viewBox="0 0 380 180" width="460" height="220">
         <text x="12" y="47" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#39ff14">G2</text><line x1="38" y1="42" x2="90" y2="42" stroke="#39ff14" stroke-width="2.5"/>
         <text x="12" y="92" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#39ff14">G1</text><line x1="38" y1="87" x2="90" y2="87" stroke="#39ff14" stroke-width="2.5"/>
@@ -1088,8 +1088,8 @@ const LEVELS = [
   {
     id: 16, name: '2:1 MUX', difficulty: 'Building Blocks',
     layout: 'vertical',
-    description: '2:1 MUX — מרבב (Multiplexer) הוא בורר נתונים: קו הבחירה S קובע איזו כניסה (D0 או D1) תועבר ליציאה Y. מרבבים הם רכיבים מרכזיים בניתוב נתונים במעבדים ובזיכרונות.',
-    instruction: 'מרבב 2:1: S בוחר בין D0 ל-D1\nמצא את ארבעת השערים שנותנים Y נכון בכל ארבעת המקרים',
+    description: '2:1 MUX — A multiplexer is a data selector: the select line S determines which input (D0 or D1) is passed to output Y. Multiplexers are key components for data routing in processors and memories.',
+    instruction: '2:1 MUX: S selects between D0 and D1\nFind the four gates that produce the correct Y for all four cases',
     hint: 'Standard MUX: NOT the select, AND with each data path, then OR the results. Four gate slots.',
     truthTable: {
       inputs:  ['D0', 'D1', 'S'],
@@ -1107,7 +1107,7 @@ const LEVELS = [
     },
     solution: {
       gatesUsed: ['NOT', 'AND', 'AND', 'OR'],
-      explanation: '2:1 MUX — מרבב (Multiplexer) הוא בורר נתונים: קו הבחירה S קובע איזו כניסה (D0 או D1) תועבר ליציאה Y. מרבבים הם רכיבים מרכזיים בניתוב נתונים במעבדים ובזיכרונות.',
+      explanation: '2:1 MUX — A multiplexer is a data selector: the select line S determines which input (D0 or D1) is passed to output Y. Multiplexers are key components for data routing in processors and memories.',
       blockSvg: `<svg viewBox="0 0 400 190" width="480" height="230"><text x="12" y="55" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#39ff14">D0</text><line x1="38" y1="50" x2="95" y2="50" stroke="#39ff14" stroke-width="2.5"/><text x="12" y="100" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#39ff14">D1</text><line x1="38" y1="95" x2="95" y2="95" stroke="#39ff14" stroke-width="2.5"/><text x="175" y="16" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#39ff14">S</text><line x1="175" y1="22" x2="175" y2="45" stroke="#39ff14" stroke-width="2.5"/><rect x="95" y="25" width="195" height="130" rx="8" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/><text x="192" y="100" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="24" font-weight="bold" fill="#00d4ff">MUX</text><line x1="290" y1="90" x2="350" y2="90" stroke="#c8d8f0" stroke-width="2.5"/><text x="358" y="95" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Y</text></svg>`,
       circuitSvg: `<svg viewBox="0 0 560 220" width="680" height="270"><text x="12" y="42" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#39ff14">D0</text><text x="12" y="122" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#39ff14">S</text><text x="12" y="192" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#39ff14">D1</text><rect x="140" y="100" width="80" height="36" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="180" y="124" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#a0c8ff">NOT</text><rect x="280" y="22" width="80" height="36" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="320" y="46" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#a0c8ff">AND</text><rect x="280" y="152" width="80" height="36" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="320" y="176" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#a0c8ff">AND</text><rect x="420" y="90" width="70" height="36" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="455" y="114" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#a0c8ff">OR</text><text x="525" y="113" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Y</text><line x1="40" y1="38" x2="280" y2="30" stroke="#39ff14" stroke-width="2"/><polyline points="40,118 100,118 140,118" stroke="#39ff14" stroke-width="2" fill="none"/><line x1="220" y1="118" x2="280" y2="50" stroke="#39ff14" stroke-width="2"/><polyline points="100,118 100,162 280,162" stroke="#39ff14" stroke-width="2" fill="none"/><line x1="40" y1="188" x2="280" y2="180" stroke="#39ff14" stroke-width="2"/><line x1="360" y1="40" x2="420" y2="100" stroke="#39ff14" stroke-width="2"/><line x1="360" y1="170" x2="420" y2="118" stroke="#39ff14" stroke-width="2"/><line x1="490" y1="108" x2="518" y2="108" stroke="#39ff14" stroke-width="2"/></svg>`,
     },
@@ -1196,13 +1196,13 @@ const LEVELS = [
   {
     id: 17, name: '1:2 DEMUX', difficulty: 'Building Blocks',
     layout: 'vertical',
-    description: '1:2 DEMUX — דה-מרבב הוא ההפך ממרבב: הוא מנתב כניסה יחידה D לאחת משתי יציאות (Y0 או Y1) לפי קו הבחירה S. משמש בפיענוח כתובות ובניתוב אותות בזיכרונות.',
-    instruction: 'דה-מרבב 1:2: מנתב את D ל-Y0 או ל-Y1 לפי S\nמצא את שלושת השערים שנותנים תוצאה נכונה בכל ארבעת המקרים',
+    description: '1:2 DEMUX — A demultiplexer is the opposite of a multiplexer: it routes a single input D to one of two outputs (Y0 or Y1) based on the select line S. Used in address decoding and signal routing in memories.',
+    instruction: '1:2 DEMUX: routes D to Y0 or Y1 based on S\nFind the three gates that produce the correct output for all four cases',
     hint: 'Invert S, then AND D with !S for Y0, AND D with S for Y1. Three gate slots.',
     truthTable: { inputs: ['D','S'], outputs: ['Y0','Y1'], rows: [[[0,0],[0,0]],[[0,1],[0,0]],[[1,0],[1,0]],[[1,1],[0,1]]] },
     solution: {
       gatesUsed: ['NOT', 'AND', 'AND'],
-      explanation: '1:2 DEMUX — דה-מרבב הוא ההפך ממרבב: הוא מנתב כניסה יחידה D לאחת משתי יציאות (Y0 או Y1) לפי קו הבחירה S. משמש בפיענוח כתובות ובניתוב אותות בזיכרונות.',
+      explanation: '1:2 DEMUX — A demultiplexer is the opposite of a multiplexer: it routes a single input D to one of two outputs (Y0 or Y1) based on the select line S. Used in address decoding and signal routing in memories.',
       blockSvg: `<svg viewBox="0 0 420 180" width="500" height="215"><text x="12" y="70" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">D</text><line x1="28" y1="65" x2="95" y2="65" stroke="#39ff14" stroke-width="2.5"/><text x="180" y="16" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">S</text><line x1="180" y1="22" x2="180" y2="40" stroke="#39ff14" stroke-width="2.5"/><rect x="95" y="25" width="195" height="130" rx="8" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/><text x="192" y="100" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="22" font-weight="bold" fill="#00d4ff">DEMUX</text><line x1="290" y1="60" x2="355" y2="60" stroke="#c8d8f0" stroke-width="2.5"/><text x="362" y="65" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#c8d8f0">Y0</text><line x1="290" y1="120" x2="355" y2="120" stroke="#c8d8f0" stroke-width="2.5"/><text x="362" y="125" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#c8d8f0">Y1</text></svg>`,
       circuitSvg: `<svg viewBox="0 0 480 200" width="580" height="245"><text x="12" y="62" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">D</text><text x="12" y="152" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">S</text><rect x="130" y="130" width="80" height="36" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="170" y="154" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#a0c8ff">NOT</text><rect x="280" y="32" width="80" height="36" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="320" y="56" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#a0c8ff">AND</text><rect x="280" y="122" width="80" height="36" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="320" y="146" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#a0c8ff">AND</text><text x="420" y="55" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#c8d8f0">Y0</text><text x="420" y="145" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#c8d8f0">Y1</text><polyline points="30,58 70,58 70,40 280,40" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="70,58 70,130 280,130" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="30,148 130,148" stroke="#39ff14" stroke-width="2" fill="none"/><line x1="210" y1="148" x2="280" y2="60" stroke="#39ff14" stroke-width="2"/><polyline points="100,148 100,150 280,150" stroke="#39ff14" stroke-width="2" fill="none"/><line x1="360" y1="50" x2="410" y2="50" stroke="#39ff14" stroke-width="2"/><line x1="360" y1="140" x2="410" y2="140" stroke="#39ff14" stroke-width="2"/></svg>`,
     },
@@ -1283,8 +1283,8 @@ const LEVELS = [
   {
     id: 18, name: 'CARRY GEN / PROP', difficulty: 'Building Blocks',
     layout: 'vertical',
-    description: 'Carry Generate/Propagate — יסודות Carry Lookahead: G=A·B (נשא נוצר) ו-P=A⊕B (נשא מתפשט). חישוב G ו-P לכל ביט מאפשר חיזוי מהיר של הנשא במקום לחכות לשרשרת — זה מה שהופך מעבדים מודרניים למהירים.',
-    instruction: 'נשא נוצר/מתפשט: G=AND, P=XOR לכל ביט\nמצא את ארבעת השערים שנותנים תוצאה נכונה בשני המקרים',
+    description: 'Carry Generate/Propagate — Carry Lookahead fundamentals: G=A AND B (carry generated) and P=A XOR B (carry propagated). Computing G and P per bit enables fast carry prediction instead of waiting for the ripple chain — this is what makes modern processors fast.',
+    instruction: 'Carry generate/propagate: G=AND, P=XOR for each bit\nFind the four gates that produce the correct output for both cases',
     hint: 'G (Generate) = AND. P (Propagate) = XOR. Same gate type for both bit positions.',
     truthTable: {
       inputs: ['A','B'], outputs: ['G','P'],
@@ -1292,7 +1292,7 @@ const LEVELS = [
     },
     solution: {
       gatesUsed: ['AND', 'XOR', 'AND', 'XOR'],
-      explanation: 'Carry Generate/Propagate — יסודות Carry Lookahead: G=A·B (נשא נוצר) ו-P=A⊕B (נשא מתפשט). חישוב G ו-P לכל ביט מאפשר חיזוי מהיר של הנשא במקום לחכות לשרשרת — זה מה שהופך מעבדים מודרניים למהירים.',
+      explanation: 'Carry Generate/Propagate — Carry Lookahead fundamentals: G=A AND B (carry generated) and P=A XOR B (carry propagated). Computing G and P per bit enables fast carry prediction instead of waiting for the ripple chain — this is what makes modern processors fast.',
       blockSvg: `<svg viewBox="0 0 460 200" width="540" height="235"><text x="12" y="52" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#39ff14">A1</text><line x1="38" y1="47" x2="90" y2="47" stroke="#39ff14" stroke-width="2.5"/><text x="12" y="82" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#39ff14">B1</text><line x1="38" y1="77" x2="90" y2="77" stroke="#39ff14" stroke-width="2.5"/><text x="12" y="122" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#39ff14">A0</text><line x1="38" y1="117" x2="90" y2="117" stroke="#39ff14" stroke-width="2.5"/><text x="12" y="157" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#39ff14">B0</text><line x1="38" y1="152" x2="90" y2="152" stroke="#39ff14" stroke-width="2.5"/><rect x="90" y="20" width="240" height="162" rx="8" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/><text x="210" y="85" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#00d4ff">CARRY GEN</text><text x="210" y="112" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#00d4ff">/ PROP</text><line x1="330" y1="45" x2="390" y2="45" stroke="#c8d8f0" stroke-width="2.5"/><text x="398" y="50" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">G1</text><line x1="330" y1="80" x2="390" y2="80" stroke="#c8d8f0" stroke-width="2.5"/><text x="398" y="85" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">P1</text><line x1="330" y1="120" x2="390" y2="120" stroke="#c8d8f0" stroke-width="2.5"/><text x="398" y="125" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">G0</text><line x1="330" y1="155" x2="390" y2="155" stroke="#c8d8f0" stroke-width="2.5"/><text x="398" y="160" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">P0</text></svg>`,
       circuitSvg: `<svg viewBox="0 0 520 260" width="640" height="320"><text x="12" y="42" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#39ff14">A1</text><text x="12" y="82" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#39ff14">B1</text><text x="12" y="172" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#39ff14">A0</text><text x="12" y="212" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#39ff14">B0</text><rect x="170" y="22" width="80" height="36" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="210" y="46" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#a0c8ff">AND</text><rect x="170" y="76" width="80" height="36" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="210" y="100" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#a0c8ff">XOR</text><rect x="170" y="152" width="80" height="36" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="210" y="176" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#a0c8ff">AND</text><rect x="170" y="206" width="80" height="36" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="210" y="230" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#a0c8ff">XOR</text><text x="420" y="46" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">G1</text><text x="420" y="100" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">P1</text><text x="420" y="176" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">G0</text><text x="420" y="230" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">P0</text><polyline points="38,38 80,38 80,30 170,30" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="80,38 80,84 170,84" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="38,78 100,78 100,50 170,50" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="100,78 100,104 170,104" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="38,168 80,168 80,160 170,160" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="80,168 80,214 170,214" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="38,208 100,208 100,180 170,180" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="100,208 100,234 170,234" stroke="#39ff14" stroke-width="2" fill="none"/><line x1="250" y1="40" x2="410" y2="40" stroke="#39ff14" stroke-width="2"/><line x1="250" y1="94" x2="410" y2="94" stroke="#39ff14" stroke-width="2"/><line x1="250" y1="170" x2="410" y2="170" stroke="#39ff14" stroke-width="2"/><line x1="250" y1="224" x2="410" y2="224" stroke="#39ff14" stroke-width="2"/></svg>`,
     },
@@ -1362,8 +1362,8 @@ const LEVELS = [
   {
     id: 19, name: '4-BIT EVEN PARITY', difficulty: 'Building Blocks',
     layout: 'vertical',
-    description: '4-Bit Even Parity — בדיקת זוגיות ל-4 ביטים: שרשרת של 3 שערי XOR סופרת האם מספר הביטים הדולקים הוא אי-זוגי. משמש בגילוי שגיאות בתקשורת, בזיכרונות RAM ובאפיקי נתונים.',
-    instruction: 'זוגיות 4-ביט: P דולק כשמספר אי-זוגי של כניסות דולק\nמצא את שלושת השערים שנותנים תוצאה נכונה בכל ארבעת המקרים',
+    description: '4-Bit Even Parity — A chain of 3 XOR gates counts whether the number of active bits is odd. Used for error detection in communication, RAM, and data buses.',
+    instruction: '4-bit parity: P is active when an odd number of inputs are active\nFind the three gates that produce the correct output for all four cases',
     hint: 'Chain three identical gates: gate(A,B) → gate(result,C) → gate(result,D) → P.',
     truthTable: {
       inputs: ['A','B','C','D'], outputs: ['P'],
@@ -1376,7 +1376,7 @@ const LEVELS = [
     },
     solution: {
       gatesUsed: ['XOR', 'XOR', 'XOR'],
-      explanation: '4-Bit Even Parity — בדיקת זוגיות ל-4 ביטים: שרשרת של 3 שערי XOR סופרת האם מספר הביטים הדולקים הוא אי-זוגי. משמש בגילוי שגיאות בתקשורת, בזיכרונות RAM ובאפיקי נתונים.',
+      explanation: '4-Bit Even Parity — A chain of 3 XOR gates counts whether the number of active bits is odd. Used for error detection in communication, RAM, and data buses.',
       blockSvg: `<svg viewBox="0 0 460 200" width="540" height="235"><text x="12" y="42" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text><line x1="28" y1="37" x2="90" y2="37" stroke="#39ff14" stroke-width="2.5"/><text x="12" y="72" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">B</text><line x1="28" y1="67" x2="90" y2="67" stroke="#39ff14" stroke-width="2.5"/><text x="12" y="112" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">C</text><line x1="28" y1="107" x2="90" y2="107" stroke="#39ff14" stroke-width="2.5"/><text x="12" y="152" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">D</text><line x1="28" y1="147" x2="90" y2="147" stroke="#39ff14" stroke-width="2.5"/><rect x="90" y="15" width="240" height="160" rx="8" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/><text x="210" y="85" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="18" font-weight="bold" fill="#00d4ff">EVEN PARITY</text><text x="210" y="112" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" fill="#4a6080">4-bit</text><line x1="330" y1="95" x2="395" y2="95" stroke="#c8d8f0" stroke-width="2.5"/><text x="403" y="100" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">P</text></svg>`,
       circuitSvg: `<svg viewBox="0 0 560 200" width="680" height="245"><text x="18" y="42" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text><text x="18" y="102" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">B</text><text x="18" y="142" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">C</text><text x="18" y="182" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">D</text><rect x="120" y="42" width="80" height="40" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="160" y="68" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">XOR</text><rect x="270" y="72" width="80" height="40" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="310" y="98" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">XOR</text><rect x="420" y="102" width="80" height="40" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="460" y="128" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">XOR</text><text x="530" y="127" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">P</text><line x1="36" y1="38" x2="120" y2="52" stroke="#39ff14" stroke-width="2"/><line x1="36" y1="98" x2="120" y2="72" stroke="#39ff14" stroke-width="2"/><line x1="200" y1="62" x2="270" y2="82" stroke="#39ff14" stroke-width="2"/><line x1="36" y1="138" x2="270" y2="102" stroke="#39ff14" stroke-width="2"/><line x1="350" y1="92" x2="420" y2="112" stroke="#39ff14" stroke-width="2"/><line x1="36" y1="178" x2="420" y2="132" stroke="#39ff14" stroke-width="2"/><line x1="500" y1="122" x2="522" y2="122" stroke="#39ff14" stroke-width="2"/></svg>`,
     },
@@ -1459,9 +1459,9 @@ const LEVELS = [
   // (I3=1 → highest priority → code=11 binary)
   {
     id: 20, name: '4-TO-2 PRIORITY ENCODER', difficulty: 'Building Blocks',
-    description: '4-to-2 Priority Encoder — מקודד עדיפויות: מזהה את הכניסה הפעילה בעלת העדיפות הגבוהה ביותר (I3=גבוהה) ומפיק את הקוד הבינארי שלה. VALID=1 אם יש כניסה פעילה כלשהי.',
-    instruction: 'מקודד עדיפויות: כל 5 השערים מאותו סוג\nמצא את השער שנותן תוצאה נכונה בשני המקרים',
-    hint: 'VALID = OR על כל הכניסות (שני שלבים). Y1 = I2 OR I3. Y0 = I1 OR I3. כל השערים OR.',
+    description: '4-to-2 Priority Encoder — Identifies the highest-priority active input (I3=highest) and produces its binary code. VALID=1 if any input is active.',
+    instruction: 'Priority encoder: all 5 gates are the same type\nFind the gate that produces the correct output for both cases',
+    hint: 'VALID = OR of all inputs (two stages). Y1 = I2 OR I3. Y0 = I1 OR I3. All gates are OR.',
     truthTable: {
       inputs: ['I3','I2','I1','I0'], outputs: ['VALID','Y1','Y0'],
       rows: [
@@ -1473,7 +1473,7 @@ const LEVELS = [
     },
     solution: {
       gatesUsed: ['OR', 'OR', 'OR', 'OR', 'OR'],
-      explanation: '4-to-2 Priority Encoder — מקודד עדיפויות: OR(I0,I1) ו-OR(I2,I3) מוזנים ל-OR שלישי ליצירת VALID. Y1=OR(I2,I3) ו-Y0=OR(I1,I3) מפיקים את הקוד הבינארי. כל 5 השערים הם OR — בודקים "האם לפחות אחת מהכניסות פעילה?".',
+      explanation: '4-to-2 Priority Encoder — OR(I0,I1) and OR(I2,I3) feed a third OR to produce VALID. Y1=OR(I2,I3) and Y0=OR(I1,I3) produce the binary code. All 5 gates are OR — checking "is at least one input active?".',
       blockSvg: `<svg viewBox="0 0 420 200" width="500" height="245">
         <text x="12" y="37" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">I0</text><line x1="35" y1="32" x2="90" y2="32" stroke="#39ff14" stroke-width="2.5"/>
         <text x="12" y="67" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">I1</text><line x1="35" y1="62" x2="90" y2="62" stroke="#39ff14" stroke-width="2.5"/>
@@ -1587,13 +1587,13 @@ const LEVELS = [
   {
     id: 21, name: 'MAJORITY-OF-3', difficulty: 'Advanced Circuits',
     layout: 'vertical',
-    description: 'Majority-of-3 — מעגל רוב: הפלט דולק כשלפחות 2 מתוך 3 כניסות דולקות. מחשב AB+BC+AC באמצעות שלושה שערי AND לזוגות ושני שערי OR למיזוג. משמש בלוגיקת הצבעה ובמערכות עמידות לתקלות.',
-    instruction: 'רוב מ-3: הפלט דולק כשלפחות 2 מתוך 3 כניסות דולקות\nמצא את חמשת השערים שנותנים M נכון בכל ארבעת המקרים',
+    description: 'Majority-of-3 — majority circuit: output is ON when at least 2 of 3 inputs are ON. Computes AB+BC+AC using three pairwise AND gates and two OR gates to merge. Used in voting logic and fault-tolerant systems.',
+    instruction: 'Majority-of-3: output is ON when at least 2 of 3 inputs are ON\nFind the five gates that produce correct M in all four cases',
     hint: 'Compute all three pairwise ANDs (AB, BC, AC), then OR them together in a two-level OR tree.',
     truthTable: { inputs: ['A','B','C'], outputs: ['M'], rows: [[[0,0,0],[0]],[[0,0,1],[0]],[[0,1,0],[0]],[[0,1,1],[1]],[[1,0,0],[0]],[[1,0,1],[1]],[[1,1,0],[1]],[[1,1,1],[1]]] },
     solution: {
       gatesUsed: ['AND', 'AND', 'AND', 'OR', 'OR'],
-      explanation: 'Majority-of-3 — מעגל רוב: הפלט דולק כשלפחות 2 מתוך 3 כניסות דולקות. מחשב AB+BC+AC באמצעות שלושה שערי AND לזוגות ושני שערי OR למיזוג. משמש בלוגיקת הצבעה ובמערכות עמידות לתקלות.',
+      explanation: 'Majority-of-3 — majority circuit: output is ON when at least 2 of 3 inputs are ON. Computes AB+BC+AC using three pairwise AND gates and two OR gates to merge. Used in voting logic and fault-tolerant systems.',
       blockSvg: `<svg viewBox="0 0 440 180" width="520" height="215"><text x="12" y="52" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text><line x1="28" y1="47" x2="90" y2="47" stroke="#39ff14" stroke-width="2.5"/><text x="12" y="92" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">B</text><line x1="28" y1="87" x2="90" y2="87" stroke="#39ff14" stroke-width="2.5"/><text x="12" y="137" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">C</text><line x1="28" y1="132" x2="90" y2="132" stroke="#39ff14" stroke-width="2.5"/><rect x="90" y="22" width="230" height="135" rx="8" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/><text x="205" y="85" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="18" font-weight="bold" fill="#00d4ff">MAJORITY</text><text x="205" y="110" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" fill="#4a6080">≥2 of 3</text><line x1="320" y1="90" x2="385" y2="90" stroke="#c8d8f0" stroke-width="2.5"/><text x="393" y="95" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">M</text></svg>`,
       circuitSvg: `<svg viewBox="0 0 580 220" width="700" height="270"><text x="10" y="32" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text><text x="10" y="112" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">B</text><text x="10" y="202" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">C</text><rect x="120" y="12" width="80" height="36" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="160" y="36" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#a0c8ff">AND</text><text x="105" y="26" font-family="JetBrains Mono,monospace" font-size="9" fill="#4a6080">AB</text><rect x="120" y="92" width="80" height="36" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="160" y="116" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#a0c8ff">AND</text><text x="105" y="106" font-family="JetBrains Mono,monospace" font-size="9" fill="#4a6080">BC</text><rect x="120" y="172" width="80" height="36" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="160" y="196" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#a0c8ff">AND</text><text x="105" y="186" font-family="JetBrains Mono,monospace" font-size="9" fill="#4a6080">AC</text><rect x="290" y="42" width="70" height="36" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="325" y="66" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#a0c8ff">OR</text><rect x="420" y="102" width="70" height="36" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="455" y="126" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#a0c8ff">OR</text><text x="535" y="125" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">M</text><polyline points="28,28 60,28 60,20 120,20" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="28,108 60,108 60,40 120,40" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="60,108 60,100 120,100" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="28,198 80,198 80,120 120,120" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="60,28 60,180 120,180" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="80,198 80,200 120,200" stroke="#39ff14" stroke-width="2" fill="none"/><line x1="200" y1="30" x2="290" y2="52" stroke="#39ff14" stroke-width="2"/><line x1="200" y1="110" x2="290" y2="70" stroke="#39ff14" stroke-width="2"/><line x1="360" y1="60" x2="420" y2="112" stroke="#39ff14" stroke-width="2"/><line x1="200" y1="190" x2="420" y2="130" stroke="#39ff14" stroke-width="2"/><line x1="490" y1="120" x2="525" y2="120" stroke="#39ff14" stroke-width="2"/></svg>`,
     },
@@ -1695,9 +1695,9 @@ const LEVELS = [
   // A1=1,B1=1,A0=0,B0=0 → XOR1=0,NOT1=1,XOR0=0,NOT0=1,AND=1 → EQ=1
   {
     id: 22, name: '2-BIT EQUALITY', difficulty: 'Advanced Circuits',
-    description: '2-Bit Equality — בודק שוויון בין שני מספרים בני 2 ביטים. XNOR משווה כל ביט בנפרד (מחזיר 1 אם שווים), ו-AND מחבר את התוצאות — EQ=1 רק אם שני הביטים שווים.',
-    instruction: 'בודק שוויון 2-ביט: XNOR לכל ביט, AND לתוצאה\nמצא את חמשת השערים שנותנים תוצאה נכונה',
-    hint: 'XNOR = XOR ואז NOT. שני ה-XNOR נכנסים ל-AND: EQ=1 רק אם שני הביטים שווים.',
+    description: '2-Bit Equality — checks equality between two 2-bit numbers. XNOR compares each bit individually (returns 1 if equal), and AND combines the results — EQ=1 only if both bits are equal.',
+    instruction: '2-bit equality checker: XNOR for each bit, AND for the result\nFind the five gates that produce the correct result',
+    hint: 'XNOR = XOR then NOT. Both XNORs feed into AND: EQ=1 only if both bits are equal.',
     truthTable: {
       inputs: ['A1','B1','A0','B0'], outputs: ['EQ'],
       rows: [
@@ -1709,7 +1709,7 @@ const LEVELS = [
     },
     solution: {
       gatesUsed: ['XOR', 'NOT', 'XOR', 'NOT', 'AND'],
-      explanation: '2-Bit Equality — בודק שוויון בין שני מספרים בני 2 ביטים. XOR מזהה שוני בכל ביט, NOT הופך אותו ל-XNOR (1=שווים), ו-AND מחבר: EQ=1 רק אם כל הביטים שווים. מעגל זה הוא הבסיס להשוואת מספרים במעבדים.',
+      explanation: '2-Bit Equality — checks equality between two 2-bit numbers. XOR detects difference in each bit, NOT inverts it to XNOR (1=equal), and AND combines: EQ=1 only if all bits are equal. This circuit is the basis for number comparison in processors.',
       blockSvg: `<svg viewBox="0 0 400 180" width="480" height="220">
         <text x="12" y="42" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#39ff14">A1</text><line x1="38" y1="37" x2="90" y2="37" stroke="#39ff14" stroke-width="2.5"/>
         <text x="12" y="72" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#39ff14">B1</text><line x1="38" y1="67" x2="90" y2="67" stroke="#39ff14" stroke-width="2.5"/>
@@ -1799,13 +1799,13 @@ const LEVELS = [
   {
     id: 23, name: '1-BIT COMPARATOR', difficulty: 'Advanced Circuits',
     layout: 'vertical',
-    description: '1-Bit Comparator — משווה ביטים: GT (גדול מ) דולק כש-A=1 ו-B=0, ו-EQ (שווה) דולק כשהביטים זהים. GT נבנה מ-AND(A, NOT B), ו-EQ מ-NOT(XOR(A,B)). משמש ב-ALU ובמעגלי מיון.',
-    instruction: 'משווה 1-ביט: GT דולק כש-A גדול מ-B, EQ דולק כשהם שווים\nמצא את ארבעת השערים שנותנים תוצאה נכונה בכל ארבעת המקרים',
+    description: '1-Bit Comparator — compares bits: GT (greater than) is ON when A=1 and B=0, EQ (equal) is ON when bits are identical. GT is built from AND(A, NOT B), EQ from NOT(XOR(A,B)). Used in ALUs and sorting circuits.',
+    instruction: '1-bit comparator: GT is ON when A > B, EQ is ON when they are equal\nFind the four gates that produce correct results in all four cases',
     hint: 'GT = A AND NOT(B). EQ = NOT(XOR(A,B)). Four gate slots total.',
     truthTable: { inputs: ['A','B'], outputs: ['GT','EQ'], rows: [[[0,0],[0,1]],[[0,1],[0,0]],[[1,0],[1,0]],[[1,1],[0,1]]] },
     solution: {
       gatesUsed: ['NOT', 'AND', 'XOR', 'NOT'],
-      explanation: '1-Bit Comparator — משווה ביטים: GT (גדול מ) דולק כש-A=1 ו-B=0, ו-EQ (שווה) דולק כשהביטים זהים. GT נבנה מ-AND(A, NOT B), ו-EQ מ-NOT(XOR(A,B)). משמש ב-ALU ובמעגלי מיון.',
+      explanation: '1-Bit Comparator — compares bits: GT (greater than) is ON when A=1 and B=0, EQ (equal) is ON when bits are identical. GT is built from AND(A, NOT B), EQ from NOT(XOR(A,B)). Used in ALUs and sorting circuits.',
       blockSvg: `<svg viewBox="0 0 420 160" width="500" height="195"><text x="12" y="55" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text><line x1="28" y1="50" x2="95" y2="50" stroke="#39ff14" stroke-width="2.5"/><text x="12" y="115" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">B</text><line x1="28" y1="110" x2="95" y2="110" stroke="#39ff14" stroke-width="2.5"/><rect x="95" y="22" width="210" height="118" rx="8" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/><text x="200" y="72" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#00d4ff">COMPARATOR</text><text x="200" y="95" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" fill="#4a6080">1-bit</text><line x1="305" y1="52" x2="365" y2="52" stroke="#c8d8f0" stroke-width="2.5"/><text x="372" y="57" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">GT</text><line x1="305" y1="108" x2="365" y2="108" stroke="#c8d8f0" stroke-width="2.5"/><text x="372" y="113" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">EQ</text></svg>`,
       circuitSvg: `<svg viewBox="0 0 560 200" width="680" height="245"><text x="12" y="52" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text><text x="12" y="162" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">B</text><rect x="110" y="140" width="80" height="36" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="150" y="164" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#a0c8ff">NOT</text><rect x="260" y="22" width="80" height="36" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="300" y="46" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#a0c8ff">AND</text><rect x="260" y="102" width="80" height="36" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="300" y="126" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#a0c8ff">XOR</text><rect x="410" y="102" width="80" height="36" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="450" y="126" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#a0c8ff">NOT</text><text x="520" y="46" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">GT</text><text x="520" y="126" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">EQ</text><polyline points="30,48 60,48 60,30 260,30" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="60,48 60,110 260,110" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="30,158 110,158" stroke="#39ff14" stroke-width="2" fill="none"/><line x1="190" y1="158" x2="260" y2="50" stroke="#39ff14" stroke-width="2"/><polyline points="90,158 90,130 260,130" stroke="#39ff14" stroke-width="2" fill="none"/><line x1="340" y1="40" x2="510" y2="40" stroke="#39ff14" stroke-width="2"/><line x1="340" y1="120" x2="410" y2="120" stroke="#39ff14" stroke-width="2"/><line x1="490" y1="120" x2="510" y2="120" stroke="#39ff14" stroke-width="2"/></svg>`,
     },
@@ -1898,13 +1898,13 @@ const LEVELS = [
   {
     id: 24, name: 'PRIORITY ENCODER', difficulty: 'Advanced Circuits',
     layout: 'vertical',
-    description: 'Priority Encoder — מקודד עדיפות: VALID דולק כשיש לפחות כניסה פעילה אחת. CODE מציין את הכניסה הפעילה בעלת העדיפות הנמוכה (B פעיל רק אם A לא פעיל). משמש בטיפול בפסיקות (interrupts) ובתורי עדיפויות בחומרה.',
-    instruction: 'מקודד עדיפות: VALID דולק אם יש כניסה פעילה, CODE מציין איזו\nמצא את שלושת השערים שנותנים תוצאה נכונה בכל ארבעת המקרים',
+    description: 'Priority Encoder — encodes priority: VALID is ON when at least one input is active. CODE indicates the active input with lowest priority (B is active only if A is not). Used in interrupt handling and hardware priority queues.',
+    instruction: 'Priority encoder: VALID is ON if any input is active, CODE indicates which\nFind the three gates that produce correct results in all four cases',
     hint: 'VALID = A OR B. CODE = NOT(A) AND B.',
     truthTable: { inputs: ['A','B'], outputs: ['VALID','CODE'], rows: [[[0,0],[0,0]],[[0,1],[1,1]],[[1,0],[1,0]],[[1,1],[1,0]]] },
     solution: {
       gatesUsed: ['NOT', 'OR', 'AND'],
-      explanation: 'Priority Encoder — מקודד עדיפות: VALID דולק כשיש לפחות כניסה פעילה אחת. CODE מציין את הכניסה הפעילה בעלת העדיפות הנמוכה (B פעיל רק אם A לא פעיל). משמש בטיפול בפסיקות (interrupts) ובתורי עדיפויות בחומרה.',
+      explanation: 'Priority Encoder — encodes priority: VALID is ON when at least one input is active. CODE indicates the active input with lowest priority (B is active only if A is not). Used in interrupt handling and hardware priority queues.',
       blockSvg: `<svg viewBox="0 0 440 160" width="520" height="195"><text x="12" y="55" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text><line x1="28" y1="50" x2="95" y2="50" stroke="#39ff14" stroke-width="2.5"/><text x="12" y="115" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">B</text><line x1="28" y1="110" x2="95" y2="110" stroke="#39ff14" stroke-width="2.5"/><rect x="95" y="22" width="220" height="118" rx="8" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/><text x="205" y="70" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#00d4ff">PRIORITY</text><text x="205" y="95" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#00d4ff">ENCODER</text><line x1="315" y1="50" x2="375" y2="50" stroke="#c8d8f0" stroke-width="2.5"/><text x="380" y="55" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#c8d8f0">VALID</text><line x1="315" y1="110" x2="375" y2="110" stroke="#c8d8f0" stroke-width="2.5"/><text x="380" y="115" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#c8d8f0">CODE</text></svg>`,
       circuitSvg: `<svg viewBox="0 0 480 180" width="580" height="220"><text x="12" y="52" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text><text x="12" y="142" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">B</text><rect x="110" y="30" width="80" height="36" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="150" y="54" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#a0c8ff">NOT</text><rect x="270" y="30" width="80" height="40" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="310" y="56" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#a0c8ff">OR</text><rect x="270" y="118" width="80" height="40" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="310" y="144" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#a0c8ff">AND</text><text x="415" y="55" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#c8d8f0">VALID</text><text x="415" y="143" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#c8d8f0">CODE</text><polyline points="30,48 70,48 110,48" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="70,48 70,38 270,38" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="30,138 80,138 80,62 270,62" stroke="#39ff14" stroke-width="2" fill="none"/><line x1="190" y1="48" x2="270" y2="126" stroke="#39ff14" stroke-width="2"/><polyline points="80,138 80,150 270,150" stroke="#39ff14" stroke-width="2" fill="none"/><line x1="350" y1="50" x2="405" y2="50" stroke="#39ff14" stroke-width="2"/><line x1="350" y1="138" x2="405" y2="138" stroke="#39ff14" stroke-width="2"/></svg>`,
     },
@@ -1985,13 +1985,13 @@ const LEVELS = [
   {
     id: 25, name: '2-TO-4 DECODER', difficulty: 'Advanced Circuits',
     layout: 'vertical',
-    description: '2-to-4 Decoder — מפענח: ממיר כתובת בינארית של 2 ביטים לאחת מ-4 יציאות. בדיוק יציאה אחת דולקת בכל רגע. משמש בפיענוח כתובות זיכרון ובבחירת רכיבים על לוח אם.',
-    instruction: 'מפענח 2-ל-4: בדיוק פלט אחד דולק לפי כתובת הכניסה\nמצא את ששת השערים שנותנים תוצאה נכונה בכל ארבעת המקרים',
+    description: '2-to-4 Decoder — converts a 2-bit binary address to one of 4 outputs. Exactly one output is ON at any time. Used in memory address decoding and component selection on motherboards.',
+    instruction: '2-to-4 decoder: exactly one output is ON based on the input address\nFind the six gates that produce correct results in all four cases',
     hint: 'Invert both select lines first. Each output AND gate takes the appropriate true/complemented versions of S1,S0.',
     truthTable: { inputs: ['S0','S1'], outputs: ['Y0','Y1','Y2','Y3'], rows: [[[0,0],[1,0,0,0]],[[1,0],[0,1,0,0]],[[0,1],[0,0,1,0]],[[1,1],[0,0,0,1]]] },
     solution: {
       gatesUsed: ['NOT', 'NOT', 'AND', 'AND', 'AND', 'AND'],
-      explanation: '2-to-4 Decoder — מפענח: ממיר כתובת בינארית של 2 ביטים לאחת מ-4 יציאות. בדיוק יציאה אחת דולקת בכל רגע. משמש בפיענוח כתובות זיכרון ובבחירת רכיבים על לוח אם.',
+      explanation: '2-to-4 Decoder — converts a 2-bit binary address to one of 4 outputs. Exactly one output is ON at any time. Used in memory address decoding and component selection on motherboards.',
       blockSvg: `<svg viewBox="0 0 440 200" width="520" height="240"><text x="12" y="72" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#39ff14">S0</text><line x1="38" y1="67" x2="90" y2="67" stroke="#39ff14" stroke-width="2.5"/><text x="12" y="127" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#39ff14">S1</text><line x1="38" y1="122" x2="90" y2="122" stroke="#39ff14" stroke-width="2.5"/><rect x="90" y="20" width="210" height="165" rx="8" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/><text x="195" y="95" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="18" font-weight="bold" fill="#00d4ff">DECODER</text><text x="195" y="118" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" fill="#4a6080">2-to-4</text><line x1="300" y1="45" x2="370" y2="45" stroke="#c8d8f0" stroke-width="2.5"/><text x="378" y="50" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">Y0</text><line x1="300" y1="80" x2="370" y2="80" stroke="#c8d8f0" stroke-width="2.5"/><text x="378" y="85" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">Y1</text><line x1="300" y1="120" x2="370" y2="120" stroke="#c8d8f0" stroke-width="2.5"/><text x="378" y="125" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">Y2</text><line x1="300" y1="158" x2="370" y2="158" stroke="#c8d8f0" stroke-width="2.5"/><text x="378" y="163" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">Y3</text></svg>`,
       circuitSvg: `<svg viewBox="0 0 560 230" width="680" height="280"><text x="10" y="72" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#39ff14">S0</text><text x="10" y="172" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#39ff14">S1</text><rect x="110" y="52" width="70" height="32" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="145" y="74" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#a0c8ff">NOT</text><rect x="110" y="152" width="70" height="32" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="145" y="174" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#a0c8ff">NOT</text><rect x="280" y="14" width="70" height="30" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/><text x="315" y="34" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#a0c8ff">AND</text><rect x="280" y="62" width="70" height="30" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/><text x="315" y="82" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#a0c8ff">AND</text><rect x="280" y="114" width="70" height="30" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/><text x="315" y="134" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#a0c8ff">AND</text><rect x="280" y="166" width="70" height="30" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/><text x="315" y="186" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#a0c8ff">AND</text><text x="400" y="34" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#c8d8f0">Y0</text><text x="400" y="82" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#c8d8f0">Y1</text><text x="400" y="134" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#c8d8f0">Y2</text><text x="400" y="186" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#c8d8f0">Y3</text><polyline points="36,68 80,68 110,68" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="36,168 80,168 110,168" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="180,168 220,168 220,22 280,22" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="180,68 240,68 240,36 280,36" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="220,168 220,70 280,70" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="80,68 80,84 280,84" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="80,168 80,122 280,122" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="240,68 240,136 280,136" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="80,168 80,174 280,174" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="80,68 80,188 280,188" stroke="#39ff14" stroke-width="1.5" fill="none"/><line x1="350" y1="29" x2="390" y2="29" stroke="#39ff14" stroke-width="1.5"/><line x1="350" y1="77" x2="390" y2="77" stroke="#39ff14" stroke-width="1.5"/><line x1="350" y1="129" x2="390" y2="129" stroke="#39ff14" stroke-width="1.5"/><line x1="350" y1="181" x2="390" y2="181" stroke="#39ff14" stroke-width="1.5"/></svg>`,
     },
@@ -2120,13 +2120,13 @@ const LEVELS = [
   {
     id: 26, name: 'FULL ADDER', difficulty: 'Advanced Circuits',
     layout: 'vertical',
-    description: 'Full Adder — מחבר מלא הוא אבן הבניין של כל מעגלי החיבור במעבדים. הוא מחבר שני ביטים (A ו-B) יחד עם ביט נשא נכנס (Cin), ומפיק סכום (SUM) ונשא יוצא (COUT). שרשור של מחברים מלאים מאפשר חיבור מספרים בני מספר ביטים.',
-    instruction: 'מחבר מלא: חמישה שערים מחשבים SUM ו-COUT\nמצא את חמשת השערים שנותנים תוצאה נכונה בכל ארבעת המקרים',
+    description: 'Full Adder — the building block of all addition circuits in processors. It adds two bits (A and B) together with a carry-in bit (Cin), producing a sum (SUM) and carry-out (COUT). Chaining full adders enables multi-bit number addition.',
+    instruction: 'Full adder: five gates compute SUM and COUT\nFind the five gates that produce correct results in all four cases',
     hint: 'XOR1(A,B)→XOR2(…,Cin)→SUM. AND stages for carry bits, OR merges into COUT.',
     truthTable: { inputs: ['A','B','Cin'], outputs: ['SUM','COUT'], rows: [[[0,0,0],[0,0]],[[0,0,1],[1,0]],[[0,1,0],[1,0]],[[0,1,1],[0,1]],[[1,0,0],[1,0]],[[1,0,1],[0,1]],[[1,1,0],[0,1]],[[1,1,1],[1,1]]] },
     solution: {
       gatesUsed: ['XOR', 'XOR', 'AND', 'AND', 'OR'],
-      explanation: 'Full Adder — מחבר מלא הוא אבן הבניין של כל מעגלי החיבור במעבדים. הוא מחבר שני ביטים (A ו-B) יחד עם ביט נשא נכנס (Cin), ומפיק סכום (SUM) ונשא יוצא (COUT). שרשור של מחברים מלאים מאפשר חיבור מספרים בני מספר ביטים.',
+      explanation: 'Full Adder — the building block of all addition circuits in processors. It adds two bits (A and B) together with a carry-in bit (Cin), producing a sum (SUM) and carry-out (COUT). Chaining full adders enables multi-bit number addition.',
       blockSvg: `<svg viewBox="0 0 440 230" width="520" height="270">
         <!-- Cin from top -->
         <text x="210" y="16" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">Cin</text>
@@ -2279,9 +2279,9 @@ const LEVELS = [
   //              PAR path: XOR(1,1)=0, XOR(0,0)=0 → PAR=0
   {
     id: 27, name: 'MAJORITY & PARITY', difficulty: 'Advanced Circuits',
-    description: 'Majority & Parity — שני מעגלים מאותם 3 כניסות: MAJ=1 אם לפחות 2 כניסות דלוקות (הצבעת רוב), PAR=1 אם מספר אי-זוגי של כניסות דלוקות (זוגיות).',
-    instruction: 'שני מעגלים במקביל מאותם כניסות:\nMAJ = רוב (AND+OR), PAR = זוגיות (XOR)\nמצא את 7 השערים',
-    hint: 'Majority: שלושה AND (AB,BC,AC) ואז שני OR. Parity: שני XOR בשרשרת. שבעה שערים סה"כ.',
+    description: 'Majority & Parity — two circuits from the same 3 inputs: MAJ=1 if at least 2 inputs are ON (majority vote), PAR=1 if an odd number of inputs are ON (parity).',
+    instruction: 'Two parallel circuits from the same inputs:\nMAJ = majority (AND+OR), PAR = parity (XOR)\nFind the 7 gates',
+    hint: 'Majority: three ANDs (AB,BC,AC) then two ORs. Parity: two XORs in a chain. Seven gates total.',
     truthTable: {
       inputs: ['A','B','C'], outputs: ['MAJ','PAR'],
       rows: [
@@ -2291,7 +2291,7 @@ const LEVELS = [
     },
     solution: {
       gatesUsed: ['AND', 'AND', 'AND', 'OR', 'OR', 'XOR', 'XOR'],
-      explanation: 'Majority & Parity — שני חישובים עצמאיים מאותם כניסות. MAJ: שלושה AND בודקים כל זוג (AB,BC,AC), שני OR מאחדים — אם לפחות זוג אחד דלוק, MAJ=1. PAR: שני XOR בשרשרת — XOR(A,B) ואז XOR עם C, מחשב זוגיות אי-זוגית.',
+      explanation: 'Majority & Parity — two independent computations from the same inputs. MAJ: three ANDs check each pair (AB,BC,AC), two ORs merge — if at least one pair is ON, MAJ=1. PAR: two XORs in a chain — XOR(A,B) then XOR with C, computes odd parity.',
       blockSvg: `<svg viewBox="0 0 420 200" width="500" height="245">
         <text x="12" y="52" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#39ff14">A</text><line x1="28" y1="47" x2="90" y2="47" stroke="#39ff14" stroke-width="2.5"/>
         <text x="12" y="102" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#39ff14">B</text><line x1="28" y1="97" x2="90" y2="97" stroke="#39ff14" stroke-width="2.5"/>
@@ -2364,8 +2364,8 @@ const LEVELS = [
   {
     id: 28, name: '4:1 MUX TREE', difficulty: 'Advanced Circuits',
     layout: 'vertical',
-    description: '4:1 MUX Tree — עץ מרבבים: בוחר אחת מ-4 כניסות נתונים באמצעות 2 ביטי בקרה (S0,S1). בנוי מ-3 מרבבי 2:1 מדורגים. מרבבים גדולים הם הבסיס לניתוב נתונים במעבדים, זיכרונות ו-FPGA.',
-    instruction: 'עץ מרבבים 4:1: שלוש יחידות MUX 2:1 מדורגות\nמצא את 11 השערים שנותנים תוצאה נכונה בשני המקרים',
+    description: '4:1 MUX Tree — multiplexer tree: selects one of 4 data inputs using 2 control bits (S0,S1). Built from 3 cascaded 2:1 MUXes. Large multiplexers are the basis for data routing in processors, memories, and FPGAs.',
+    instruction: '4:1 MUX tree: three cascaded 2:1 MUX units\nFind the 11 gates that produce correct results in both cases',
     hint: 'NOT for inverters. AND gates select data×control. OR merges each MUX pair. Three MUX stages: lower, upper, final.',
     truthTable: {
       inputs: ['D0','D1','D2','D3','S1','S0'], outputs: ['Y'],
@@ -2378,7 +2378,7 @@ const LEVELS = [
     },
     solution: {
       gatesUsed: ['NOT', 'NOT', 'AND', 'AND', 'OR', 'AND', 'AND', 'OR', 'AND', 'AND', 'OR'],
-      explanation: '4:1 MUX Tree — עץ מרבבים: בוחר אחת מ-4 כניסות נתונים באמצעות 2 ביטי בקרה (S0,S1). בנוי מ-3 מרבבי 2:1 מדורגים. מרבבים גדולים הם הבסיס לניתוב נתונים במעבדים, זיכרונות ו-FPGA.',
+      explanation: '4:1 MUX Tree — multiplexer tree: selects one of 4 data inputs using 2 control bits (S0,S1). Built from 3 cascaded 2:1 MUXes. Large multiplexers are the basis for data routing in processors, memories, and FPGAs.',
       blockSvg: `<svg viewBox="0 0 480 220" width="560" height="260"><text x="12" y="42" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">D0</text><line x1="38" y1="37" x2="90" y2="37" stroke="#39ff14" stroke-width="2.5"/><text x="12" y="67" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">D1</text><line x1="38" y1="62" x2="90" y2="62" stroke="#39ff14" stroke-width="2.5"/><text x="12" y="97" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">D2</text><line x1="38" y1="92" x2="90" y2="92" stroke="#39ff14" stroke-width="2.5"/><text x="12" y="127" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">D3</text><line x1="38" y1="122" x2="90" y2="122" stroke="#39ff14" stroke-width="2.5"/><text x="160" y="16" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">S0</text><line x1="160" y1="22" x2="160" y2="40" stroke="#39ff14" stroke-width="2.5"/><text x="220" y="16" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">S1</text><line x1="220" y1="22" x2="220" y2="40" stroke="#39ff14" stroke-width="2.5"/><rect x="90" y="22" width="240" height="145" rx="8" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/><text x="210" y="90" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="18" font-weight="bold" fill="#00d4ff">4:1 MUX</text><text x="210" y="115" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" fill="#4a6080">3×(2:1 MUX)</text><line x1="330" y1="95" x2="400" y2="95" stroke="#c8d8f0" stroke-width="2.5"/><text x="408" y="100" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Y</text></svg>`,
       circuitSvg: `<svg viewBox="0 0 700 400" width="760" height="435"><text x="8" y="42" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#39ff14">D0</text><text x="8" y="92" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#39ff14">D1</text><text x="8" y="182" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#39ff14">D2</text><text x="8" y="232" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#39ff14">D3</text><text x="8" y="312" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#39ff14">S0</text><text x="8" y="372" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#39ff14">S1</text><rect x="100" y="298" width="60" height="26" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/><text x="130" y="316" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#a0c8ff">NOT</text><rect x="100" y="358" width="60" height="26" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/><text x="130" y="376" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#a0c8ff">NOT</text><rect x="230" y="26" width="60" height="26" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/><text x="260" y="44" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#a0c8ff">AND</text><rect x="230" y="72" width="60" height="26" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/><text x="260" y="90" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#a0c8ff">AND</text><rect x="370" y="50" width="55" height="26" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/><text x="397" y="68" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#a0c8ff">OR</text><rect x="230" y="166" width="60" height="26" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/><text x="260" y="184" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#a0c8ff">AND</text><rect x="230" y="216" width="60" height="26" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/><text x="260" y="234" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#a0c8ff">AND</text><rect x="370" y="192" width="55" height="26" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/><text x="397" y="210" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#a0c8ff">OR</text><rect x="490" y="90" width="60" height="26" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/><text x="520" y="108" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#a0c8ff">AND</text><rect x="490" y="160" width="60" height="26" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/><text x="520" y="178" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#a0c8ff">AND</text><rect x="610" y="126" width="55" height="26" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/><text x="637" y="144" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#a0c8ff">OR</text><text x="680" y="144" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">Y</text><line x1="35" y1="38" x2="230" y2="34" stroke="#39ff14" stroke-width="1.5"/><line x1="160" y1="311" x2="230" y2="46" stroke="#39ff14" stroke-width="1.5"/><line x1="35" y1="88" x2="230" y2="80" stroke="#39ff14" stroke-width="1.5"/><polyline points="35,308 100,308" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="75,308 75,90 230,90" stroke="#39ff14" stroke-width="1.5" fill="none"/><line x1="290" y1="39" x2="370" y2="56" stroke="#39ff14" stroke-width="1.5"/><line x1="290" y1="85" x2="370" y2="70" stroke="#39ff14" stroke-width="1.5"/><line x1="35" y1="178" x2="230" y2="174" stroke="#39ff14" stroke-width="1.5"/><line x1="160" y1="311" x2="230" y2="186" stroke="#39ff14" stroke-width="1.5"/><line x1="35" y1="228" x2="230" y2="224" stroke="#39ff14" stroke-width="1.5"/><line x1="75" y1="308" x2="230" y2="234" stroke="#39ff14" stroke-width="1.5"/><line x1="290" y1="179" x2="370" y2="198" stroke="#39ff14" stroke-width="1.5"/><line x1="290" y1="229" x2="370" y2="212" stroke="#39ff14" stroke-width="1.5"/><line x1="425" y1="63" x2="490" y2="98" stroke="#39ff14" stroke-width="1.5"/><line x1="160" y1="371" x2="490" y2="110" stroke="#39ff14" stroke-width="1.5"/><line x1="425" y1="205" x2="490" y2="168" stroke="#39ff14" stroke-width="1.5"/><polyline points="35,368 100,368" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="85,368 85,180 490,180" stroke="#39ff14" stroke-width="1.5" fill="none"/><line x1="550" y1="103" x2="610" y2="133" stroke="#39ff14" stroke-width="1.5"/><line x1="550" y1="173" x2="610" y2="146" stroke="#39ff14" stroke-width="1.5"/><line x1="665" y1="139" x2="675" y2="139" stroke="#39ff14" stroke-width="1.5"/></svg>`,
     },
@@ -2488,8 +2488,8 @@ const LEVELS = [
   {
     id: 29, name: '2-BIT RIPPLE CARRY ADDER', difficulty: 'Advanced Circuits',
     layout: 'vertical',
-    description: '2-Bit Ripple Carry Adder — מחבר 2-ביט: חצי-מחבר (HA) מטפל בביט 0, ומחבר מלא (FA) מטפל בביט 1 עם הנשא מה-HA. שרשור זה הוא הבסיס לכל מחברים רב-ביטיים במעבדים.',
-    instruction: 'מחבר 2-ביט: HA לביט 0, FA לביט 1 עם הנשא\nמצא את שבעת השערים שנותנים תוצאה נכונה בשני המקרים',
+    description: '2-Bit Ripple Carry Adder — half adder (HA) handles bit 0, and full adder (FA) handles bit 1 with the carry from HA. This chaining is the basis for all multi-bit adders in processors.',
+    instruction: '2-bit adder: HA for bit 0, FA for bit 1 with carry\nFind the seven gates that produce correct results in both cases',
     hint: 'HA: XOR for S0, AND for C0. FA: two XORs for S1, two ANDs + OR for COUT. C0 feeds into FA.',
     truthTable: {
       inputs: ['A1','B1','A0','B0'], outputs: ['S1','S0','COUT'],
@@ -2502,7 +2502,7 @@ const LEVELS = [
     },
     solution: {
       gatesUsed: ['XOR', 'AND', 'XOR', 'XOR', 'AND', 'AND', 'OR'],
-      explanation: '2-Bit Ripple Carry Adder — מחבר 2-ביט: חצי-מחבר (HA) מטפל בביט 0, ומחבר מלא (FA) מטפל בביט 1 עם הנשא מה-HA. שרשור זה הוא הבסיס לכל מחברים רב-ביטיים במעבדים.',
+      explanation: '2-Bit Ripple Carry Adder — half adder (HA) handles bit 0, and full adder (FA) handles bit 1 with the carry from HA. This chaining is the basis for all multi-bit adders in processors.',
       blockSvg: `<svg viewBox="0 0 480 200" width="560" height="235"><text x="12" y="42" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#39ff14">A1</text><line x1="38" y1="37" x2="95" y2="37" stroke="#39ff14" stroke-width="2.5"/><text x="12" y="72" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#39ff14">B1</text><line x1="38" y1="67" x2="95" y2="67" stroke="#39ff14" stroke-width="2.5"/><text x="12" y="117" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#39ff14">A0</text><line x1="38" y1="112" x2="95" y2="112" stroke="#39ff14" stroke-width="2.5"/><text x="12" y="152" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#39ff14">B0</text><line x1="38" y1="147" x2="95" y2="147" stroke="#39ff14" stroke-width="2.5"/><rect x="95" y="15" width="260" height="160" rx="8" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/><text x="225" y="85" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#00d4ff">2-BIT RIPPLE</text><text x="225" y="110" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#00d4ff">CARRY ADDER</text><line x1="355" y1="45" x2="420" y2="45" stroke="#c8d8f0" stroke-width="2.5"/><text x="428" y="50" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">S1</text><line x1="355" y1="95" x2="420" y2="95" stroke="#c8d8f0" stroke-width="2.5"/><text x="428" y="100" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">S0</text><line x1="355" y1="145" x2="420" y2="145" stroke="#c8d8f0" stroke-width="2.5"/><text x="425" y="150" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#c8d8f0">COUT</text></svg>`,
       circuitSvg: `<svg viewBox="0 0 700 340" width="760" height="370"><text x="8" y="32" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">A1</text><text x="8" y="72" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">B1</text><text x="8" y="232" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">A0</text><text x="8" y="272" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">B0</text><text x="80" y="210" font-family="JetBrains Mono,monospace" font-size="11" fill="#4a6080">— HA —</text><text x="200" y="10" font-family="JetBrains Mono,monospace" font-size="11" fill="#4a6080">— FA —</text><rect x="110" y="222" width="70" height="30" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/><text x="145" y="242" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#a0c8ff">XOR</text><rect x="110" y="280" width="70" height="30" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/><text x="145" y="300" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#a0c8ff">AND</text><rect x="220" y="18" width="70" height="30" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/><text x="255" y="38" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#a0c8ff">XOR</text><rect x="220" y="80" width="70" height="30" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/><text x="255" y="100" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#a0c8ff">AND</text><rect x="380" y="45" width="70" height="30" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/><text x="415" y="65" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#a0c8ff">XOR</text><rect x="380" y="110" width="70" height="30" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/><text x="415" y="130" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#a0c8ff">AND</text><rect x="520" y="90" width="60" height="30" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/><text x="550" y="110" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#a0c8ff">OR</text><text x="635" y="65" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">S1</text><text x="635" y="242" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">S0</text><text x="630" y="110" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#c8d8f0">COUT</text><polyline points="35,228 70,228 70,230 110,230" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="70,228 70,288 110,288" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="35,268 90,268 90,244 110,244" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="90,268 90,302 110,302" stroke="#39ff14" stroke-width="1.5" fill="none"/><line x1="180" y1="237" x2="625" y2="237" stroke="#39ff14" stroke-width="1.5"/><polyline points="35,28 60,28 60,26 220,26" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="60,28 60,88 220,88" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="35,68 80,68 80,40 220,40" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="80,68 80,102 220,102" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="290,33 330,33 330,53 380,53" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="330,33 330,118 380,118" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="180,295 200,295 200,67 380,67" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="200,295 200,132 380,132" stroke="#39ff14" stroke-width="1.5" fill="none"/><line x1="290" y1="95" x2="520" y2="98" stroke="#39ff14" stroke-width="1.5"/><line x1="450" y1="125" x2="520" y2="112" stroke="#39ff14" stroke-width="1.5"/><line x1="450" y1="60" x2="625" y2="60" stroke="#39ff14" stroke-width="1.5"/><line x1="580" y1="105" x2="625" y2="105" stroke="#39ff14" stroke-width="1.5"/></svg>`,
     },
@@ -2596,9 +2596,9 @@ const LEVELS = [
   // Outputs: O1=g1=1,O2=g2=0,O3=g5=1,O4=g8=1,O5=g9=1,O6=g10=1,O7=g11=1,O8=g12=1
   {
     id: 30, name: 'LOGIC MATRIX', difficulty: 'Advanced Circuits',
-    description: 'Logic Matrix — מטריצת לוגיקה: 5 כניסות, 8 פלטים, 12 שערים ב-3 שכבות. האתגר הקומבינטורי האולטימטיבי — כל שער יכול להיות סוג אחר!',
-    instruction: 'מטריצת לוגיקה: 12 שערים ב-3 שכבות\nעבוד שכבה-שכבה מהכניסות לפלטים\nכל שער יכול להיות סוג שונה',
-    hint: 'שכבה 1 מקבלת כניסות גולמיות. שכבה 2 משלבת פלטי שכבה 1. שכבה 3 מפיקה פלטים סופיים. התחל מהפלטים ועקוב אחורה.',
+    description: 'Logic Matrix — 5 inputs, 8 outputs, 12 gates in 3 layers. The ultimate combinational challenge — each gate can be a different type!',
+    instruction: 'Logic matrix: 12 gates in 3 layers\nWork layer by layer from inputs to outputs\nEach gate can be a different type',
+    hint: 'Layer 1 takes raw inputs. Layer 2 combines layer 1 outputs. Layer 3 produces final outputs. Start from outputs and trace backward.',
     truthTable: {
       inputs: ['A','B','C','D','E'], outputs: ['O1','O2','O3','O4','O5','O6','O7','O8'],
       rows: [
@@ -2622,7 +2622,7 @@ const LEVELS = [
     },
     solution: {
       gatesUsed: ['OR', 'NOR', 'AND', 'OR', 'OR', 'NAND', 'NOR', 'OR', 'AND', 'XOR', 'NOR', 'AND'],
-      explanation: 'Logic Matrix — מטריצת לוגיקה עם 12 שערים מ-6 סוגים שונים ב-3 שכבות. שכבה 1: OR,NOR,AND,OR מעבדים זוגות כניסות. שכבה 2: OR,NAND,NOR משלבים. שכבה 3: OR,AND,XOR,NOR,AND מפיקים 8 פלטים. זהו מעגל שדורש חשיבה שיטתית שכבה אחר שכבה.',
+      explanation: 'Logic Matrix — 12 gates of 6 different types in 3 layers. Layer 1: OR,NOR,AND,OR process input pairs. Layer 2: OR,NAND,NOR combine. Layer 3: OR,AND,XOR,NOR,AND produce 8 outputs. This circuit requires systematic layer-by-layer reasoning.',
       blockSvg: `<svg viewBox="0 0 420 250" width="500" height="300">
         <text x="12" y="37" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">A</text><line x1="25" y1="32" x2="80" y2="32" stroke="#39ff14" stroke-width="2.5"/>
         <text x="12" y="72" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">B</text><line x1="25" y1="67" x2="80" y2="67" stroke="#39ff14" stroke-width="2.5"/>
@@ -2733,12 +2733,12 @@ const LEVELS = [
     id: 31, name: 'T FLIP-FLOP', difficulty: 'Flip-Flops',
 
 
-    description: 'כניסה=1, Q מתחיל ב-1. מצא את הפליפלופ שמשנה את Q ל-0 בעליית השעון.',
-    instruction: 'בחר את הפליפלופ הנכון ולחץ STEP',
-    hint: 'כניסה=1, Q₀=1. D-FF ילכוד 1 (Q נשאר 1). SR/JK עושים SET (Q נשאר 1). רק פליפלופ שמחליף (toggle) ייתן Q=0.',
+    description: 'Input=1, Q starts at 1. Find the flip-flop that changes Q to 0 on the rising clock edge.',
+    instruction: 'Select the correct flip-flop and click STEP',
+    hint: 'Input=1, Q₀=1. D-FF captures 1 (Q stays 1). SR/JK do SET (Q stays 1). Only a toggle flip-flop will produce Q=0.',
     solution: {
       ffsUsed: ['T-FF'],
-      explanation: 'T Flip-Flop — פליפלופ T (Toggle) הופך את Q בכל עליית שעון כאשר T=1. כש-Q=1 ו-T=1, Q מתהפך ל-0. כל השאר (D, SR, JK) משאירים Q=1. משמש לבניית מונים ומחלקי תדר.',
+      explanation: 'T Flip-Flop — The T (Toggle) flip-flop inverts Q on every rising clock edge when T=1. When Q=1 and T=1, Q toggles to 0. All others (D, SR, JK) keep Q=1. Used to build counters and frequency dividers.',
       blockSvg: `<svg viewBox="0 0 400 160" width="480" height="195">
         <text x="12" y="52" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">T</text>
         <line x1="28" y1="47" x2="100" y2="47" stroke="#39ff14" stroke-width="2.5"/>
@@ -2778,12 +2778,12 @@ const LEVELS = [
   // Case 2: D=0, Q₀=1 → after STEP Q must be 0 (only D-FF captures the 0)
   {
     id: 32, name: 'D FLIP-FLOP', difficulty: 'Flip-Flops',
-    description: 'D Flip-Flop — פליפלופ D (Data) לוכד את הערך שנמצא בכניסת D ברגע עליית השעון. שני מקרים במקביל — רק פליפלופ אחד מתאים לשניהם.',
-    instruction: 'בחר את הפליפלופ שמתאים לשני המקרים ולחץ STEP',
-    hint: 'מקרה 1: כל פליפלופ עם כניסה 1 ייתן Q=1. אבל מקרה 2: רק פליפלופ שלוכד את ערך הכניסה (0) יאפס את Q מ-1 ל-0.',
+    description: 'D Flip-Flop — The D (Data) flip-flop captures the value at input D on the rising clock edge. Two parallel cases — only one flip-flop satisfies both.',
+    instruction: 'Select the flip-flop that satisfies both cases and click STEP',
+    hint: 'Case 1: any flip-flop with input 1 gives Q=1. But Case 2: only a flip-flop that captures the input value (0) will reset Q from 1 to 0.',
     solution: {
       ffsUsed: ['D-FF'],
-      explanation: 'D Flip-Flop — פליפלופ D (Data) לוכד את הערך שנמצא בכניסת D ברגע עליית השעון. D=1→Q=1, D=0→Q=0. זהו הפליפלופ היחיד שתמיד לוכד את ערך הכניסה — T מחליף, SR ו-JK עושים hold כשהכניסה 0.',
+      explanation: 'D Flip-Flop — The D (Data) flip-flop captures the value at input D on the rising clock edge. D=1→Q=1, D=0→Q=0. It is the only flip-flop that always captures the input value — T toggles, SR and JK hold when input is 0.',
       blockSvg: `<svg viewBox="0 0 400 160" width="480" height="195">
         <text x="12" y="52" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">D</text>
         <line x1="28" y1="47" x2="100" y2="47" stroke="#39ff14" stroke-width="2.5"/>
@@ -2842,12 +2842,12 @@ const LEVELS = [
   // Case 3: S=1,R=1,Q₀=1 → SET→Q=1    (eliminates JK: toggle→0, T: toggle→0)
   {
     id: 33, name: 'SR FLIP-FLOP', difficulty: 'Flip-Flops',
-    description: 'SR Flip-Flop — פליפלופ SR (Set/Reset) מאפשר לקבוע את Q ל-1 (SET), ל-0 (RESET), או לשמור (HOLD). שלושה מקרים — רק פליפלופ אחד מתאים לכולם.',
-    instruction: 'בחר את הפליפלופ שמתאים לשלושת המקרים ולחץ STEP',
-    hint: 'מקרה 1: RESET (S=0,R=1). מקרה 2: HOLD (S=0,R=0). מקרה 3: S=1,R=1 — רק פליפלופ שבו SET גובר ייתן Q=1.',
+    description: 'SR Flip-Flop — The SR (Set/Reset) flip-flop can set Q to 1 (SET), to 0 (RESET), or hold (HOLD). Three cases — only one flip-flop satisfies all of them.',
+    instruction: 'Select the flip-flop that satisfies all three cases and click STEP',
+    hint: 'Case 1: RESET (S=0,R=1). Case 2: HOLD (S=0,R=0). Case 3: S=1,R=1 — only a flip-flop where SET dominates will produce Q=1.',
     solution: {
       ffsUsed: ['SR-FF'],
-      explanation: 'SR Flip-Flop — פליפלופ SR (Set/Reset) הוא הפליפלופ הבסיסי ביותר. S=1,R=0 → SET (Q=1). S=0,R=1 → RESET (Q=0). S=0,R=0 → HOLD. S=1,R=1 → SET גובר (Q=1). T מחליף במקום RESET, D לוכד S בלבד, JK מחליף כש-J=K=1.',
+      explanation: 'SR Flip-Flop — The most basic flip-flop. S=1,R=0 → SET (Q=1). S=0,R=1 → RESET (Q=0). S=0,R=0 → HOLD. S=1,R=1 → SET dominates (Q=1). T toggles instead of RESET, D captures S only, JK toggles when J=K=1.',
       blockSvg: `<svg viewBox="0 0 400 180" width="480" height="220">
         <text x="12" y="42" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">S</text>
         <line x1="28" y1="37" x2="100" y2="37" stroke="#39ff14" stroke-width="2.5"/>
@@ -2937,12 +2937,12 @@ const LEVELS = [
   // Case 3: J=0,K=0,Q₀=1 → HOLD→Q=1    (eliminates D: D=0→0)
   {
     id: 34, name: 'JK FLIP-FLOP', difficulty: 'Flip-Flops',
-    description: 'JK Flip-Flop — הפליפלופ הגמיש ביותר. J=K=1 → TOGGLE, J=1,K=0 → SET, J=0,K=1 → RESET, J=K=0 → HOLD. שלושה מקרים — רק פליפלופ אחד מתאים לכולם.',
-    instruction: 'בחר את הפליפלופ שמתאים לשלושת המקרים ולחץ STEP',
-    hint: 'מקרה 1: J=K=1 → רק TOGGLE ייתן Q=0. מקרה 2: J=1,K=0 → SET. מקרה 3: J=K=0 → HOLD. רק פליפלופ עם כל 4 המצבים מתאים.',
+    description: 'JK Flip-Flop — The most versatile flip-flop. J=K=1 → TOGGLE, J=1,K=0 → SET, J=0,K=1 → RESET, J=K=0 → HOLD. Three cases — only one flip-flop satisfies all of them.',
+    instruction: 'Select the flip-flop that satisfies all three cases and click STEP',
+    hint: 'Case 1: J=K=1 → only TOGGLE produces Q=0. Case 2: J=1,K=0 → SET. Case 3: J=K=0 → HOLD. Only a flip-flop with all 4 modes works.',
     solution: {
       ffsUsed: ['JK-FF'],
-      explanation: 'JK Flip-Flop — הפליפלופ הגמיש ביותר. J=K=1→TOGGLE (Q מתהפך), J=1,K=0→SET, J=0,K=1→RESET, J=K=0→HOLD. בשונה מ-SR, כש-J=K=1 JK מחליף במקום SET. משמש למונים ומכונות מצב.',
+      explanation: 'JK Flip-Flop — The most versatile flip-flop. J=K=1→TOGGLE (Q inverts), J=1,K=0→SET, J=0,K=1→RESET, J=K=0→HOLD. Unlike SR, when J=K=1 JK toggles instead of SET. Used for counters and state machines.',
       blockSvg: `<svg viewBox="0 0 400 180" width="480" height="220">
         <text x="12" y="42" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">J</text>
         <line x1="28" y1="37" x2="100" y2="37" stroke="#39ff14" stroke-width="2.5"/>
@@ -3032,12 +3032,12 @@ const LEVELS = [
     id: 35, name: 'RIPPLE COUNTER', difficulty: 'Flip-Flops',
 
 
-    description: 'מונה אדווה — שני פליפלופים בטור. FF1 מקבל כניסה קבועה, Q1 מזין את FF2. אחרי 2 פעימות צריך להגיע ליעד.',
-    instruction: 'שים את הפליפלופ הנכון בשני המקומות ולחץ STEP פעמיים',
-    hint: 'STEP 1: Q1=1, Q2=0. STEP 2: Q1 חוזר ל-0, Q2 עולה ל-1. איזה פליפלופ מחליף מצב כשהכניסה 1?',
+    description: 'Ripple counter — two flip-flops in series. FF1 receives a constant input, Q1 feeds FF2. After 2 clock pulses, reach the target output.',
+    instruction: 'Place the correct flip-flop in both slots and click STEP twice',
+    hint: 'STEP 1: Q1=1, Q2=0. STEP 2: Q1 returns to 0, Q2 rises to 1. Which flip-flop toggles state when input is 1?',
     solution: {
       ffsUsed: ['T-FF', 'T-FF'],
-      explanation: 'מונה אדווה (Ripple Counter) — שני פליפלופי T יוצרים מונה בינארי 2-ביט. כל פליפלופ מחלק את התדר ב-2. זהו הבסיס לכל המונים הדיגיטליים.',
+      explanation: 'Ripple Counter — Two T flip-flops form a 2-bit binary counter. Each flip-flop divides the frequency by 2. This is the foundation of all digital counters.',
       blockSvg: `<svg viewBox="0 0 400 160" width="480" height="195">
         <text x="12" y="52" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">T</text>
         <line x1="28" y1="47" x2="100" y2="47" stroke="#39ff14" stroke-width="2.5"/>
@@ -3090,12 +3090,12 @@ const LEVELS = [
   {
     id: 36, name: 'DIVIDE BY 4', difficulty: 'Flip-Flops',
     minSteps: 2,
-    description: 'מחלק תדר ב-4 (Johnson Counter) — שני פליפלופים בטור עם Q̄ של האחרון מוזן חזרה לראשון. המצבים מסתובבים במחזור של 4 פעימות.',
-    instruction: 'שים את הפליפלופ הנכון בשני המקומות ולחץ STEP פעמיים',
-    hint: 'Q̄2 מתחיל ב-1, מוזן ל-FF1. FF2 מקבל את Q1. איזה פליפלופ תמיד לוכד את מה שבכניסה?',
+    description: 'Divide-by-4 (Johnson Counter) — two flip-flops in series with the last Q-bar fed back to the first. States rotate in a cycle of 4 clock pulses.',
+    instruction: 'Place the correct flip-flop in both slots and click STEP twice',
+    hint: 'Q-bar2 starts at 1, fed to FF1. FF2 receives Q1. Which flip-flop always captures its input?',
     solution: {
       ffsUsed: ['D-FF', 'D-FF'],
-      explanation: 'Johnson Counter (Twisted Ring) — שני D-FF בטור עם Q̄→D feedback. יוצר 4 מצבים ייחודיים (חילוק ב-4). משמש ליצירת תזמון מדויק, מונים ללא glitch, ומחלקי תדר.',
+      explanation: 'Johnson Counter (Twisted Ring) — Two D-FFs in series with Q-bar→D feedback. Produces 4 unique states (divide-by-4). Used for glitch-free timing, counters, and frequency dividers.',
       blockSvg: `<svg viewBox="0 0 400 160" width="480" height="195">
         <text x="12" y="82" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#ffcc00">CLK</text>
         <line x1="45" y1="77" x2="100" y2="77" stroke="#ffcc00" stroke-width="2.5"/>
@@ -3148,12 +3148,12 @@ const LEVELS = [
   // Data "shifts" one stage per clock. Classic serial-to-parallel converter.
   {
     id: 37, name: '4-BIT SHIFT REGISTER', difficulty: 'Flip-Flops',
-    description: 'רגיסטר הזזה 4-ביט — ארבעה פליפלופים בטור. הנתון "זז" שלב אחד קדימה בכל פעימת שעון. לחץ STEP ארבע פעמים כדי למלא את כל הרגיסטר.',
-    instruction: 'שים את הפליפלופ הנכון בכל ארבעת המקומות ולחץ STEP 4 פעמים',
-    hint: 'כל STEP דוחף את הנתון שלב אחד קדימה. איזה פליפלופ תמיד לוכד את הכניסה שלו?',
+    description: '4-bit shift register — four flip-flops in series. Data shifts one stage forward on each clock pulse. Click STEP four times to fill the entire register.',
+    instruction: 'Place the correct flip-flop in all four slots and click STEP 4 times',
+    hint: 'Each STEP pushes data one stage forward. Which flip-flop always captures its input?',
     solution: {
       ffsUsed: ['D-FF', 'D-FF', 'D-FF', 'D-FF'],
-      explanation: '4-Bit Shift Register — ארבעה פליפלופי D בטור. בכל פעימת שעון, כל FF לוכד את הערך של ה-FF שלפניו. זהו הבסיס של תקשורת סריאלית (UART, SPI) ושל ממיר סריאלי→מקבילי.',
+      explanation: '4-Bit Shift Register — Four D flip-flops in series. On each clock pulse, each FF captures the value of the previous FF. This is the basis of serial communication (UART, SPI) and serial-to-parallel conversion.',
       blockSvg: `<svg viewBox="0 0 420 200" width="500" height="245">
         <text x="12" y="52" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">D</text>
         <line x1="28" y1="47" x2="100" y2="47" stroke="#39ff14" stroke-width="2.5"/>
@@ -3241,12 +3241,12 @@ const LEVELS = [
   {
     id: 38, name: 'HOLD MODE', difficulty: 'Flip-Flops',
     minSteps: 2,
-    description: 'מצב HOLD — פליפלופ יכול לשמור ערך גם כשהכניסה משתנה. מקרה 1: SET ואז HOLD. מקרה 2: כשהשניים דולקים — מי גובר?',
-    instruction: 'בחר את הפליפלופ שמתאים לשני המקרים ולחץ STEP פעמיים',
-    hint: 'מקרה 1: S=1 מדליק, ואז S=0 — הפליפלופ צריך לזכור. מקרה 2: S=R=1 — רק פליפלופ שבו SET גובר שומר Q=1.',
+    description: 'HOLD mode — a flip-flop can retain its value even when the input changes. Case 1: SET then HOLD. Case 2: when both inputs are high — which one dominates?',
+    instruction: 'Select the flip-flop that satisfies both cases and click STEP twice',
+    hint: 'Case 1: S=1 sets Q, then S=0 — the flip-flop must remember. Case 2: S=R=1 — only a flip-flop where SET dominates keeps Q=1.',
     solution: {
       ffsUsed: ['SR-FF'],
-      explanation: 'SR Flip-Flop שומר ערך כש-S=R=0 (HOLD). D-FF לא יכול לשמור — הוא תמיד לוכד את הכניסה. JK ו-T מחליפים כש-J=K=1. רק SR עושה SET→HOLD ומחזיק את הזיכרון.',
+      explanation: 'SR Flip-Flop holds its value when S=R=0 (HOLD). D-FF cannot hold — it always captures the input. JK and T toggle when J=K=1. Only SR does SET→HOLD and retains the stored value.',
       blockSvg: `<svg viewBox="0 0 400 180" width="480" height="220">
         <text x="12" y="42" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">S</text>
         <line x1="28" y1="37" x2="100" y2="37" stroke="#39ff14" stroke-width="2.5"/>
@@ -3315,12 +3315,12 @@ const LEVELS = [
   // After 3 STEPs: Q1=0,Q2=0,Q3=0,Q4=1. After 4 STEPs: back to start.
   {
     id: 39, name: 'RING COUNTER', difficulty: 'Flip-Flops',
-    description: 'מונה טבעת — ארבעה פליפלופים במעגל סגור. ביט אחד "רץ" סביב הטבעת, שלב אחד בכל פעימת שעון. משמש ליצירת תזמון סדרתי ולבקרת מכונות מצב.',
-    instruction: 'שים את הפליפלופ הנכון בכל המקומות ולחץ STEP 3 פעמים',
-    hint: 'הפלט של FF4 מוזן חזרה לכניסת FF1. הביט זז: 1000→0100→0010→0001. איזה פליפלופ מעביר נתון הלאה?',
+    description: 'Ring counter — four flip-flops in a closed loop. A single bit circulates around the ring, one stage per clock pulse. Used for sequential timing and state machine control.',
+    instruction: 'Place the correct flip-flop in all slots and click STEP 3 times',
+    hint: 'FF4 output feeds back to FF1 input. The bit shifts: 1000→0100→0010→0001. Which flip-flop passes data forward?',
     solution: {
       ffsUsed: ['D-FF', 'D-FF', 'D-FF', 'D-FF'],
-      explanation: 'Ring Counter — ארבעה D-FF במעגל סגור. ה-1 מסתובב בטבעת שלב אחד בכל פעימת שעון. משמש לתזמון רב-פאזי, בקרת מכונות מצב, ויצירת דפוסי LED.',
+      explanation: 'Ring Counter — Four D-FFs in a closed loop. The 1 circulates around the ring one stage per clock pulse. Used for multi-phase timing, state machine control, and LED pattern generation.',
       blockSvg: `<svg viewBox="0 0 420 200" width="500" height="245">
         <text x="12" y="82" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#ffcc00">CLK</text>
         <line x1="45" y1="77" x2="100" y2="77" stroke="#ffcc00" stroke-width="2.5"/>
@@ -3393,12 +3393,12 @@ const LEVELS = [
   {
     id: 40, name: 'PROGRAM COUNTER', difficulty: 'Flip-Flops',
     minSteps: 3,
-    description: 'מונה פקודות (PC) — ארבעה פליפלופים במקביל מאחסנים את כתובת הפקודה הנוכחית. הכתובת מתעדכנת בכל פעימת שעון. זהו הרגיסטר החשוב ביותר במעבד.',
-    instruction: 'שים את הפליפלופ הנכון בכל המקומות ולחץ STEP 3 פעמים',
-    hint: 'הכניסות משתנות כל צעד כמו מונה בינארי. איזה פליפלופ תמיד לוכד את מה שבכניסה? אחרי 3 צעדים: כתובת 011 (=3).',
+    description: 'Program Counter (PC) — four flip-flops in parallel store the current instruction address. The address updates on each clock pulse. This is the most important register in a CPU.',
+    instruction: 'Place the correct flip-flop in all slots and click STEP 3 times',
+    hint: 'Inputs change each step like a binary counter. Which flip-flop always captures its input? After 3 steps: address 011 (=3).',
     solution: {
       ffsUsed: ['D-FF', 'D-FF', 'D-FF', 'D-FF'],
-      explanation: 'Program Counter — ארבעה D-FF במקביל שומרים כתובת 4-ביט. בכל פעימת שעון הם לוכדים את הכתובת הבאה. במעבד אמיתי, מעגל חיצוני מחשב PC+1 והרגיסטר רק שומר את התוצאה.',
+      explanation: 'Program Counter — Four D-FFs in parallel store a 4-bit address. On each clock pulse they capture the next address. In a real CPU, external logic computes PC+1 and the register simply stores the result.',
       blockSvg: `<svg viewBox="0 0 440 230" width="520" height="280">
         <text x="12" y="42" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">D0</text>
         <line x1="38" y1="37" x2="100" y2="37" stroke="#39ff14" stroke-width="2.5"/>
@@ -3508,13 +3508,13 @@ const LEVELS = [
   {
     id: 41, name: 'SYNCHRONIZE', difficulty: 'Sequential Logic',
     minSteps: 3,
-    description: 'סנכרון — שער לוגי מחשב ערך, פליפלופ שומר אותו בעליית השעון. נמצא בכל ממשק בין רכיבים: USB, SPI, I2C — כל פעם שנתון עובר בין שעונים שונים, צריך synchronizer.',
-    instruction: 'שים שער ופליפלופ ולחץ STEP שלוש פעמים',
-    hint: 'עקוב אחרי פלט השער בכל צעד. Z צריך להיות 0 בסוף (A=1,B=0). Q צריך להיות 1 — איזה פליפלופ מחליף מצב כשהכניסה 1?',
+    description: 'Synchronizer — a logic gate computes a value, a flip-flop stores it on the clock rising edge. Found in every inter-component interface: USB, SPI, I2C — whenever data crosses between different clock domains, a synchronizer is needed.',
+    instruction: 'Place a gate and a flip-flop, then click STEP three times',
+    hint: 'Track the gate output at each step. Z should be 0 at the end (A=1,B=0). Q should be 1 — which flip-flop toggles state when the input is 1?',
     solution: {
       gatesUsed: ['AND'],
       ffsUsed: ['T-FF'],
-      explanation: 'AND + T-FF — השער מוציא 1 רק כש-A=B=1 (צעד 2). T-FF מחליף מצב פעם אחת ונשאר Q=1. בחומרה: כך עובד synchronizer בממשקי USB, SPI ו-I2C — שער מחשב, פליפלופ שומר בעליית שעון.',
+      explanation: 'AND + T-FF — the gate outputs 1 only when A=B=1 (step 2). T-FF toggles once and stays Q=1. In hardware: this is how synchronizers work in USB, SPI, and I2C interfaces — the gate computes, the flip-flop stores on the clock rising edge.',
       blockSvg: `<svg viewBox="0 0 400 160" width="480" height="195">
         <!-- Inputs -->
         <text x="12" y="42" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text>
@@ -3578,13 +3578,13 @@ const LEVELS = [
   {
     id: 42, name: 'FILTER ZERO', difficulty: 'Sequential Logic',
     minSteps: 3,
-    description: 'סינון אפס — שער לוגי מסנן רעש מכניסות משתנות, פליפלופ שומר תוצאה יציבה. משמש בבקרי כפתורים (debounce) ובמסנני אותות דיגיטליים בכרטיסי קול ותקשורת.',
-    instruction: 'שים שער ופליפלופ ולחץ STEP שלוש פעמים',
-    hint: 'עקוב אחרי הפלט בכל צעד. Z צריך להיות 1 בסוף. Q צריך להיות 0 — מי מתהפך פעמיים וחוזר למקום?',
+    description: 'Zero filter — a logic gate filters noise from changing inputs, a flip-flop stores a stable result. Used in button debounce controllers and digital signal filters in sound cards and communication devices.',
+    instruction: 'Place a gate and a flip-flop, then click STEP three times',
+    hint: 'Track the output at each step. Z should be 1 at the end. Q should be 0 — which flip-flop toggles twice and returns to its original state?',
     solution: {
       gatesUsed: ['NAND'],
       ffsUsed: ['T-FF'],
-      explanation: 'NAND + T-FF — NAND מסנן רעש (מוציא [1,0,1]), T-FF סופר היפוכים. בחומרה: כך עובד debounce בכפתורים — השער מסנן, הפליפלופ שומר מצב יציב. נמצא בכל בקר כפתורים ובכרטיסי קול.',
+      explanation: 'NAND + T-FF — NAND filters noise (outputs [1,0,1]), T-FF counts toggles. In hardware: this is how button debounce works — the gate filters, the flip-flop holds a stable state. Found in every button controller and sound card.',
       blockSvg: `<svg viewBox="0 0 400 160" width="480" height="195">
         <!-- Inputs -->
         <text x="12" y="42" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text>
@@ -3648,13 +3648,13 @@ const LEVELS = [
   {
     id: 43, name: 'EDGE PULSE', difficulty: 'Sequential Logic',
     minSteps: 4,
-    description: 'פולס קצה — שער מייצר דפוס, פליפלופ סופר אירועים על ציר הזמן. משמש בבקרי PWM למנועים, בייצור פולסים לתקשורת UART, ובטיימרים של מיקרו-בקרים כמו Arduino.',
-    instruction: 'שים שער ופליפלופ ולחץ STEP ארבע פעמים',
-    hint: 'בצעד 4: A=0,B=0. איזה שער נותן 1 כששתי הכניסות כבויות? הפליפלופ מתהפך פעמיים — לאן הוא חוזר?',
+    description: 'Edge pulse — a gate generates a pattern, a flip-flop counts events over time. Used in PWM controllers for motors, UART pulse generation, and microcontroller timers like Arduino.',
+    instruction: 'Place a gate and a flip-flop, then click STEP four times',
+    hint: 'At step 4: A=0,B=0. Which gate outputs 1 when both inputs are off? The flip-flop toggles twice — where does it return to?',
     solution: {
       gatesUsed: ['NAND'],
       ffsUsed: ['T-FF'],
-      explanation: 'NAND + T-FF — הרצף [1,0,0,1] גורם ל-T-FF להתהפך פעמיים ולחזור ל-0. בחומרה: כך עובדים מחוללי PWM ב-Arduino ובמיקרו-בקרים — שער מייצר דפוס פולסים, פליפלופ מונה אירועים על ציר הזמן.',
+      explanation: 'NAND + T-FF — the sequence [1,0,0,1] causes T-FF to toggle twice and return to 0. In hardware: this is how PWM generators work in Arduino and microcontrollers — the gate produces a pulse pattern, the flip-flop counts events over time.',
       blockSvg: `<svg viewBox="0 0 400 160" width="480" height="195">
         <!-- Inputs -->
         <text x="12" y="42" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text>
@@ -3719,13 +3719,13 @@ const LEVELS = [
   {
     id: 44, name: 'CONDITIONAL SET', difficulty: 'Sequential Logic',
     minSteps: 2,
-    description: 'בקר הפעלה — שני שערים מחשבים SET ו-RESET בנפרד, הפליפלופ שומר את המצב. משמש בניהול interrupt flags במעבדי ARM, בבקרת מצבי הפעלה/כיבוי של רכיבים בלוח אם, ובמכונות מצב של בקרי DMA.',
-    instruction: 'שים שער בכל משבצת ופליפלופ, ולחץ STEP פעמיים',
-    hint: 'צעד 1: שער S צריך לתת 1, שער R גם נותן 1 — איזה פליפלופ שומר Q=1 כשגם S וגם R דולקים? צעד 2: שניהם 0 — מי שומר?',
+    description: 'Activation controller — two gates compute SET and RESET independently, the flip-flop holds the state. Used for interrupt flag management in ARM processors, power state control on motherboards, and DMA controller state machines.',
+    instruction: 'Place a gate in each slot and a flip-flop, then click STEP twice',
+    hint: 'Step 1: gate S should output 1, gate R also outputs 1 — which flip-flop keeps Q=1 when both S and R are active? Step 2: both are 0 — which one holds?',
     solution: {
       gatesUsed: ['AND', 'NOT'],
       ffsUsed: ['SR-FF'],
-      explanation: 'AND + NOT + SR-FF — SET גובר בצעד 1, HOLD שומר בצעד 2. בחומרה: כך מנוהלים interrupt flags במעבדי ARM — שער OR מדליק דגל מכל מקור, שער AND מכבה בתנאי ספציפי, SR-FF שומר את המצב.',
+      explanation: 'AND + NOT + SR-FF — SET dominates at step 1, HOLD preserves at step 2. In hardware: this is how interrupt flags are managed in ARM processors — an OR gate sets the flag from any source, an AND gate clears it conditionally, SR-FF holds the state.',
       blockSvg: `<svg viewBox="0 0 400 180" width="480" height="220">
         <!-- Inputs -->
         <text x="12" y="37" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text>
@@ -3795,13 +3795,13 @@ const LEVELS = [
   {
     id: 45, name: 'WRITE-ENABLE', difficulty: 'Sequential Logic',
     minSteps: 3,
-    description: 'רגיסטר עם Write-Enable — ביט נכתב רק כשה-Enable דולק. נמצא בכל register file במעבדי x86 ו-ARM: רק כשה-WE פעיל, הנתון נשמר. בלי WE, המעבד לא יכול לבחור איזה רגיסטר לעדכן.',
-    instruction: 'שים שער ופליפלופ ולחץ STEP שלוש פעמים',
-    hint: 'השער צריך לתת 1 רק כשגם DATA וגם WE דולקים. הפליפלופ צריך לשמור על המצב כשהשער נותן 0.',
+    description: 'Write-enable register — a bit is written only when the Enable signal is active. Found in every register file in x86 and ARM processors: only when WE is active, data is stored. Without WE, the CPU cannot select which register to update.',
+    instruction: 'Place a gate and a flip-flop, then click STEP three times',
+    hint: 'The gate should output 1 only when both DATA and WE are active. The flip-flop should hold its state when the gate outputs 0.',
     solution: {
       gatesUsed: ['AND'],
       ffsUsed: ['T-FF'],
-      explanation: 'Write-Enable Register — AND gate מעביר נתון רק כש-WE=1, T-FF שומר מצב. בחומרה: כך עובד כל register file במעבדי x86 ו-ARM — בלי WE, המעבד לא יכול לבחור איזה רגיסטר לעדכן ואיזה לשמור.',
+      explanation: 'Write-Enable Register — AND gate passes data only when WE=1, T-FF holds state. In hardware: this is how every register file works in x86 and ARM processors — without WE, the CPU cannot select which register to update and which to preserve.',
       blockSvg: `<svg viewBox="0 0 400 160" width="480" height="195">
         <!-- Inputs -->
         <text x="12" y="42" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">DATA</text>
@@ -3865,13 +3865,13 @@ const LEVELS = [
   {
     id: 46, name: 'SYNC COUNTER', difficulty: 'Sequential Logic',
     minSteps: 2,
-    description: 'מונה סינכרוני — שני פליפלופים על אותו שעון, שער AND מחשב carry. משמש בטיימרים של מיקרו-בקרים, במוני כתובות של זיכרון DDR, ובמחלקי תדר במערכות תקשורת 5G.',
-    instruction: 'שים שער ופליפלופ בכל המקומות ולחץ STEP פעמיים',
-    hint: 'FF1 סופר כל פעימה. FF2 סופר רק כש-FF1=1 — איזה שער מעביר רק כששניהם 1? ואיזה פליפלופ מחליף מצב?',
+    description: 'Synchronous counter — two flip-flops on the same clock, an AND gate computes the carry. Used in microcontroller timers, DDR memory address counters, and frequency dividers in 5G communication systems.',
+    instruction: 'Place a gate and a flip-flop in every slot, then click STEP twice',
+    hint: 'FF1 counts every clock pulse. FF2 counts only when FF1=1 — which gate passes only when both are 1? And which flip-flop toggles state?',
     solution: {
       gatesUsed: ['AND'],
       ffsUsed: ['T-FF', 'T-FF'],
-      explanation: 'Synchronous Counter — AND gate מייצר carry: FF2 מחליף רק כש-Q1=1. בחומרה: כך עובדים טיימרים במיקרו-בקרים, מוני כתובות בזיכרון DDR, ומחלקי תדר ב-5G. יותר מהיר מ-ripple כי אין glitches.',
+      explanation: 'Synchronous Counter — AND gate generates carry: FF2 toggles only when Q1=1. In hardware: this is how timers work in microcontrollers, address counters in DDR memory, and frequency dividers in 5G. Faster than ripple counters because there are no glitches.',
       blockSvg: `<svg viewBox="0 0 400 160" width="480" height="195">
         <!-- Inputs -->
         <text x="12" y="52" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">T</text>
@@ -3947,13 +3947,13 @@ const LEVELS = [
   {
     id: 47, name: 'LFSR', difficulty: 'Sequential Logic',
     minSteps: 3,
-    description: 'LFSR — רגיסטר הזזה עם feedback לוגי. משמש בכל מקום שצריך רצפים פסאודו-אקראיים: CRC בכרטיסי רשת Ethernet, scrambling ב-USB 3.0, הצפנת Bluetooth, ו-BIST (בדיקה עצמית) בשבבי Intel.',
-    instruction: 'שים שער אחד ו-4 פליפלופים זהים, ולחץ STEP שלוש פעמים',
-    hint: 'השער מקבל את Q3 ו-Q4 ומחזיר feedback ל-FF1. שאר ה-FFs בשרשרת. בצעד 3 גם Q3 וגם Q4 שונים מ-0 — איזה שער מבדיל בין 1,1 ל-1,0?',
+    description: 'LFSR — a shift register with logic feedback. Used wherever pseudo-random sequences are needed: CRC in Ethernet NICs, scrambling in USB 3.0, Bluetooth encryption, and BIST (built-in self-test) in Intel chips.',
+    instruction: 'Place one gate and 4 identical flip-flops, then click STEP three times',
+    hint: 'The gate takes Q3 and Q4 and feeds back to FF1. The remaining FFs form a chain. At step 3, both Q3 and Q4 differ from 0 — which gate distinguishes between 1,1 and 1,0?',
     solution: {
       gatesUsed: ['XOR'],
       ffsUsed: ['D-FF', 'D-FF', 'D-FF', 'D-FF'],
-      explanation: 'LFSR — XOR(Q3,Q4) יוצר רצף פסאודו-אקראי: 1100→0110→1011→0101. בחומרה: CRC בכרטיסי רשת Ethernet, scrambling ב-USB 3.0, הצפנת Bluetooth, ו-BIST (בדיקה עצמית) בשבבי Intel. המפתח: XOR(1,1)=0 אבל OR(1,1)=1.',
+      explanation: 'LFSR — XOR(Q3,Q4) generates a pseudo-random sequence: 1100->0110->1011->0101. In hardware: CRC in Ethernet NICs, scrambling in USB 3.0, Bluetooth encryption, and BIST in Intel chips. The key: XOR(1,1)=0 but OR(1,1)=1.',
       blockSvg: `<svg viewBox="0 0 400 200" width="480" height="245">
         <text x="12" y="102" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#ffcc00">CLK</text>
         <line x1="45" y1="97" x2="100" y2="97" stroke="#ffcc00" stroke-width="2.5"/>
@@ -4047,13 +4047,13 @@ const LEVELS = [
   {
     id: 48, name: 'PIPELINE BYPASS', difficulty: 'Sequential Logic',
     minSteps: 3,
-    description: 'Pipeline עם Bypass — שער מעבד נתון, 3 פליפלופים מעבירים אותו בשלבים, שער נוסף מזהה התנגשויות. כך עובד pipeline של ARM Cortex: Fetch→Decode→Execute, עם bypass detection שמונע data hazards.',
-    instruction: 'שים שער בכל משבצת ופליפלופ בכל המקומות, ולחץ STEP שלוש פעמים',
-    hint: 'G1 מעבד את A ו-B — בצעד 3 שניהם 0. איזה שער נותן 0 כששני הקלטים 0? G2 בודק אם Q1 וגם Q3 דולקים — איזה שער דורש ששניהם 1?',
+    description: 'Pipeline with bypass — a gate processes data, 3 flip-flops pass it through stages, another gate detects collisions. This is how the ARM Cortex pipeline works: Fetch->Decode->Execute, with bypass detection that prevents data hazards.',
+    instruction: 'Place a gate in each slot and a flip-flop in every slot, then click STEP three times',
+    hint: 'G1 processes A and B — at step 3 both are 0. Which gate outputs 0 when both inputs are 0? G2 checks if both Q1 and Q3 are active — which gate requires both to be 1?',
     solution: {
       gatesUsed: ['XOR', 'AND'],
       ffsUsed: ['D-FF', 'D-FF', 'D-FF'],
-      explanation: 'Pipeline Bypass — XOR מעבד, 3 D-FFs מזיזים שלב בכל פעימה, AND מזהה התנגשות. בחומרה: כך עובד pipeline של ARM Cortex (Fetch→Decode→Execute). AND(Q1,Q3) הוא bypass detector שמונע data hazards.',
+      explanation: 'Pipeline Bypass — XOR processes, 3 D-FFs shift one stage per clock, AND detects collision. In hardware: this is how the ARM Cortex pipeline works (Fetch->Decode->Execute). AND(Q1,Q3) is the bypass detector that prevents data hazards.',
       blockSvg: `<svg viewBox="0 0 420 200" width="500" height="245">
         <!-- Inputs -->
         <text x="12" y="52" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text>
@@ -4156,13 +4156,13 @@ const LEVELS = [
   {
     id: 49, name: 'HAZARD DETECTOR', difficulty: 'Sequential Logic',
     minSteps: 3,
-    description: 'גלאי שינוי — הפליפלופ שומר ערך קודם, השער משווה לערך נוכחי וחושף שינויים. נמצא בממשקי GPIO של מיקרו-בקרים (זיהוי edge), בבקרי תצוגה (זיהוי שינוי פיקסל), ובמעבדים לזיהוי data hazards.',
-    instruction: 'שים שער ופליפלופ ולחץ STEP שלוש פעמים',
-    hint: 'הפליפלופ מקבל את A ישירות ושומר אותו לצעד הבא. השער משווה A הנוכחי ל-Q (A הקודם). איזה שער נותן 1 כשהכניסות שונות?',
+    description: 'Change detector — the flip-flop stores the previous value, the gate compares it to the current value and exposes changes. Found in microcontroller GPIO interfaces (edge detection), display controllers (pixel change detection), and processors for data hazard detection.',
+    instruction: 'Place a gate and a flip-flop, then click STEP three times',
+    hint: 'The flip-flop receives A directly and stores it for the next step. The gate compares current A to Q (previous A). Which gate outputs 1 when inputs differ?',
     solution: {
       gatesUsed: ['XOR'],
       ffsUsed: ['D-FF'],
-      explanation: 'Hazard Detector — D-FF שומר ערך קודם, XOR משווה לנוכחי. בחומרה: GPIO edge detection במיקרו-בקרים (זיהוי לחיצת כפתור), זיהוי שינוי פיקסל בבקרי תצוגה, ו-data hazard detection ב-pipeline של מעבדים.',
+      explanation: 'Hazard Detector — D-FF stores the previous value, XOR compares to the current one. In hardware: GPIO edge detection in microcontrollers (button press detection), pixel change detection in display controllers, and data hazard detection in processor pipelines.',
       blockSvg: `<svg viewBox="0 0 400 160" width="480" height="195">
         <!-- Inputs -->
         <text x="12" y="52" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text>
@@ -4235,13 +4235,13 @@ const LEVELS = [
   {
     id: 50, name: 'DUAL-MODE REG', difficulty: 'Sequential Logic',
     minSteps: 3,
-    description: 'רגיסטר דו-מצבי — שני שערים שולטים ב-J ו-K בנפרד, מה שמאפשר SET, RESET ו-TOGGLE באותו מעגל. נמצא במכונות מצב של בקרי Ethernet, בבוררי עדיפויות של אפיק PCI, ובמעגלי בקרת cache במעבדים.',
-    instruction: 'שים שער בשני המקומות ופליפלופ, ולחץ STEP שלוש פעמים',
-    hint: 'שני השערים חייבים להיות זהים. G1 מקבל A=1,B=1 (תמיד). G2 מקבל A=1,C (משתנה). איזה שער נותן 1 רק כשהשניים 1? ואיזה פליפלופ מגיב שונה ל-J=1,K=1 לעומת J=1,K=0?',
+    description: 'Dual-mode register — two gates control J and K independently, enabling SET, RESET, and TOGGLE in the same circuit. Found in Ethernet controller state machines, PCI bus priority arbiters, and cache control circuits in processors.',
+    instruction: 'Place a gate in both slots and a flip-flop, then click STEP three times',
+    hint: 'Both gates must be identical. G1 receives A=1,B=1 (always). G2 receives A=1,C (changing). Which gate outputs 1 only when both are 1? And which flip-flop responds differently to J=1,K=1 vs J=1,K=0?',
     solution: {
       gatesUsed: ['AND', 'AND'],
       ffsUsed: ['JK-FF'],
-      explanation: 'Dual-Mode Register — AND gates שולטים ב-J ו-K בנפרד: TOGGLE, SET, TOGGLE. בחומרה: מכונות מצב בבקרי Ethernet, בוררי עדיפויות של אפיק PCI, ובקרת cache levels במעבדים. רק JK-FF מבדיל בין TOGGLE ל-SET.',
+      explanation: 'Dual-Mode Register — AND gates control J and K independently: TOGGLE, SET, TOGGLE. In hardware: state machines in Ethernet controllers, PCI bus priority arbiters, and cache level control in processors. Only JK-FF distinguishes between TOGGLE and SET.',
       blockSvg: `<svg viewBox="0 0 400 160" width="480" height="195">
         <!-- Inputs -->
         <text x="12" y="42" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text>

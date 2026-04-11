@@ -849,10 +849,6 @@
           <div class="level-card-status">${completed ? 'COMPLETED' : 'NEW'}</div>
         </div>
         <div class="level-card-title">${level.name}</div>
-        <div class="level-card-meta">
-          <span>Difficulty: ${level.difficulty || 'Medium'}</span>
-          <span>${completed ? 'REPLAY' : 'PLAY'}</span>
-        </div>
         <div class="level-card-best">Best: ${best !== null ? formatTime(best) : '--:--.--'}</div>
       `;
 
@@ -943,13 +939,48 @@
       if (State.solved) { _stopAutoClock(); return; }
       State.stepClock();
       _updateStepCount();
+      setTimeout(_checkFail, 200);
     }, 600);
   }
+
+  // ── Fail detection ─────────────────────────────────────────
+  const failOverlay   = document.getElementById('fail-overlay');
+  const btnFailRetry  = document.getElementById('btn-fail-retry');
+
+  function _checkFail() {
+    const levelDef = LEVELS[State.currentLevelIndex];
+    if (!levelDef || State.solved) return;
+    if (State.stepCount <= 0) return; // no steps taken yet
+    // Determine how many steps are required
+    const minSteps = levelDef.minSteps || 0;
+    const maxStepVals = (levelDef.nodes || []).reduce((max, n) =>
+      n.stepValues ? Math.max(max, n.stepValues.length) : max, 0);
+    const required = Math.max(minSteps, maxStepVals);
+    if (required <= 0) return; // non-sequential or no step limit
+    if (State.stepCount >= required && !State.solved) {
+      _stopAutoClock();
+      failOverlay.classList.remove('hidden');
+    }
+  }
+
+  function _closeFailOverlay() {
+    failOverlay.classList.add('hidden');
+    State.resetLevel();
+    _stopAutoClock();
+    _updateStepCount();
+  }
+
+  btnFailRetry.addEventListener('click', _closeFailOverlay);
+  failOverlay.addEventListener('click', (e) => {
+    if (e.target === failOverlay) _closeFailOverlay();
+  });
 
   btnStep.addEventListener('click', () => {
     if (!State.isSequentialLevel() || State.solved) return;
     State.stepClock();
     _updateStepCount();
+    // Check fail after a short delay (let tick evaluate first)
+    setTimeout(_checkFail, 200);
   });
 
   btnAutoClk.addEventListener('click', () => {
@@ -1065,8 +1096,24 @@
       // Show solution inside win overlay if available
       if (levelDef.solution) {
         const sol = levelDef.solution;
-        solutionBlock.innerHTML = sol.blockSvg;
-        solutionCircuit.innerHTML = sol.circuitSvg;
+        if (sol.blockSvg) {
+          solutionBlock.innerHTML = sol.blockSvg;
+          solutionBlock.style.display = '';
+          solutionBlock.style.justifyContent = '';
+          solutionBlock.parentElement.querySelector('.solution-diagram-label').style.display = '';
+          solutionBlock.parentElement.classList.remove('hidden');
+          solutionCircuit.innerHTML = sol.circuitSvg;
+          solutionCircuit.parentElement.classList.remove('hidden');
+        } else {
+          // Single diagram — hide both labels, center the diagram
+          solutionBlock.innerHTML = sol.circuitSvg;
+          solutionBlock.parentElement.querySelector('.solution-diagram-label').style.display = 'none';
+          solutionBlock.style.display = 'flex';
+          solutionBlock.style.justifyContent = 'center';
+          solutionBlock.parentElement.classList.remove('hidden');
+          solutionCircuit.innerHTML = '';
+          solutionCircuit.parentElement.classList.add('hidden');
+        }
         solutionExplanation.textContent = sol.explanation || '';
         const gateList = sol.gatesUsed ? sol.gatesUsed.join(', ') : '';
         const ffList = sol.ffsUsed ? sol.ffsUsed.join(', ') : '';

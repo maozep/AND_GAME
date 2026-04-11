@@ -386,6 +386,65 @@ html, body {
   box-shadow: 0 0 8px rgba(160, 96, 255, 0.4);
 }
 
+/* ── Fail Overlay ────────────────────────────────────────── */
+
+#fail-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(6px);
+  animation: fadeIn 0.4s ease;
+}
+
+#fail-box {
+  background: linear-gradient(135deg, #1a0a0a 0%, #2a1010 100%);
+  border: 2px solid #cc3333;
+  border-radius: 16px;
+  padding: 32px 40px;
+  text-align: center;
+  max-width: 400px;
+  box-shadow: 0 0 40px rgba(204, 51, 51, 0.3);
+}
+
+#fail-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 24px;
+  font-weight: bold;
+  color: #ff4444;
+  margin-bottom: 16px;
+}
+
+#fail-message {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  color: #cc9999;
+  margin-bottom: 24px;
+  line-height: 1.5;
+  direction: rtl;
+}
+
+#btn-fail-retry {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  font-weight: bold;
+  padding: 10px 28px;
+  border: 2px solid #cc3333;
+  border-radius: 8px;
+  background: rgba(204, 51, 51, 0.2);
+  color: #ff6666;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+#btn-fail-retry:hover {
+  background: rgba(204, 51, 51, 0.4);
+  color: #fff;
+}
+
 /* ── Win Overlay ─────────────────────────────────────────── */
 
 #win-overlay,
@@ -407,6 +466,7 @@ html, body {
   animation: fadeIn 0.4s ease;
 }
 
+#fail-overlay.hidden,
 #win-overlay.hidden,
 #final-overlay.hidden,
 #menu-overlay.hidden,
@@ -802,6 +862,8 @@ html, body {
   line-height: 1.9;
   letter-spacing: 1.2px;
   color: var(--text-primary);
+  direction: rtl;
+  text-align: right;
 }
 
 #hint-body strong {
@@ -933,7 +995,7 @@ html, body {
 }
 
 .level-card-title {
-  font-size: 16px;
+  font-size: 19px;
   font-weight: 800;
   letter-spacing: 2.5px;
   color: var(--text-primary);

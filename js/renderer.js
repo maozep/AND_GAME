@@ -356,68 +356,57 @@ const Renderer = (() => {
     ctx.save();
     if (val === 1) { ctx.shadowColor = C.wireHighGlow; ctx.shadowBlur = 20; }
 
-    // Dynamic input with stepValues: show all values as small circles in a row,
-    // with the active step highlighted inside a mini-circle
+    // Dynamic input with stepValues: main circle first, then mini-circles on top
     if (node.stepValues && node.stepValues.length > 1) {
       const steps = node.stepValues;
       const n = steps.length;
-      const activeIdx = Math.min(_stepCount, n) - 1; // -1 means before first step
+      const activeIdx = Math.min(_stepCount, n) - 1;
       const miniR = 8;
       const spacing = miniR * 2.5;
       const totalW = (n - 1) * spacing;
       const startX = node.x - totalW / 2;
 
-      // Draw all step values as small circles right-to-left inside the main circle
-      for (let i = 0; i < n; i++) {
-        const cx = startX + i * spacing;
-        const cy = node.y;
-        const sv = steps[i];
-        const isActive = (i === activeIdx);
-
-        // Small circle background
-        ctx.beginPath();
-        ctx.arc(cx, cy, miniR, 0, Math.PI * 2);
-        if (isActive) {
-          ctx.fillStyle = sv === 1 ? 'rgba(57,255,20,0.7)' : 'rgba(255,60,60,0.6)';
-        } else {
-          ctx.fillStyle = sv === 1 ? 'rgba(40,180,15,0.4)' : 'rgba(200,50,50,0.35)';
-        }
-        ctx.fill();
-
-        // Small circle border
-        ctx.strokeStyle = isActive ? '#fff' : (sv === 1 ? 'rgba(57,255,20,0.75)' : 'rgba(255,60,60,0.65)');
-        ctx.lineWidth = isActive ? 2.5 : 1.5;
-        ctx.stroke();
-
-        // Value text inside mini-circle
-        ctx.fillStyle = isActive ? '#fff' : 'rgba(240,240,240,0.85)';
-        ctx.font = (isActive ? 'bold ' : '') + '10px JetBrains Mono, monospace';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText(sv.toString(), cx, cy);
-      }
-
-      // Draw main circle (outer ring only, transparent fill to show mini-circles)
+      // Main circle background first
       ctx.beginPath();
       ctx.arc(node.x, node.y, r, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(8,16,24,0.75)';
+      ctx.fillStyle = 'rgba(8,16,24,0.85)';
       ctx.fill();
-
       ctx.strokeStyle = val === 1 ? '#1a8a1a' : '#6a1a1a';
       ctx.lineWidth   = hovered ? 2.5 : 1.5;
       ctx.stroke();
       ctx.shadowBlur  = 0;
 
-      // Redraw the active mini-circle on top (so it's not clipped by main fill)
+      // Mini-circles on top (inactive)
+      for (let i = 0; i < n; i++) {
+        if (i === activeIdx) continue;
+        const cx = startX + i * spacing;
+        const sv = steps[i];
+
+        ctx.beginPath();
+        ctx.arc(cx, node.y, miniR, 0, Math.PI * 2);
+        ctx.fillStyle = sv === 1 ? 'rgba(40,180,15,0.45)' : 'rgba(200,50,50,0.4)';
+        ctx.fill();
+        ctx.strokeStyle = sv === 1 ? 'rgba(57,255,20,0.7)' : 'rgba(255,60,60,0.6)';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+
+        ctx.fillStyle = 'rgba(240,240,240,0.8)';
+        ctx.font = '10px JetBrains Mono, monospace';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(sv.toString(), cx, node.y);
+      }
+
+      // Active mini-circle on top (brightest)
       if (activeIdx >= 0) {
         const acx = startX + activeIdx * spacing;
         const sv = steps[activeIdx];
         ctx.beginPath();
         ctx.arc(acx, node.y, miniR + 1, 0, Math.PI * 2);
-        ctx.fillStyle = sv === 1 ? 'rgba(57,255,20,0.7)' : 'rgba(255,60,60,0.6)';
+        ctx.fillStyle = sv === 1 ? 'rgba(57,255,20,0.75)' : 'rgba(255,60,60,0.65)';
         ctx.fill();
         ctx.strokeStyle = '#fff';
-        ctx.lineWidth = 2;
+        ctx.lineWidth = 2.5;
         ctx.stroke();
 
         ctx.fillStyle = '#fff';
@@ -595,7 +584,7 @@ const Renderer = (() => {
     ctx.stroke();
     ctx.setLineDash([]);
 
-    // Dynamic output with stepTargets: show timeline of expected values
+    // Dynamic output with stepTargets: mini-circles drawn on top of main circle
     if (hasTimeline) {
       const steps = node.stepTargets;
       const n = steps.length;
@@ -605,43 +594,37 @@ const Renderer = (() => {
       const totalW = (n - 1) * spacing;
       const startX = node.x - totalW / 2;
 
-      // Draw all step targets as small circles
+      // Inactive mini-circles
       for (let i = 0; i < n; i++) {
+        if (i === activeIdx) continue;
         const cx = startX + i * spacing;
-        const cy = node.y;
         const sv = steps[i];
-        const isActive = (i === activeIdx);
 
         ctx.beginPath();
-        ctx.arc(cx, cy, miniR, 0, Math.PI * 2);
-        if (isActive) {
-          ctx.fillStyle = sv === 1 ? 'rgba(57,255,20,0.7)' : 'rgba(255,60,60,0.6)';
-        } else {
-          ctx.fillStyle = sv === 1 ? 'rgba(40,180,15,0.4)' : 'rgba(200,50,50,0.35)';
-        }
+        ctx.arc(cx, node.y, miniR, 0, Math.PI * 2);
+        ctx.fillStyle = sv === 1 ? 'rgba(40,180,15,0.45)' : 'rgba(200,50,50,0.4)';
         ctx.fill();
-
-        ctx.strokeStyle = isActive ? '#fff' : (sv === 1 ? 'rgba(57,255,20,0.75)' : 'rgba(255,60,60,0.65)');
-        ctx.lineWidth = isActive ? 2.5 : 1.5;
+        ctx.strokeStyle = sv === 1 ? 'rgba(57,255,20,0.7)' : 'rgba(255,60,60,0.6)';
+        ctx.lineWidth = 1.5;
         ctx.stroke();
 
-        ctx.fillStyle = isActive ? '#fff' : 'rgba(240,240,240,0.85)';
-        ctx.font = (isActive ? 'bold ' : '') + '10px JetBrains Mono, monospace';
+        ctx.fillStyle = 'rgba(240,240,240,0.8)';
+        ctx.font = '10px JetBrains Mono, monospace';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText(sv.toString(), cx, cy);
+        ctx.fillText(sv.toString(), cx, node.y);
       }
 
-      // Redraw active mini-circle on top
+      // Active mini-circle (brightest)
       if (activeIdx >= 0) {
         const acx = startX + activeIdx * spacing;
         const sv = steps[activeIdx];
         ctx.beginPath();
         ctx.arc(acx, node.y, miniR + 1, 0, Math.PI * 2);
-        ctx.fillStyle = sv === 1 ? 'rgba(57,255,20,0.7)' : 'rgba(255,60,60,0.6)';
+        ctx.fillStyle = sv === 1 ? 'rgba(57,255,20,0.75)' : 'rgba(255,60,60,0.65)';
         ctx.fill();
         ctx.strokeStyle = '#fff';
-        ctx.lineWidth = 2;
+        ctx.lineWidth = 2.5;
         ctx.stroke();
 
         ctx.fillStyle = '#fff';

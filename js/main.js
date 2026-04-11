@@ -94,6 +94,8 @@
 
   function _getTruthObjective(levelDef) {
     if (!levelDef) return '';
+    // Hide objective for levels 1-6 (it reveals the solution)
+    if (levelDef.id >= 1 && levelDef.id <= 6) return '';
     if (TRUTH_OBJECTIVES[levelDef.id]) return TRUTH_OBJECTIVES[levelDef.id];
     if (levelDef.description) return levelDef.description;
     return `Goal: Understand the operation of ${levelDef.name}.`;
@@ -799,6 +801,17 @@
     return completedLevelIds.has(levelId);
   }
 
+  // Hide solution names until completed
+  function getDisplayName(level) {
+    if (level.id >= 1 && level.id <= 6 && !isLevelCompleted(level.id)) {
+      return `GATE ${level.id}`;
+    }
+    if (level.id >= 31 && level.id <= 34 && !isLevelCompleted(level.id)) {
+      return `FLIP-FLOP ${level.id - 30}`;
+    }
+    return level.name;
+  }
+
   function setMenuDifficulty(difficulty) {
     currentMenuDifficulty = difficulty;
     renderLevelMenu();
@@ -848,7 +861,7 @@
           <div class="level-card-name">LEVEL ${index + 1}</div>
           <div class="level-card-status">${completed ? 'COMPLETED' : 'NEW'}</div>
         </div>
-        <div class="level-card-title">${level.name}</div>
+        <div class="level-card-title">${getDisplayName(level)}</div>
         <div class="level-card-best">Best: ${best !== null ? formatTime(best) : '--:--.--'}</div>
       `;
 
@@ -878,7 +891,7 @@
     if (!State.level) return;
 
     const level = LEVELS[State.currentLevelIndex];
-    hintLevelEl.textContent = `LEVEL ${State.currentLevelIndex + 1} — ${level.name}`;
+    hintLevelEl.textContent = `LEVEL ${State.currentLevelIndex + 1} — ${getDisplayName(level)}`;
     hintBodyEl.textContent = level.hint || 'Try matching the target by combining the gate outputs and input values carefully.';
     hintOverlay.classList.remove('hidden');
     hintOverlay.setAttribute('aria-hidden', 'false');
@@ -1037,7 +1050,7 @@
     _elapsedMs = 0;
 
     // Update HUD
-    levelName.textContent = `${index + 1}. ${levelDef.name}`;
+    levelName.textContent = `${index + 1}. ${getDisplayName(levelDef)}`;
     updateHintButtonState();
     currentMenuDifficulty = levelDef.difficulty || 'Medium';
 
@@ -1052,7 +1065,7 @@
     // Show instruction overlay if level has one (timer starts on START click)
     const hasInstruction = !!levelDef.instruction;
     if (hasInstruction) {
-      instructionLevelName.textContent = levelDef.name;
+      instructionLevelName.textContent = getDisplayName(levelDef);
       instructionText.textContent = levelDef.instruction;
       instructionOverlay.classList.remove('hidden');
     }
@@ -1089,6 +1102,8 @@
       stopTimer();
       setBestTime(levelDef.id, _elapsedMs);
       markLevelCompleted(levelDef.id);
+      // Update HUD to reveal real name now that level is completed
+      levelName.textContent = `${idx + 1}. ${getDisplayName(levelDef)}`;
       winLevelEl.textContent = `LEVEL ${idx + 1} — ${LEVELS[idx].name}`;
       winTimeEl.textContent = `TIME: ${formatTime(_elapsedMs)}`;
       const best = getBestTime(levelDef.id);
@@ -1333,6 +1348,27 @@
       State.resetLevel();
       _stopAutoClock();
       _updateStepCount();
+      return;
+    }
+    // Toggle hint: H
+    if (e.key === 'h' || e.key === 'H') {
+      if (!e.ctrlKey && !e.altKey && !e.metaKey) {
+        if (!hintOverlay.classList.contains('hidden')) {
+          closeHintOverlay();
+        } else {
+          openHintOverlay();
+        }
+        return;
+      }
+    }
+    // STEP: Space (sequential levels only)
+    if (e.key === ' ') {
+      e.preventDefault();
+      if (State.isSequentialLevel() && !State.solved) {
+        State.stepClock();
+        _updateStepCount();
+        setTimeout(_checkFail, 200);
+      }
       return;
     }
     if (e.key === 'Escape' && !diagramOverlay.classList.contains('hidden')) {

@@ -20,7 +20,7 @@ const LEVELS = [
     id: 1, name: 'NOT GATE', difficulty: 'Fundamentals',
     description: 'NOT Gate — The NOT gate (inverter) flips the input value: 0 becomes 1 and 1 becomes 0. It is the only single-input gate and is used to create logical negation in any digital circuit.',
     instruction: 'Choose the single gate that matches all cases',
-    hint: 'NOT inverts the input: 0→1, 1→0. It is the only single-input gate.',
+    hint: 'The output is always the opposite of the input. Which gate inverts?',
     truthTable: { inputs: ['A'], outputs: ['Z'], rows: [[[0],[1]],[[1],[0]]] },
     solution: {
       gatesUsed: ['NOT'],
@@ -51,7 +51,7 @@ const LEVELS = [
     id: 2, name: 'AND GATE', difficulty: 'Fundamentals',
     description: 'AND Gate — The AND gate outputs 1 only when both inputs are 1. It is the most basic gate in digital logic, used to check whether multiple conditions are all true simultaneously.',
     instruction: 'Choose the single gate that matches all cases',
-    hint: 'AND outputs 1 ONLY when both inputs are 1. Check all four rows.',
+    hint: 'The output is 1 in only one row. What is special about that row?',
     truthTable: {
       inputs: ['A', 'B'], outputs: ['Z'],
       rows: [[[0,0],[0]], [[0,1],[0]], [[1,0],[0]], [[1,1],[1]]],
@@ -131,7 +131,7 @@ const LEVELS = [
     id: 3, name: 'OR GATE', difficulty: 'Fundamentals',
     description: 'OR Gate — The OR gate outputs 1 when at least one input is 1. Used to check whether any condition is met — a single true input is enough to produce a positive output.',
     instruction: 'Choose the single gate that matches all cases',
-    hint: 'OR outputs 1 when at least one input is 1. Only OR matches all four rows.',
+    hint: 'The output is 0 in only one row. What is special about that row?',
     truthTable: { inputs: ['A','B'], outputs: ['Z'], rows: [[[0,0],[0]],[[0,1],[1]],[[1,0],[1]],[[1,1],[1]]] },
     solution: {
       gatesUsed: ['OR'],
@@ -182,7 +182,7 @@ const LEVELS = [
     id: 4, name: 'NAND GATE', difficulty: 'Fundamentals',
     description: 'NAND Gate — The NAND gate is an inverted AND: it outputs 0 only when both inputs are 1. NAND is a universal gate — any logic circuit can be built using NAND gates alone.',
     instruction: 'Choose the single gate that matches all cases',
-    hint: 'NAND is inverted AND: output is 0 ONLY when both inputs are 1.',
+    hint: 'Compare this truth table to level 2. Every output is flipped. Which gate does that?',
     truthTable: { inputs: ['A','B'], outputs: ['Z'], rows: [[[0,0],[1]],[[0,1],[1]],[[1,0],[1]],[[1,1],[0]]] },
     solution: {
       gatesUsed: ['NAND'],
@@ -233,7 +233,7 @@ const LEVELS = [
     id: 5, name: 'NOR GATE', difficulty: 'Fundamentals',
     description: 'NOR Gate — The NOR gate is an inverted OR: it outputs 1 only when both inputs are 0. Like NAND, NOR is also a universal gate — any logic circuit can be built using NOR gates alone.',
     instruction: 'Choose the single gate that matches all cases',
-    hint: 'NOR is inverted OR: output is 1 ONLY when both inputs are 0.',
+    hint: 'Compare this truth table to level 3. Every output is flipped. Which gate does that?',
     truthTable: { inputs: ['A','B'], outputs: ['Z'], rows: [[[0,0],[1]],[[0,1],[0]],[[1,0],[0]],[[1,1],[0]]] },
     solution: {
       gatesUsed: ['NOR'],
@@ -284,7 +284,7 @@ const LEVELS = [
     id: 6, name: 'XOR GATE', difficulty: 'Fundamentals',
     description: 'XOR Gate — The XOR (exclusive OR) gate outputs 1 only when the inputs differ from each other. Widely used in binary addition and parity checking circuits.',
     instruction: 'Choose the single gate that matches all cases',
-    hint: 'XOR outputs 1 when inputs differ. Only XOR matches all four rows.',
+    hint: 'The output is 1 only when the two inputs are different from each other.',
     truthTable: { inputs: ['A','B'], outputs: ['Z'], rows: [[[0,0],[0]],[[0,1],[1]],[[1,0],[1]],[[1,1],[0]]] },
     solution: {
       gatesUsed: ['XOR'],

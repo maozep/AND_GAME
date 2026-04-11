@@ -347,9 +347,11 @@ AND_GAME/
 
 | Shortcut | Action |
 |----------|--------|
+| `Space` | STEP — deliver one clock edge (sequential levels) |
+| `H` | Toggle hint overlay |
+| `Escape` | Close any open overlay |
 | `Ctrl+Shift+S` | Auto-solve current level (dev tool) |
 | `Ctrl+Shift+R` | Clear all placed components |
-| `Escape` | Close any open overlay |
 
 ---
 

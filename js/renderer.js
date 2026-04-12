@@ -109,8 +109,12 @@ const Renderer = (() => {
 
   // ── Main Render ───────────────────────────────────────────
   let _stepCount = 0;
+  let _currentLevel = null;
+  let _currentNodeValues = null;
   function render(level, evalResult, hoveredNodeId, solved, stepCount) {
     _stepCount = stepCount || 0;
+    _currentLevel = level;
+    _currentNodeValues = (evalResult && evalResult.nodeValues) || new Map();
     if (!ctx || !level) return;
 
     ctx.clearRect(0, 0, W, H);
@@ -647,7 +651,10 @@ const Renderer = (() => {
       ctx.fillText(`→${node.targetValue}`, node.x, node.y + 16);
     }
 
-    ctx.fillStyle    = C.textDim;
+    // Traffic light colored labels for G/Y/R outputs
+    const trafficColors = { 'G': '#39ff14', 'Y': '#ffcc00', 'R': '#ff4444', 'WALK': '#39ff14', 'UNLOCK': '#39ff14', 'FLOOR': '#00d4ff', 'DOOR': '#39ff14', 'ALARM': '#ff4444', 'VEND': '#39ff14', '5₪': '#ffcc00', '10₪': '#ffcc00', '15₪': '#ffcc00' };
+    const labelColor = trafficColors[node.label] || C.textDim;
+    ctx.fillStyle    = labelColor;
     ctx.font         = 'bold 16px JetBrains Mono, monospace';
     if (_currentLayout === 'vertical') {
       ctx.textBaseline = 'alphabetic';
@@ -656,6 +663,259 @@ const Renderer = (() => {
       ctx.textBaseline = 'alphabetic';
       ctx.fillText(node.label || '', node.x, node.y - r - 12);
     }
+
+    // Traffic light glow ring when output is active (val=1)
+    if (trafficColors[node.label] && val === 1) {
+      ctx.beginPath();
+      ctx.arc(node.x, node.y, r + 4, 0, Math.PI * 2);
+      ctx.strokeStyle = trafficColors[node.label];
+      ctx.lineWidth = 3;
+      ctx.shadowColor = trafficColors[node.label];
+      ctx.shadowBlur = 15;
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+    }
+
+    // Elevator visual for DOOR output
+    if (node.label === 'DOOR') {
+      if (_currentLevel) {
+        const floorNode = _currentLevel.nodes.find(n => n.label === 'FLOOR');
+        const floorVal = floorNode ? (_currentNodeValues.get(floorNode.id) ?? null) : null;
+        const doorOpen = val === 1;
+        const atFloor1 = floorVal === 1;
+
+        const ex = node.x + 55;
+        const ey = node.y - 60;
+
+        // Elevator shaft
+        ctx.fillStyle = 'rgba(10,10,10,0.95)';
+        _roundRect(ctx, ex, ey, 55, 110, 6);
+        ctx.fill();
+        ctx.strokeStyle = '#444';
+        ctx.lineWidth = 2;
+        _roundRect(ctx, ex, ey, 55, 110, 6);
+        ctx.stroke();
+
+        // Floor divider
+        ctx.beginPath();
+        ctx.moveTo(ex, ey + 55);
+        ctx.lineTo(ex + 55, ey + 55);
+        ctx.strokeStyle = '#333';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+
+        // Floor labels
+        ctx.fillStyle = '#555';
+        ctx.font = '8px JetBrains Mono, monospace';
+        ctx.textAlign = 'right';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('F1', ex - 4, ey + 27);
+        ctx.fillText('F0', ex - 4, ey + 82);
+
+        // Cabin (at floor 1 or floor 0)
+        const cabinY = atFloor1 ? ey + 5 : ey + 60;
+        const cabinColor = doorOpen ? '#39ff14' : '#2a5a90';
+        if (doorOpen) { ctx.shadowColor = '#39ff14'; ctx.shadowBlur = 10; }
+        ctx.fillStyle = doorOpen ? 'rgba(57,255,20,0.2)' : 'rgba(42,90,144,0.3)';
+        _roundRect(ctx, ex + 5, cabinY, 45, 45, 4);
+        ctx.fill();
+        ctx.strokeStyle = cabinColor;
+        ctx.lineWidth = 2;
+        _roundRect(ctx, ex + 5, cabinY, 45, 45, 4);
+        ctx.stroke();
+        ctx.shadowBlur = 0;
+
+        // Door lines (open or closed)
+        if (doorOpen) {
+          // Open doors — gap in middle
+          ctx.strokeStyle = '#39ff14';
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.moveTo(ex + 8, cabinY + 5); ctx.lineTo(ex + 8, cabinY + 40);
+          ctx.stroke();
+          ctx.beginPath();
+          ctx.moveTo(ex + 47, cabinY + 5); ctx.lineTo(ex + 47, cabinY + 40);
+          ctx.stroke();
+        } else {
+          // Closed doors — line in middle
+          ctx.strokeStyle = '#2a5a90';
+          ctx.lineWidth = 1.5;
+          ctx.beginPath();
+          ctx.moveTo(ex + 27, cabinY + 5); ctx.lineTo(ex + 27, cabinY + 40);
+          ctx.stroke();
+        }
+
+        // Status text below
+        ctx.fillStyle = doorOpen ? '#39ff14' : '#888';
+        ctx.font = 'bold 9px JetBrains Mono, monospace';
+        ctx.textAlign = 'center';
+        ctx.fillText(doorOpen ? 'OPEN' : 'CLOSED', ex + 27, ey + 120);
+      }
+    }
+
+    // Vending machine visual for VEND output
+    if (node.label === '15₪' || node.label === 'VEND') {
+      const vx = node.x + 55;
+      const vy = node.y - 50;
+      const vended = val === 1;
+
+      // Machine body
+      ctx.fillStyle = 'rgba(15,15,15,0.95)';
+      _roundRect(ctx, vx, vy, 65, 95, 8);
+      ctx.fill();
+      ctx.strokeStyle = vended ? '#39ff14' : '#444';
+      ctx.lineWidth = 2;
+      if (vended) { ctx.shadowColor = '#39ff14'; ctx.shadowBlur = 10; }
+      _roundRect(ctx, vx, vy, 65, 95, 8);
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+
+      // Coin counter (3 slots)
+      const coins = _currentLevel ? _currentLevel.nodes.filter(n => n.type === 'OUTPUT' && (n.label === '5₪' || n.label === '10₪' || n.label === '15₪')) : [];
+      for (let i = 0; i < 3; i++) {
+        const cx = vx + 14 + i * 14;
+        const cy = vy + 18;
+        const coinNode = coins[i];
+        const coinVal = coinNode ? (_currentNodeValues.get(coinNode.id) ?? 0) : 0;
+        ctx.beginPath();
+        ctx.arc(cx, cy, 5, 0, Math.PI * 2);
+        ctx.fillStyle = coinVal === 1 ? '#ffcc00' : 'rgba(60,60,60,0.5)';
+        ctx.fill();
+        ctx.strokeStyle = coinVal === 1 ? '#ffcc00' : '#333';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+      }
+
+      // Price label
+      ctx.fillStyle = '#ffcc00';
+      ctx.font = 'bold 10px JetBrains Mono, monospace';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('15₪', vx + 32, vy + 40);
+
+      // Can dispenser
+      if (vended) {
+        // Can dropping out
+        ctx.fillStyle = 'rgba(255,68,68,0.7)';
+        _roundRect(ctx, vx + 15, vy + 55, 35, 20, 4);
+        ctx.fill();
+        ctx.strokeStyle = '#ff4444';
+        ctx.lineWidth = 1.5;
+        _roundRect(ctx, vx + 15, vy + 55, 35, 20, 4);
+        ctx.stroke();
+        ctx.fillStyle = '#fff';
+        ctx.font = 'bold 8px JetBrains Mono, monospace';
+        ctx.fillText('COLA', vx + 32, vy + 65);
+      } else {
+        // Empty slot
+        ctx.fillStyle = 'rgba(30,30,30,0.8)';
+        _roundRect(ctx, vx + 15, vy + 55, 35, 20, 4);
+        ctx.fill();
+        ctx.strokeStyle = '#333';
+        ctx.lineWidth = 1;
+        _roundRect(ctx, vx + 15, vy + 55, 35, 20, 4);
+        ctx.stroke();
+      }
+
+      // Status
+      ctx.fillStyle = vended ? '#39ff14' : '#888';
+      ctx.font = 'bold 9px JetBrains Mono, monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText(vended ? 'ENJOY!' : 'INSERT COIN', vx + 32, vy + 88);
+    }
+
+    // Alarm siren visual for ALARM output
+    if (node.label === 'ALARM') {
+      const ax = node.x + 55;
+      const ay = node.y - 25;
+      const alarmOn = val === 1;
+
+      // Siren body
+      ctx.beginPath();
+      ctx.arc(ax + 25, ay + 20, 22, 0, Math.PI * 2);
+      ctx.fillStyle = alarmOn ? 'rgba(255,68,68,0.3)' : 'rgba(40,20,20,0.5)';
+      ctx.fill();
+      if (alarmOn) { ctx.shadowColor = '#ff4444'; ctx.shadowBlur = 20; }
+      ctx.strokeStyle = alarmOn ? '#ff4444' : '#555';
+      ctx.lineWidth = 2.5;
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+
+      // Inner circle
+      ctx.beginPath();
+      ctx.arc(ax + 25, ay + 20, 12, 0, Math.PI * 2);
+      ctx.fillStyle = alarmOn ? 'rgba(255,68,68,0.6)' : 'rgba(60,30,30,0.4)';
+      ctx.fill();
+      ctx.strokeStyle = alarmOn ? '#ff6666' : '#444';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      // Exclamation or status
+      ctx.fillStyle = alarmOn ? '#fff' : '#666';
+      ctx.font = 'bold 14px JetBrains Mono, monospace';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(alarmOn ? '!' : '-', ax + 25, ay + 20);
+
+      // Pulse rings when active
+      if (alarmOn) {
+        const t = (Date.now() / 400) % 1;
+        ctx.beginPath();
+        ctx.arc(ax + 25, ay + 20, 22 + t * 15, 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(255,68,68,${0.4 * (1 - t)})`;
+        ctx.lineWidth = 2;
+        ctx.stroke();
+      }
+
+      // Label
+      ctx.fillStyle = alarmOn ? '#ff4444' : '#555';
+      ctx.font = 'bold 9px JetBrains Mono, monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText(alarmOn ? 'TRIGGERED' : 'ARMED', ax + 25, ay + 50);
+    }
+
+    // Safe/vault visual for UNLOCK output
+    if (node.label === 'UNLOCK') {
+      const sx = node.x + 55;
+      const sy = node.y - 35;
+      const sw = 60, sh = 70;
+      const unlocked = val === 1;
+
+      // Safe body
+      ctx.fillStyle = unlocked ? 'rgba(10,40,10,0.95)' : 'rgba(25,15,15,0.95)';
+      _roundRect(ctx, sx, sy, sw, sh, 8);
+      ctx.fill();
+      ctx.strokeStyle = unlocked ? '#39ff14' : '#555';
+      ctx.lineWidth = 2;
+      if (unlocked) { ctx.shadowColor = '#39ff14'; ctx.shadowBlur = 12; }
+      _roundRect(ctx, sx, sy, sw, sh, 8);
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+
+      // Lock dial / handle
+      const cx = sx + sw / 2;
+      const cy = sy + sh / 2 - 5;
+      ctx.beginPath();
+      ctx.arc(cx, cy, 12, 0, Math.PI * 2);
+      ctx.fillStyle = unlocked ? 'rgba(57,255,20,0.15)' : 'rgba(80,80,80,0.3)';
+      ctx.fill();
+      ctx.strokeStyle = unlocked ? '#39ff14' : '#666';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      // Lock icon or OPEN text
+      ctx.fillStyle = unlocked ? '#39ff14' : '#ff4444';
+      ctx.font = 'bold 10px JetBrains Mono, monospace';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(unlocked ? 'OPEN' : 'LOCKED', cx, cy);
+
+      // Handle bar at bottom
+      ctx.fillStyle = unlocked ? '#39ff14' : '#555';
+      _roundRect(ctx, cx - 15, sy + sh - 18, 30, 8, 3);
+      ctx.fill();
+    }
+
     ctx.restore();
   }
 
@@ -802,8 +1062,9 @@ const Renderer = (() => {
     ctx.closePath();
     ctx.fill();
 
-    // Node label above
-    ctx.fillStyle    = C.textDim;
+    // Node label above (with traffic light colors for G/Y/R)
+    const ffTrafficColors = { 'G': '#39ff14', 'Y': '#ffcc00', 'R': '#ff4444' };
+    ctx.fillStyle    = ffTrafficColors[node.label] || C.textDim;
     ctx.font         = '10px JetBrains Mono, monospace';
     ctx.textAlign    = 'center';
     ctx.textBaseline = 'alphabetic';

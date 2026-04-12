@@ -60,7 +60,7 @@
   const BEST_TIMES_KEY = 'and_game_best_times';
   const completedLevelIds = new Set(loadCompletedLevelIds());
   const bestTimes = loadBestTimes();
-  const DIFFICULTY_ORDER = ['Fundamentals', 'Building Blocks', 'Advanced Circuits', 'Flip-Flops', 'Sequential Logic'];
+  const DIFFICULTY_ORDER = ['Fundamentals', 'Building Blocks', 'Advanced Circuits', 'Flip-Flops', 'Sequential Logic', 'FSM Applications'];
   const TRUTH_OBJECTIVES = {
     1: 'Goal: Understand that an AND gate outputs 1 only when both inputs are 1.',
     2: 'Goal: Understand that an OR gate outputs 1 when at least one input is 1.',
@@ -1066,7 +1066,12 @@
     const hasInstruction = !!levelDef.instruction;
     if (hasInstruction) {
       instructionLevelName.textContent = getDisplayName(levelDef);
-      instructionText.textContent = levelDef.instruction;
+      // Support HTML in instruction (for special visuals like traffic light)
+      if (levelDef.instructionHtml) {
+        instructionText.innerHTML = levelDef.instructionHtml;
+      } else {
+        instructionText.textContent = levelDef.instruction;
+      }
       instructionOverlay.classList.remove('hidden');
     }
 

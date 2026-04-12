@@ -4317,6 +4317,493 @@ const LEVELS = [
     ],
   },
 
+  // ════════════════════════════════════════════════════════════
+  // TAB 6 — 6. FSM Applications  (IDs 51+)
+  // State machines combining shift registers, feedback, and decode logic.
+  // ════════════════════════════════════════════════════════════
+
+  // L51 — ELEVATOR CONTROLLER (T-FF for floor + AND gate for door)
+  // MOVE=[1,0,1]: elevator goes up, stops, goes down. CALL=1 constant.
+  // T-FF toggles floor: 0→1→1→0. AND(FLOOR, CALL) → DOOR open only at floor 1.
+  // Unique: AND (OR gives DOOR=1 at floor 0). T-FF (D-FF captures MOVE, wrong floor).
+  {
+    id: 51, name: 'ELEVATOR CTRL', difficulty: 'FSM Applications',
+    minSteps: 3,
+    description: 'Elevator Controller — a flip-flop tracks which floor the elevator is on. The door opens only when the elevator is at the requested floor. Found in every elevator PLC, building automation system, and industrial lift controller.',
+    instruction: 'Control a 2-floor elevator. Open the door only at the right floor.',
+    instructionHtml: '<div style="text-align:center;margin:18px 0"><svg viewBox="0 0 160 260" width="120" height="195"><rect x="10" y="10" width="140" height="240" rx="6" fill="#111" stroke="#444" stroke-width="2"/><rect x="25" y="25" width="110" height="95" rx="4" fill="#0a0f18" stroke="#333" stroke-width="1.5"/><text x="80" y="55" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" fill="#888">FLOOR 1</text><text x="80" y="80" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" fill="#39ff14">CALL</text><rect x="25" y="135" width="110" height="95" rx="4" fill="#0a1a0a" stroke="#39ff14" stroke-width="2"/><text x="80" y="165" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" fill="#39ff14">FLOOR 0</text><rect x="55" y="180" width="50" height="30" rx="3" fill="rgba(57,255,20,0.2)" stroke="#39ff14" stroke-width="1.5"/><text x="80" y="200" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#39ff14">DOOR</text><text x="80" y="248" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#888">Elevator starts at Floor 0</text></svg></div><p style="text-align:center;color:#c8d8f0;font-size:14px;margin:8px 0">The elevator moves between floors with each MOVE signal.</p><p style="text-align:center;color:#c8d8f0;font-size:14px;margin:4px 0">The <span style="color:#39ff14;font-weight:bold">DOOR</span> opens only when the elevator is at <span style="color:#39ff14;font-weight:bold">Floor 1</span> AND a call is active.</p><p style="text-align:center;color:#888;font-size:12px;margin:4px 0">Place a flip-flop and a gate, then STEP three times.</p>',
+    hint: 'MOVE=1 makes the elevator change floors (toggle). MOVE=0 means stay. The door should open only when BOTH conditions are true: elevator at floor 1 AND call button pressed. Which flip-flop toggles? Which gate needs both inputs to be 1?',
+    solution: {
+      gatesUsed: ['AND'],
+      ffsUsed: ['T-FF'],
+      explanation: 'Elevator Controller — T-FF toggles between floors (MOVE=1 changes floor, MOVE=0 stays). AND(FLOOR, CALL) opens the door only when at floor 1 with a call. OR would open the door at floor 0 too. D-FF would copy MOVE directly instead of toggling. Used in PLC elevator logic and building automation.',
+      blockSvg: `<svg viewBox="0 0 420 180" width="510" height="220">
+        <text x="12" y="42" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">MOVE</text>
+        <line x1="60" y1="37" x2="110" y2="47" stroke="#39ff14" stroke-width="2.5"/>
+        <text x="12" y="82" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">CALL</text>
+        <line x1="55" y1="77" x2="110" y2="77" stroke="#39ff14" stroke-width="2.5"/>
+        <text x="12" y="142" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#ffcc00">CLK</text>
+        <line x1="45" y1="137" x2="110" y2="117" stroke="#ffcc00" stroke-width="2.5"/>
+        <rect x="110" y="20" width="190" height="130" rx="8" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/>
+        <text x="205" y="72" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#00d4ff">ELEVATOR</text>
+        <text x="205" y="97" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#00d4ff">CONTROLLER</text>
+        <line x1="300" y1="52" x2="355" y2="52" stroke="#c8d8f0" stroke-width="2.5"/>
+        <text x="363" y="57" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">FLOOR</text>
+        <line x1="300" y1="112" x2="355" y2="112" stroke="#c8d8f0" stroke-width="2.5"/>
+        <text x="363" y="117" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">DOOR</text>
+      </svg>`,
+      circuitSvg: `<svg viewBox="0 0 520 200" width="630" height="245">
+        <text x="8" y="18" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">STEP 1: MOVE=1→up to F1, DOOR=1 | STEP 2: MOVE=0→stay F1, DOOR=1 | STEP 3: MOVE=1→down to F0, DOOR=0</text>
+        <!-- Inputs -->
+        <text x="8" y="55" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#39ff14">MOVE: 1→0→1</text>
+        <text x="8" y="80" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#39ff14">CALL=1</text>
+        <line x1="115" y1="51" x2="150" y2="51" stroke="#39ff14" stroke-width="2"/>
+        <!-- T-FF -->
+        <rect x="150" y="35" width="75" height="40" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="187" y="60" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#a0c8ff">T-FF</text>
+        <!-- FLOOR output -->
+        <line x1="225" y1="55" x2="260" y2="55" stroke="#39ff14" stroke-width="2"/>
+        <line x1="260" y1="55" x2="260" y2="95" stroke="#39ff14" stroke-width="1.5"/>
+        <line x1="260" y1="95" x2="300" y2="95" stroke="#39ff14" stroke-width="1.5"/>
+        <line x1="260" y1="55" x2="400" y2="55" stroke="#39ff14" stroke-width="1.5"/>
+        <text x="408" y="60" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#c8d8f0">FLOOR: 1→1→0</text>
+        <!-- CALL to AND -->
+        <line x1="60" y1="76" x2="300" y2="105" stroke="#39ff14" stroke-width="1.5"/>
+        <!-- AND gate -->
+        <rect x="300" y="85" width="60" height="35" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="330" y="107" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#a0c8ff">AND</text>
+        <!-- DOOR output -->
+        <line x1="360" y1="102" x2="400" y2="102" stroke="#39ff14" stroke-width="2"/>
+        <text x="408" y="107" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#39ff14">DOOR: 1→1→0</text>
+        <!-- CLK -->
+        <text x="8" y="150" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#ffcc00">CLK x3</text>
+        <text x="8" y="175" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">T-FF toggles floor on MOVE=1, holds on MOVE=0. AND opens door only at Floor 1.</text>
+        <text x="8" y="195" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">Used in: elevator PLCs, building automation, industrial lift controllers</text>
+      </svg>`,
+    },
+    nodes: [
+      { id: 'in_MOVE', type: 'INPUT',     x: 140, y: 420, fixedValue: 1, stepValues: [1, 0, 1], label: 'MOVE' },
+      { id: 'in_CALL', type: 'INPUT',     x: 140, y: 530, fixedValue: 1, label: 'CALL' },
+      { id: 'clk_1',   type: 'CLOCK',     x: 140, y: 650, value: 0, label: null },
+      { id: 'ff_1',    type: 'FF_SLOT',   ffType: null, x: 420, y: 460, initialQ: 0, label: 'FF' },
+      { id: 'g1',      type: 'GATE_SLOT', x: 650, y: 540 },
+      { id: 'out_FL',  type: 'OUTPUT',    x: 880, y: 420, targetValue: 0, stepTargets: [1, 1, 0], label: 'FLOOR' },
+      { id: 'out_DR',  type: 'OUTPUT',    x: 880, y: 560, targetValue: 0, stepTargets: [1, 1, 0], label: 'DOOR' },
+    ],
+    wires: [
+      { id: 'w1',    sourceId: 'in_MOVE', targetId: 'ff_1',   targetInputIndex: 0 },
+      { id: 'wclk',  sourceId: 'clk_1',   targetId: 'ff_1',   targetInputIndex: 1, isClockWire: true },
+      { id: 'w2',    sourceId: 'ff_1',    targetId: 'g1',     targetInputIndex: 0, sourceOutputIndex: 0 },
+      { id: 'w3',    sourceId: 'in_CALL', targetId: 'g1',     targetInputIndex: 1 },
+      { id: 'woFL',  sourceId: 'ff_1',    targetId: 'out_FL', targetInputIndex: 0, sourceOutputIndex: 0 },
+      { id: 'woDR',  sourceId: 'g1',      targetId: 'out_DR', targetInputIndex: 0 },
+    ],
+  },
+
+  // L52 — ALARM SYSTEM (OR gate + SR-FF, sensor triggers alarm that stays on)
+  // SENSOR=[0,1,0], ZONE=[1,0,0]. OR=[1,1,0]→S. RESET=0→R.
+  // SR-FF: SET, SET, HOLD → Q=[1,1,1]. Alarm stays on even after sensors clear.
+  // Unique: OR (AND gives S=[0,0,0]→alarm never triggers). SR-FF (D captures 0 at step3).
+  {
+    id: 52, name: 'ALARM SYSTEM', difficulty: 'FSM Applications',
+    minSteps: 3,
+    description: 'Alarm System — sensors detect intruders and trigger an alarm. The alarm stays ON even after the sensors clear — only a manual RESET can turn it off. This is how every burglar alarm, fire alarm, and industrial safety system works.',
+    instruction: 'Build an alarm that triggers and stays on.',
+    instructionHtml: '<div style="text-align:center;margin:18px 0"><svg viewBox="0 0 200 210" width="150" height="158"><rect x="20" y="10" width="160" height="160" rx="10" fill="#111" stroke="#444" stroke-width="2"/><circle cx="100" cy="70" r="35" fill="rgba(255,68,68,0.1)" stroke="#ff4444" stroke-width="2"/><text x="100" y="65" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="20" font-weight="bold" fill="#ff4444">!</text><text x="100" y="85" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#ff4444">ALARM</text><text x="60" y="130" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#39ff14">SENSOR</text><circle cx="60" cy="140" r="8" fill="rgba(57,255,20,0.2)" stroke="#39ff14" stroke-width="1.5"/><text x="140" y="130" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#39ff14">ZONE</text><circle cx="140" cy="140" r="8" fill="rgba(57,255,20,0.2)" stroke="#39ff14" stroke-width="1.5"/><text x="100" y="195" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">Alarm stays ON until RESET</text></svg></div><p style="text-align:center;color:#c8d8f0;font-size:14px;margin:8px 0">Two sensors watch different zones. <span style="color:#ff4444;font-weight:bold">Any</span> detection triggers the alarm.</p><p style="text-align:center;color:#c8d8f0;font-size:14px;margin:4px 0">The alarm <span style="color:#ff4444;font-weight:bold">stays ON</span> even after the intruder leaves — it remembers!</p><p style="text-align:center;color:#888;font-size:12px;margin:4px 0">Place a gate and flip-flop, then STEP three times.</p>',
+    hint: 'Two sensors, either one should trigger the alarm. Which gate outputs 1 when AT LEAST ONE input is 1? The alarm must stay on after the sensors clear — which flip-flop has a HOLD mode that remembers?',
+    solution: {
+      gatesUsed: ['OR'],
+      ffsUsed: ['SR-FF'],
+      explanation: 'Alarm System — OR gate triggers on ANY sensor (either zone is enough). SR-FF latches the alarm: once SET, it stays on via HOLD (S=R=0). D-FF would turn off when sensors clear (captures S=0). AND would require BOTH sensors simultaneously. Every burglar alarm uses this exact SR latch pattern.',
+      blockSvg: `<svg viewBox="0 0 420 180" width="510" height="220">
+        <text x="12" y="42" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">SENSOR</text>
+        <line x1="75" y1="37" x2="110" y2="47" stroke="#39ff14" stroke-width="2.5"/>
+        <text x="12" y="72" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">ZONE</text>
+        <line x1="55" y1="67" x2="110" y2="67" stroke="#39ff14" stroke-width="2.5"/>
+        <text x="12" y="112" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#ff4444">RESET</text>
+        <line x1="65" y1="107" x2="110" y2="97" stroke="#ff4444" stroke-width="2.5"/>
+        <text x="12" y="152" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#ffcc00">CLK</text>
+        <line x1="45" y1="147" x2="110" y2="127" stroke="#ffcc00" stroke-width="2.5"/>
+        <rect x="110" y="20" width="190" height="130" rx="8" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/>
+        <text x="205" y="72" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#00d4ff">ALARM</text>
+        <text x="205" y="97" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#00d4ff">SYSTEM</text>
+        <line x1="300" y1="82" x2="355" y2="82" stroke="#c8d8f0" stroke-width="2.5"/>
+        <text x="363" y="87" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#ff4444">ALARM</text>
+      </svg>`,
+      circuitSvg: `<svg viewBox="0 0 520 200" width="630" height="245">
+        <text x="8" y="18" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">S1: ZONE triggers→SET | S2: SENSOR triggers→SET | S3: both clear→HOLD (alarm stays!)</text>
+        <text x="8" y="50" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#39ff14">SENSOR: 0→1→0</text>
+        <text x="8" y="70" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#39ff14">ZONE: 1→0→0</text>
+        <line x1="130" y1="46" x2="170" y2="55" stroke="#39ff14" stroke-width="2"/>
+        <line x1="130" y1="66" x2="170" y2="62" stroke="#39ff14" stroke-width="2"/>
+        <!-- OR gate -->
+        <rect x="170" y="42" width="60" height="35" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="200" y="64" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#a0c8ff">OR</text>
+        <line x1="230" y1="59" x2="270" y2="59" stroke="#39ff14" stroke-width="2"/>
+        <text x="242" y="52" font-family="JetBrains Mono,monospace" font-size="9" fill="#888">S: 1→1→0</text>
+        <!-- RESET -->
+        <text x="8" y="105" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#ff4444">RESET=0</text>
+        <line x1="80" y1="101" x2="270" y2="75" stroke="#ff4444" stroke-width="1.5"/>
+        <!-- SR-FF -->
+        <rect x="270" y="45" width="80" height="45" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="310" y="73" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#a0c8ff">SR-FF</text>
+        <!-- ALARM output -->
+        <line x1="350" y1="67" x2="400" y2="67" stroke="#39ff14" stroke-width="2"/>
+        <text x="408" y="72" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#ff4444">ALARM: 1→1→1</text>
+        <!-- CLK -->
+        <text x="8" y="150" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#ffcc00">CLK x3</text>
+        <text x="8" y="175" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">OR: any sensor triggers. SR-FF: SET then HOLD — alarm remembers!</text>
+        <text x="8" y="195" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">Used in: burglar alarms, fire systems, industrial safety latches</text>
+      </svg>`,
+    },
+    nodes: [
+      { id: 'in_SEN',  type: 'INPUT',     x: 140, y: 380, fixedValue: 0, stepValues: [0, 1, 0], label: 'SENSOR' },
+      { id: 'in_ZONE', type: 'INPUT',     x: 140, y: 470, fixedValue: 1, stepValues: [1, 0, 0], label: 'ZONE' },
+      { id: 'in_RST',  type: 'INPUT',     x: 140, y: 560, fixedValue: 0, label: 'RESET' },
+      { id: 'clk_1',   type: 'CLOCK',     x: 140, y: 670, value: 0, label: null },
+      { id: 'g1',      type: 'GATE_SLOT', x: 400, y: 430 },
+      { id: 'ff_1',    type: 'FF_SLOT',   ffType: null, x: 650, y: 480, initialQ: 0, label: 'FF' },
+      { id: 'out_ALM', type: 'OUTPUT',    x: 900, y: 480, targetValue: 1, stepTargets: [1, 1, 1], label: 'ALARM' },
+    ],
+    wires: [
+      // SENSOR, ZONE → OR gate
+      { id: 'w1',   sourceId: 'in_SEN',  targetId: 'g1',     targetInputIndex: 0 },
+      { id: 'w2',   sourceId: 'in_ZONE', targetId: 'g1',     targetInputIndex: 1 },
+      // OR → S (input 0 of FF)
+      { id: 'w3',   sourceId: 'g1',      targetId: 'ff_1',   targetInputIndex: 0 },
+      // RESET → R (input 1 of FF)
+      { id: 'w4',   sourceId: 'in_RST',  targetId: 'ff_1',   targetInputIndex: 1 },
+      // Clock
+      { id: 'wclk', sourceId: 'clk_1',   targetId: 'ff_1',   targetInputIndex: 2, isClockWire: true },
+      // Output
+      { id: 'woA',  sourceId: 'ff_1',    targetId: 'out_ALM', targetInputIndex: 0, sourceOutputIndex: 0 },
+    ],
+  },
+
+  // L53 — TRAFFIC LIGHT CONTROLLER (3 D-FFs ring + AND gate for pedestrian walk signal)
+  // Ring counter: G=1,Y=0,R=0 → G=0,Y=1,R=0 → G=0,Y=0,R=1
+  // AND(Q_R, BUTTON) → WALK signal. BUTTON=1 constant.
+  // Step 1: WALK=AND(0,1)=0 (GREEN, no walk). Step 2: WALK=AND(1,1)=1 (RED, walk!).
+  // Unique: AND (OR gives WALK=1 at step1 because OR(0,1)=1). D-FF (T-FF toggles wrong).
+  {
+    id: 53, name: 'TRAFFIC LIGHT', difficulty: 'FSM Applications',
+    minSteps: 2,
+    description: 'You are building a real traffic light controller. The light starts GREEN, then cycles to YELLOW, then RED. A pedestrian presses the WALK button — but they should only be allowed to cross when the light is RED. Build the circuit that makes this happen.',
+    instruction: 'Build a traffic light: GREEN → YELLOW → RED. When RED is on and the button is pressed, WALK turns on.',
+    instructionHtml: '<div style="text-align:center;margin:16px 0"><svg viewBox="0 0 200 310" width="120" height="186"><rect x="50" y="10" width="100" height="240" rx="16" fill="#181818" stroke="#555" stroke-width="3"/><circle cx="100" cy="60" r="30" fill="rgba(57,255,20,0.85)" stroke="#39ff14" stroke-width="3"/><text x="100" y="67" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#fff">GREEN</text><circle cx="100" cy="130" r="30" fill="rgba(255,204,0,0.25)" stroke="#ffcc00" stroke-width="2"/><text x="100" y="137" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="12" fill="#ffcc00">YELLOW</text><circle cx="100" cy="200" r="30" fill="rgba(255,68,68,0.2)" stroke="#ff4444" stroke-width="2"/><text x="100" y="207" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" fill="#ff4444">RED</text><text x="100" y="280" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" fill="#888">START → STEP → STEP</text></svg></div><p style="text-align:center;color:#c8d8f0;font-size:14px;margin:8px 0">Build the circuit that rotates the light from <span style="color:#39ff14;font-weight:bold">GREEN</span> → <span style="color:#ffcc00;font-weight:bold">YELLOW</span> → <span style="color:#ff4444;font-weight:bold">RED</span></p><p style="text-align:center;color:#888;font-size:13px">When <span style="color:#ff4444;font-weight:bold">RED</span> is on and the button is pressed → <span style="color:#39ff14;font-weight:bold">WALK = 1</span></p>',
+    hint: 'Think about a real intersection: 3 lights take turns — only one is on at a time (ring counter). The WALK signal needs BOTH conditions: the light is RED AND the button is pressed. Which gate outputs 1 only when both inputs are 1?',
+    solution: {
+      gatesUsed: ['AND'],
+      ffsUsed: ['D-FF', 'D-FF', 'D-FF'],
+      explanation: 'Traffic Light Controller — 3 D-FFs in a ring rotate a single "1" bit: GREEN→YELLOW→RED. AND(RED, BUTTON) produces WALK=1 only during RED phase. OR would allow walking during GREEN (OR(0,1)=1). This exact FSM runs in traffic controllers at every intersection.',
+      blockSvg: `<svg viewBox="0 0 420 200" width="510" height="245">
+        <text x="12" y="52" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">BTN</text>
+        <line x1="50" y1="47" x2="110" y2="57" stroke="#39ff14" stroke-width="2.5"/>
+        <text x="12" y="152" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#ffcc00">CLK</text>
+        <line x1="45" y1="147" x2="110" y2="117" stroke="#ffcc00" stroke-width="2.5"/>
+        <rect x="110" y="25" width="190" height="140" rx="8" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/>
+        <text x="205" y="75" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#00d4ff">TRAFFIC LIGHT</text>
+        <text x="205" y="100" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#00d4ff">CONTROLLER</text>
+        <!-- Traffic light visual -->
+        <circle cx="205" cy="130" r="8" fill="none" stroke="#39ff14" stroke-width="2"/>
+        <circle cx="225" cy="130" r="8" fill="none" stroke="#ffcc00" stroke-width="2"/>
+        <circle cx="245" cy="130" r="8" fill="none" stroke="#ff4444" stroke-width="2"/>
+        <!-- Outputs -->
+        <line x1="300" y1="42" x2="355" y2="42" stroke="#c8d8f0" stroke-width="2.5"/>
+        <text x="363" y="47" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">G</text>
+        <line x1="300" y1="72" x2="355" y2="72" stroke="#c8d8f0" stroke-width="2.5"/>
+        <text x="363" y="77" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#ffcc00">Y</text>
+        <line x1="300" y1="102" x2="355" y2="102" stroke="#c8d8f0" stroke-width="2.5"/>
+        <text x="363" y="107" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#ff4444">R</text>
+        <line x1="300" y1="142" x2="355" y2="142" stroke="#c8d8f0" stroke-width="2.5"/>
+        <text x="363" y="147" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">WALK</text>
+      </svg>`,
+      circuitSvg: `<svg viewBox="0 0 620 250" width="750" height="305">
+        <text x="8" y="18" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">Ring counter: G→Y→R→G... | WALK = AND(RED, BUTTON)</text>
+        <!-- Traffic light visualization -->
+        <rect x="440" y="30" width="50" height="120" rx="8" fill="rgba(20,20,20,0.95)" stroke="#444" stroke-width="2"/>
+        <circle cx="465" cy="55" r="14" fill="rgba(57,255,20,0.15)" stroke="#39ff14" stroke-width="2"/>
+        <text x="465" y="59" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="#39ff14">G</text>
+        <circle cx="465" cy="90" r="14" fill="rgba(255,204,0,0.15)" stroke="#ffcc00" stroke-width="2"/>
+        <text x="465" y="94" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="#ffcc00">Y</text>
+        <circle cx="465" cy="125" r="14" fill="rgba(255,68,68,0.8)" stroke="#ff4444" stroke-width="2.5"/>
+        <text x="465" y="129" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" font-weight="bold" fill="#fff">R</text>
+        <text x="465" y="162" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#39ff14">WALK</text>
+        <!-- Ring: D-FF_G → D-FF_Y → D-FF_R → feedback to D-FF_G -->
+        <rect x="30" y="40" width="70" height="40" rx="5" fill="rgba(14,31,51,0.96)" stroke="#39ff14" stroke-width="2"/>
+        <text x="65" y="65" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#39ff14">D-FF G</text>
+        <line x1="100" y1="60" x2="140" y2="60" stroke="#39ff14" stroke-width="2"/>
+        <rect x="140" y="40" width="70" height="40" rx="5" fill="rgba(14,31,51,0.96)" stroke="#ffcc00" stroke-width="2"/>
+        <text x="175" y="65" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#ffcc00">D-FF Y</text>
+        <line x1="210" y1="60" x2="250" y2="60" stroke="#ffcc00" stroke-width="2"/>
+        <rect x="250" y="40" width="70" height="40" rx="5" fill="rgba(14,31,51,0.96)" stroke="#ff4444" stroke-width="2"/>
+        <text x="285" y="65" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#ff4444">D-FF R</text>
+        <!-- Feedback R → G -->
+        <polyline points="285,80 285,110 15,110 15,50 30,50" stroke="#ff6b6b" stroke-width="1.5" fill="none" stroke-dasharray="5,3"/>
+        <text x="150" y="125" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ff6b6b">R → G FEEDBACK (ring)</text>
+        <!-- AND gate for WALK -->
+        <line x1="285" y1="80" x2="285" y2="155" stroke="#ff4444" stroke-width="1.5"/>
+        <line x1="285" y1="155" x2="330" y2="155" stroke="#ff4444" stroke-width="1.5"/>
+        <text x="8" y="170" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#39ff14">BTN=1</text>
+        <line x1="60" y1="166" x2="330" y2="166" stroke="#39ff14" stroke-width="1.5"/>
+        <rect x="330" y="143" width="55" height="35" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="357" y="165" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#a0c8ff">AND</text>
+        <line x1="385" y1="160" x2="420" y2="160" stroke="#39ff14" stroke-width="2"/>
+        <text x="395" y="150" font-family="JetBrains Mono,monospace" font-size="10" fill="#c8d8f0">WALK</text>
+        <!-- State sequence -->
+        <text x="8" y="200" font-family="JetBrains Mono,monospace" font-size="11" fill="#888">init: G=1 Y=0 R=0 (GREEN)</text>
+        <text x="8" y="218" font-family="JetBrains Mono,monospace" font-size="11" fill="#888">S1:   G=0 Y=1 R=0 (YELLOW) WALK=0</text>
+        <text x="8" y="236" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#39ff14">S2:   G=0 Y=0 R=1 (RED)    WALK=1</text>
+      </svg>`,
+    },
+    nodes: [
+      // Button input (constant 1)
+      { id: 'in_BTN', type: 'INPUT',     x: 100, y: 380, fixedValue: 1, label: 'BTN' },
+      // Clock
+      { id: 'clk_1',  type: 'CLOCK',     x: 100, y: 680, value: 0, label: null },
+      // 3 D-FFs in ring: G → Y → R → G
+      { id: 'ff_G',   type: 'FF_SLOT',   ffType: null, x: 350, y: 440, initialQ: 1, label: 'G' },
+      { id: 'ff_Y',   type: 'FF_SLOT',   ffType: null, x: 550, y: 440, initialQ: 0, label: 'Y' },
+      { id: 'ff_R',   type: 'FF_SLOT',   ffType: null, x: 750, y: 440, initialQ: 0, label: 'R' },
+      // AND gate: WALK = AND(R, BTN)
+      { id: 'g1',     type: 'GATE_SLOT', x: 900, y: 560 },
+      // Outputs
+      { id: 'out_G',    type: 'OUTPUT',  x: 350, y: 340, targetValue: 0, stepTargets: [0, 0], label: 'G' },
+      { id: 'out_Y',    type: 'OUTPUT',  x: 550, y: 340, targetValue: 0, stepTargets: [1, 0], label: 'Y' },
+      { id: 'out_R',    type: 'OUTPUT',  x: 750, y: 340, targetValue: 1, stepTargets: [0, 1], label: 'R' },
+      { id: 'out_WALK', type: 'OUTPUT',  x: 1050, y: 560, targetValue: 1, stepTargets: [0, 1], label: 'WALK' },
+    ],
+    wires: [
+      // Ring: R→G, G→Y, Y→R
+      { id: 'wRG',   sourceId: 'ff_R',  targetId: 'ff_G',     targetInputIndex: 0, sourceOutputIndex: 0 },
+      { id: 'wGY',   sourceId: 'ff_G',  targetId: 'ff_Y',     targetInputIndex: 0, sourceOutputIndex: 0 },
+      { id: 'wYR',   sourceId: 'ff_Y',  targetId: 'ff_R',     targetInputIndex: 0, sourceOutputIndex: 0 },
+      // Clock to all FFs
+      { id: 'wclkG', sourceId: 'clk_1', targetId: 'ff_G',     targetInputIndex: 1, isClockWire: true },
+      { id: 'wclkY', sourceId: 'clk_1', targetId: 'ff_Y',     targetInputIndex: 1, isClockWire: true },
+      { id: 'wclkR', sourceId: 'clk_1', targetId: 'ff_R',     targetInputIndex: 1, isClockWire: true },
+      // AND(R, BTN) → WALK
+      { id: 'wRA',   sourceId: 'ff_R',  targetId: 'g1',       targetInputIndex: 0, sourceOutputIndex: 0 },
+      { id: 'wBA',   sourceId: 'in_BTN', targetId: 'g1',      targetInputIndex: 1 },
+      // Outputs
+      { id: 'woG',   sourceId: 'ff_G',  targetId: 'out_G',    targetInputIndex: 0, sourceOutputIndex: 0 },
+      { id: 'woY',   sourceId: 'ff_Y',  targetId: 'out_Y',    targetInputIndex: 0, sourceOutputIndex: 0 },
+      { id: 'woR',   sourceId: 'ff_R',  targetId: 'out_R',    targetInputIndex: 0, sourceOutputIndex: 0 },
+      { id: 'woW',   sourceId: 'g1',    targetId: 'out_WALK', targetInputIndex: 0 },
+    ],
+  },
+
+  // L54 — VENDING MACHINE (3 D-FFs shift register + AND decode = coin counter)
+  // COIN=1 constant. 3 D-FFs count: 5₪→10₪→15₪. AND(Q2,Q3) → VEND at 15₪.
+  {
+    id: 54, name: 'VENDING MACHINE', difficulty: 'FSM Applications',
+    minSteps: 3,
+    description: 'Vending Machine — insert three 5₪ coins to buy a drink (15₪). The shift register counts coins: each flip-flop represents 5₪ added. When all three are full, the machine vends. Found in every coin-operated machine, parking meter, and arcade system.',
+    instruction: 'Insert 3 coins to get your drink!',
+    instructionHtml: '<div style="text-align:center;margin:18px 0"><svg viewBox="0 0 180 280" width="135" height="210"><rect x="15" y="10" width="150" height="220" rx="12" fill="#151515" stroke="#444" stroke-width="2.5"/><rect x="30" y="25" width="120" height="60" rx="6" fill="#0a0a0a" stroke="#333" stroke-width="1.5"/><circle cx="60" cy="55" r="12" fill="rgba(255,68,68,0.6)" stroke="#ff4444" stroke-width="1.5"/><circle cx="90" cy="55" r="12" fill="rgba(57,255,20,0.15)" stroke="#39ff14" stroke-width="1"/><circle cx="120" cy="55" r="12" fill="rgba(0,180,255,0.15)" stroke="#00b4ff" stroke-width="1"/><text x="90" y="110" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#ffcc00">15₪</text><text x="90" y="130" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">3 x 5₪ coins</text><rect x="55" y="145" width="70" height="30" rx="6" fill="#0a0a0a" stroke="#ffcc00" stroke-width="1.5"/><text x="90" y="165" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#ffcc00">COIN SLOT</text><rect x="55" y="190" width="70" height="25" rx="4" fill="rgba(57,255,20,0.1)" stroke="#39ff14" stroke-width="1"/><text x="90" y="207" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#39ff14">VEND</text><text x="90" y="253" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#888">Insert coins → STEP x3</text></svg></div><p style="text-align:center;color:#c8d8f0;font-size:14px;margin:8px 0">A drink costs <span style="color:#ffcc00;font-weight:bold">15₪</span>. Each STEP inserts a <span style="color:#ffcc00;font-weight:bold">5₪</span> coin.</p><p style="text-align:center;color:#c8d8f0;font-size:14px;margin:4px 0">Build a counter that tracks coins and <span style="color:#39ff14;font-weight:bold">vends when full</span>.</p><p style="text-align:center;color:#888;font-size:12px;margin:4px 0">Place flip-flops and a gate, then STEP three times.</p>',
+    hint: 'Each FF stores one coin: FF1=first coin, FF2=second, FF3=third. They form a shift register — each coin shifts through. VEND should activate only when the last TWO stages are full (10₪+5₪=15₪). Which gate needs both inputs to be 1?',
+    solution: {
+      gatesUsed: ['AND'],
+      ffsUsed: ['D-FF', 'D-FF', 'D-FF'],
+      explanation: 'Vending Machine — 3 D-FFs in a shift register count coins. Each STEP shifts a "1" one stage deeper: 5₪→10₪→15₪. AND(Q2,Q3) vends only when both deep stages are full (at least 15₪). OR would vend too early (at 10₪). Used in coin-op machines, parking meters, and arcade token systems.',
+      blockSvg: `<svg viewBox="0 0 420 200" width="510" height="245">
+        <text x="12" y="52" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#ffcc00">COIN</text>
+        <line x1="55" y1="47" x2="110" y2="57" stroke="#ffcc00" stroke-width="2.5"/>
+        <text x="12" y="142" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#ffcc00">CLK</text>
+        <line x1="45" y1="137" x2="110" y2="117" stroke="#ffcc00" stroke-width="2.5"/>
+        <rect x="110" y="25" width="190" height="130" rx="8" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/>
+        <text x="205" y="65" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#00d4ff">VENDING</text>
+        <text x="205" y="90" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#00d4ff">MACHINE</text>
+        <text x="205" y="115" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" fill="#ffcc00">3 x 5₪ = 15₪</text>
+        <line x1="300" y1="47" x2="345" y2="47" stroke="#c8d8f0" stroke-width="2"/>
+        <text x="353" y="52" font-family="JetBrains Mono,monospace" font-size="12" fill="#c8d8f0">5₪</text>
+        <line x1="300" y1="67" x2="345" y2="67" stroke="#c8d8f0" stroke-width="2"/>
+        <text x="353" y="72" font-family="JetBrains Mono,monospace" font-size="12" fill="#c8d8f0">10₪</text>
+        <line x1="300" y1="87" x2="345" y2="87" stroke="#c8d8f0" stroke-width="2"/>
+        <text x="353" y="92" font-family="JetBrains Mono,monospace" font-size="12" fill="#c8d8f0">15₪</text>
+        <line x1="300" y1="120" x2="345" y2="120" stroke="#c8d8f0" stroke-width="2.5"/>
+        <text x="353" y="125" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">VEND</text>
+      </svg>`,
+      circuitSvg: `<svg viewBox="0 0 580 200" width="700" height="245">
+        <text x="8" y="18" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">STEP 1: 5₪ inserted | STEP 2: 10₪ total | STEP 3: 15₪ → VEND!</text>
+        <text x="8" y="50" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#ffcc00">COIN=1</text>
+        <line x1="75" y1="46" x2="110" y2="46" stroke="#ffcc00" stroke-width="2"/>
+        <!-- 3 D-FFs -->
+        <rect x="110" y="30" width="70" height="38" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="145" y="54" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#a0c8ff">D-FF</text>
+        <text x="145" y="28" font-family="JetBrains Mono,monospace" font-size="9" fill="#ffcc00">5₪</text>
+        <line x1="180" y1="46" x2="210" y2="46" stroke="#39ff14" stroke-width="2"/>
+        <rect x="210" y="30" width="70" height="38" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="245" y="54" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#a0c8ff">D-FF</text>
+        <text x="245" y="28" font-family="JetBrains Mono,monospace" font-size="9" fill="#ffcc00">10₪</text>
+        <line x1="280" y1="46" x2="310" y2="46" stroke="#39ff14" stroke-width="2"/>
+        <rect x="310" y="30" width="70" height="38" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="345" y="54" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#a0c8ff">D-FF</text>
+        <text x="345" y="28" font-family="JetBrains Mono,monospace" font-size="9" fill="#ffcc00">15₪</text>
+        <!-- Outputs -->
+        <text x="400" y="37" font-family="JetBrains Mono,monospace" font-size="10" fill="#c8d8f0">5₪: 1→1→1</text>
+        <text x="400" y="52" font-family="JetBrains Mono,monospace" font-size="10" fill="#c8d8f0">10₪: 0→1→1</text>
+        <text x="400" y="67" font-family="JetBrains Mono,monospace" font-size="10" fill="#c8d8f0">15₪: 0→0→1</text>
+        <!-- AND decode -->
+        <line x1="245" y1="68" x2="245" y2="105" stroke="#39ff14" stroke-width="1.5"/>
+        <line x1="245" y1="105" x2="400" y2="105" stroke="#39ff14" stroke-width="1.5"/>
+        <line x1="345" y1="68" x2="345" y2="115" stroke="#39ff14" stroke-width="1.5"/>
+        <line x1="345" y1="115" x2="400" y2="115" stroke="#39ff14" stroke-width="1.5"/>
+        <rect x="400" y="98" width="55" height="30" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="427" y="117" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#a0c8ff">AND</text>
+        <line x1="455" y1="113" x2="490" y2="113" stroke="#39ff14" stroke-width="2"/>
+        <text x="498" y="118" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#39ff14">VEND: 0→0→1</text>
+        <!-- CLK -->
+        <text x="8" y="150" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#ffcc00">CLK x3</text>
+        <text x="8" y="175" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">Each coin shifts through the register. AND vends only when 10₪+15₪ stages are full.</text>
+        <text x="8" y="195" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">Used in: coin-op machines, parking meters, arcade token systems</text>
+      </svg>`,
+    },
+    nodes: [
+      { id: 'in_COIN', type: 'INPUT',     x: 140, y: 440, fixedValue: 1, label: 'COIN' },
+      { id: 'clk_1',   type: 'CLOCK',     x: 140, y: 680, value: 0, label: null },
+      { id: 'ff_1',    type: 'FF_SLOT',   ffType: null, x: 370, y: 480, initialQ: 0, label: '5₪' },
+      { id: 'ff_2',    type: 'FF_SLOT',   ffType: null, x: 540, y: 480, initialQ: 0, label: '10₪' },
+      { id: 'ff_3',    type: 'FF_SLOT',   ffType: null, x: 710, y: 480, initialQ: 0, label: '15₪' },
+      { id: 'g1',      type: 'GATE_SLOT', x: 880, y: 560 },
+      { id: 'out_5',   type: 'OUTPUT',    x: 370, y: 380, targetValue: 1, stepTargets: [1, 1, 1], label: '5₪' },
+      { id: 'out_10',  type: 'OUTPUT',    x: 540, y: 380, targetValue: 1, stepTargets: [0, 1, 1], label: '10₪' },
+      { id: 'out_V',   type: 'OUTPUT',    x: 1050, y: 560, targetValue: 1, stepTargets: [0, 0, 1], label: '15₪' },
+    ],
+    wires: [
+      { id: 'w1',    sourceId: 'in_COIN', targetId: 'ff_1',   targetInputIndex: 0 },
+      { id: 'w12',   sourceId: 'ff_1',    targetId: 'ff_2',   targetInputIndex: 0, sourceOutputIndex: 0 },
+      { id: 'w23',   sourceId: 'ff_2',    targetId: 'ff_3',   targetInputIndex: 0, sourceOutputIndex: 0 },
+      { id: 'wclk1', sourceId: 'clk_1',   targetId: 'ff_1',   targetInputIndex: 1, isClockWire: true },
+      { id: 'wclk2', sourceId: 'clk_1',   targetId: 'ff_2',   targetInputIndex: 1, isClockWire: true },
+      { id: 'wclk3', sourceId: 'clk_1',   targetId: 'ff_3',   targetInputIndex: 1, isClockWire: true },
+      { id: 'wA1',   sourceId: 'ff_2',    targetId: 'g1',     targetInputIndex: 0, sourceOutputIndex: 0 },
+      { id: 'wA2',   sourceId: 'ff_3',    targetId: 'g1',     targetInputIndex: 1, sourceOutputIndex: 0 },
+      { id: 'wV',    sourceId: 'g1',      targetId: 'out_V',  targetInputIndex: 0 },
+      { id: 'wo1',   sourceId: 'ff_1',    targetId: 'out_5',  targetInputIndex: 0, sourceOutputIndex: 0 },
+      { id: 'wo2',   sourceId: 'ff_2',    targetId: 'out_10', targetInputIndex: 0, sourceOutputIndex: 0 },
+    ],
+  },
+
+  // L55 — PASSWORD LOCK (4 D-FFs shift register + AND decode, sequence 1-0-1-1)
+  {
+    id: 55, name: 'PASSWORD LOCK', difficulty: 'FSM Applications',
+    minSteps: 4,
+    description: 'Password Lock — the code is 1-0-1-1. A shift register captures bits, but the "0" in the code needs to be inverted before storage. You need both a gate to flip the bit AND the right flip-flops to shift data. Used in keycard readers, PIN decoders, and serial authentication.',
+    instruction: 'Enter the code 1-0-1-1 to unlock the safe.',
+    instructionHtml: '<div style="text-align:center;margin:18px 0"><svg viewBox="0 0 240 200" width="180" height="150"><rect x="20" y="10" width="200" height="150" rx="12" fill="#111" stroke="#444" stroke-width="3"/><rect x="30" y="20" width="180" height="50" rx="6" fill="#0a0a0a" stroke="#333" stroke-width="2"/><text x="120" y="52" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="28" font-weight="bold" fill="#39ff14" letter-spacing="12">1 0 1 1</text><circle cx="120" cy="110" r="25" fill="#1a1a1a" stroke="#555" stroke-width="2"/><text x="120" y="116" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#ff4444">LOCKED</text><text x="120" y="185" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" fill="#888">Enter the correct sequence to unlock</text></svg></div><p style="text-align:center;color:#c8d8f0;font-size:14px;margin:8px 0">Build a shift register that stores the last 4 inputs.</p><p style="text-align:center;color:#c8d8f0;font-size:14px;margin:4px 0">When the code <span style="color:#39ff14;font-weight:bold;letter-spacing:3px">1-0-1-1</span> is loaded, the lock opens.</p><p style="text-align:center;color:#888;font-size:12px;margin:4px 0">Place flip-flops and a gate, then press STEP four times.</p>',
+    hint: 'FF1-FF2 shift normally, then a gate inverts the bit before FF3, then FF4 shifts again. The "0" in the code needs to become "1" in Q3. Which gate inverts? UNLOCK needs Q1 AND Q2 both = 1.',
+    solution: {
+      gatesUsed: ['NOT', 'AND'],
+      ffsUsed: ['D-FF', 'D-FF', 'D-FF', 'D-FF'],
+      explanation: 'Password Lock — 4 D-FFs shift the code, NOT gate inverts the "0" bit so FF3 stores 1. Final state: Q1=1,Q2=1,Q3=1(inverted!),Q4=0. AND(Q1,Q2)=1 only at step 4 when both last bits are 1 → UNLOCK. Used in serial authentication and pattern matching with bit masking.',
+      blockSvg: `<svg viewBox="0 0 420 200" width="510" height="245">
+        <text x="12" y="52" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">KEY</text>
+        <line x1="45" y1="47" x2="110" y2="57" stroke="#39ff14" stroke-width="2.5"/>
+        <text x="12" y="142" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#ffcc00">CLK</text>
+        <line x1="45" y1="137" x2="110" y2="117" stroke="#ffcc00" stroke-width="2.5"/>
+        <rect x="110" y="25" width="190" height="140" rx="8" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/>
+        <text x="205" y="70" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#00d4ff">PASSWORD</text>
+        <text x="205" y="95" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#00d4ff">LOCK</text>
+        <text x="205" y="120" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" fill="#888">1-0-1-1</text>
+        <line x1="300" y1="42" x2="355" y2="42" stroke="#c8d8f0" stroke-width="2"/>
+        <text x="363" y="47" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#c8d8f0">Q1-Q4</text>
+        <line x1="300" y1="130" x2="355" y2="130" stroke="#c8d8f0" stroke-width="2.5"/>
+        <text x="363" y="135" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">UNLOCK</text>
+      </svg>`,
+      circuitSvg: `<svg viewBox="0 0 720 220" width="870" height="270">
+        <text x="8" y="18" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">KEY = 1→0→1→1 | NOT inverts the "0" | After 4 steps: Q1=1, Q2=1, Q3=1(inv!), Q4=0 → UNLOCK!</text>
+        <!-- KEY input -->
+        <text x="8" y="55" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#39ff14">KEY</text>
+        <line x1="40" y1="51" x2="70" y2="51" stroke="#39ff14" stroke-width="2"/>
+        <!-- FF1 -->
+        <rect x="70" y="35" width="65" height="38" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="102" y="59" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#a0c8ff">D-FF1</text>
+        <line x1="135" y1="51" x2="160" y2="51" stroke="#39ff14" stroke-width="2"/>
+        <!-- FF2 -->
+        <rect x="160" y="35" width="65" height="38" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="192" y="59" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#a0c8ff">D-FF2</text>
+        <line x1="225" y1="51" x2="250" y2="51" stroke="#39ff14" stroke-width="2"/>
+        <!-- NOT gate (inverter) -->
+        <rect x="250" y="35" width="55" height="38" rx="5" fill="rgba(14,31,51,0.96)" stroke="#ff6b6b" stroke-width="2"/>
+        <text x="277" y="59" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ff6b6b">NOT</text>
+        <line x1="305" y1="51" x2="330" y2="51" stroke="#ff6b6b" stroke-width="2"/>
+        <!-- FF3 -->
+        <rect x="330" y="35" width="65" height="38" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="362" y="59" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#a0c8ff">D-FF3</text>
+        <line x1="395" y1="51" x2="420" y2="51" stroke="#39ff14" stroke-width="2"/>
+        <!-- FF4 -->
+        <rect x="420" y="35" width="65" height="38" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="452" y="59" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#a0c8ff">D-FF4</text>
+        <!-- Q outputs -->
+        <text x="505" y="37" font-family="JetBrains Mono,monospace" font-size="10" fill="#c8d8f0">Q1: 1→0→1→1</text>
+        <text x="505" y="52" font-family="JetBrains Mono,monospace" font-size="10" fill="#c8d8f0">Q2: 0→1→0→1</text>
+        <text x="505" y="67" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ff6b6b">Q3: 1→1→0→1 (inv)</text>
+        <text x="505" y="82" font-family="JetBrains Mono,monospace" font-size="10" fill="#c8d8f0">Q4: 0→1→1→0</text>
+        <!-- AND(Q1, Q2) decode -->
+        <line x1="102" y1="73" x2="102" y2="110" stroke="#39ff14" stroke-width="1.5"/>
+        <line x1="102" y1="110" x2="520" y2="110" stroke="#39ff14" stroke-width="1.5"/>
+        <line x1="192" y1="73" x2="192" y2="120" stroke="#39ff14" stroke-width="1.5"/>
+        <line x1="192" y1="120" x2="520" y2="120" stroke="#39ff14" stroke-width="1.5"/>
+        <rect x="520" y="103" width="55" height="30" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="547" y="122" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#a0c8ff">AND</text>
+        <line x1="575" y1="118" x2="610" y2="118" stroke="#39ff14" stroke-width="2"/>
+        <text x="618" y="123" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#39ff14">UNLOCK</text>
+        <!-- Safe -->
+        <rect x="620" y="30" width="70" height="60" rx="8" fill="#111" stroke="#555" stroke-width="2"/>
+        <circle cx="655" cy="55" r="10" fill="none" stroke="#39ff14" stroke-width="2"/>
+        <text x="655" y="59" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" font-weight="bold" fill="#39ff14">OPEN</text>
+        <!-- CLK -->
+        <text x="8" y="155" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#ffcc00">CLK x4</text>
+        <text x="8" y="180" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">NOT inverts the "0" in the code so FF3 stores 1. AND(Q1,Q2) unlocks only at step 4.</text>
+        <text x="8" y="200" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">Used in: keycard readers with bit masking, serial pattern matching</text>
+      </svg>`,
+    },
+    nodes: [
+      { id: 'in_KEY', type: 'INPUT',     x: 100, y: 480, fixedValue: 1, stepValues: [1, 0, 1, 1], label: 'KEY' },
+      { id: 'clk_1',  type: 'CLOCK',     x: 100, y: 720, value: 0, label: null },
+      { id: 'ff_1',   type: 'FF_SLOT',   ffType: null, x: 300, y: 520, initialQ: 0, label: 'FF1' },
+      { id: 'ff_2',   type: 'FF_SLOT',   ffType: null, x: 460, y: 520, initialQ: 0, label: 'FF2' },
+      { id: 'g_not',  type: 'GATE_SLOT', x: 600, y: 520, label: 'INV' },
+      { id: 'ff_3',   type: 'FF_SLOT',   ffType: null, x: 740, y: 520, initialQ: 0, label: 'FF3' },
+      { id: 'ff_4',   type: 'FF_SLOT',   ffType: null, x: 900, y: 520, initialQ: 0, label: 'FF4' },
+      { id: 'g_and',  type: 'GATE_SLOT', x: 1050, y: 600 },
+      { id: 'out_Q1', type: 'OUTPUT',    x: 300, y: 420, targetValue: 1, stepTargets: [1, 0, 1, 1], label: 'Q1' },
+      { id: 'out_Q2', type: 'OUTPUT',    x: 460, y: 420, targetValue: 1, stepTargets: [0, 1, 0, 1], label: 'Q2' },
+      { id: 'out_Q3', type: 'OUTPUT',    x: 740, y: 420, targetValue: 1, stepTargets: [1, 1, 0, 1], label: 'Q3' },
+      { id: 'out_Q4', type: 'OUTPUT',    x: 900, y: 420, targetValue: 0, stepTargets: [0, 1, 1, 0], label: 'Q4' },
+      { id: 'out_UNL', type: 'OUTPUT',   x: 1200, y: 600, targetValue: 1, stepTargets: [0, 0, 0, 1], label: 'UNLOCK' },
+    ],
+    wires: [
+      // KEY → FF1
+      { id: 'w1',    sourceId: 'in_KEY', targetId: 'ff_1',    targetInputIndex: 0 },
+      // FF1 → FF2 (shift)
+      { id: 'w12',   sourceId: 'ff_1',   targetId: 'ff_2',    targetInputIndex: 0, sourceOutputIndex: 0 },
+      // FF2 → NOT gate (Q2 goes through inverter)
+      { id: 'w2n1',  sourceId: 'ff_2',   targetId: 'g_not',   targetInputIndex: 0, sourceOutputIndex: 0 },
+      { id: 'w2n2',  sourceId: 'ff_2',   targetId: 'g_not',   targetInputIndex: 1, sourceOutputIndex: 0 },
+      // NOT → FF3 (inverted bit)
+      { id: 'wn3',   sourceId: 'g_not',  targetId: 'ff_3',    targetInputIndex: 0 },
+      // FF3 → FF4 (shift)
+      { id: 'w34',   sourceId: 'ff_3',   targetId: 'ff_4',    targetInputIndex: 0, sourceOutputIndex: 0 },
+      // Clock to all FFs
+      { id: 'wclk1', sourceId: 'clk_1',  targetId: 'ff_1',    targetInputIndex: 1, isClockWire: true },
+      { id: 'wclk2', sourceId: 'clk_1',  targetId: 'ff_2',    targetInputIndex: 1, isClockWire: true },
+      { id: 'wclk3', sourceId: 'clk_1',  targetId: 'ff_3',    targetInputIndex: 1, isClockWire: true },
+      { id: 'wclk4', sourceId: 'clk_1',  targetId: 'ff_4',    targetInputIndex: 1, isClockWire: true },
+      // AND(Q1, Q2) → UNLOCK (both = 1 only at step 4)
+      { id: 'wA1',   sourceId: 'ff_1',   targetId: 'g_and',   targetInputIndex: 0, sourceOutputIndex: 0 },
+      { id: 'wA2',   sourceId: 'ff_2',   targetId: 'g_and',   targetInputIndex: 1, sourceOutputIndex: 0 },
+      { id: 'wU',    sourceId: 'g_and',  targetId: 'out_UNL', targetInputIndex: 0 },
+      // Outputs
+      { id: 'wo1',   sourceId: 'ff_1',   targetId: 'out_Q1',  targetInputIndex: 0, sourceOutputIndex: 0 },
+      { id: 'wo2',   sourceId: 'ff_2',   targetId: 'out_Q2',  targetInputIndex: 0, sourceOutputIndex: 0 },
+      { id: 'wo3',   sourceId: 'ff_3',   targetId: 'out_Q3',  targetInputIndex: 0, sourceOutputIndex: 0 },
+      { id: 'wo4',   sourceId: 'ff_4',   targetId: 'out_Q4',  targetInputIndex: 0, sourceOutputIndex: 0 },
+    ],
+  },
+
+
 ];
 
 // ── Hint derivation ──────────────────────────────────────────

@@ -19,6 +19,48 @@ const State = (() => {
   // Gate cycling palette
   const GATE_PALETTE = [null, 'AND', 'OR', 'XOR', 'NAND', 'NOR', 'NOT'];
 
+  // ── Undo / Redo ───────────────────────────────────────────
+  let _undoStack = [];
+  let _redoStack = [];
+  const MAX_UNDO = 50;
+
+  function _snapshot() {
+    if (!_level) return null;
+    return {
+      gates: _level.nodes.filter(n => n.type === 'GATE_SLOT').map(n => ({ id: n.id, gate: n.gate })),
+      ffs: _level.nodes.filter(n => n.type === 'FF_SLOT').map(n => ({ id: n.id, ffType: n.ffType })),
+      muxes: _level.nodes.filter(n => n.type === 'MUX_SELECT').map(n => ({ id: n.id, value: n.value })),
+      inputs: _level.nodes.filter(n => n.type === 'INPUT' && n.stepValues).map(n => ({ id: n.id, fixedValue: n.fixedValue })),
+      stepCount: _stepCount,
+      clockHigh: _clockHigh,
+      ffStates: new Map([..._ffStates].map(([k, v]) => [k, { ...v }])),
+      clockValues: _level.nodes.filter(n => n.type === 'CLOCK').map(n => ({ id: n.id, value: n.value })),
+    };
+  }
+
+  function _restore(snap) {
+    if (!_level || !snap) return;
+    snap.gates.forEach(s => { const n = _level.nodes.find(nd => nd.id === s.id); if (n) n.gate = s.gate; });
+    snap.ffs.forEach(s => { const n = _level.nodes.find(nd => nd.id === s.id); if (n) n.ffType = s.ffType; });
+    snap.muxes.forEach(s => { const n = _level.nodes.find(nd => nd.id === s.id); if (n) n.value = s.value; });
+    snap.inputs.forEach(s => { const n = _level.nodes.find(nd => nd.id === s.id); if (n) n.fixedValue = s.fixedValue; });
+    _stepCount = snap.stepCount;
+    _clockHigh = snap.clockHigh;
+    _ffStates = new Map([...snap.ffStates].map(([k, v]) => [k, { ...v }]));
+    snap.clockValues.forEach(s => { const n = _level.nodes.find(nd => nd.id === s.id); if (n) n.value = s.value; });
+    _solved = false;
+    _evalResult = null;
+  }
+
+  function _pushUndo() {
+    const snap = _snapshot();
+    if (snap) {
+      _undoStack.push(snap);
+      if (_undoStack.length > MAX_UNDO) _undoStack.shift();
+      _redoStack = []; // clear redo on new action
+    }
+  }
+
   // ── Helpers ───────────────────────────────────────────────
   function _initFfStates(nodes) {
     _ffStates = new Map();
@@ -63,6 +105,8 @@ const State = (() => {
 
     setLevel(levelObj) {
       _level      = JSON.parse(JSON.stringify(levelObj));
+      _undoStack  = [];
+      _redoStack  = [];
       _solved     = false;
       _evalResult = null;
       _stepCount  = 0;
@@ -87,6 +131,7 @@ const State = (() => {
     cycleGate(nodeId) {
       const node = _level.nodes.find(n => n.id === nodeId);
       if (!node || node.type !== 'GATE_SLOT') return false;
+      _pushUndo();
       const idx  = GATE_PALETTE.indexOf(node.gate);
       node.gate  = GATE_PALETTE[(idx + 1) % GATE_PALETTE.length];
       return true;
@@ -95,6 +140,7 @@ const State = (() => {
     setGate(nodeId, gate) {
       const node = _level.nodes.find(n => n.id === nodeId);
       if (!node || node.type !== 'GATE_SLOT') return;
+      _pushUndo();
       node.gate = gate;
       // Propagate to all linked gate slots in the same group
       if (node.linkedGroup) {
@@ -110,6 +156,7 @@ const State = (() => {
     setFfType(nodeId, ffType) {
       const node = _level.nodes.find(n => n.id === nodeId);
       if (!node || node.type !== 'FF_SLOT') return;
+      _pushUndo();
       node.ffType = ffType || null;
       if (ffType) _ensureFfState(nodeId);
       else _ffStates.delete(nodeId);
@@ -129,12 +176,32 @@ const State = (() => {
       _currentLevelIndex++;
     },
 
+    undo() {
+      if (_undoStack.length === 0 || !_level) return false;
+      _redoStack.push(_snapshot());
+      _restore(_undoStack.pop());
+      return true;
+    },
+
+    redo() {
+      if (_redoStack.length === 0 || !_level) return false;
+      _undoStack.push(_snapshot());
+      _restore(_redoStack.pop());
+      return true;
+    },
+
+    get canUndo() { return _undoStack.length > 0; },
+    get canRedo() { return _redoStack.length > 0; },
+
     resetLevel() {
       if (!_level) return;
+      _undoStack = [];
+      _redoStack = [];
       _level.nodes.forEach(n => {
         if (n.type === 'GATE_SLOT') n.gate = null;
         if (n.type === 'FF_SLOT') n.ffType = null;
         if (n.type === 'INPUT' && n.stepValues) n.fixedValue = n.stepValues[0];
+        if (n.type === 'MUX_SELECT') n.value = n.initialValue ?? 0;
       });
       _solved     = false;
       _evalResult = null;
@@ -150,6 +217,7 @@ const State = (() => {
     // then immediately falls back to 0. This is the "STEP" action.
     stepClock() {
       if (!_level || _solved) return;
+      _pushUndo();
       _stepCount++;
       // Update inputs that have per-step values (stepValues array)
       _level.nodes.forEach(n => {

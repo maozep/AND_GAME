@@ -342,6 +342,8 @@ const Renderer = (() => {
       if (node.type === 'INPUT')            _drawInputNode(node, val, hovered);
       else if (node.type === 'CLOCK')       _drawClockNode(node, val, hovered);
       else if (node.type === 'GATE_SLOT')   _drawGateNode(node, val, hovered);
+      else if (node.type === 'MUX_SELECT')  _drawMuxSelectNode(node, val, hovered);
+      else if (node.type === 'DISPLAY_7SEG') _draw7SegNode(node, hovered);
       else if (node.type === 'OUTPUT')      _drawOutputNode(node, val, hovered, solved);
       else if (node.type === 'FF_SLOT') {
         const ffState = ffStates.get(node.id) || { q: 0, qNot: 1 };
@@ -497,6 +499,139 @@ const Renderer = (() => {
     ctx.restore();
   }
 
+  // ── 7-SEGMENT DISPLAY node ─────────────────────────────────
+  function _draw7SegNode(node, hovered) {
+    const w = 80, h = 120;
+    const x = node.x - w / 2;
+    const y = node.y - h / 2;
+    const segs = node._segments || [0,0,0,0,0,0,0]; // a,b,c,d,e,f,g
+    ctx.save();
+
+    // Background case
+    if (hovered) { ctx.shadowColor = 'rgba(0,212,255,0.4)'; ctx.shadowBlur = 15; }
+    ctx.fillStyle = '#0a0a0a';
+    _roundRect(ctx, x, y, w, h, 8);
+    ctx.fill();
+    ctx.strokeStyle = hovered ? '#00d4ff' : '#333';
+    ctx.lineWidth = 2;
+    _roundRect(ctx, x, y, w, h, 8);
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+
+    // Segment geometry (relative to display center)
+    const cx = node.x;
+    const cy = node.y;
+    const sw = 28;  // segment width
+    const sh = 5;   // segment thickness
+    const gap = 2;
+    const vLen = 22; // vertical segment length
+
+    const onColor = '#ff1a1a';
+    const offColor = 'rgba(60,20,20,0.3)';
+    const glowColor = 'rgba(255,26,26,0.4)';
+
+    // Draw segments: a=top, b=top-right, c=bot-right, d=bottom, e=bot-left, f=top-left, g=middle
+    function drawHSeg(sx, sy, on) {
+      ctx.fillStyle = on ? onColor : offColor;
+      if (on) { ctx.shadowColor = glowColor; ctx.shadowBlur = 8; }
+      ctx.fillRect(sx - sw/2, sy - sh/2, sw, sh);
+      ctx.shadowBlur = 0;
+    }
+
+    function drawVSeg(sx, sy, on) {
+      ctx.fillStyle = on ? onColor : offColor;
+      if (on) { ctx.shadowColor = glowColor; ctx.shadowBlur = 8; }
+      ctx.fillRect(sx - sh/2, sy, sh, vLen);
+      ctx.shadowBlur = 0;
+    }
+
+    const topY = cy - 28;
+    const midY = cy - 2;
+    const botY = cy + 24;
+    const leftX = cx - 16;
+    const rightX = cx + 16;
+
+    // a: top horizontal
+    drawHSeg(cx, topY, segs[0]);
+    // b: top-right vertical
+    drawVSeg(rightX, topY + gap, segs[1]);
+    // c: bottom-right vertical
+    drawVSeg(rightX, midY + gap, segs[2]);
+    // d: bottom horizontal
+    drawHSeg(cx, botY, segs[3]);
+    // e: bottom-left vertical
+    drawVSeg(leftX, midY + gap, segs[4]);
+    // f: top-left vertical
+    drawVSeg(leftX, topY + gap, segs[5]);
+    // g: middle horizontal
+    drawHSeg(cx, midY, segs[6]);
+
+    // Label below
+    ctx.fillStyle = '#555';
+    ctx.font = '9px JetBrains Mono, monospace';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'top';
+    ctx.fillText(node.label || '7-SEG', node.x, y + h + 4);
+
+    ctx.restore();
+  }
+
+  // ── MUX_SELECT node (clickable toggle switch) ─────────────
+  function _drawMuxSelectNode(node, val, hovered) {
+    const w = 50, h = 30, r = 6;
+    const x = node.x - w / 2;
+    const y = node.y - h / 2;
+    const isOn = val === 1;
+    ctx.save();
+
+    // Background
+    ctx.fillStyle = isOn ? 'rgba(57,255,20,0.15)' : 'rgba(40,20,20,0.3)';
+    if (hovered) { ctx.shadowColor = 'rgba(0,212,255,0.5)'; ctx.shadowBlur = 15; }
+    _roundRect(ctx, x, y, w, h, r);
+    ctx.fill();
+
+    // Border
+    ctx.strokeStyle = hovered ? '#00d4ff' : (isOn ? '#39ff14' : '#6a1a1a');
+    ctx.lineWidth = hovered ? 2.5 : 2;
+    _roundRect(ctx, x, y, w, h, r);
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+
+    // Toggle indicator (slider)
+    const sliderX = isOn ? node.x + 8 : node.x - 8;
+    ctx.beginPath();
+    ctx.arc(sliderX, node.y, 8, 0, Math.PI * 2);
+    ctx.fillStyle = isOn ? '#39ff14' : '#ff4444';
+    ctx.fill();
+    ctx.strokeStyle = isOn ? '#2a8a2a' : '#8a2a2a';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+
+    // Value text on slider
+    ctx.fillStyle = '#fff';
+    ctx.font = 'bold 10px JetBrains Mono, monospace';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(isOn ? '1' : '0', sliderX, node.y);
+
+    // Label above
+    ctx.fillStyle = isOn ? '#39ff14' : '#ff4444';
+    ctx.font = 'bold 10px JetBrains Mono, monospace';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'alphabetic';
+    ctx.fillText(node.label || '', node.x, y - 6);
+
+    // "CLICK" hint when hovered
+    if (hovered) {
+      ctx.fillStyle = '#00d4ff';
+      ctx.font = '7px JetBrains Mono, monospace';
+      ctx.textBaseline = 'top';
+      ctx.fillText('CLICK TO TOGGLE', node.x, y + h + 4);
+    }
+
+    ctx.restore();
+  }
+
   // ── GATE_SLOT node ────────────────────────────────────────
   function _drawGateNode(node, val, hovered) {
     const { gateW: w, gateH: h, gateR: r } = NODE;
@@ -561,9 +696,11 @@ const Renderer = (() => {
     const r = 36;
     ctx.save();
 
-    const correct = val !== null && val === node.targetValue;
+    const isSandbox = !!node.sandbox;
+    const correct = !isSandbox && val !== null && val === node.targetValue;
     const hasTimeline = node.stepTargets && node.stepTargets.length > 1;
-    if (correct) { ctx.shadowColor = C.wireHighGlow; ctx.shadowBlur = solved ? 30 : 20; }
+    if (isSandbox && val === 1) { ctx.shadowColor = C.wireHighGlow; ctx.shadowBlur = 15; }
+    else if (correct) { ctx.shadowColor = C.wireHighGlow; ctx.shadowBlur = solved ? 30 : 20; }
 
     ctx.beginPath();
     ctx.arc(node.x, node.y, r, 0, Math.PI * 2);
@@ -643,12 +780,14 @@ const Renderer = (() => {
       ctx.font         = 'bold 22px JetBrains Mono, monospace';
       ctx.textAlign    = 'center';
       ctx.textBaseline = 'middle';
-      ctx.fillText(val !== null ? val.toString() : '?', node.x, node.y - 5);
+      ctx.fillText(val !== null ? val.toString() : '?', node.x, isSandbox ? node.y : node.y - 5);
 
-      ctx.fillStyle    = 'rgba(100,150,170,0.7)';
-      ctx.font         = 'bold 13px JetBrains Mono, monospace';
-      ctx.textBaseline = 'middle';
-      ctx.fillText(`→${node.targetValue}`, node.x, node.y + 16);
+      if (!isSandbox) {
+        ctx.fillStyle    = 'rgba(100,150,170,0.7)';
+        ctx.font         = 'bold 13px JetBrains Mono, monospace';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(`→${node.targetValue}`, node.x, node.y + 16);
+      }
     }
 
     // Traffic light colored labels for G/Y/R outputs
@@ -1103,7 +1242,13 @@ const Renderer = (() => {
     const y = (py - _offsetY) / _scale;
     for (let i = nodes.length - 1; i >= 0; i--) {
       const n = nodes[i];
-      if (n.type === 'GATE_SLOT') {
+      if (n.type === 'DISPLAY_7SEG') {
+        const hw = 40 + 6, hh = 60 + 6;
+        if (x >= n.x - hw && x <= n.x + hw && y >= n.y - hh && y <= n.y + hh) return n;
+      } else if (n.type === 'MUX_SELECT') {
+        const hw = 25 + 6, hh = 15 + 6;
+        if (x >= n.x - hw && x <= n.x + hw && y >= n.y - hh && y <= n.y + hh) return n;
+      } else if (n.type === 'GATE_SLOT') {
         const hw = NODE.gateW / 2 + 6;
         const hh = NODE.gateH / 2 + 6;
         if (x >= n.x - hw && x <= n.x + hw && y >= n.y - hh && y <= n.y + hh) return n;

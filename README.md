@@ -347,6 +347,9 @@ AND_GAME/
 
 | Shortcut | Action |
 |----------|--------|
+| `Ctrl+Z` | Undo last action |
+| `Ctrl+Y` / `Ctrl+Shift+Z` | Redo |
+| `W` | Toggle waveform display |
 | `Space` | STEP — deliver one clock edge (sequential levels) |
 | `H` | Toggle hint overlay |
 | `Escape` | Close any open overlay |

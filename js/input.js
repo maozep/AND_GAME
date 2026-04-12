@@ -53,6 +53,17 @@ const Input = (() => {
     _canvas.addEventListener('drop',       _onCanvasDrop);
     _canvas.addEventListener('mousemove',  _onMouseMove);
     _canvas.addEventListener('mouseleave', _onMouseLeave);
+    _canvas.addEventListener('click',      _onCanvasClick);
+  }
+
+  function _onCanvasClick(e) {
+    if (!State.level) return;
+    const { x, y } = _getCanvasPoint(e);
+    const node = Renderer.getNodeAtPoint(x, y, State.level.nodes);
+    if (node && node.type === 'MUX_SELECT') {
+      node.value = (node.value ?? 0) ^ 1; // toggle 0↔1
+      if (_onGatePlaced) _onGatePlaced(node.id);
+    }
   }
 
   function _attachChipDrag(chip) {
@@ -168,8 +179,8 @@ const Input = (() => {
     const { x, y } = _getCanvasPoint(e);
     const node = Renderer.getNodeAtPoint(x, y, State.level.nodes);
 
-    // Hoverable: GATE_SLOT and FF_SLOT
-    const isHoverable = node && (node.type === 'GATE_SLOT' || node.type === 'FF_SLOT');
+    // Hoverable: GATE_SLOT, FF_SLOT, and MUX_SELECT
+    const isHoverable = node && (node.type === 'GATE_SLOT' || node.type === 'FF_SLOT' || node.type === 'MUX_SELECT');
     const hoverId = isHoverable ? node.id : null;
 
     if (_dragged) {

@@ -34,6 +34,7 @@
         <div id="clock-controls-row">
           <button id="btn-step" title="Deliver one rising clock edge">▶ STEP</button>
           <button id="btn-auto-clk" class="btn-secondary" title="Toggle automatic clock">AUTO CLK</button>
+          <button id="btn-waveform" title="Toggle waveform display (W)">WAVEFORM</button>
           <div id="step-count">STEP: 0</div>
         </div>
       </div>
@@ -42,6 +43,7 @@
       <div id="gate-palette-label-row">
         <div id="gate-palette-label">GATE PALETTE</div>
         <button id="btn-info" aria-label="Open gate truth tables" title="Gate Truth Tables">i</button>
+        <button id="btn-undo" title="Undo last action (Ctrl+Z)">UNDO</button>
         <button id="btn-clear-gates" title="Clear all gates and rethink">CLEAR ALL</button>
       </div>
       <div id="gate-palette">
@@ -66,6 +68,15 @@
 
   <!-- Main Canvas -->
   <canvas id="game-canvas"></canvas>
+
+  <!-- Waveform Panel -->
+  <div id="waveform-panel" class="hidden">
+    <div id="waveform-header">
+      <span id="waveform-title">WAVEFORM</span>
+      <button id="btn-waveform-close" class="btn-waveform-ctrl">CLOSE</button>
+    </div>
+    <canvas id="waveform-canvas"></canvas>
+  </div>
 
   <!-- Stage Select Overlay -->
   <div id="menu-overlay" class="hidden" aria-hidden="true">
@@ -137,6 +148,7 @@
       </div>
       <div id="win-buttons">
         <button id="btn-next">NEXT LEVEL →</button>
+        <button id="btn-screenshot" class="btn-share">SHARE</button>
         <button id="btn-restart" class="btn-secondary">RESTART</button>
         <button id="btn-win-stages" class="btn-secondary">STAGES</button>
       </div>
@@ -407,6 +419,7 @@
   <script src="js/engine.js"></script>
   <script src="js/levels.js"></script>
   <script src="js/renderer.js"></script>
+  <script src="js/waveform.js"></script>
   <script src="js/input.js"></script>
   <script src="js/main.js"></script>
 </body>

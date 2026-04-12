@@ -117,6 +117,17 @@ const Engine = (() => {
       if (node.type === 'INPUT') {
         value = node.fixedValue;
 
+      } else if (node.type === 'MUX_SELECT') {
+        value = node.value ?? 0;
+
+      } else if (node.type === 'DISPLAY_7SEG') {
+        // 7-segment display: reads 7 inputs (a-g), outputs nothing
+        // Just collect input values for rendering
+        const inputSlots = inputs.get(id);
+        const segments = inputSlots.map(s => nodeValues.get(s.sourceId) ?? 0);
+        node._segments = segments; // store for renderer
+        value = segments.reduce((acc, v, i) => acc | ((v ? 1 : 0) << i), 0);
+
       } else if (node.type === 'CLOCK') {
         // CLOCK node: value is stored in the node itself (mutable)
         value = node.value ?? 0;
@@ -238,7 +249,8 @@ const Engine = (() => {
       order.forEach(id => {
         const node = nodeMap.get(id);
         if (FF_TYPES.has(node.type) || node.type === 'INPUT' ||
-            node.type === 'CLOCK')  return;
+            node.type === 'CLOCK' || node.type === 'MUX_SELECT' ||
+            node.type === 'DISPLAY_7SEG')  return;
 
         let value = null;
         if (node.type === 'GATE_SLOT') {
@@ -269,9 +281,9 @@ const Engine = (() => {
 
     // ── Win Condition ─────────────────────────────────────
     const minSteps = level.minSteps || 0;
-    const outputNodes = nodes.filter(n => n.type === 'OUTPUT');
-    const solved = (stepCount || 0) >= minSteps &&
-      outputNodes.length > 0 && outputNodes.every(n => {
+    const outputNodes = nodes.filter(n => n.type === 'OUTPUT' && !n.sandbox);
+    const solved = outputNodes.length > 0 && (stepCount || 0) >= minSteps &&
+      outputNodes.every(n => {
       const computed = nodeValues.get(n.id);
       return computed !== null && computed === n.targetValue;
     });

@@ -60,7 +60,7 @@
   const BEST_TIMES_KEY = 'and_game_best_times';
   const completedLevelIds = new Set(loadCompletedLevelIds());
   const bestTimes = loadBestTimes();
-  const DIFFICULTY_ORDER = ['Fundamentals', 'Building Blocks', 'Advanced Circuits', 'Flip-Flops', 'Sequential Logic', 'FSM Applications'];
+  const DIFFICULTY_ORDER = ['Fundamentals', 'Building Blocks', 'Advanced Circuits', 'Flip-Flops', 'Sequential Logic', 'FSM Applications', 'Design'];
   const TRUTH_OBJECTIVES = {
     1: 'Goal: Understand that an AND gate outputs 1 only when both inputs are 1.',
     2: 'Goal: Understand that an OR gate outputs 1 when at least one input is 1.',
@@ -1016,6 +1016,14 @@
 
     Renderer.render(level, result, State.hoveredNodeId, result.solved, State.stepCount);
 
+    // Record waveform data (always record, render only when visible)
+    if (result.nodeValues) {
+      Waveform.record(State.stepCount, result.nodeValues);
+      if (Waveform.isVisible()) {
+        Waveform.render();
+      }
+    }
+
     // Trigger win sequence if newly solved
     if (result.solved && !_lastSolved) {
       _lastSolved = true;
@@ -1049,6 +1057,15 @@
     _levelFinished = false;
     _elapsedMs = 0;
 
+    // Reset waveform for new level
+    Waveform.reset();
+    Waveform.setSignals(State.level);
+    // Record initial state (step 0)
+    const initResult = Engine.evaluate(State.level, State.getFfStates(), 0);
+    if (initResult.nodeValues) {
+      Waveform.record(0, initResult.nodeValues);
+    }
+
     // Update HUD
     levelName.textContent = `${index + 1}. ${getDisplayName(levelDef)}`;
     updateHintButtonState();
@@ -1071,6 +1088,13 @@
         instructionText.innerHTML = levelDef.instructionHtml;
       } else {
         instructionText.textContent = levelDef.instruction;
+      }
+      // Full-screen mode for large diagrams (CPU etc.)
+      const box = document.getElementById('instruction-box');
+      if (levelDef.fullscreenInstruction) {
+        box.classList.add('fullscreen-diagram');
+      } else {
+        box.classList.remove('fullscreen-diagram');
       }
       instructionOverlay.classList.remove('hidden');
     }
@@ -1215,9 +1239,125 @@
     loadLevel(State.currentLevelIndex);
   });
 
+  document.getElementById('btn-undo').addEventListener('click', () => {
+    if (State.undo()) _updateStepCount();
+  });
+
   document.getElementById('btn-clear-gates').addEventListener('click', () => {
     State.resetLevel();
   });
+
+  // ── Share Screenshot ──────────────────────────────────────
+  document.getElementById('btn-screenshot').addEventListener('click', () => {
+    const levelDef = LEVELS[State.currentLevelIndex];
+    if (!levelDef) return;
+
+    // Create a composite image: game canvas + level info banner
+    const gameCanvas = document.getElementById('game-canvas');
+    const w = gameCanvas.width;
+    const h = gameCanvas.height;
+    const bannerH = 80;
+
+    const offscreen = document.createElement('canvas');
+    offscreen.width = w;
+    offscreen.height = h + bannerH;
+    const octx = offscreen.getContext('2d');
+
+    // Dark banner at top
+    octx.fillStyle = '#0d1117';
+    octx.fillRect(0, 0, w, bannerH);
+
+    // Banner border
+    octx.strokeStyle = '#39ff14';
+    octx.lineWidth = 2;
+    octx.beginPath();
+    octx.moveTo(0, bannerH);
+    octx.lineTo(w, bannerH);
+    octx.stroke();
+
+    // Level name
+    octx.fillStyle = '#39ff14';
+    octx.font = 'bold 22px JetBrains Mono, monospace';
+    octx.textAlign = 'left';
+    octx.textBaseline = 'middle';
+    octx.fillText(`LEVEL ${State.currentLevelIndex + 1} — ${levelDef.name}`, 20, 28);
+
+    // Time + game title
+    octx.fillStyle = '#00d4ff';
+    octx.font = '14px JetBrains Mono, monospace';
+    octx.fillText(`TIME: ${formatTime(_elapsedMs)}`, 20, 58);
+
+    octx.fillStyle = '#555';
+    octx.font = '12px JetBrains Mono, monospace';
+    octx.textAlign = 'right';
+    octx.fillText('AND_GAME — maozep.github.io/AND_GAME', w - 20, 28);
+    octx.fillText('CIRCUIT SOLVED', w - 20, 50);
+
+    // Copy game canvas below banner
+    octx.drawImage(gameCanvas, 0, bannerH);
+
+    // Add waveform if it has data
+    const waveCanvas = document.getElementById('waveform-canvas');
+    if (Waveform && waveCanvas && waveCanvas.width > 0 && waveCanvas.height > 0) {
+      // Force render waveform to make sure it's up to date
+      const wasVisible = Waveform.isVisible();
+      if (!wasVisible) {
+        waveformPanel.classList.remove('hidden');
+        Waveform.show();
+      }
+      // Wait a frame for render, then capture
+      requestAnimationFrame(() => {
+        const wfH = waveCanvas.height / (window.devicePixelRatio || 1);
+        const totalH = h + bannerH + wfH;
+        const finalCanvas = document.createElement('canvas');
+        finalCanvas.width = w;
+        finalCanvas.height = totalH;
+        const fctx = finalCanvas.getContext('2d');
+        // Copy existing banner + game
+        fctx.drawImage(offscreen, 0, 0);
+        // Waveform separator
+        fctx.strokeStyle = '#00d4ff';
+        fctx.lineWidth = 2;
+        fctx.beginPath();
+        fctx.moveTo(0, h + bannerH);
+        fctx.lineTo(w, h + bannerH);
+        fctx.stroke();
+        // Copy waveform canvas
+        fctx.drawImage(waveCanvas, 0, 0, waveCanvas.width, waveCanvas.height, 0, h + bannerH, w, wfH);
+        // Restore waveform visibility
+        if (!wasVisible) {
+          Waveform.hide();
+          waveformPanel.classList.add('hidden');
+        }
+        // Share/download the final image
+        _shareBlob(finalCanvas, levelDef);
+      });
+      return; // async path
+    }
+
+    // No waveform — share directly
+    _shareBlob(offscreen, levelDef);
+  });
+
+  function _shareBlob(canvas, levelDef) {
+    canvas.toBlob(blob => {
+      if (navigator.share && navigator.canShare && navigator.canShare({ files: [new File([blob], 'solve.png', { type: 'image/png' })] })) {
+        const file = new File([blob], `AND_GAME_L${levelDef.id}_${levelDef.name.replace(/\s+/g,'_')}.png`, { type: 'image/png' });
+        navigator.share({
+          title: `AND_GAME — Level ${levelDef.id} Solved!`,
+          text: `I solved "${levelDef.name}" in ${formatTime(_elapsedMs)}!`,
+          files: [file],
+        }).catch(() => {});
+      } else {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `AND_GAME_L${levelDef.id}_${levelDef.name.replace(/\s+/g,'_')}.png`;
+        a.click();
+        URL.revokeObjectURL(url);
+      }
+    }, 'image/png');
+  }
 
   btnWinStages.addEventListener('click', () => {
     winOverlay.classList.add('hidden');
@@ -1347,6 +1487,18 @@
       _devAutoSolve();
       return;
     }
+    // Undo: Ctrl+Z
+    if (e.ctrlKey && !e.shiftKey && e.key === 'z') {
+      e.preventDefault();
+      if (State.undo()) _updateStepCount();
+      return;
+    }
+    // Redo: Ctrl+Y or Ctrl+Shift+Z
+    if ((e.ctrlKey && e.key === 'y') || (e.ctrlKey && e.shiftKey && e.key === 'Z')) {
+      e.preventDefault();
+      if (State.redo()) _updateStepCount();
+      return;
+    }
     // Clear all (reset level): Ctrl+Shift+R
     if (e.ctrlKey && e.shiftKey && e.key === 'R') {
       e.preventDefault();
@@ -1365,6 +1517,11 @@
         }
         return;
       }
+    }
+    // Toggle waveform: W
+    if ((e.key === 'w' || e.key === 'W') && !e.ctrlKey && !e.altKey && !e.metaKey) {
+      toggleWaveform();
+      return;
     }
     // STEP: Space (sequential levels only)
     if (e.key === ' ') {
@@ -1407,7 +1564,27 @@
 
   // ── Renderer Init & Resize ────────────────────────────────
   Renderer.init(canvas);
-  window.addEventListener('resize', () => Renderer.resize());
+  window.addEventListener('resize', () => { Renderer.resize(); if (Waveform.isVisible()) Waveform.render(); });
+
+  // ── Waveform Init ────────────────────────────────────────
+  const waveformPanel = document.getElementById('waveform-panel');
+  const btnWaveform = document.getElementById('btn-waveform');
+  Waveform.init(document.getElementById('waveform-canvas'));
+
+  function toggleWaveform() {
+    if (Waveform.isVisible()) {
+      Waveform.hide();
+      waveformPanel.classList.add('hidden');
+      btnWaveform.classList.remove('active');
+    } else {
+      waveformPanel.classList.remove('hidden'); // un-hide FIRST so it has dimensions
+      Waveform.show(); // then show (which does requestAnimationFrame resize+render)
+      btnWaveform.classList.add('active');
+    }
+  }
+
+  btnWaveform.addEventListener('click', toggleWaveform);
+  document.getElementById('btn-waveform-close').addEventListener('click', toggleWaveform);
 
   // ── Gate Palette Highlight (hover sync) ───────────────────
   function updatePaletteHighlight(gate) {

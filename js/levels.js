@@ -4818,53 +4818,15 @@ const LEVELS = [
   // Sandbox / open-ended design levels.
   // ════════════════════════════════════════════════════════════
 
-  // L56 — SANDBOX (7-segment display + free toggle switches)
-  // No win condition — sandbox mode. Player toggles segments to explore.
+  // L56 — DESIGN MODE (empty canvas — player builds their own circuit)
   {
-    id: 56, name: 'SANDBOX', difficulty: 'Design',
-    description: 'Sandbox Mode — a 7-segment display and toggle switches. No goals, no timer, no targets. Just play, experiment, and build whatever you want.',
-    instruction: 'Welcome to Sandbox Mode! Toggle the switches to light up segments on the display. There are no rules here — just explore.',
-    instructionHtml: '<div style="text-align:center;margin:16px 0"><svg viewBox="0 0 200 180" width="150" height="135"><rect x="10" y="10" width="180" height="130" rx="10" fill="#0a0a0a" stroke="#444" stroke-width="2"/><rect x="60" y="20" width="80" height="110" rx="6" fill="#111" stroke="#333" stroke-width="1.5"/><line x1="78" y1="40" x2="122" y2="40" stroke="#ff1a1a" stroke-width="5" stroke-linecap="round"/><line x1="125" y1="45" x2="125" y2="72" stroke="#ff1a1a" stroke-width="5" stroke-linecap="round"/><line x1="125" y1="78" x2="125" y2="105" stroke="rgba(60,20,20,0.4)" stroke-width="5" stroke-linecap="round"/><line x1="78" y1="110" x2="122" y2="110" stroke="rgba(60,20,20,0.4)" stroke-width="5" stroke-linecap="round"/><line x1="75" y1="78" x2="75" y2="105" stroke="rgba(60,20,20,0.4)" stroke-width="5" stroke-linecap="round"/><line x1="75" y1="45" x2="75" y2="72" stroke="#ff1a1a" stroke-width="5" stroke-linecap="round"/><line x1="78" y1="75" x2="122" y2="75" stroke="#ff1a1a" stroke-width="5" stroke-linecap="round"/><text x="100" y="160" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">7-SEGMENT DISPLAY</text></svg></div><p style="text-align:center;color:#c8d8f0;font-size:14px;margin:8px 0">Toggle switches to control each segment. No targets — just play!</p><p style="text-align:center;color:#888;font-size:12px">Click the switches on the left to light up segments on the display.</p>',
-    hint: 'This is sandbox mode — there is no wrong answer! Toggle the 7 switches (a-g) to light up different segments. Try to make numbers 0-9.',
-    // No solution needed for sandbox
-    nodes: [
-      // 7 toggle switches for segments a-g
-      { id: 'sw_a', type: 'MUX_SELECT', x: 200, y: 250, value: 0, label: 'a (top)' },
-      { id: 'sw_b', type: 'MUX_SELECT', x: 200, y: 310, value: 0, label: 'b (top-R)' },
-      { id: 'sw_c', type: 'MUX_SELECT', x: 200, y: 370, value: 0, label: 'c (bot-R)' },
-      { id: 'sw_d', type: 'MUX_SELECT', x: 200, y: 430, value: 0, label: 'd (bot)' },
-      { id: 'sw_e', type: 'MUX_SELECT', x: 200, y: 490, value: 0, label: 'e (bot-L)' },
-      { id: 'sw_f', type: 'MUX_SELECT', x: 200, y: 550, value: 0, label: 'f (top-L)' },
-      { id: 'sw_g', type: 'MUX_SELECT', x: 200, y: 610, value: 0, label: 'g (mid)' },
-      // 7-segment display
-      { id: 'disp', type: 'DISPLAY_7SEG', x: 550, y: 430, label: '7-SEG' },
-      // LED outputs for individual segments
-      { id: 'led_a', type: 'OUTPUT', x: 750, y: 280, label: 'a', sandbox: true },
-      { id: 'led_b', type: 'OUTPUT', x: 750, y: 340, label: 'b', sandbox: true },
-      { id: 'led_c', type: 'OUTPUT', x: 750, y: 400, label: 'c', sandbox: true },
-      { id: 'led_d', type: 'OUTPUT', x: 750, y: 460, label: 'd', sandbox: true },
-      { id: 'led_e', type: 'OUTPUT', x: 750, y: 520, label: 'e', sandbox: true },
-      { id: 'led_f', type: 'OUTPUT', x: 750, y: 580, label: 'f', sandbox: true },
-      { id: 'led_g', type: 'OUTPUT', x: 750, y: 640, label: 'g', sandbox: true },
-    ],
-    wires: [
-      // Switches → Display segments
-      { id: 'wa', sourceId: 'sw_a', targetId: 'disp', targetInputIndex: 0 },
-      { id: 'wb', sourceId: 'sw_b', targetId: 'disp', targetInputIndex: 1 },
-      { id: 'wc', sourceId: 'sw_c', targetId: 'disp', targetInputIndex: 2 },
-      { id: 'wd', sourceId: 'sw_d', targetId: 'disp', targetInputIndex: 3 },
-      { id: 'we', sourceId: 'sw_e', targetId: 'disp', targetInputIndex: 4 },
-      { id: 'wf', sourceId: 'sw_f', targetId: 'disp', targetInputIndex: 5 },
-      { id: 'wg', sourceId: 'sw_g', targetId: 'disp', targetInputIndex: 6 },
-      // Switches → LED outputs
-      { id: 'la', sourceId: 'sw_a', targetId: 'led_a', targetInputIndex: 0 },
-      { id: 'lb', sourceId: 'sw_b', targetId: 'led_b', targetInputIndex: 0 },
-      { id: 'lc', sourceId: 'sw_c', targetId: 'led_c', targetInputIndex: 0 },
-      { id: 'ld', sourceId: 'sw_d', targetId: 'led_d', targetInputIndex: 0 },
-      { id: 'le', sourceId: 'sw_e', targetId: 'led_e', targetInputIndex: 0 },
-      { id: 'lf', sourceId: 'sw_f', targetId: 'led_f', targetInputIndex: 0 },
-      { id: 'lg', sourceId: 'sw_g', targetId: 'led_g', targetInputIndex: 0 },
-    ],
+    id: 56, name: 'DESIGN MODE', difficulty: 'Design Mode',
+    description: 'Design Mode — create your own circuit from scratch. Place nodes, draw wires, and build whatever you want. Export your creation and share it with others.',
+    instruction: 'Welcome to Design Mode! Use the toolbar on the left to place components and draw wires.',
+    instructionHtml: '<div style="text-align:center;margin:16px 0"><svg viewBox="0 0 220 140" width="165" height="105"><rect x="10" y="10" width="200" height="120" rx="10" fill="#0a0e14" stroke="#a060ff" stroke-width="2"/><circle cx="50" cy="50" r="15" fill="rgba(57,255,20,0.15)" stroke="#39ff14" stroke-width="2"/><text x="50" y="54" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#39ff14">IN</text><rect x="90" y="38" width="40" height="25" rx="4" fill="rgba(0,212,255,0.1)" stroke="#00d4ff" stroke-width="1.5"/><text x="110" y="55" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#00d4ff">GATE</text><circle cx="170" cy="50" r="15" fill="rgba(200,216,240,0.1)" stroke="#c8d8f0" stroke-width="2"/><text x="170" y="54" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#c8d8f0">OUT</text><line x1="65" y1="50" x2="90" y2="50" stroke="#39ff14" stroke-width="2"/><line x1="130" y1="50" x2="155" y2="50" stroke="#39ff14" stroke-width="2"/><text x="110" y="100" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#a060ff">BUILD YOUR OWN</text><text x="110" y="118" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#a060ff">CIRCUIT</text></svg></div><p style="text-align:center;color:#c8d8f0;font-size:14px;margin:8px 0">Place inputs, gates, flip-flops, and outputs on an empty canvas.</p><p style="text-align:center;color:#c8d8f0;font-size:14px;margin:4px 0">Draw wires to connect them. Test your circuit. Export and share!</p>',
+    hint: 'Use the toolbar on the left: select a tool, click on the canvas to place. Switch to WIRE mode to connect nodes. Click TEST to try your circuit.',
+    nodes: [],
+    wires: [],
   },
 
 ];

@@ -54,17 +54,132 @@ const Input = (() => {
     _canvas.addEventListener('mousemove',  _onMouseMove);
     _canvas.addEventListener('mouseleave', _onMouseLeave);
     _canvas.addEventListener('click',      _onCanvasClick);
+    _canvas.addEventListener('mousedown',  _onMouseDown);
+    _canvas.addEventListener('mouseup',    _onMouseUp);
   }
+
+  // ── Design Mode: Node Dragging & Canvas Panning ──
+  let _dragNode = null;
+  let _dragOffset = { x: 0, y: 0 };
+  let _panning = false;
+  let _panStart = { x: 0, y: 0 };
+
+  function _onMouseDown(e) {
+    if (!State.designMode || State.designTool !== 'select') return;
+    if (!State.level) return;
+    const canvasPoint = _getCanvasPoint(e);
+    const node = Renderer.getNodeAtPoint(canvasPoint.x, canvasPoint.y, State.level.nodes);
+    if (node) {
+      const world = Renderer.canvasToWorld(canvasPoint.x, canvasPoint.y);
+      _dragNode = node;
+      _dragOffset = { x: world.x - node.x, y: world.y - node.y };
+      State.selectedNodeId = node.id;
+    } else {
+      // No node — start panning the canvas
+      _panning = true;
+      _panStart = { x: e.clientX, y: e.clientY };
+    }
+  }
+
+  function _onMouseUp(e) {
+    _dragNode = null;
+    _panning = false;
+  }
+
+  // Node defaults for design mode placement
+  const _nodeDefaults = {
+    'place-input':  (x, y) => ({ type: 'INPUT',      x, y, fixedValue: 0, label: 'IN' }),
+    'place-output': (x, y) => ({ type: 'OUTPUT',     x, y, targetValue: 0, label: 'OUT', sandbox: true }),
+    'place-gate':   (x, y) => ({ type: 'GATE_SLOT',  x, y, gate: null, label: 'G' }),
+    'place-ff':     (x, y) => ({ type: 'FF_SLOT',    x, y, ffType: null, initialQ: 0, label: 'FF' }),
+    'place-clock':  (x, y) => ({ type: 'CLOCK',      x, y, value: 0 }),
+    'place-mux':    (x, y) => ({ type: 'MUX_SELECT', x, y, value: 0, label: 'SW' }),
+    'place-7seg':   (x, y) => ({ type: 'DISPLAY_7SEG', x, y, label: '7SEG' }),
+  };
 
   function _onCanvasClick(e) {
     if (!State.level) return;
-    const { x, y } = _getCanvasPoint(e);
-    const node = Renderer.getNodeAtPoint(x, y, State.level.nodes);
+    const canvasPoint = _getCanvasPoint(e);
+    const node = Renderer.getNodeAtPoint(canvasPoint.x, canvasPoint.y, State.level.nodes);
+
+    // ── Design Mode ──
+    if (State.designMode) {
+      const tool = State.designTool;
+      const world = Renderer.canvasToWorld(canvasPoint.x, canvasPoint.y);
+
+      // Place node tools
+      if (_nodeDefaults[tool]) {
+        const newNode = _nodeDefaults[tool](world.x, world.y);
+        const id = State.addNode(newNode);
+        State.selectedNodeId = id;
+        if (_onGatePlaced) _onGatePlaced(id);
+        return;
+      }
+
+      // Select tool
+      if (tool === 'select') {
+        State.selectedNodeId = node ? node.id : null;
+        return;
+      }
+
+      // Delete tool
+      if (tool === 'delete') {
+        if (node) {
+          State.deleteNode(node.id);
+        } else {
+          // Try deleting a wire
+          const wire = Renderer.getWireAtPoint(canvasPoint.x, canvasPoint.y, State.level);
+          if (wire) State.deleteWire(wire.id);
+        }
+        if (_onGatePlaced) _onGatePlaced(null);
+        return;
+      }
+
+      // Wire tool — handled separately (needs two clicks)
+      if (tool === 'wire') {
+        if (node) {
+          if (!_wireSource) {
+            _wireSource = node;
+          } else if (node.id !== _wireSource.id) {
+            // Validate: no duplicate wires
+            const duplicate = State.level.wires.some(w =>
+              w.sourceId === _wireSource.id && w.targetId === node.id
+            );
+            if (duplicate) {
+              _wireSource = null;
+              return;
+            }
+            // Determine targetInputIndex
+            const existingWires = State.level.wires.filter(w => w.targetId === node.id);
+            const nextIdx = existingWires.length;
+            State.addWire({
+              sourceId: _wireSource.id,
+              targetId: node.id,
+              targetInputIndex: nextIdx,
+              sourceOutputIndex: 0,
+            });
+            _wireSource = null;
+            if (_onGatePlaced) _onGatePlaced(null);
+          }
+        } else {
+          _wireSource = null; // click on empty space cancels wire
+        }
+        return;
+      }
+
+      return;
+    }
+
+    // ── Normal Mode ──
     if (node && node.type === 'MUX_SELECT') {
-      node.value = (node.value ?? 0) ^ 1; // toggle 0↔1
+      node.value = (node.value ?? 0) ^ 1;
       if (_onGatePlaced) _onGatePlaced(node.id);
     }
   }
+
+  // Wire drawing state
+  let _wireSource = null;
+  let _mouseWorld = { x: 0, y: 0 };
 
   function _attachChipDrag(chip) {
     chip.draggable = true;
@@ -179,11 +294,49 @@ const Input = (() => {
     const { x, y } = _getCanvasPoint(e);
     const node = Renderer.getNodeAtPoint(x, y, State.level.nodes);
 
-    // Hoverable: GATE_SLOT, FF_SLOT, and MUX_SELECT
-    const isHoverable = node && (node.type === 'GATE_SLOT' || node.type === 'FF_SLOT' || node.type === 'MUX_SELECT');
+    // Hoverable: in design mode all nodes, otherwise GATE_SLOT, FF_SLOT, MUX_SELECT
+    const isHoverable = State.designMode
+      ? !!node
+      : node && (node.type === 'GATE_SLOT' || node.type === 'FF_SLOT' || node.type === 'MUX_SELECT');
     const hoverId = isHoverable ? node.id : null;
 
-    if (_dragged) {
+    // Track mouse world position for wire preview
+    if (State.designMode) {
+      _mouseWorld = Renderer.canvasToWorld(x, y);
+    }
+
+    // Design mode: canvas panning
+    if (_panning && State.designMode && State.designTool === 'select') {
+      const dx = e.clientX - _panStart.x;
+      const dy = e.clientY - _panStart.y;
+      _panStart = { x: e.clientX, y: e.clientY };
+      Renderer.panBy(dx, dy);
+      _setCanvasCursor('grabbing');
+      return;
+    }
+
+    // Design mode: drag node movement
+    if (_dragNode && State.designMode && State.designTool === 'select') {
+      const world = _mouseWorld;
+      _dragNode.x = world.x - _dragOffset.x;
+      _dragNode.y = world.y - _dragOffset.y;
+      _setCanvasCursor('grabbing');
+      return;
+    }
+
+    if (State.designMode) {
+      const tool = State.designTool;
+      if (tool && tool.startsWith('place-')) {
+        _setCanvasCursor('crosshair');
+      } else if (tool === 'wire') {
+        _setCanvasCursor(node ? 'cell' : 'crosshair');
+      } else if (tool === 'delete') {
+        const wire = !node ? Renderer.getWireAtPoint(x, y, State.level) : null;
+        _setCanvasCursor((node || wire) ? 'not-allowed' : 'default');
+      } else {
+        _setCanvasCursor(node ? 'move' : 'default');
+      }
+    } else if (_dragged) {
       const target = _resolveDropTarget(x, y);
       _setCanvasCursor(target ? 'copy' : 'default');
     } else {
@@ -204,6 +357,10 @@ const Input = (() => {
     }
   }
 
-  return { init, refreshChips };
+  return {
+    init, refreshChips,
+    get wireSource() { return _wireSource; },
+    get mouseWorld() { return _mouseWorld; },
+  };
 
 })();

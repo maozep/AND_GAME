@@ -60,7 +60,7 @@
   const BEST_TIMES_KEY = 'and_game_best_times';
   const completedLevelIds = new Set(loadCompletedLevelIds());
   const bestTimes = loadBestTimes();
-  const DIFFICULTY_ORDER = ['Fundamentals', 'Building Blocks', 'Advanced Circuits', 'Flip-Flops', 'Sequential Logic', 'FSM Applications', 'Design'];
+  const DIFFICULTY_ORDER = ['Fundamentals', 'Building Blocks', 'Advanced Circuits', 'Flip-Flops', 'Sequential Logic', 'FSM Applications', 'Design', 'Design Mode'];
   const TRUTH_OBJECTIVES = {
     1: 'Goal: Understand that an AND gate outputs 1 only when both inputs are 1.',
     2: 'Goal: Understand that an OR gate outputs 1 when at least one input is 1.',
@@ -1034,7 +1034,25 @@
       _lastSolved = false;
     }
 
+    // Auto-save design
+    if (State.designMode) _scheduleDesignSave();
+
     _rafId = requestAnimationFrame(tick);
+  }
+
+  // Auto-save design mode every 2 seconds
+  let _designSaveTimer = null;
+  function _scheduleDesignSave() {
+    if (_designSaveTimer) return;
+    _designSaveTimer = setTimeout(() => {
+      _designSaveTimer = null;
+      if (State.designMode && State.level) {
+        localStorage.setItem('andgame_design', JSON.stringify({
+          nodes: State.level.nodes,
+          wires: State.level.wires,
+        }));
+      }
+    }, 2000);
   }
 
   function startLoop() {
@@ -1099,13 +1117,20 @@
       instructionOverlay.classList.remove('hidden');
     }
 
-    // Show clock controls and FF palette only for sequential levels
+    // Design mode: activate for Design difficulty levels
+    const isDesignLevel = levelDef.difficulty === 'Design Mode';
+    State.designMode = isDesignLevel;
+    _setDesignMode(isDesignLevel);
+
+    // Show clock controls and FF palette only for sequential levels (and not design mode)
     _stopAutoClock();
     const isSequential = State.isSequentialLevel();
-    _setClockControlsVisible(isSequential);
-    _updateStepCount();
-    _setFfPaletteVisible(isSequential);
-    if (isSequential) Input.refreshChips();
+    if (!isDesignLevel) {
+      _setClockControlsVisible(isSequential);
+      _updateStepCount();
+      _setFfPaletteVisible(isSequential);
+      if (isSequential) Input.refreshChips();
+    }
 
     // Hide overlays
     closeMenuOverlay();
@@ -1481,6 +1506,11 @@
 
   // Keyboard accessibility
   window.addEventListener('keydown', (e) => {
+    // When user is typing in a text input, let the browser handle keys
+    // (except Escape which should still close overlays)
+    const _isTyping = e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA';
+    if (_isTyping && e.key !== 'Escape') return;
+
     // Dev auto-solve: Ctrl+Shift+S
     if (e.ctrlKey && e.shiftKey && e.key === 'S') {
       e.preventDefault();
@@ -1488,13 +1518,60 @@
       return;
     }
     // Undo: Ctrl+Z
-    if (e.ctrlKey && !e.shiftKey && e.key === 'z') {
+    if (e.ctrlKey && !e.shiftKey && (e.key === 'z' || e.key === 'Z' || e.code === 'KeyZ')) {
       e.preventDefault();
       if (State.undo()) _updateStepCount();
       return;
     }
+    // ── Design Mode shortcuts ──
+    if (State.designMode && !e.ctrlKey && !e.altKey && !e.metaKey) {
+      const code = e.code;
+      const shortcut = {
+        'KeyS': 'select', 'KeyI': 'place-input', 'KeyO': 'place-output',
+        'KeyG': 'place-gate', 'KeyF': 'place-ff', 'KeyC': 'place-clock',
+        'KeyM': 'place-mux', 'Digit7': 'place-7seg', 'KeyW': 'wire', 'KeyD': 'delete',
+      }[code];
+      if (shortcut) {
+        e.preventDefault();
+        State.designTool = shortcut;
+        _updateDesignToolActive(shortcut);
+        return;
+      }
+      if (code === 'KeyT') {
+        e.preventDefault();
+        document.getElementById('btn-design-test').click();
+        return;
+      }
+      if (code === 'KeyE') {
+        e.preventDefault();
+        document.getElementById('btn-design-export').click();
+        return;
+      }
+      if (code === 'KeyR') {
+        e.preventDefault();
+        document.getElementById('btn-design-share').click();
+        return;
+      }
+      if (code === 'KeyP') {
+        e.preventDefault();
+        document.getElementById('btn-design-import').click();
+        return;
+      }
+      if (code === 'KeyX') {
+        e.preventDefault();
+        document.getElementById('btn-design-clear').click();
+        return;
+      }
+      if (e.key === 'Delete' || e.key === 'Backspace') {
+        if (State.selectedNodeId) {
+          e.preventDefault();
+          State.deleteNode(State.selectedNodeId);
+        }
+        return;
+      }
+    }
     // Redo: Ctrl+Y or Ctrl+Shift+Z
-    if ((e.ctrlKey && e.key === 'y') || (e.ctrlKey && e.shiftKey && e.key === 'Z')) {
+    if ((e.ctrlKey && (e.key === 'y' || e.key === 'Y' || e.code === 'KeyY')) || (e.ctrlKey && e.shiftKey && e.code === 'KeyZ')) {
       e.preventDefault();
       if (State.redo()) _updateStepCount();
       return;
@@ -1603,6 +1680,344 @@
       updatePaletteHighlight(null);
     }
   }, 100);
+
+  // ── Design Mode ──────────────────────────────────────────
+  const designToolbar = document.getElementById('design-toolbar');
+  const designTools = document.querySelectorAll('.design-tool');
+
+  function _setDesignMode(active) {
+    designToolbar.classList.toggle('hidden', !active);
+    // Hide normal HUD elements in design mode
+    document.getElementById('hud-right').style.display = active ? 'none' : '';
+    document.getElementById('hud-center').style.display = active ? 'none' : '';
+    if (active) {
+      State.designTool = 'select';
+      _updateDesignToolActive('select');
+      // Load saved design or start empty
+      if (State.level) {
+        const saved = localStorage.getItem('andgame_design');
+        if (saved) {
+          try {
+            const data = JSON.parse(saved);
+            State.level.nodes = data.nodes || [];
+            State.level.wires = data.wires || [];
+            // Restore node counter
+            let maxNum = 0;
+            State.level.nodes.forEach(n => {
+              const m = String(n.id).match(/(\d+)$/);
+              if (m) maxNum = Math.max(maxNum, parseInt(m[1]));
+            });
+            State.level.wires.forEach(w => {
+              const m = String(w.id).match(/(\d+)$/);
+              if (m) maxNum = Math.max(maxNum, parseInt(m[1]));
+            });
+            State.nodeCounter = maxNum + 1;
+          } catch (_) {
+            State.level.nodes = [];
+            State.level.wires = [];
+          }
+        } else {
+          State.level.nodes = [];
+          State.level.wires = [];
+        }
+      }
+      // Initialize camera for design mode
+      Renderer.panBy(0, 0); // ensure offset is set
+
+    }
+  }
+
+  function _updateDesignToolActive(tool) {
+    designTools.forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.tool === tool);
+    });
+  }
+
+  // ── Property Editor ──────────────────────────────────────
+  const designProps = document.getElementById('design-props');
+  const propsType = document.getElementById('design-props-type');
+  const propLabel = document.getElementById('prop-label');
+  const propValueToggle = document.getElementById('prop-value-toggle');
+  const propStepsRow = document.getElementById('prop-steps-row');
+  const propSteps = document.getElementById('prop-steps');
+  const propTargetToggle = document.getElementById('prop-target-toggle');
+  const propStepTargetsRow = document.getElementById('prop-step-targets-row');
+  const propStepTargets = document.getElementById('prop-step-targets');
+  const propInitQToggle = document.getElementById('prop-initq-toggle');
+  const propLabelRow = document.getElementById('prop-label-row');
+  const propValueRow = document.getElementById('prop-value-row');
+  const propTargetRow = document.getElementById('prop-target-row');
+  const propInitQRow = document.getElementById('prop-initq-row');
+
+  function _getSelectedNode() {
+    if (!State.level || !State.selectedNodeId) return null;
+    return State.level.nodes.find(n => n.id === State.selectedNodeId) || null;
+  }
+
+  function _updatePropsPanel() {
+    const node = _getSelectedNode();
+    if (!node || !State.designMode) {
+      designProps.classList.add('hidden');
+      return;
+    }
+    designProps.classList.remove('hidden');
+    propsType.textContent = node.type;
+
+    // Show/hide rows based on type
+    propLabelRow.style.display = '';
+    propValueRow.style.display = (node.type === 'INPUT' || node.type === 'MUX_SELECT') ? '' : 'none';
+    propStepsRow.style.display = node.type === 'INPUT' ? '' : 'none';
+    propTargetRow.style.display = node.type === 'OUTPUT' ? '' : 'none';
+    propStepTargetsRow.style.display = node.type === 'OUTPUT' ? '' : 'none';
+    propInitQRow.style.display = node.type === 'FF_SLOT' ? '' : 'none';
+
+    // Fill values
+    propLabel.value = node.label || '';
+    if (node.type === 'INPUT') {
+      propValueToggle.textContent = node.fixedValue ?? 0;
+      propSteps.value = (node.stepValues || []).join(',');
+    }
+    if (node.type === 'MUX_SELECT') propValueToggle.textContent = node.value ?? 0;
+    if (node.type === 'OUTPUT') {
+      propTargetToggle.textContent = node.targetValue ?? 0;
+      propStepTargets.value = (node.stepTargets || []).join(',');
+    }
+    if (node.type === 'FF_SLOT') propInitQToggle.textContent = node.initialQ ?? 0;
+  }
+
+  // Update props panel on each tick (checks if selection changed)
+  let _lastPropsNodeId = null;
+  setInterval(() => {
+    if (State.selectedNodeId !== _lastPropsNodeId) {
+      _lastPropsNodeId = State.selectedNodeId;
+      _updatePropsPanel();
+    }
+  }, 100);
+
+  propLabel.addEventListener('input', () => {
+    const node = _getSelectedNode();
+    if (node) node.label = propLabel.value;
+  });
+
+  propValueToggle.addEventListener('click', () => {
+    const node = _getSelectedNode();
+    if (!node) return;
+    if (node.type === 'INPUT') {
+      node.fixedValue = (node.fixedValue ?? 0) ^ 1;
+      propValueToggle.textContent = node.fixedValue;
+    } else if (node.type === 'MUX_SELECT') {
+      node.value = (node.value ?? 0) ^ 1;
+      propValueToggle.textContent = node.value;
+    }
+  });
+
+  propSteps.addEventListener('input', () => {
+    const node = _getSelectedNode();
+    if (!node || node.type !== 'INPUT') return;
+    const vals = propSteps.value.split(',').map(s => parseInt(s.trim())).filter(v => v === 0 || v === 1);
+    node.stepValues = vals.length > 0 ? vals : undefined;
+  });
+
+  propTargetToggle.addEventListener('click', () => {
+    const node = _getSelectedNode();
+    if (!node || node.type !== 'OUTPUT') return;
+    node.targetValue = (node.targetValue ?? 0) ^ 1;
+    propTargetToggle.textContent = node.targetValue;
+  });
+
+  propStepTargets.addEventListener('input', () => {
+    const node = _getSelectedNode();
+    if (!node || node.type !== 'OUTPUT') return;
+    const vals = propStepTargets.value.split(',').map(s => parseInt(s.trim())).filter(v => v === 0 || v === 1);
+    node.stepTargets = vals.length > 0 ? vals : undefined;
+  });
+
+  propInitQToggle.addEventListener('click', () => {
+    const node = _getSelectedNode();
+    if (!node || node.type !== 'FF_SLOT') return;
+    node.initialQ = (node.initialQ ?? 0) ^ 1;
+    propInitQToggle.textContent = node.initialQ;
+  });
+
+
+
+  // Tool selection
+  designTools.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const tool = btn.dataset.tool;
+      State.designTool = tool;
+      _updateDesignToolActive(tool);
+    });
+  });
+
+  // Design actions
+  // Prevent clicks on toolbar from reaching canvas
+  document.getElementById('design-toolbar').addEventListener('mousedown', (e) => {
+    e.stopPropagation();
+  });
+  document.getElementById('design-toolbar').addEventListener('click', (e) => {
+    e.stopPropagation();
+  });
+
+  document.getElementById('btn-design-clear').addEventListener('click', () => {
+    if (!State.level) return;
+    State.level.nodes = [];
+    State.level.wires = [];
+    State.selectedNodeId = null;
+    localStorage.removeItem('andgame_design');
+  });
+
+  document.getElementById('btn-design-undo').addEventListener('click', () => {
+    if (State.undo()) _updateStepCount();
+  });
+  document.getElementById('btn-design-redo').addEventListener('click', () => {
+    if (State.redo()) _updateStepCount();
+  });
+
+  document.getElementById('btn-design-export').addEventListener('click', () => {
+    const exported = State.exportLevel();
+    if (!exported) return;
+    const json = JSON.stringify(exported, null, 2);
+    navigator.clipboard.writeText(json).then(() => {
+      alert('Level JSON copied to clipboard! (' + json.length + ' chars)');
+    }).catch(() => {
+      prompt('Copy this JSON:', json);
+    });
+  });
+
+  document.getElementById('btn-design-import').addEventListener('click', () => {
+    if (!State.level) return;
+    const json = prompt('Paste level JSON:');
+    if (!json) return;
+    try {
+      const data = JSON.parse(json);
+      if (!data.nodes || !data.wires) throw new Error('Invalid level: missing nodes or wires');
+      State.level.nodes = data.nodes;
+      State.level.wires = data.wires;
+      State.selectedNodeId = null;
+      // Update node counter to avoid ID collisions
+      let maxNum = 0;
+      data.nodes.forEach(n => {
+        const m = String(n.id).match(/(\d+)$/);
+        if (m) maxNum = Math.max(maxNum, parseInt(m[1]));
+      });
+      data.wires.forEach(w => {
+        const m = String(w.id).match(/(\d+)$/);
+        if (m) maxNum = Math.max(maxNum, parseInt(m[1]));
+      });
+      State.nodeCounter = maxNum + 1;
+    } catch (err) {
+      alert('Import failed: ' + err.message);
+    }
+  });
+
+  document.getElementById('btn-design-share').addEventListener('click', () => {
+    if (!State.level) return;
+    const gameCanvas = document.getElementById('game-canvas');
+    const w = gameCanvas.width;
+    const h = gameCanvas.height;
+    const bannerH = 80;
+    const nodeCount = State.level.nodes.length;
+    const wireCount = State.level.wires.length;
+
+    const offscreen = document.createElement('canvas');
+    offscreen.width = w;
+    offscreen.height = h + bannerH;
+    const octx = offscreen.getContext('2d');
+
+    // Dark banner
+    octx.fillStyle = '#0d1117';
+    octx.fillRect(0, 0, w, bannerH);
+    octx.strokeStyle = '#a060ff';
+    octx.lineWidth = 2;
+    octx.beginPath();
+    octx.moveTo(0, bannerH);
+    octx.lineTo(w, bannerH);
+    octx.stroke();
+
+    // Title
+    octx.fillStyle = '#a060ff';
+    octx.font = 'bold 22px JetBrains Mono, monospace';
+    octx.textAlign = 'left';
+    octx.textBaseline = 'middle';
+    octx.fillText('DESIGN MODE — Custom Circuit', 20, 28);
+
+    // Stats
+    octx.fillStyle = '#00d4ff';
+    octx.font = '14px JetBrains Mono, monospace';
+    octx.fillText(`${nodeCount} nodes · ${wireCount} wires`, 20, 58);
+
+    octx.fillStyle = '#555';
+    octx.font = '12px JetBrains Mono, monospace';
+    octx.textAlign = 'right';
+    octx.fillText('AND_GAME — maozep.github.io/AND_GAME', w - 20, 28);
+    octx.fillText('DESIGNED WITH LOVE', w - 20, 50);
+
+    // Game canvas
+    octx.drawImage(gameCanvas, 0, bannerH);
+
+    // Share or download
+    offscreen.toBlob(blob => {
+      const fileName = `AND_GAME_Design_${nodeCount}n_${wireCount}w.png`;
+      if (navigator.share && navigator.canShare && navigator.canShare({ files: [new File([blob], 'design.png', { type: 'image/png' })] })) {
+        navigator.share({
+          title: 'AND_GAME — Custom Circuit',
+          text: `Check out my circuit design! ${nodeCount} nodes, ${wireCount} wires.`,
+          files: [new File([blob], fileName, { type: 'image/png' })],
+        }).catch(() => {});
+      } else {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = fileName;
+        a.click();
+        URL.revokeObjectURL(url);
+      }
+    }, 'image/png');
+  });
+
+  const btnDesignTest = document.getElementById('btn-design-test');
+  const btnDesignBack = document.getElementById('btn-design-back');
+
+  btnDesignTest.addEventListener('click', () => {
+    if (!State.level) return;
+    // Switch to play/test mode
+    State.designMode = false;
+    // Hide design tools, show test controls
+    document.getElementById('design-tools').classList.add('hidden');
+    btnDesignTest.classList.add('hidden');
+    btnDesignBack.classList.remove('hidden');
+    // Show normal game controls
+    document.getElementById('hud-right').style.display = '';
+    document.getElementById('hud-center').style.display = '';
+    const isSequential = State.isSequentialLevel();
+    _setClockControlsVisible(isSequential);
+    _updateStepCount();
+    _setFfPaletteVisible(isSequential);
+    if (isSequential) Input.refreshChips();
+  });
+
+  btnDesignBack.addEventListener('click', () => {
+    if (!State.level) return;
+    // Switch back to design mode
+    State.designMode = true;
+    State.designTool = 'select';
+    _updateDesignToolActive('select');
+    // Show design tools, hide test controls
+    document.getElementById('design-tools').classList.remove('hidden');
+    btnDesignTest.classList.remove('hidden');
+    btnDesignBack.classList.add('hidden');
+    // Hide normal game controls
+    document.getElementById('hud-right').style.display = 'none';
+    document.getElementById('hud-center').style.display = 'none';
+    _setClockControlsVisible(false);
+    _setFfPaletteVisible(false);
+    // Reset placed gates/FFs for re-testing
+    State.level.nodes.forEach(n => {
+      if (n.type === 'GATE_SLOT') n.gate = null;
+      if (n.type === 'FF_SLOT') n.ffType = null;
+    });
+  });
 
   // ── Start ─────────────────────────────────────────────────
   currentMenuDifficulty = LEVELS[0].difficulty || 'Easy';

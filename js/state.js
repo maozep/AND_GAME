@@ -10,6 +10,10 @@ const State = (() => {
   let _evalResult        = null;
   let _solved            = false;
   let _hoveredNodeId     = null;
+  let _designMode        = false;
+  let _designTool        = 'select'; // 'select'|'place-input'|'place-output'|'place-gate'|'place-ff'|'place-clock'|'place-mux'|'wire'|'delete'
+  let _selectedNodeId    = null;
+  let _nodeCounter       = 0;
 
   // ── Sequential state ──────────────────────────────────────
   let _ffStates    = new Map();  // Map<nodeId, { q, qNot, prevClkValue }>
@@ -26,6 +30,16 @@ const State = (() => {
 
   function _snapshot() {
     if (!_level) return null;
+    if (_designMode) {
+      // Design mode: deep-clone entire structure
+      return {
+        design: true,
+        nodes: JSON.parse(JSON.stringify(_level.nodes)),
+        wires: JSON.parse(JSON.stringify(_level.wires)),
+        selectedNodeId: _selectedNodeId,
+        nodeCounter: _nodeCounter,
+      };
+    }
     return {
       gates: _level.nodes.filter(n => n.type === 'GATE_SLOT').map(n => ({ id: n.id, gate: n.gate })),
       ffs: _level.nodes.filter(n => n.type === 'FF_SLOT').map(n => ({ id: n.id, ffType: n.ffType })),
@@ -40,6 +54,15 @@ const State = (() => {
 
   function _restore(snap) {
     if (!_level || !snap) return;
+    if (snap.design) {
+      _level.nodes = snap.nodes;
+      _level.wires = snap.wires;
+      _selectedNodeId = snap.selectedNodeId;
+      _nodeCounter = snap.nodeCounter;
+      _solved = false;
+      _evalResult = null;
+      return;
+    }
     snap.gates.forEach(s => { const n = _level.nodes.find(nd => nd.id === s.id); if (n) n.gate = s.gate; });
     snap.ffs.forEach(s => { const n = _level.nodes.find(nd => nd.id === s.id); if (n) n.ffType = s.ffType; });
     snap.muxes.forEach(s => { const n = _level.nodes.find(nd => nd.id === s.id); if (n) n.value = s.value; });
@@ -100,6 +123,61 @@ const State = (() => {
     get GATE_PALETTE()      { return GATE_PALETTE; },
     get stepCount()         { return _stepCount; },
     get clockHigh()         { return _clockHigh; },
+
+    // ── Design Mode ───────────────────────────────────────
+    get designMode()        { return _designMode; },
+    set designMode(v)       { _designMode = !!v; },
+    get designTool()        { return _designTool; },
+    set designTool(v)       { _designTool = v; },
+    get selectedNodeId()    { return _selectedNodeId; },
+    set selectedNodeId(v)   { _selectedNodeId = v; },
+
+    addNode(node) {
+      if (!_level) return;
+      _pushUndo();
+      if (!node.id) node.id = 'dn_' + (_nodeCounter++);
+      _level.nodes.push(node);
+      return node.id;
+    },
+
+    deleteNode(nodeId) {
+      if (!_level) return;
+      _pushUndo();
+      _level.nodes = _level.nodes.filter(n => n.id !== nodeId);
+      _level.wires = _level.wires.filter(w => w.sourceId !== nodeId && w.targetId !== nodeId);
+      _ffStates.delete(nodeId);
+      if (_selectedNodeId === nodeId) _selectedNodeId = null;
+    },
+
+    addWire(wire) {
+      if (!_level) return;
+      // Validate: no self-loops
+      if (wire.sourceId === wire.targetId) return;
+      // Validate: no duplicate wires (same source → same target)
+      const dup = _level.wires.some(w => w.sourceId === wire.sourceId && w.targetId === wire.targetId);
+      if (dup) return;
+      _pushUndo();
+      if (!wire.id) wire.id = 'dw_' + (_nodeCounter++);
+      _level.wires.push(wire);
+      return wire.id;
+    },
+
+    deleteWire(wireId) {
+      if (!_level) return;
+      _pushUndo();
+      _level.wires = _level.wires.filter(w => w.id !== wireId);
+    },
+
+    exportLevel() {
+      if (!_level) return null;
+      return JSON.parse(JSON.stringify({
+        id: 999,
+        name: 'Custom Level',
+        difficulty: 'Design',
+        nodes: _level.nodes,
+        wires: _level.wires,
+      }));
+    },
 
     getFfStates() { return _ffStates; },
 
@@ -192,6 +270,7 @@ const State = (() => {
 
     get canUndo() { return _undoStack.length > 0; },
     get canRedo() { return _redoStack.length > 0; },
+    set nodeCounter(v) { _nodeCounter = v; },
 
     resetLevel() {
       if (!_level) return;

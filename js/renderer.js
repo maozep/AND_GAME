@@ -88,6 +88,13 @@ const Renderer = (() => {
   function _computeCenterOffset(level) {
     if (!level) { _currentLayout = null; _offsetX = 0; _offsetY = 0; _scale = 1; return; }
     _currentLayout = level.layout || null;
+    // Empty canvas (design mode) — use identity transform so clicks map 1:1
+    if (level.nodes.length === 0) {
+      _scale = 1;
+      _offsetX = 0;
+      _offsetY = 56;  // offset past HUD
+      return;
+    }
     let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
     level.nodes.forEach(n => {
       minX = Math.min(minX, n.x); maxX = Math.max(maxX, n.x);
@@ -121,7 +128,7 @@ const Renderer = (() => {
     _drawBackground();
     _drawGrid();
 
-    _computeCenterOffset(level);
+    if (!State.designMode) _computeCenterOffset(level);
 
     const { wireValues, nodeValues } = evalResult || {
       wireValues: new Map(),
@@ -136,6 +143,71 @@ const Renderer = (() => {
 
     _drawWires(level, wireValues);
     _drawNodes(level, nodeValues, ffStates, hoveredNodeId, solved);
+
+    // Design mode: wire preview line from source to mouse
+    if (State.designMode && Input.wireSource && State.designTool === 'wire') {
+      const src = Input.wireSource;
+      const mouse = Input.mouseWorld;
+      // Check if hovering over an invalid target
+      const hNode = hoveredNodeId ? level.nodes.find(n => n.id === hoveredNodeId) : null;
+      let wireColor = '#a060ff'; // default purple
+      if (hNode) {
+        const isSelf = hNode.id === src.id;
+        const isDup = level.wires.some(w => w.sourceId === src.id && w.targetId === hNode.id);
+        wireColor = (isSelf || isDup) ? '#ff4444' : '#39ff14';
+      }
+      const isInvalid = hNode && (hNode.id === src.id || level.wires.some(w => w.sourceId === src.id && w.targetId === hNode.id));
+      ctx.save();
+      // Wire line
+      ctx.shadowColor = wireColor;
+      ctx.shadowBlur = isInvalid ? 20 : 10;
+      ctx.strokeStyle = wireColor;
+      ctx.lineWidth = isInvalid ? 4 : 2;
+      ctx.setLineDash(isInvalid ? [8, 6] : [6, 4]);
+      ctx.beginPath();
+      ctx.moveTo(src.x, src.y);
+      ctx.lineTo(mouse.x, mouse.y);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      // Highlight source node
+      ctx.beginPath();
+      ctx.arc(src.x, src.y, 22, 0, Math.PI * 2);
+      ctx.strokeStyle = wireColor;
+      ctx.lineWidth = 3;
+      ctx.stroke();
+      // Invalid target: draw X and red ring on hovered node
+      if (isInvalid && hNode) {
+        ctx.shadowColor = '#ff4444';
+        ctx.shadowBlur = 25;
+        ctx.beginPath();
+        ctx.arc(hNode.x, hNode.y, 30, 0, Math.PI * 2);
+        ctx.strokeStyle = '#ff4444';
+        ctx.lineWidth = 4;
+        ctx.stroke();
+        // Draw X
+        ctx.shadowBlur = 0;
+        ctx.strokeStyle = '#ff4444';
+        ctx.lineWidth = 4;
+        ctx.lineCap = 'round';
+        ctx.beginPath();
+        ctx.moveTo(hNode.x - 10, hNode.y - 10);
+        ctx.lineTo(hNode.x + 10, hNode.y + 10);
+        ctx.moveTo(hNode.x + 10, hNode.y - 10);
+        ctx.lineTo(hNode.x - 10, hNode.y + 10);
+        ctx.stroke();
+      }
+      // Valid target: green ring on hovered node
+      if (hNode && !isInvalid) {
+        ctx.shadowColor = '#39ff14';
+        ctx.shadowBlur = 20;
+        ctx.beginPath();
+        ctx.arc(hNode.x, hNode.y, 30, 0, Math.PI * 2);
+        ctx.strokeStyle = '#39ff14';
+        ctx.lineWidth = 3;
+        ctx.stroke();
+      }
+      ctx.restore();
+    }
 
     ctx.restore();
 
@@ -352,6 +424,20 @@ const Renderer = (() => {
       else if (Engine.FF_TYPES && Engine.FF_TYPES.has(node.type)) {
         const ffState = ffStates.get(node.id) || { q: 0, qNot: 1 };
         _drawFlipFlopNode(node, ffState, hovered);
+      }
+
+      // Design mode: draw selection highlight
+      if (State.designMode && State.selectedNodeId === node.id) {
+        ctx.save();
+        ctx.strokeStyle = '#a060ff';
+        ctx.lineWidth = 3;
+        ctx.setLineDash([6, 4]);
+        ctx.lineDashOffset = (Date.now() / 60) % 10;
+        ctx.beginPath();
+        ctx.arc(node.x, node.y, 45, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.restore();
       }
     });
   }
@@ -780,9 +866,9 @@ const Renderer = (() => {
       ctx.font         = 'bold 22px JetBrains Mono, monospace';
       ctx.textAlign    = 'center';
       ctx.textBaseline = 'middle';
-      ctx.fillText(val !== null ? val.toString() : '?', node.x, isSandbox ? node.y : node.y - 5);
+      ctx.fillText(val !== null ? val.toString() : '?', node.x, isSandbox && !State.designMode ? node.y : node.y - 5);
 
-      if (!isSandbox) {
+      if (!isSandbox || State.designMode) {
         ctx.fillStyle    = 'rgba(100,150,170,0.7)';
         ctx.font         = 'bold 13px JetBrains Mono, monospace';
         ctx.textBaseline = 'middle';
@@ -1265,6 +1351,47 @@ const Renderer = (() => {
     return null;
   }
 
-  return { init, render, resize, getNodeAtPoint };
+  function canvasToWorld(px, py) {
+    return {
+      x: Math.round((px - _offsetX) / _scale),
+      y: Math.round((py - _offsetY) / _scale),
+    };
+  }
+
+  // Find the closest wire to a world point (for deletion)
+  function getWireAtPoint(px, py, level) {
+    if (!level) return null;
+    const wx = (px - _offsetX) / _scale;
+    const wy = (py - _offsetY) / _scale;
+    const nodeMap = new Map(level.nodes.map(n => [n.id, n]));
+    let closest = null;
+    let closestDist = 20; // max distance in world coords
+
+    level.wires.forEach(wire => {
+      const src = nodeMap.get(wire.sourceId);
+      const tgt = nodeMap.get(wire.targetId);
+      if (!src || !tgt) return;
+      // Simple distance from point to line segment
+      const dx = tgt.x - src.x, dy = tgt.y - src.y;
+      const len2 = dx*dx + dy*dy;
+      if (len2 === 0) return;
+      let t = ((wx - src.x) * dx + (wy - src.y) * dy) / len2;
+      t = Math.max(0, Math.min(1, t));
+      const px2 = src.x + t * dx, py2 = src.y + t * dy;
+      const dist = Math.sqrt((wx - px2)*(wx - px2) + (wy - py2)*(wy - py2));
+      if (dist < closestDist) {
+        closestDist = dist;
+        closest = wire;
+      }
+    });
+    return closest;
+  }
+
+  function panBy(dx, dy) {
+    _offsetX += dx;
+    _offsetY += dy;
+  }
+
+  return { init, render, resize, getNodeAtPoint, canvasToWorld, getWireAtPoint, panBy };
 
 })();

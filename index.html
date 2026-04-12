@@ -66,6 +66,61 @@
     </div>
   </div>
 
+  <!-- Design Mode Toolbar -->
+  <div id="design-toolbar" class="hidden">
+    <div id="design-toolbar-title">DESIGN MODE</div>
+    <div id="design-tools">
+      <button class="design-tool active" data-tool="select" data-shortcut="S">SELECT</button>
+      <button class="design-tool" data-tool="place-input" data-shortcut="I">INPUT</button>
+      <button class="design-tool" data-tool="place-output" data-shortcut="O">OUTPUT</button>
+      <button class="design-tool" data-tool="place-gate" data-shortcut="G">GATE</button>
+      <button class="design-tool" data-tool="place-ff" data-shortcut="F">FF</button>
+      <button class="design-tool" data-tool="place-clock" data-shortcut="C">CLK</button>
+      <button class="design-tool" data-tool="place-mux" data-shortcut="M">SWITCH</button>
+      <button class="design-tool" data-tool="place-7seg" data-shortcut="7">7SEG</button>
+      <button class="design-tool" data-tool="wire" data-shortcut="W">WIRE</button>
+      <button class="design-tool design-tool-danger" data-tool="delete" data-shortcut="D">DELETE</button>
+    </div>
+    <div id="design-props" class="hidden">
+      <div id="design-props-title">PROPERTIES</div>
+      <div id="design-props-type"></div>
+      <label class="design-prop-row" id="prop-label-row">
+        <span>Label</span>
+        <input type="text" id="prop-label" maxlength="10" />
+      </label>
+      <div class="design-prop-row" id="prop-value-row">
+        <span>Value</span>
+        <button id="prop-value-toggle" class="design-prop-toggle">0</button>
+      </div>
+      <div class="design-prop-row" id="prop-steps-row">
+        <span>Steps</span>
+        <input type="text" id="prop-steps" placeholder="e.g. 1,0,1" maxlength="40" />
+      </div>
+      <div class="design-prop-row" id="prop-target-row">
+        <span>Value</span>
+        <button id="prop-target-toggle" class="design-prop-toggle">0</button>
+      </div>
+      <div class="design-prop-row" id="prop-step-targets-row">
+        <span>Steps</span>
+        <input type="text" id="prop-step-targets" placeholder="e.g. 0,1,1" maxlength="40" />
+      </div>
+      <label class="design-prop-row" id="prop-initq-row">
+        <span>Init Q</span>
+        <button id="prop-initq-toggle" class="design-prop-toggle">0</button>
+      </label>
+    </div>
+    <div id="design-actions">
+      <button id="btn-design-undo" class="design-action" data-shortcut="Ctrl+Z">UNDO</button>
+      <button id="btn-design-redo" class="design-action" data-shortcut="Ctrl+Y">REDO</button>
+      <button id="btn-design-test" class="design-action" data-shortcut="T">TEST</button>
+      <button id="btn-design-back" class="design-action hidden">BACK TO EDIT</button>
+      <button id="btn-design-export" class="design-action" data-shortcut="E">EXPORT</button>
+      <button id="btn-design-import" class="design-action" data-shortcut="P">IMPORT</button>
+      <button id="btn-design-share" class="design-action design-action-share" data-shortcut="R">SHARE</button>
+      <button id="btn-design-clear" class="design-action design-action-danger" data-shortcut="X">CLEAR</button>
+    </div>
+  </div>
+
   <!-- Main Canvas -->
   <canvas id="game-canvas"></canvas>
 

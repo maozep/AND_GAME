@@ -51,6 +51,12 @@ const Input = (() => {
 
     _canvas.addEventListener('dragover',   _onCanvasDragOver);
     _canvas.addEventListener('drop',       _onCanvasDrop);
+    // Track ghost position across entire page
+    document.addEventListener('drag', (e) => {
+      if (!_dragged || !e.clientX) return;
+      _dragGhost.style.left = e.clientX + 'px';
+      _dragGhost.style.top = e.clientY + 'px';
+    });
     _canvas.addEventListener('mousemove',  _onMouseMove);
     _canvas.addEventListener('mouseleave', _onMouseLeave);
     _canvas.addEventListener('click',      _onCanvasClick);
@@ -198,6 +204,7 @@ const Input = (() => {
       Sound.play('toggle');
       if (_onGatePlaced) _onGatePlaced(node.id);
     }
+
   }
 
   // Wire drawing state
@@ -229,6 +236,8 @@ const Input = (() => {
     return { x: e.clientX - rect.left, y: e.clientY - rect.top };
   }
 
+  const _dragGhost = document.getElementById('drag-ghost');
+
   function _onChipDragStart(e) {
     const gate = e.currentTarget.dataset.gate;
     const ff   = e.currentTarget.dataset.ff;
@@ -246,13 +255,25 @@ const Input = (() => {
     if (e.dataTransfer) {
       e.dataTransfer.effectAllowed = 'copy';
       e.dataTransfer.setData('text/plain', JSON.stringify(_dragged));
+      // Hide native ghost
+      const emptyImg = new Image();
+      emptyImg.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+      e.dataTransfer.setDragImage(emptyImg, 0, 0);
     }
+
+    // Show custom ghost
+    _dragGhost.textContent = _dragged.value + (_dragged.kind === 'ff' ? '-FF' : '');
+    _dragGhost.className = _dragged.kind === 'ff' ? 'ff-ghost' : '';
+    _dragGhost.style.left = e.clientX + 'px';
+    _dragGhost.style.top = e.clientY + 'px';
+
     _setCanvasCursor('copy');
   }
 
   function _onChipDragEnd(e) {
     e.currentTarget.classList.remove('dragging');
     _dragged = null;
+    _dragGhost.classList.add('hidden');
     _setCanvasCursor('default');
   }
 
@@ -296,6 +317,11 @@ const Input = (() => {
     const { x, y } = _getCanvasPoint(e);
     const target = _resolveDropTarget(x, y);
     _setCanvasCursor(target ? 'copy' : 'no-drop');
+
+    // Move ghost and snap effect
+    _dragGhost.style.left = e.clientX + 'px';
+    _dragGhost.style.top = e.clientY + 'px';
+    _dragGhost.classList.toggle('snap', !!target);
   }
 
   function _onCanvasDrop(e) {
@@ -311,6 +337,7 @@ const Input = (() => {
     const { x, y } = _getCanvasPoint(e);
     _handleDrop(x, y, dragged);
     _dragged = null;
+    _dragGhost.classList.add('hidden');
     _setCanvasCursor('default');
   }
 

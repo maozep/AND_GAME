@@ -817,6 +817,17 @@
     renderLevelMenu();
   }
 
+  const TAB_DESCRIPTIONS = {
+    'Fundamentals': 'Single logic gates — NOT, AND, OR, XOR, NAND, NOR. Learn the basic building blocks of digital circuits.',
+    'Building Blocks': 'Classic digital components — half adder, MUX, DEMUX, parity, encoder, decoder. Multi-gate circuits.',
+    'Advanced Circuits': 'Complex circuits — full adder, comparator, majority, ripple carry adder, logic matrix. Real-world designs.',
+    'Flip-Flops': 'Sequential logic — D, T, SR, JK flip-flops. Shift registers, counters, ring counters. Memory and timing.',
+    'Sequential Logic': 'Flip-flops + gates combined — counters, filters, LFSRs, hazard detectors, pipeline bypass.',
+    'FSM Applications': 'Finite state machines — elevator, alarm, traffic light, vending machine, rocket launch, CPU pipeline.',
+    'Design': 'Challenge levels — design your own circuits.',
+    'Design Mode': 'Sandbox — build anything from scratch. Place nodes, draw wires, test and share.',
+  };
+
   function renderDifficultyTabs() {
     difficultyTabs.innerHTML = '';
 
@@ -852,9 +863,22 @@
       bar.appendChild(fill);
       tab.appendChild(bar);
 
+      // Hover → show description
+      tab.addEventListener('mouseenter', () => {
+        tabDescEl.textContent = TAB_DESCRIPTIONS[difficulty] || '';
+      });
+      tab.addEventListener('mouseleave', () => {
+        tabDescEl.textContent = TAB_DESCRIPTIONS[currentMenuDifficulty] || '';
+      });
+
       difficultyTabs.appendChild(tab);
     });
+
+    // Show active tab description by default
+    tabDescEl.textContent = TAB_DESCRIPTIONS[currentMenuDifficulty] || '';
   }
+
+  const tabDescEl = document.getElementById('tab-description');
 
   function renderLevelMenu() {
     levelGrid.innerHTML = '';

@@ -1520,13 +1520,13 @@
     if (_isTyping && e.key !== 'Escape') return;
 
     // Dev auto-solve: Ctrl+Shift+S
-    if (e.ctrlKey && e.shiftKey && e.key === 'S') {
+    if (e.ctrlKey && e.shiftKey && e.code === 'KeyS') {
       e.preventDefault();
       _devAutoSolve();
       return;
     }
     // Undo: Ctrl+Z
-    if (e.ctrlKey && !e.shiftKey && (e.key === 'z' || e.key === 'Z' || e.code === 'KeyZ')) {
+    if (e.ctrlKey && !e.shiftKey && e.code === 'KeyZ') {
       e.preventDefault();
       if (State.undo()) _updateStepCount();
       return;
@@ -1579,13 +1579,13 @@
       }
     }
     // Redo: Ctrl+Y or Ctrl+Shift+Z
-    if ((e.ctrlKey && (e.key === 'y' || e.key === 'Y' || e.code === 'KeyY')) || (e.ctrlKey && e.shiftKey && e.code === 'KeyZ')) {
+    if ((e.ctrlKey && e.code === 'KeyY') || (e.ctrlKey && e.shiftKey && e.code === 'KeyZ')) {
       e.preventDefault();
       if (State.redo()) _updateStepCount();
       return;
     }
     // Clear all (reset level): Ctrl+Shift+R
-    if (e.ctrlKey && e.shiftKey && e.key === 'R') {
+    if (e.ctrlKey && e.shiftKey && e.code === 'KeyR') {
       e.preventDefault();
       State.resetLevel();
       _stopAutoClock();
@@ -1593,8 +1593,8 @@
       return;
     }
     // Toggle hint: H
-    if (e.key === 'h' || e.key === 'H') {
-      if (!e.ctrlKey && !e.altKey && !e.metaKey) {
+    if (e.code === 'KeyH' && !e.ctrlKey && !e.altKey && !e.metaKey) {
+      {
         if (!hintOverlay.classList.contains('hidden')) {
           closeHintOverlay();
         } else {
@@ -1604,12 +1604,12 @@
       }
     }
     // Toggle waveform: W
-    if ((e.key === 'w' || e.key === 'W') && !e.ctrlKey && !e.altKey && !e.metaKey) {
+    if (e.code === 'KeyW' && !e.ctrlKey && !e.altKey && !e.metaKey) {
       toggleWaveform();
       return;
     }
     // STEP: Space (sequential levels only)
-    if (e.key === ' ') {
+    if (e.code === 'Space') {
       e.preventDefault();
       if (State.isSequentialLevel() && !State.solved) {
         State.stepClock();
@@ -1683,22 +1683,20 @@
   btnWaveform.addEventListener('click', toggleWaveform);
   document.getElementById('btn-waveform-close').addEventListener('click', toggleWaveform);
 
-  // ── Gate Palette Highlight (hover sync) ───────────────────
-  function updatePaletteHighlight(gate) {
-    document.querySelectorAll('.gate-chip').forEach(el => {
-      el.classList.toggle('active', el.dataset.gate === gate);
-    });
-  }
+  // ── Palette Highlight (hover sync) ─────────────────────────
+  const gatePalette = document.getElementById('gate-palette');
+  const ffPaletteEl = document.getElementById('ff-palette');
 
-  // Sync palette with hovered gate slot
   setInterval(() => {
     const h = State.hoveredNodeId;
+    let highlightGate = false, highlightFf = false;
     if (h && State.level) {
       const node = State.level.nodes.find(n => n.id === h);
-      updatePaletteHighlight(node ? node.gate : null);
-    } else {
-      updatePaletteHighlight(null);
+      if (node && node.type === 'GATE_SLOT') highlightGate = true;
+      if (node && node.type === 'FF_SLOT') highlightFf = true;
     }
+    gatePalette.classList.toggle('highlight', highlightGate);
+    ffPaletteEl.classList.toggle('highlight', highlightFf);
   }, 100);
 
   // ── Design Mode ──────────────────────────────────────────

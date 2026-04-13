@@ -702,6 +702,13 @@ html, body {
   display: flex;
   gap: 7px;
   flex-wrap: nowrap;
+  padding: 4px;
+  border-radius: 6px;
+  transition: box-shadow 0.25s, background 0.25s;
+}
+#gate-palette.highlight {
+  box-shadow: 0 0 18px rgba(0, 212, 255, 0.4);
+  background: rgba(0, 212, 255, 0.08);
 }
 
 .gate-chip {
@@ -739,6 +746,14 @@ html, body {
   flex-direction: column;
   gap: 4px;
   align-items: flex-end;
+  padding: 4px;
+  border-radius: 6px;
+  transition: box-shadow 0.25s, background 0.25s;
+}
+#ff-palette.highlight {
+  box-shadow: 0 0 18px rgba(160, 96, 255, 0.4);
+  background: rgba(160, 96, 255, 0.08);
+}
 }
 
 #ff-palette.hidden {

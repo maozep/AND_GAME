@@ -26,7 +26,7 @@ const LEVELS = [
       gatesUsed: ['NOT'],
       explanation: 'NOT Gate — The NOT gate (inverter) flips the input value: 0 becomes 1 and 1 becomes 0. It is the only single-input gate and is used to create logical negation in any digital circuit.',
       blockSvg: `<svg viewBox="0 0 320 120" width="400" height="150"><text x="12" y="67" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text><line x1="30" y1="62" x2="90" y2="62" stroke="#39ff14" stroke-width="2.5"/><rect x="90" y="30" width="140" height="65" rx="8" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/><text x="160" y="72" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="28" font-weight="bold" fill="#00d4ff">NOT</text><line x1="230" y1="62" x2="285" y2="62" stroke="#c8d8f0" stroke-width="2.5"/><text x="293" y="67" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Z</text></svg>`,
-      circuitSvg: `<svg viewBox="0 0 340 120" width="420" height="150"><text x="18" y="67" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text><rect x="110" y="40" width="100" height="45" rx="6" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="160" y="68" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="18" font-weight="bold" fill="#a0c8ff">NOT</text><text x="295" y="67" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Z</text><line x1="36" y1="62" x2="110" y2="62" stroke="#39ff14" stroke-width="2"/><line x1="210" y1="62" x2="285" y2="62" stroke="#39ff14" stroke-width="2"/></svg>`,
+      circuitSvg: `<svg viewBox="0 0 340 130" width="420" height="160"><text x="18" y="77" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text><rect x="110" y="50" width="100" height="45" rx="6" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="160" y="78" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="18" font-weight="bold" fill="#a0c8ff">NOT</text><text x="160" y="44" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">¬A</text><text x="295" y="77" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Z</text><line x1="36" y1="72" x2="110" y2="72" stroke="#39ff14" stroke-width="2"/><line x1="210" y1="72" x2="285" y2="72" stroke="#39ff14" stroke-width="2"/><text x="170" y="122" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">Z = ¬A</text></svg>`,
     },
     nodes: [
       // Case 1: A=0 → 1
@@ -73,19 +73,22 @@ const LEVELS = [
         <line x1="260" y1="82" x2="320" y2="82" stroke="#c8d8f0" stroke-width="2.5"/>
         <text x="328" y="87" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Z</text>
       </svg>`,
-      circuitSvg: `<svg viewBox="0 0 380 160" width="460" height="195">
+      circuitSvg: `<svg viewBox="0 0 380 170" width="460" height="210">
         <!-- Inputs -->
         <text x="18" y="52" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text>
         <text x="18" y="122" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">B</text>
         <!-- AND gate -->
         <rect x="120" y="50" width="100" height="60" rx="6" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
         <text x="170" y="86" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="18" font-weight="bold" fill="#a0c8ff">AND</text>
+        <text x="170" y="44" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">A·B</text>
         <!-- Output -->
         <text x="310" y="85" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Z</text>
         <!-- Wires -->
-        <line x1="36" y1="48" x2="120" y2="68" stroke="#39ff14" stroke-width="2"/>
-        <line x1="36" y1="118" x2="120" y2="92" stroke="#39ff14" stroke-width="2"/>
+        <polyline points="36,48 80,48 80,68 120,68" stroke="#39ff14" stroke-width="2" fill="none"/>
+        <polyline points="36,118 80,118 80,92 120,92" stroke="#39ff14" stroke-width="2" fill="none"/>
         <line x1="220" y1="80" x2="300" y2="80" stroke="#39ff14" stroke-width="2"/>
+        <!-- Formula -->
+        <text x="190" y="160" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">Z = A·B</text>
       </svg>`,
     },
     nodes: [
@@ -137,7 +140,7 @@ const LEVELS = [
       gatesUsed: ['OR'],
       explanation: 'OR Gate — The OR gate outputs 1 when at least one input is 1. Used to check whether any condition is met — a single true input is enough to produce a positive output.',
       blockSvg: `<svg viewBox="0 0 360 160" width="440" height="195"><text x="12" y="62" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text><line x1="30" y1="57" x2="100" y2="57" stroke="#39ff14" stroke-width="2.5"/><text x="12" y="112" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">B</text><line x1="30" y1="107" x2="100" y2="107" stroke="#39ff14" stroke-width="2.5"/><rect x="100" y="30" width="160" height="105" rx="8" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/><text x="180" y="92" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="28" font-weight="bold" fill="#00d4ff">OR</text><line x1="260" y1="82" x2="320" y2="82" stroke="#c8d8f0" stroke-width="2.5"/><text x="328" y="87" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Z</text></svg>`,
-      circuitSvg: `<svg viewBox="0 0 380 160" width="460" height="195"><text x="18" y="52" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text><text x="18" y="122" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">B</text><rect x="120" y="50" width="100" height="60" rx="6" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="170" y="86" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="18" font-weight="bold" fill="#a0c8ff">OR</text><text x="310" y="85" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Z</text><line x1="36" y1="48" x2="120" y2="68" stroke="#39ff14" stroke-width="2"/><line x1="36" y1="118" x2="120" y2="92" stroke="#39ff14" stroke-width="2"/><line x1="220" y1="80" x2="300" y2="80" stroke="#39ff14" stroke-width="2"/></svg>`,
+      circuitSvg: `<svg viewBox="0 0 380 170" width="460" height="210"><text x="18" y="52" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text><text x="18" y="122" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">B</text><rect x="120" y="50" width="100" height="60" rx="6" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="170" y="86" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="18" font-weight="bold" fill="#a0c8ff">OR</text><text x="170" y="44" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">A+B</text><text x="310" y="85" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Z</text><polyline points="36,48 80,48 80,68 120,68" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="36,118 80,118 80,92 120,92" stroke="#39ff14" stroke-width="2" fill="none"/><line x1="220" y1="80" x2="300" y2="80" stroke="#39ff14" stroke-width="2"/><text x="190" y="160" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">Z = A+B</text></svg>`,
     },
     nodes: [
       // Case 1: A=0, B=0 → 0
@@ -188,7 +191,7 @@ const LEVELS = [
       gatesUsed: ['NAND'],
       explanation: 'NAND Gate — The NAND gate is an inverted AND: it outputs 0 only when both inputs are 1. NAND is a universal gate — any logic circuit can be built using NAND gates alone.',
       blockSvg: `<svg viewBox="0 0 360 160" width="440" height="195"><text x="12" y="62" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text><line x1="30" y1="57" x2="100" y2="57" stroke="#39ff14" stroke-width="2.5"/><text x="12" y="112" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">B</text><line x1="30" y1="107" x2="100" y2="107" stroke="#39ff14" stroke-width="2.5"/><rect x="100" y="30" width="160" height="105" rx="8" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/><text x="180" y="92" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="26" font-weight="bold" fill="#00d4ff">NAND</text><line x1="260" y1="82" x2="320" y2="82" stroke="#c8d8f0" stroke-width="2.5"/><text x="328" y="87" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Z</text></svg>`,
-      circuitSvg: `<svg viewBox="0 0 380 160" width="460" height="195"><text x="18" y="52" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text><text x="18" y="122" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">B</text><rect x="120" y="50" width="100" height="60" rx="6" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="170" y="86" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#a0c8ff">NAND</text><text x="310" y="85" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Z</text><line x1="36" y1="48" x2="120" y2="68" stroke="#39ff14" stroke-width="2"/><line x1="36" y1="118" x2="120" y2="92" stroke="#39ff14" stroke-width="2"/><line x1="220" y1="80" x2="300" y2="80" stroke="#39ff14" stroke-width="2"/></svg>`,
+      circuitSvg: `<svg viewBox="0 0 380 170" width="460" height="210"><text x="18" y="52" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text><text x="18" y="122" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">B</text><rect x="120" y="50" width="100" height="60" rx="6" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="170" y="86" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#a0c8ff">NAND</text><text x="170" y="44" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">¬(A·B)</text><text x="310" y="85" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Z</text><polyline points="36,48 80,48 80,68 120,68" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="36,118 80,118 80,92 120,92" stroke="#39ff14" stroke-width="2" fill="none"/><line x1="220" y1="80" x2="300" y2="80" stroke="#39ff14" stroke-width="2"/><text x="190" y="160" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">Z = ¬(A·B)</text></svg>`,
     },
     nodes: [
       // Case 1: A=0, B=0 → 1
@@ -239,7 +242,7 @@ const LEVELS = [
       gatesUsed: ['NOR'],
       explanation: 'NOR Gate — The NOR gate is an inverted OR: it outputs 1 only when both inputs are 0. Like NAND, NOR is also a universal gate — any logic circuit can be built using NOR gates alone.',
       blockSvg: `<svg viewBox="0 0 360 160" width="440" height="195"><text x="12" y="62" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text><line x1="30" y1="57" x2="100" y2="57" stroke="#39ff14" stroke-width="2.5"/><text x="12" y="112" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">B</text><line x1="30" y1="107" x2="100" y2="107" stroke="#39ff14" stroke-width="2.5"/><rect x="100" y="30" width="160" height="105" rx="8" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/><text x="180" y="92" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="28" font-weight="bold" fill="#00d4ff">NOR</text><line x1="260" y1="82" x2="320" y2="82" stroke="#c8d8f0" stroke-width="2.5"/><text x="328" y="87" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Z</text></svg>`,
-      circuitSvg: `<svg viewBox="0 0 380 160" width="460" height="195"><text x="18" y="52" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text><text x="18" y="122" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">B</text><rect x="120" y="50" width="100" height="60" rx="6" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="170" y="86" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="18" font-weight="bold" fill="#a0c8ff">NOR</text><text x="310" y="85" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Z</text><line x1="36" y1="48" x2="120" y2="68" stroke="#39ff14" stroke-width="2"/><line x1="36" y1="118" x2="120" y2="92" stroke="#39ff14" stroke-width="2"/><line x1="220" y1="80" x2="300" y2="80" stroke="#39ff14" stroke-width="2"/></svg>`,
+      circuitSvg: `<svg viewBox="0 0 380 170" width="460" height="210"><text x="18" y="52" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text><text x="18" y="122" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">B</text><rect x="120" y="50" width="100" height="60" rx="6" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="170" y="86" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="18" font-weight="bold" fill="#a0c8ff">NOR</text><text x="170" y="44" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">¬(A+B)</text><text x="310" y="85" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Z</text><polyline points="36,48 80,48 80,68 120,68" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="36,118 80,118 80,92 120,92" stroke="#39ff14" stroke-width="2" fill="none"/><line x1="220" y1="80" x2="300" y2="80" stroke="#39ff14" stroke-width="2"/><text x="190" y="160" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">Z = ¬(A+B)</text></svg>`,
     },
     nodes: [
       // Case 1: A=0, B=0 → 1
@@ -290,7 +293,7 @@ const LEVELS = [
       gatesUsed: ['XOR'],
       explanation: 'XOR Gate — The XOR (exclusive OR) gate outputs 1 only when the inputs differ from each other. Widely used in binary addition and parity checking circuits.',
       blockSvg: `<svg viewBox="0 0 360 160" width="440" height="195"><text x="12" y="62" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text><line x1="30" y1="57" x2="100" y2="57" stroke="#39ff14" stroke-width="2.5"/><text x="12" y="112" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">B</text><line x1="30" y1="107" x2="100" y2="107" stroke="#39ff14" stroke-width="2.5"/><rect x="100" y="30" width="160" height="105" rx="8" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/><text x="180" y="92" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="28" font-weight="bold" fill="#00d4ff">XOR</text><line x1="260" y1="82" x2="320" y2="82" stroke="#c8d8f0" stroke-width="2.5"/><text x="328" y="87" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Z</text></svg>`,
-      circuitSvg: `<svg viewBox="0 0 380 160" width="460" height="195"><text x="18" y="52" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text><text x="18" y="122" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">B</text><rect x="120" y="50" width="100" height="60" rx="6" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="170" y="86" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="18" font-weight="bold" fill="#a0c8ff">XOR</text><text x="310" y="85" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Z</text><line x1="36" y1="48" x2="120" y2="68" stroke="#39ff14" stroke-width="2"/><line x1="36" y1="118" x2="120" y2="92" stroke="#39ff14" stroke-width="2"/><line x1="220" y1="80" x2="300" y2="80" stroke="#39ff14" stroke-width="2"/></svg>`,
+      circuitSvg: `<svg viewBox="0 0 380 170" width="460" height="210"><text x="18" y="52" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text><text x="18" y="122" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">B</text><rect x="120" y="50" width="100" height="60" rx="6" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="170" y="86" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="18" font-weight="bold" fill="#a0c8ff">XOR</text><text x="170" y="44" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">A⊕B</text><text x="310" y="85" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Z</text><polyline points="36,48 80,48 80,68 120,68" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="36,118 80,118 80,92 120,92" stroke="#39ff14" stroke-width="2" fill="none"/><line x1="220" y1="80" x2="300" y2="80" stroke="#39ff14" stroke-width="2"/><text x="190" y="160" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">Z = A⊕B</text></svg>`,
     },
     nodes: [
       // Case 1: A=0, B=0 → 0
@@ -345,7 +348,7 @@ const LEVELS = [
       gatesUsed: ['NAND', 'OR'],
       explanation: 'Gate Chain — A gate chain feeds the output of the first gate as input to the second. This is the most basic two-gate series structure, demonstrating how complex logic functions can be built by combining simple gates.',
       blockSvg: `<svg viewBox="0 0 440 160" width="520" height="190"><text x="12" y="52" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text><line x1="30" y1="47" x2="90" y2="47" stroke="#39ff14" stroke-width="2.5"/><text x="12" y="82" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">B</text><line x1="30" y1="77" x2="90" y2="77" stroke="#39ff14" stroke-width="2.5"/><text x="12" y="127" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">C</text><line x1="30" y1="122" x2="90" y2="122" stroke="#39ff14" stroke-width="2.5"/><rect x="90" y="25" width="240" height="115" rx="8" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/><text x="210" y="92" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="20" font-weight="bold" fill="#00d4ff">GATE CHAIN</text><line x1="330" y1="82" x2="390" y2="82" stroke="#c8d8f0" stroke-width="2.5"/><text x="398" y="87" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Z</text></svg>`,
-      circuitSvg: `<svg viewBox="0 0 520 180" width="640" height="220"><text x="18" y="42" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text><text x="18" y="92" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">B</text><text x="18" y="152" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">C</text><rect x="110" y="40" width="90" height="44" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="155" y="68" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">NAND</text><rect x="290" y="70" width="80" height="44" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="330" y="98" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">OR</text><text x="455" y="97" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Z</text><line x1="36" y1="38" x2="110" y2="52" stroke="#39ff14" stroke-width="2"/><line x1="36" y1="88" x2="110" y2="74" stroke="#39ff14" stroke-width="2"/><line x1="200" y1="62" x2="290" y2="82" stroke="#39ff14" stroke-width="2"/><line x1="36" y1="148" x2="290" y2="104" stroke="#39ff14" stroke-width="2"/><line x1="370" y1="92" x2="445" y2="92" stroke="#39ff14" stroke-width="2"/></svg>`,
+      circuitSvg: `<svg viewBox="0 0 520 190" width="640" height="230"><text x="18" y="42" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text><text x="18" y="92" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">B</text><text x="18" y="152" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">C</text><rect x="110" y="40" width="90" height="44" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="155" y="68" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">NAND</text><text x="155" y="34" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">¬(A·B)</text><rect x="290" y="70" width="80" height="44" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="330" y="98" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">OR</text><text x="330" y="64" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">¬(A·B)+C</text><text x="455" y="97" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Z</text><polyline points="36,38 70,38 70,52 110,52" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="36,88 70,88 70,74 110,74" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="200,62 245,62 245,82 290,82" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="36,148 245,148 245,104 290,104" stroke="#39ff14" stroke-width="2" fill="none"/><line x1="370" y1="92" x2="445" y2="92" stroke="#39ff14" stroke-width="2"/><text x="260" y="182" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">Z = ¬(A·B)+C</text></svg>`,
     },
     nodes: [
       // Case 1: A=1, B=1, C=0 → Z=0   (cx = -420)
@@ -420,7 +423,7 @@ const LEVELS = [
       gatesUsed: ['NAND', 'OR'],
       explanation: 'Fanout — Signal fanout: signal A feeds two different gates simultaneously. This is a fundamental structure in circuit design — a single signal can affect multiple paths in parallel, like a data bus connected to multiple components.',
       blockSvg: `<svg viewBox="0 0 440 180" width="520" height="210"><text x="12" y="52" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text><line x1="30" y1="47" x2="90" y2="47" stroke="#39ff14" stroke-width="2.5"/><text x="12" y="92" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">B</text><line x1="30" y1="87" x2="90" y2="87" stroke="#39ff14" stroke-width="2.5"/><text x="12" y="137" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">C</text><line x1="30" y1="132" x2="90" y2="132" stroke="#39ff14" stroke-width="2.5"/><rect x="90" y="22" width="230" height="135" rx="8" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/><text x="205" y="98" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="22" font-weight="bold" fill="#00d4ff">FANOUT</text><line x1="320" y1="62" x2="380" y2="62" stroke="#c8d8f0" stroke-width="2.5"/><text x="388" y="67" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">X</text><line x1="320" y1="117" x2="380" y2="117" stroke="#c8d8f0" stroke-width="2.5"/><text x="388" y="122" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Y</text></svg>`,
-      circuitSvg: `<svg viewBox="0 0 520 200" width="640" height="245"><text x="18" y="52" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text><text x="18" y="102" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">B</text><text x="18" y="172" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">C</text><rect x="160" y="30" width="90" height="44" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="205" y="58" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#a0c8ff">NAND</text><rect x="160" y="130" width="90" height="44" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="205" y="158" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">OR</text><text x="455" y="57" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">X</text><text x="455" y="157" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Y</text><polyline points="36,48 80,48 80,38 160,38" stroke="#39ff14" stroke-width="2" fill="none"/><line x1="36" y1="98" x2="160" y2="62" stroke="#39ff14" stroke-width="2"/><polyline points="80,48 80,138 160,138" stroke="#39ff14" stroke-width="2" fill="none"/><line x1="36" y1="168" x2="160" y2="164" stroke="#39ff14" stroke-width="2"/><line x1="250" y1="52" x2="445" y2="52" stroke="#39ff14" stroke-width="2"/><line x1="250" y1="152" x2="445" y2="152" stroke="#39ff14" stroke-width="2"/></svg>`,
+      circuitSvg: `<svg viewBox="0 0 520 210" width="640" height="255"><text x="18" y="52" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text><text x="18" y="102" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">B</text><text x="18" y="172" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">C</text><rect x="160" y="30" width="90" height="44" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="205" y="58" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#a0c8ff">NAND</text><text x="205" y="24" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">¬(A·B)</text><rect x="160" y="130" width="90" height="44" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="205" y="158" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">OR</text><text x="205" y="124" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">A+C</text><text x="455" y="57" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">X</text><text x="455" y="157" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Y</text><polyline points="36,48 80,48 80,38 160,38" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="36,98 120,98 120,62 160,62" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="80,48 80,138 160,138" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="36,168 120,168 120,164 160,164" stroke="#39ff14" stroke-width="2" fill="none"/><line x1="250" y1="52" x2="445" y2="52" stroke="#39ff14" stroke-width="2"/><line x1="250" y1="152" x2="445" y2="152" stroke="#39ff14" stroke-width="2"/><text x="260" y="200" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">X = ¬(A·B), Y = A+C</text></svg>`,
     },
     nodes: [
       // Case 1: A=1, B=1, C=0 → X=0, Y=1   (cx = -435)
@@ -503,7 +506,7 @@ const LEVELS = [
       gatesUsed: ['OR', 'NAND'],
       explanation: 'Split Path — The output of G1 splits in two directions — directly to output Y and simultaneously as input to G2 leading to X. This structure combines fanout with chaining, bridging parallel and sequential circuits.',
       blockSvg: `<svg viewBox="0 0 440 180" width="520" height="210"><text x="12" y="55" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text><line x1="30" y1="50" x2="90" y2="50" stroke="#39ff14" stroke-width="2.5"/><text x="12" y="95" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">B</text><line x1="30" y1="90" x2="90" y2="90" stroke="#39ff14" stroke-width="2.5"/><text x="12" y="140" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">C</text><line x1="30" y1="135" x2="90" y2="135" stroke="#39ff14" stroke-width="2.5"/><rect x="90" y="22" width="230" height="140" rx="8" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/><text x="205" y="80" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="18" font-weight="bold" fill="#00d4ff">SPLIT PATH</text><text x="205" y="105" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" fill="#4a6080">G1→Y, G1+C→G2→X</text><line x1="320" y1="62" x2="380" y2="62" stroke="#c8d8f0" stroke-width="2.5"/><text x="388" y="67" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">X</text><line x1="320" y1="122" x2="380" y2="122" stroke="#c8d8f0" stroke-width="2.5"/><text x="388" y="127" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Y</text></svg>`,
-      circuitSvg: `<svg viewBox="0 0 540 200" width="660" height="245"><text x="18" y="52" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text><text x="18" y="112" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">B</text><text x="18" y="172" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">C</text><rect x="130" y="50" width="80" height="44" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="170" y="78" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">OR</text><rect x="310" y="80" width="90" height="44" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="355" y="108" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#a0c8ff">NAND</text><text x="478" y="107" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">X</text><text x="478" y="57" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Y</text><line x1="36" y1="48" x2="130" y2="62" stroke="#39ff14" stroke-width="2"/><line x1="36" y1="108" x2="130" y2="82" stroke="#39ff14" stroke-width="2"/><polyline points="210,72 250,72 250,52 468,52" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="250,72 250,90 310,90" stroke="#39ff14" stroke-width="2" fill="none"/><line x1="36" y1="168" x2="310" y2="114" stroke="#39ff14" stroke-width="2"/><line x1="400" y1="102" x2="468" y2="102" stroke="#39ff14" stroke-width="2"/></svg>`,
+      circuitSvg: `<svg viewBox="0 0 540 210" width="660" height="255"><text x="18" y="52" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text><text x="18" y="112" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">B</text><text x="18" y="172" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">C</text><rect x="130" y="50" width="80" height="44" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="170" y="78" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">OR</text><text x="170" y="44" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">A+B</text><rect x="310" y="80" width="90" height="44" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="355" y="108" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#a0c8ff">NAND</text><text x="355" y="74" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">¬((A+B)·C)</text><text x="478" y="107" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">X</text><text x="478" y="57" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Y</text><polyline points="36,48 80,48 80,62 130,62" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="36,108 80,108 80,82 130,82" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="210,72 250,72 250,52 468,52" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="250,72 250,90 310,90" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="36,168 270,168 270,114 310,114" stroke="#39ff14" stroke-width="2" fill="none"/><line x1="400" y1="102" x2="468" y2="102" stroke="#39ff14" stroke-width="2"/><text x="270" y="200" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">Y = A+B, X = ¬((A+B)·C)</text></svg>`,
     },
     nodes: [
       // Case 1: A=1, B=0, C=1 → Y=1, X=0   (cx = -420)
@@ -587,7 +590,7 @@ const LEVELS = [
       gatesUsed: ['OR', 'OR', 'AND'],
       explanation: 'Three-Gate Network — B fans out to G1 and G2, C fans out to G2 and G3, and G1 output chains into G3. This structure combines signal fanout with gate chaining in a single network for the first time — the foundation of any complex combinational circuit.',
       blockSvg: `<svg viewBox="0 0 440 180" width="520" height="210"><text x="12" y="55" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text><line x1="30" y1="50" x2="90" y2="50" stroke="#39ff14" stroke-width="2.5"/><text x="12" y="95" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">B</text><line x1="30" y1="90" x2="90" y2="90" stroke="#39ff14" stroke-width="2.5"/><text x="12" y="140" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">C</text><line x1="30" y1="135" x2="90" y2="135" stroke="#39ff14" stroke-width="2.5"/><rect x="90" y="22" width="230" height="140" rx="8" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/><text x="205" y="80" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#00d4ff">THREE-GATE</text><text x="205" y="105" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#00d4ff">NETWORK</text><line x1="320" y1="62" x2="380" y2="62" stroke="#c8d8f0" stroke-width="2.5"/><text x="388" y="67" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">P</text><line x1="320" y1="122" x2="380" y2="122" stroke="#c8d8f0" stroke-width="2.5"/><text x="388" y="127" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Q</text></svg>`,
-      circuitSvg: `<svg viewBox="0 0 580 220" width="700" height="270"><text x="12" y="42" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text><text x="12" y="112" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">B</text><text x="12" y="192" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">C</text><rect x="130" y="22" width="80" height="44" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="170" y="50" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">OR</text><rect x="130" y="132" width="80" height="44" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="170" y="160" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">OR</text><rect x="310" y="52" width="80" height="44" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="350" y="80" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">AND</text><text x="510" y="79" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">P</text><text x="510" y="159" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Q</text><line x1="30" y1="38" x2="130" y2="34" stroke="#39ff14" stroke-width="2"/><polyline points="30,108 80,108 80,54 130,54" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="80,108 80,142 130,142" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="30,188 100,188 100,164 130,164" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="210,44 260,44 260,62 310,62" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="100,188 100,86 310,86" stroke="#39ff14" stroke-width="2" fill="none"/><line x1="390" y1="74" x2="500" y2="74" stroke="#39ff14" stroke-width="2"/><line x1="210" y1="154" x2="500" y2="154" stroke="#39ff14" stroke-width="2"/></svg>`,
+      circuitSvg: `<svg viewBox="0 0 580 230" width="700" height="280"><text x="12" y="42" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text><text x="12" y="112" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">B</text><text x="12" y="192" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">C</text><rect x="130" y="22" width="80" height="44" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="170" y="50" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">OR</text><text x="170" y="16" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">A+B</text><rect x="130" y="132" width="80" height="44" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="170" y="160" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">OR</text><text x="170" y="126" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">B+C</text><rect x="310" y="52" width="80" height="44" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="350" y="80" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">AND</text><text x="350" y="46" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">(A+B)·C</text><text x="510" y="79" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">P</text><text x="510" y="159" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Q</text><polyline points="30,38 70,38 70,34 130,34" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="30,108 80,108 80,54 130,54" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="80,108 80,142 130,142" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="30,188 100,188 100,164 130,164" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="210,44 260,44 260,62 310,62" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="100,188 100,86 310,86" stroke="#39ff14" stroke-width="2" fill="none"/><line x1="390" y1="74" x2="500" y2="74" stroke="#39ff14" stroke-width="2"/><line x1="210" y1="154" x2="500" y2="154" stroke="#39ff14" stroke-width="2"/><text x="290" y="222" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">P = (A+B)·C, Q = B+C</text></svg>`,
     },
     nodes: [
       // Case 1: A=1, B=0, C=1 → P=1, Q=1   (cx = -450)
@@ -687,7 +690,31 @@ const LEVELS = [
       gatesUsed: ['XOR', 'NOT'],
       explanation: 'XNOR Gate — The XNOR gate outputs 1 when both inputs are equal (both 0 or both 1). It is built by chaining XOR followed by NOT. Used in comparison circuits and bit equality checking.',
       blockSvg: `<svg viewBox="0 0 380 160" width="460" height="195"><text x="12" y="55" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text><line x1="30" y1="50" x2="95" y2="50" stroke="#39ff14" stroke-width="2.5"/><text x="12" y="110" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">B</text><line x1="30" y1="105" x2="95" y2="105" stroke="#39ff14" stroke-width="2.5"/><rect x="95" y="25" width="180" height="110" rx="8" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/><text x="185" y="88" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="26" font-weight="bold" fill="#00d4ff">XNOR</text><line x1="275" y1="80" x2="340" y2="80" stroke="#c8d8f0" stroke-width="2.5"/><text x="348" y="85" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Z</text></svg>`,
-      circuitSvg: `<svg viewBox="0 0 480 170" width="580" height="205"><text x="18" y="52" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text><text x="18" y="132" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">B</text><rect x="120" y="50" width="90" height="44" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="165" y="78" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">XOR</text><rect x="290" y="55" width="80" height="40" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="330" y="81" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">NOT</text><text x="435" y="80" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Z</text><line x1="36" y1="48" x2="120" y2="62" stroke="#39ff14" stroke-width="2"/><line x1="36" y1="128" x2="120" y2="84" stroke="#39ff14" stroke-width="2"/><line x1="210" y1="72" x2="290" y2="75" stroke="#39ff14" stroke-width="2"/><line x1="370" y1="75" x2="425" y2="75" stroke="#39ff14" stroke-width="2"/></svg>`,
+      circuitSvg: `<svg viewBox="0 0 480 180" width="580" height="220">
+        <!-- Inputs -->
+        <text x="18" y="62" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text>
+        <text x="18" y="102" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">B</text>
+        <!-- XOR gate -->
+        <rect x="120" y="50" width="90" height="44" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="165" y="78" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">XOR</text>
+        <text x="165" y="44" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">A⊕B</text>
+        <!-- NOT gate -->
+        <rect x="290" y="53" width="80" height="40" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="330" y="79" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">NOT</text>
+        <text x="330" y="47" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">¬(A⊕B)</text>
+        <!-- Output -->
+        <text x="435" y="78" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Z</text>
+        <!-- Wires: A → XOR -->
+        <polyline points="36,58 80,58 80,62 120,62" stroke="#39ff14" stroke-width="2" fill="none"/>
+        <!-- B → XOR -->
+        <polyline points="36,98 80,98 80,84 120,84" stroke="#39ff14" stroke-width="2" fill="none"/>
+        <!-- XOR → NOT -->
+        <line x1="210" y1="72" x2="290" y2="72" stroke="#39ff14" stroke-width="2"/>
+        <!-- NOT → Z -->
+        <line x1="370" y1="73" x2="425" y2="73" stroke="#39ff14" stroke-width="2"/>
+        <!-- Formula -->
+        <text x="240" y="170" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">Z = ¬(A⊕B)</text>
+      </svg>`,
     },
     nodes: [
       // Case 1: A=0, B=0 → Z=1   (cx = -420)
@@ -757,7 +784,7 @@ const LEVELS = [
       gatesUsed: ['XOR', 'AND'],
       explanation: 'Half Adder — The half adder is the simplest addition circuit. It adds two single bits: XOR computes the SUM and AND computes the CARRY. It is the building block of the full adder.',
       blockSvg: `<svg viewBox="0 0 400 160" width="480" height="195"><text x="12" y="55" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text><line x1="30" y1="50" x2="90" y2="50" stroke="#39ff14" stroke-width="2.5"/><text x="12" y="110" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">B</text><line x1="30" y1="105" x2="90" y2="105" stroke="#39ff14" stroke-width="2.5"/><rect x="90" y="25" width="200" height="110" rx="8" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/><text x="190" y="88" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="26" font-weight="bold" fill="#00d4ff">H.A.</text><line x1="290" y1="55" x2="345" y2="55" stroke="#c8d8f0" stroke-width="2.5"/><text x="352" y="60" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">SUM</text><line x1="290" y1="105" x2="345" y2="105" stroke="#c8d8f0" stroke-width="2.5"/><text x="352" y="110" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#c8d8f0">CARRY</text></svg>`,
-      circuitSvg: `<svg viewBox="0 0 480 190" width="580" height="230"><text x="18" y="52" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text><text x="18" y="152" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">B</text><rect x="150" y="30" width="90" height="44" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="195" y="58" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">XOR</text><rect x="150" y="120" width="90" height="44" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="195" y="148" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">AND</text><text x="390" y="57" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">SUM</text><text x="390" y="147" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#c8d8f0">CARRY</text><polyline points="36,48 80,48 80,40 150,40" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="80,48 80,130 150,130" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="36,148 100,148 100,62 150,62" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="100,148 100,152 150,152" stroke="#39ff14" stroke-width="2" fill="none"/><line x1="240" y1="52" x2="380" y2="52" stroke="#39ff14" stroke-width="2"/><line x1="240" y1="142" x2="380" y2="142" stroke="#39ff14" stroke-width="2"/></svg>`,
+      circuitSvg: `<svg viewBox="0 0 480 200" width="580" height="245"><text x="18" y="52" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text><text x="18" y="152" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">B</text><rect x="150" y="30" width="90" height="44" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="195" y="58" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">XOR</text><text x="195" y="24" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">A⊕B</text><rect x="150" y="120" width="90" height="44" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="195" y="148" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">AND</text><text x="195" y="114" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">A·B</text><text x="390" y="57" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">SUM</text><text x="390" y="147" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#c8d8f0">CARRY</text><polyline points="36,48 80,48 80,40 150,40" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="80,48 80,130 150,130" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="36,148 100,148 100,62 150,62" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="100,148 100,152 150,152" stroke="#39ff14" stroke-width="2" fill="none"/><line x1="240" y1="52" x2="380" y2="52" stroke="#39ff14" stroke-width="2"/><line x1="240" y1="142" x2="380" y2="142" stroke="#39ff14" stroke-width="2"/><text x="240" y="192" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">SUM = A⊕B, CARRY = A·B</text></svg>`,
     },
     nodes: [
       // Case 1: A=0, B=0 → SUM=0, CARRY=0   (cx = -435)
@@ -836,7 +863,34 @@ const LEVELS = [
       gatesUsed: ['XOR', 'XOR'],
       explanation: 'Odd Parity — A chain of XOR gates counts whether the number of active inputs is odd. Used for error detection in data communication and memory systems.',
       blockSvg: `<svg viewBox="0 0 440 180" width="520" height="215"><text x="12" y="52" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text><line x1="28" y1="47" x2="90" y2="47" stroke="#39ff14" stroke-width="2.5"/><text x="12" y="92" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">B</text><line x1="28" y1="87" x2="90" y2="87" stroke="#39ff14" stroke-width="2.5"/><text x="12" y="137" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">C</text><line x1="28" y1="132" x2="90" y2="132" stroke="#39ff14" stroke-width="2.5"/><rect x="90" y="22" width="230" height="135" rx="8" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/><text x="205" y="98" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="20" font-weight="bold" fill="#00d4ff">ODD PARITY</text><line x1="320" y1="90" x2="385" y2="90" stroke="#c8d8f0" stroke-width="2.5"/><text x="393" y="95" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">P</text></svg>`,
-      circuitSvg: `<svg viewBox="0 0 520 180" width="640" height="220"><text x="18" y="42" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text><text x="18" y="102" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">B</text><text x="18" y="152" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">C</text><rect x="120" y="40" width="90" height="44" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="165" y="68" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">XOR</text><rect x="300" y="70" width="90" height="44" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="345" y="98" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">XOR</text><text x="460" y="97" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">P</text><line x1="36" y1="38" x2="120" y2="52" stroke="#39ff14" stroke-width="2"/><line x1="36" y1="98" x2="120" y2="74" stroke="#39ff14" stroke-width="2"/><line x1="210" y1="62" x2="300" y2="82" stroke="#39ff14" stroke-width="2"/><line x1="36" y1="148" x2="300" y2="104" stroke="#39ff14" stroke-width="2"/><line x1="390" y1="92" x2="450" y2="92" stroke="#39ff14" stroke-width="2"/></svg>`,
+      circuitSvg: `<svg viewBox="0 0 520 190" width="640" height="230">
+        <!-- Inputs -->
+        <text x="18" y="52" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text>
+        <text x="18" y="82" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">B</text>
+        <text x="18" y="152" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">C</text>
+        <!-- XOR1 -->
+        <rect x="120" y="40" width="90" height="44" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="165" y="68" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">XOR</text>
+        <text x="165" y="34" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">A⊕B</text>
+        <!-- XOR2 -->
+        <rect x="300" y="70" width="90" height="44" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="345" y="98" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">XOR</text>
+        <text x="345" y="64" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">(A⊕B)⊕C</text>
+        <!-- Output -->
+        <text x="460" y="97" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">P</text>
+        <!-- A → XOR1 -->
+        <line x1="36" y1="48" x2="120" y2="48" stroke="#39ff14" stroke-width="2"/>
+        <!-- B → XOR1 -->
+        <polyline points="36,78 80,78 80,74 120,74" stroke="#39ff14" stroke-width="2" fill="none"/>
+        <!-- XOR1 → XOR2 -->
+        <polyline points="210,62 255,62 255,82 300,82" stroke="#39ff14" stroke-width="2" fill="none"/>
+        <!-- C → XOR2 -->
+        <polyline points="36,148 255,148 255,104 300,104" stroke="#39ff14" stroke-width="2" fill="none"/>
+        <!-- XOR2 → P -->
+        <line x1="390" y1="92" x2="450" y2="92" stroke="#39ff14" stroke-width="2"/>
+        <!-- Formula -->
+        <text x="260" y="182" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">P = A⊕B⊕C</text>
+      </svg>`,
     },
     nodes: [
       // Case 1: A=1, B=0, C=0 → P=1   (cx = -420)
@@ -924,12 +978,14 @@ const LEVELS = [
         <line x1="280" y1="92" x2="335" y2="92" stroke="#c8d8f0" stroke-width="2.5"/><text x="342" y="97" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">G1</text>
         <line x1="280" y1="137" x2="335" y2="137" stroke="#c8d8f0" stroke-width="2.5"/><text x="342" y="142" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">G0</text>
       </svg>`,
-      circuitSvg: `<svg viewBox="0 0 440 200" width="530" height="245">
+      circuitSvg: `<svg viewBox="0 0 440 210" width="530" height="255">
         <text x="12" y="42" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">B2</text>
         <text x="12" y="102" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">B1</text>
         <text x="12" y="172" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">B0</text>
         <rect x="160" y="50" width="76" height="36" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="198" y="74" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#a0c8ff">XOR</text>
+        <text x="198" y="44" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">B2⊕B1</text>
         <rect x="160" y="130" width="76" height="36" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="198" y="154" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#a0c8ff">XOR</text>
+        <text x="198" y="124" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">B1⊕B0</text>
         <text x="390" y="42" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">G2</text>
         <text x="390" y="74" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">G1</text>
         <text x="390" y="154" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">G0</text>
@@ -941,6 +997,7 @@ const LEVELS = [
         <line x1="236" y1="68" x2="380" y2="68" stroke="#39ff14" stroke-width="1.5"/>
         <line x1="236" y1="148" x2="380" y2="148" stroke="#39ff14" stroke-width="1.5"/>
         <circle cx="60" cy="38" r="3" fill="#39ff14"/>
+        <text x="220" y="200" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">G2=B2, G1=B2⊕B1, G0=B1⊕B0</text>
       </svg>`,
     },
     nodes: [
@@ -1012,12 +1069,14 @@ const LEVELS = [
         <line x1="280" y1="92" x2="335" y2="92" stroke="#c8d8f0" stroke-width="2.5"/><text x="342" y="97" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">B1</text>
         <line x1="280" y1="137" x2="335" y2="137" stroke="#c8d8f0" stroke-width="2.5"/><text x="342" y="142" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">B0</text>
       </svg>`,
-      circuitSvg: `<svg viewBox="0 0 480 200" width="580" height="245">
+      circuitSvg: `<svg viewBox="0 0 480 210" width="580" height="255">
         <text x="12" y="42" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">G2</text>
         <text x="12" y="102" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">G1</text>
         <text x="12" y="172" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">G0</text>
         <rect x="140" y="50" width="76" height="36" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="178" y="74" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#a0c8ff">XOR</text>
+        <text x="178" y="44" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">G2⊕G1</text>
         <rect x="290" y="130" width="76" height="36" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="328" y="154" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#a0c8ff">XOR</text>
+        <text x="328" y="124" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">B1⊕G0</text>
         <text x="430" y="42" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">B2</text>
         <text x="430" y="74" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">B1</text>
         <text x="430" y="154" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">B0</text>
@@ -1038,6 +1097,8 @@ const LEVELS = [
         <line x1="366" y1="148" x2="420" y2="148" stroke="#39ff14" stroke-width="1.5"/>
         <!-- cascade arrow label -->
         <text x="240" y="115" fill="#4a6080" font-size="10" font-family="monospace">B1 cascade ↓</text>
+        <!-- Formula -->
+        <text x="240" y="200" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">B2=G2, B1=G2⊕G1, B0=B1⊕G0</text>
       </svg>`,
     },
     nodes: [
@@ -1108,8 +1169,60 @@ const LEVELS = [
     solution: {
       gatesUsed: ['NOT', 'AND', 'AND', 'OR'],
       explanation: '2:1 MUX — A multiplexer is a data selector: the select line S determines which input (D0 or D1) is passed to output Y. Multiplexers are key components for data routing in processors and memories.',
-      blockSvg: `<svg viewBox="0 0 400 190" width="480" height="230"><text x="12" y="55" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#39ff14">D0</text><line x1="38" y1="50" x2="95" y2="50" stroke="#39ff14" stroke-width="2.5"/><text x="12" y="100" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#39ff14">D1</text><line x1="38" y1="95" x2="95" y2="95" stroke="#39ff14" stroke-width="2.5"/><text x="175" y="16" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#39ff14">S</text><line x1="175" y1="22" x2="175" y2="45" stroke="#39ff14" stroke-width="2.5"/><rect x="95" y="25" width="195" height="130" rx="8" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/><text x="192" y="100" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="24" font-weight="bold" fill="#00d4ff">MUX</text><line x1="290" y1="90" x2="350" y2="90" stroke="#c8d8f0" stroke-width="2.5"/><text x="358" y="95" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Y</text></svg>`,
-      circuitSvg: `<svg viewBox="0 0 560 220" width="680" height="270"><text x="12" y="42" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#39ff14">D0</text><text x="12" y="122" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#39ff14">S</text><text x="12" y="192" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#39ff14">D1</text><rect x="140" y="100" width="80" height="36" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="180" y="124" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#a0c8ff">NOT</text><rect x="280" y="22" width="80" height="36" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="320" y="46" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#a0c8ff">AND</text><rect x="280" y="152" width="80" height="36" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="320" y="176" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#a0c8ff">AND</text><rect x="420" y="90" width="70" height="36" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="455" y="114" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#a0c8ff">OR</text><text x="525" y="113" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Y</text><line x1="40" y1="38" x2="280" y2="30" stroke="#39ff14" stroke-width="2"/><polyline points="40,118 100,118 140,118" stroke="#39ff14" stroke-width="2" fill="none"/><line x1="220" y1="118" x2="280" y2="50" stroke="#39ff14" stroke-width="2"/><polyline points="100,118 100,162 280,162" stroke="#39ff14" stroke-width="2" fill="none"/><line x1="40" y1="188" x2="280" y2="180" stroke="#39ff14" stroke-width="2"/><line x1="360" y1="40" x2="420" y2="100" stroke="#39ff14" stroke-width="2"/><line x1="360" y1="170" x2="420" y2="118" stroke="#39ff14" stroke-width="2"/><line x1="490" y1="108" x2="518" y2="108" stroke="#39ff14" stroke-width="2"/></svg>`,
+      blockSvg: `<svg viewBox="0 0 420 180" width="500" height="215">
+        <text x="12" y="60" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#39ff14">D0</text>
+        <line x1="40" y1="55" x2="110" y2="55" stroke="#39ff14" stroke-width="2.5"/>
+        <text x="12" y="110" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#39ff14">D1</text>
+        <line x1="40" y1="105" x2="110" y2="105" stroke="#39ff14" stroke-width="2.5"/>
+        <text x="205" y="16" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#39ff14">S</text>
+        <line x1="205" y1="22" x2="205" y2="40" stroke="#39ff14" stroke-width="2.5"/>
+        <rect x="110" y="25" width="195" height="130" rx="8" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/>
+        <text x="207" y="100" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="24" font-weight="bold" fill="#00d4ff">MUX</text>
+        <text x="207" y="120" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" fill="#888">2 : 1</text>
+        <line x1="305" y1="90" x2="365" y2="90" stroke="#c8d8f0" stroke-width="2.5"/>
+        <text x="373" y="95" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Y</text>
+      </svg>`,
+      circuitSvg: `<svg viewBox="0 0 560 240" width="680" height="290">
+        <!-- Inputs -->
+        <text x="12" y="42" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">D0</text>
+        <text x="12" y="122" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">S</text>
+        <text x="12" y="202" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">D1</text>
+        <!-- NOT gate -->
+        <rect x="120" y="100" width="70" height="36" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="155" y="124" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#a0c8ff">NOT</text>
+        <!-- AND gates -->
+        <rect x="270" y="22" width="70" height="36" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="305" y="46" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#a0c8ff">AND</text>
+        <rect x="270" y="162" width="70" height="36" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="305" y="186" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#a0c8ff">AND</text>
+        <!-- OR gate -->
+        <rect x="410" y="90" width="65" height="36" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="442" y="114" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#a0c8ff">OR</text>
+        <!-- Output -->
+        <text x="510" y="113" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Y</text>
+        <!-- Wires: D0 → AND top -->
+        <polyline points="40,38 60,38 60,30 270,30" stroke="#39ff14" stroke-width="2" fill="none"/>
+        <!-- S → NOT -->
+        <line x1="40" y1="118" x2="120" y2="118" stroke="#39ff14" stroke-width="2"/>
+        <!-- NOT → AND top (input 1) -->
+        <polyline points="190,118 230,118 230,50 270,50" stroke="#39ff14" stroke-width="2" fill="none"/>
+        <!-- S → AND bottom (input 1) -->
+        <polyline points="80,118 80,190 270,190" stroke="#39ff14" stroke-width="2" fill="none"/>
+        <!-- D1 → AND bottom (input 0) -->
+        <polyline points="40,198 60,198 60,170 270,170" stroke="#39ff14" stroke-width="2" fill="none"/>
+        <!-- AND top → OR -->
+        <polyline points="340,40 380,40 380,100 410,100" stroke="#39ff14" stroke-width="2" fill="none"/>
+        <!-- AND bottom → OR -->
+        <polyline points="340,180 380,180 380,118 410,118" stroke="#39ff14" stroke-width="2" fill="none"/>
+        <!-- OR → Y -->
+        <line x1="475" y1="108" x2="503" y2="108" stroke="#39ff14" stroke-width="2"/>
+        <!-- Labels -->
+        <text x="155" y="93" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">¬S</text>
+        <text x="305" y="15" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">D0·¬S</text>
+        <text x="305" y="210" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">D1·S</text>
+        <text x="442" y="82" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">Y = D0·¬S + D1·S</text>
+        <text x="280" y="235" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">Y = D0·¬S + D1·S</text>
+      </svg>`,
     },
     nodes: [
       // Case 1: D0=1, D1=0, S=0 → Y=1   (cx = -420)
@@ -1204,7 +1317,11 @@ const LEVELS = [
       gatesUsed: ['NOT', 'AND', 'AND'],
       explanation: '1:2 DEMUX — A demultiplexer is the opposite of a multiplexer: it routes a single input D to one of two outputs (Y0 or Y1) based on the select line S. Used in address decoding and signal routing in memories.',
       blockSvg: `<svg viewBox="0 0 420 180" width="500" height="215"><text x="12" y="70" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">D</text><line x1="28" y1="65" x2="95" y2="65" stroke="#39ff14" stroke-width="2.5"/><text x="180" y="16" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">S</text><line x1="180" y1="22" x2="180" y2="40" stroke="#39ff14" stroke-width="2.5"/><rect x="95" y="25" width="195" height="130" rx="8" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/><text x="192" y="100" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="22" font-weight="bold" fill="#00d4ff">DEMUX</text><line x1="290" y1="60" x2="355" y2="60" stroke="#c8d8f0" stroke-width="2.5"/><text x="362" y="65" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#c8d8f0">Y0</text><line x1="290" y1="120" x2="355" y2="120" stroke="#c8d8f0" stroke-width="2.5"/><text x="362" y="125" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#c8d8f0">Y1</text></svg>`,
-      circuitSvg: `<svg viewBox="0 0 480 200" width="580" height="245"><text x="12" y="62" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">D</text><text x="12" y="152" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">S</text><rect x="130" y="130" width="80" height="36" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="170" y="154" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#a0c8ff">NOT</text><rect x="280" y="32" width="80" height="36" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="320" y="56" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#a0c8ff">AND</text><rect x="280" y="122" width="80" height="36" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="320" y="146" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#a0c8ff">AND</text><text x="420" y="55" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#c8d8f0">Y0</text><text x="420" y="145" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#c8d8f0">Y1</text><polyline points="30,58 70,58 70,40 280,40" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="70,58 70,130 280,130" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="30,148 130,148" stroke="#39ff14" stroke-width="2" fill="none"/><line x1="210" y1="148" x2="280" y2="60" stroke="#39ff14" stroke-width="2"/><polyline points="100,148 100,150 280,150" stroke="#39ff14" stroke-width="2" fill="none"/><line x1="360" y1="50" x2="410" y2="50" stroke="#39ff14" stroke-width="2"/><line x1="360" y1="140" x2="410" y2="140" stroke="#39ff14" stroke-width="2"/></svg>`,
+      circuitSvg: `<svg viewBox="0 0 480 200" width="580" height="245"><text x="12" y="62" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">D</text><text x="12" y="152" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">S</text><rect x="130" y="130" width="80" height="36" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="170" y="154" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#a0c8ff">NOT</text><rect x="280" y="32" width="80" height="36" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="320" y="56" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#a0c8ff">AND</text><rect x="280" y="122" width="80" height="36" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="320" y="146" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#a0c8ff">AND</text><text x="420" y="55" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#c8d8f0">Y0</text><text x="420" y="145" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#c8d8f0">Y1</text><polyline points="30,58 70,58 70,40 280,40" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="70,58 70,130 280,130" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="30,148 130,148" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="210,148 240,148 240,60 280,60" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="100,148 100,150 280,150" stroke="#39ff14" stroke-width="2" fill="none"/><line x1="360" y1="50" x2="410" y2="50" stroke="#39ff14" stroke-width="2"/><line x1="360" y1="140" x2="410" y2="140" stroke="#39ff14" stroke-width="2"/>
+        <text x="170" y="124" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">¬S</text>
+        <text x="320" y="26" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">D·¬S</text>
+        <text x="320" y="116" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">D·S</text>
+        <text x="240" y="190" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">Y0 = D·¬S, Y1 = D·S</text></svg>`,
     },
     nodes: [
       // Case 1: D=1, S=0 → Y0=1, Y1=0   (cx = -420)
@@ -1294,7 +1411,12 @@ const LEVELS = [
       gatesUsed: ['AND', 'XOR', 'AND', 'XOR'],
       explanation: 'Carry Generate/Propagate — Carry Lookahead fundamentals: G=A AND B (carry generated) and P=A XOR B (carry propagated). Computing G and P per bit enables fast carry prediction instead of waiting for the ripple chain — this is what makes modern processors fast.',
       blockSvg: `<svg viewBox="0 0 460 200" width="540" height="235"><text x="12" y="52" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#39ff14">A1</text><line x1="38" y1="47" x2="90" y2="47" stroke="#39ff14" stroke-width="2.5"/><text x="12" y="82" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#39ff14">B1</text><line x1="38" y1="77" x2="90" y2="77" stroke="#39ff14" stroke-width="2.5"/><text x="12" y="122" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#39ff14">A0</text><line x1="38" y1="117" x2="90" y2="117" stroke="#39ff14" stroke-width="2.5"/><text x="12" y="157" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#39ff14">B0</text><line x1="38" y1="152" x2="90" y2="152" stroke="#39ff14" stroke-width="2.5"/><rect x="90" y="20" width="240" height="162" rx="8" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/><text x="210" y="85" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#00d4ff">CARRY GEN</text><text x="210" y="112" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#00d4ff">/ PROP</text><line x1="330" y1="45" x2="390" y2="45" stroke="#c8d8f0" stroke-width="2.5"/><text x="398" y="50" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">G1</text><line x1="330" y1="80" x2="390" y2="80" stroke="#c8d8f0" stroke-width="2.5"/><text x="398" y="85" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">P1</text><line x1="330" y1="120" x2="390" y2="120" stroke="#c8d8f0" stroke-width="2.5"/><text x="398" y="125" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">G0</text><line x1="330" y1="155" x2="390" y2="155" stroke="#c8d8f0" stroke-width="2.5"/><text x="398" y="160" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">P0</text></svg>`,
-      circuitSvg: `<svg viewBox="0 0 520 260" width="640" height="320"><text x="12" y="42" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#39ff14">A1</text><text x="12" y="82" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#39ff14">B1</text><text x="12" y="172" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#39ff14">A0</text><text x="12" y="212" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#39ff14">B0</text><rect x="170" y="22" width="80" height="36" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="210" y="46" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#a0c8ff">AND</text><rect x="170" y="76" width="80" height="36" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="210" y="100" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#a0c8ff">XOR</text><rect x="170" y="152" width="80" height="36" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="210" y="176" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#a0c8ff">AND</text><rect x="170" y="206" width="80" height="36" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="210" y="230" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#a0c8ff">XOR</text><text x="420" y="46" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">G1</text><text x="420" y="100" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">P1</text><text x="420" y="176" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">G0</text><text x="420" y="230" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">P0</text><polyline points="38,38 80,38 80,30 170,30" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="80,38 80,84 170,84" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="38,78 100,78 100,50 170,50" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="100,78 100,104 170,104" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="38,168 80,168 80,160 170,160" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="80,168 80,214 170,214" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="38,208 100,208 100,180 170,180" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="100,208 100,234 170,234" stroke="#39ff14" stroke-width="2" fill="none"/><line x1="250" y1="40" x2="410" y2="40" stroke="#39ff14" stroke-width="2"/><line x1="250" y1="94" x2="410" y2="94" stroke="#39ff14" stroke-width="2"/><line x1="250" y1="170" x2="410" y2="170" stroke="#39ff14" stroke-width="2"/><line x1="250" y1="224" x2="410" y2="224" stroke="#39ff14" stroke-width="2"/></svg>`,
+      circuitSvg: `<svg viewBox="0 0 520 260" width="640" height="320"><text x="12" y="42" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#39ff14">A1</text><text x="12" y="82" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#39ff14">B1</text><text x="12" y="172" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#39ff14">A0</text><text x="12" y="212" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#39ff14">B0</text><rect x="170" y="22" width="80" height="36" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="210" y="46" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#a0c8ff">AND</text><rect x="170" y="76" width="80" height="36" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="210" y="100" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#a0c8ff">XOR</text><rect x="170" y="152" width="80" height="36" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="210" y="176" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#a0c8ff">AND</text><rect x="170" y="206" width="80" height="36" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="210" y="230" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#a0c8ff">XOR</text><text x="420" y="46" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">G1</text><text x="420" y="100" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">P1</text><text x="420" y="176" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">G0</text><text x="420" y="230" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">P0</text><polyline points="38,38 80,38 80,30 170,30" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="80,38 80,84 170,84" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="38,78 100,78 100,50 170,50" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="100,78 100,104 170,104" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="38,168 80,168 80,160 170,160" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="80,168 80,214 170,214" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="38,208 100,208 100,180 170,180" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="100,208 100,234 170,234" stroke="#39ff14" stroke-width="2" fill="none"/><line x1="250" y1="40" x2="410" y2="40" stroke="#39ff14" stroke-width="2"/><line x1="250" y1="94" x2="410" y2="94" stroke="#39ff14" stroke-width="2"/><line x1="250" y1="170" x2="410" y2="170" stroke="#39ff14" stroke-width="2"/><line x1="250" y1="224" x2="410" y2="224" stroke="#39ff14" stroke-width="2"/>
+        <text x="210" y="16" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">A1·B1</text>
+        <text x="210" y="70" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">A1⊕B1</text>
+        <text x="210" y="146" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">A0·B0</text>
+        <text x="210" y="200" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">A0⊕B0</text>
+        <text x="260" y="255" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">G = A·B, P = A⊕B</text></svg>`,
     },
     nodes: [
       // Case 1: A1=1,B1=1,A0=1,B0=0 → G1=1,P1=0,G0=0,P0=1   (cx = -500)
@@ -1378,7 +1500,43 @@ const LEVELS = [
       gatesUsed: ['XOR', 'XOR', 'XOR'],
       explanation: '4-Bit Even Parity — A chain of 3 XOR gates counts whether the number of active bits is odd. Used for error detection in communication, RAM, and data buses.',
       blockSvg: `<svg viewBox="0 0 460 200" width="540" height="235"><text x="12" y="42" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text><line x1="28" y1="37" x2="90" y2="37" stroke="#39ff14" stroke-width="2.5"/><text x="12" y="72" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">B</text><line x1="28" y1="67" x2="90" y2="67" stroke="#39ff14" stroke-width="2.5"/><text x="12" y="112" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">C</text><line x1="28" y1="107" x2="90" y2="107" stroke="#39ff14" stroke-width="2.5"/><text x="12" y="152" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">D</text><line x1="28" y1="147" x2="90" y2="147" stroke="#39ff14" stroke-width="2.5"/><rect x="90" y="15" width="240" height="160" rx="8" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/><text x="210" y="85" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="18" font-weight="bold" fill="#00d4ff">EVEN PARITY</text><text x="210" y="112" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" fill="#4a6080">4-bit</text><line x1="330" y1="95" x2="395" y2="95" stroke="#c8d8f0" stroke-width="2.5"/><text x="403" y="100" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">P</text></svg>`,
-      circuitSvg: `<svg viewBox="0 0 560 200" width="680" height="245"><text x="18" y="42" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text><text x="18" y="102" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">B</text><text x="18" y="142" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">C</text><text x="18" y="182" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">D</text><rect x="120" y="42" width="80" height="40" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="160" y="68" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">XOR</text><rect x="270" y="72" width="80" height="40" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="310" y="98" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">XOR</text><rect x="420" y="102" width="80" height="40" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="460" y="128" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">XOR</text><text x="530" y="127" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">P</text><line x1="36" y1="38" x2="120" y2="52" stroke="#39ff14" stroke-width="2"/><line x1="36" y1="98" x2="120" y2="72" stroke="#39ff14" stroke-width="2"/><line x1="200" y1="62" x2="270" y2="82" stroke="#39ff14" stroke-width="2"/><line x1="36" y1="138" x2="270" y2="102" stroke="#39ff14" stroke-width="2"/><line x1="350" y1="92" x2="420" y2="112" stroke="#39ff14" stroke-width="2"/><line x1="36" y1="178" x2="420" y2="132" stroke="#39ff14" stroke-width="2"/><line x1="500" y1="122" x2="522" y2="122" stroke="#39ff14" stroke-width="2"/></svg>`,
+      circuitSvg: `<svg viewBox="0 0 560 200" width="680" height="245">
+        <!-- Inputs -->
+        <text x="18" y="52" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text>
+        <text x="18" y="82" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">B</text>
+        <text x="18" y="142" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">C</text>
+        <text x="18" y="182" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">D</text>
+        <!-- XOR1 -->
+        <rect x="120" y="42" width="80" height="40" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="160" y="68" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">XOR</text>
+        <!-- XOR2 -->
+        <rect x="270" y="72" width="80" height="40" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="310" y="98" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">XOR</text>
+        <!-- XOR3 -->
+        <rect x="420" y="102" width="80" height="40" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="460" y="128" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">XOR</text>
+        <!-- Output -->
+        <text x="530" y="127" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">P</text>
+        <!-- A → XOR1 -->
+        <line x1="36" y1="48" x2="120" y2="48" stroke="#39ff14" stroke-width="2"/>
+        <!-- B → XOR1 -->
+        <polyline points="36,78 80,78 80,74 120,74" stroke="#39ff14" stroke-width="2" fill="none"/>
+        <!-- XOR1 → XOR2 -->
+        <polyline points="200,62 235,62 235,82 270,82" stroke="#39ff14" stroke-width="2" fill="none"/>
+        <!-- C → XOR2 -->
+        <polyline points="36,138 235,138 235,104 270,104" stroke="#39ff14" stroke-width="2" fill="none"/>
+        <!-- XOR2 → XOR3 -->
+        <polyline points="350,92 385,92 385,112 420,112" stroke="#39ff14" stroke-width="2" fill="none"/>
+        <!-- D → XOR3 -->
+        <polyline points="36,178 385,178 385,134 420,134" stroke="#39ff14" stroke-width="2" fill="none"/>
+        <!-- XOR3 → P -->
+        <line x1="500" y1="122" x2="522" y2="122" stroke="#39ff14" stroke-width="2"/>
+        <!-- Labels -->
+        <text x="160" y="36" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">A⊕B</text>
+        <text x="310" y="66" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">(A⊕B)⊕C</text>
+        <text x="460" y="96" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">P</text>
+        <text x="280" y="195" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">P = A⊕B⊕C⊕D</text>
+      </svg>`,
     },
     nodes: [
       // Case 1: A=1,B=1,C=0,D=1 → P=1   (cx = -435)
@@ -1500,11 +1658,11 @@ const LEVELS = [
         <text x="500" y="170" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#c8d8f0">Y1</text>
         <text x="500" y="230" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#c8d8f0">Y0</text>
         <polyline points="30,28 100,26" stroke="#39ff14" stroke-width="1.5" fill="none"/>
-        <polyline points="30,78 100,42" stroke="#39ff14" stroke-width="1.5" fill="none"/>
+        <polyline points="30,78 70,78 70,42 100,42" stroke="#39ff14" stroke-width="1.5" fill="none"/>
         <polyline points="30,168 100,166" stroke="#39ff14" stroke-width="1.5" fill="none"/>
-        <polyline points="30,218 100,182" stroke="#39ff14" stroke-width="1.5" fill="none"/>
-        <line x1="168" y1="34" x2="240" y2="83" stroke="#39ff14" stroke-width="1.5"/>
-        <line x1="168" y1="174" x2="240" y2="99" stroke="#39ff14" stroke-width="1.5"/>
+        <polyline points="30,218 70,218 70,182 100,182" stroke="#39ff14" stroke-width="1.5" fill="none"/>
+        <polyline points="168,34 200,34 200,83 240,83" stroke="#39ff14" stroke-width="1.5" fill="none"/>
+        <polyline points="168,174 200,174 200,99 240,99" stroke="#39ff14" stroke-width="1.5" fill="none"/>
         <line x1="308" y1="91" x2="480" y2="91" stroke="#39ff14" stroke-width="1.5"/>
         <polyline points="30,168 80,168 80,156 340,156" stroke="#39ff14" stroke-width="1.5" fill="none"/>
         <polyline points="30,218 80,218 80,172 340,172" stroke="#39ff14" stroke-width="1.5" fill="none"/>
@@ -1512,6 +1670,13 @@ const LEVELS = [
         <polyline points="30,78 60,78 60,216 340,216" stroke="#39ff14" stroke-width="1.5" fill="none"/>
         <polyline points="30,218 80,218 80,232 340,232" stroke="#39ff14" stroke-width="1.5" fill="none"/>
         <line x1="408" y1="224" x2="490" y2="224" stroke="#39ff14" stroke-width="1.5"/>
+        <!-- Labels -->
+        <text x="134" y="12" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">I0+I1</text>
+        <text x="134" y="152" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">I2+I3</text>
+        <text x="274" y="69" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">VALID</text>
+        <text x="374" y="142" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">I2+I3</text>
+        <text x="374" y="202" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">I1+I3</text>
+        <text x="280" y="255" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">VALID=(I0+I1)+(I2+I3), Y1=I2+I3, Y0=I1+I3</text>
       </svg>`,
     },
     nodes: [
@@ -1595,7 +1760,59 @@ const LEVELS = [
       gatesUsed: ['AND', 'AND', 'AND', 'OR', 'OR'],
       explanation: 'Majority-of-3 — majority circuit: output is ON when at least 2 of 3 inputs are ON. Computes AB+BC+AC using three pairwise AND gates and two OR gates to merge. Used in voting logic and fault-tolerant systems.',
       blockSvg: `<svg viewBox="0 0 440 180" width="520" height="215"><text x="12" y="52" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text><line x1="28" y1="47" x2="90" y2="47" stroke="#39ff14" stroke-width="2.5"/><text x="12" y="92" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">B</text><line x1="28" y1="87" x2="90" y2="87" stroke="#39ff14" stroke-width="2.5"/><text x="12" y="137" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">C</text><line x1="28" y1="132" x2="90" y2="132" stroke="#39ff14" stroke-width="2.5"/><rect x="90" y="22" width="230" height="135" rx="8" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/><text x="205" y="85" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="18" font-weight="bold" fill="#00d4ff">MAJORITY</text><text x="205" y="110" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" fill="#4a6080">≥2 of 3</text><line x1="320" y1="90" x2="385" y2="90" stroke="#c8d8f0" stroke-width="2.5"/><text x="393" y="95" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">M</text></svg>`,
-      circuitSvg: `<svg viewBox="0 0 580 220" width="700" height="270"><text x="10" y="32" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text><text x="10" y="112" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">B</text><text x="10" y="202" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">C</text><rect x="120" y="12" width="80" height="36" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="160" y="36" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#a0c8ff">AND</text><text x="105" y="26" font-family="JetBrains Mono,monospace" font-size="9" fill="#4a6080">AB</text><rect x="120" y="92" width="80" height="36" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="160" y="116" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#a0c8ff">AND</text><text x="105" y="106" font-family="JetBrains Mono,monospace" font-size="9" fill="#4a6080">BC</text><rect x="120" y="172" width="80" height="36" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="160" y="196" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#a0c8ff">AND</text><text x="105" y="186" font-family="JetBrains Mono,monospace" font-size="9" fill="#4a6080">AC</text><rect x="290" y="42" width="70" height="36" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="325" y="66" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#a0c8ff">OR</text><rect x="420" y="102" width="70" height="36" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="455" y="126" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#a0c8ff">OR</text><text x="535" y="125" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">M</text><polyline points="28,28 60,28 60,20 120,20" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="28,108 60,108 60,40 120,40" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="60,108 60,100 120,100" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="28,198 80,198 80,120 120,120" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="60,28 60,180 120,180" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="80,198 80,200 120,200" stroke="#39ff14" stroke-width="2" fill="none"/><line x1="200" y1="30" x2="290" y2="52" stroke="#39ff14" stroke-width="2"/><line x1="200" y1="110" x2="290" y2="70" stroke="#39ff14" stroke-width="2"/><line x1="360" y1="60" x2="420" y2="112" stroke="#39ff14" stroke-width="2"/><line x1="200" y1="190" x2="420" y2="130" stroke="#39ff14" stroke-width="2"/><line x1="490" y1="120" x2="525" y2="120" stroke="#39ff14" stroke-width="2"/></svg>`,
+      circuitSvg: `<svg viewBox="0 0 600 240" width="720" height="290">
+        <!-- Inputs -->
+        <text x="10" y="42" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#39ff14">A</text>
+        <text x="10" y="122" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#39ff14">B</text>
+        <text x="10" y="202" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#39ff14">C</text>
+        <!-- AND(A,B) -->
+        <rect x="120" y="18" width="80" height="36" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="160" y="42" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#a0c8ff">AND</text>
+        <text x="160" y="12" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">A·B</text>
+        <!-- AND(B,C) -->
+        <rect x="120" y="98" width="80" height="36" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="160" y="122" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#a0c8ff">AND</text>
+        <text x="160" y="92" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">B·C</text>
+        <!-- AND(A,C) -->
+        <rect x="120" y="178" width="80" height="36" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="160" y="202" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#a0c8ff">AND</text>
+        <text x="160" y="172" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">A·C</text>
+        <!-- OR(A·B, B·C) -->
+        <rect x="290" y="48" width="70" height="36" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="325" y="72" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#a0c8ff">OR</text>
+        <text x="325" y="42" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">A·B + B·C</text>
+        <!-- OR(A·B+B·C, A·C) = M -->
+        <rect x="430" y="108" width="70" height="36" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="465" y="132" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#a0c8ff">OR</text>
+        <text x="465" y="102" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">A·B + B·C + A·C</text>
+        <!-- Output M -->
+        <text x="540" y="131" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#c8d8f0">M</text>
+        <!-- Wires: A → AND(A,B) -->
+        <polyline points="28,38 60,38 60,26 120,26" stroke="#39ff14" stroke-width="2" fill="none"/>
+        <!-- B → AND(A,B) -->
+        <polyline points="28,118 70,118 70,46 120,46" stroke="#39ff14" stroke-width="2" fill="none"/>
+        <!-- B → AND(B,C) -->
+        <polyline points="70,118 70,106 120,106" stroke="#39ff14" stroke-width="2" fill="none"/>
+        <!-- C → AND(B,C) -->
+        <polyline points="28,198 80,198 80,126 120,126" stroke="#39ff14" stroke-width="2" fill="none"/>
+        <!-- A → AND(A,C) -->
+        <polyline points="60,38 60,186 120,186" stroke="#39ff14" stroke-width="2" fill="none"/>
+        <!-- C → AND(A,C) -->
+        <polyline points="80,198 80,206 120,206" stroke="#39ff14" stroke-width="2" fill="none"/>
+        <!-- AND(A,B) → OR1 -->
+        <polyline points="200,36 245,36 245,56 290,56" stroke="#39ff14" stroke-width="2" fill="none"/>
+        <!-- AND(B,C) → OR1 -->
+        <polyline points="200,116 245,116 245,76 290,76" stroke="#39ff14" stroke-width="2" fill="none"/>
+        <!-- OR1 → OR2 -->
+        <polyline points="360,66 395,66 395,116 430,116" stroke="#39ff14" stroke-width="2" fill="none"/>
+        <!-- AND(A,C) → OR2 -->
+        <polyline points="200,196 395,196 395,136 430,136" stroke="#39ff14" stroke-width="2" fill="none"/>
+        <!-- OR2 → M -->
+        <line x1="500" y1="126" x2="530" y2="126" stroke="#39ff14" stroke-width="2"/>
+        <!-- Formula summary -->
+        <text x="10" y="235" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#ffcc00">M = A·B + B·C + A·C</text>
+        <text x="250" y="235" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">(majority vote: ≥2 of 3 inputs ON)</text>
+      </svg>`,
     },
     nodes: [
       // Case 1: A=1, B=1, C=0 → M=1   (cx = -450)
@@ -1708,7 +1925,7 @@ const LEVELS = [
       ],
     },
     solution: {
-      gatesUsed: ['XOR', 'NOT', 'XOR', 'NOT', 'AND'],
+      gatesUsed: ['XOR', 'NOT', 'AND'],
       explanation: '2-Bit Equality — checks equality between two 2-bit numbers. XOR detects difference in each bit, NOT inverts it to XNOR (1=equal), and AND combines: EQ=1 only if all bits are equal. This circuit is the basis for number comparison in processors.',
       blockSvg: `<svg viewBox="0 0 400 180" width="480" height="220">
         <text x="12" y="42" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#39ff14">A1</text><line x1="38" y1="37" x2="90" y2="37" stroke="#39ff14" stroke-width="2.5"/>
@@ -1738,9 +1955,16 @@ const LEVELS = [
         <polyline points="38,128 70,128 70,122 110,122" stroke="#39ff14" stroke-width="1.5" fill="none"/>
         <polyline points="38,168 70,168 70,142 110,142" stroke="#39ff14" stroke-width="1.5" fill="none"/>
         <line x1="186" y1="132" x2="220" y2="132" stroke="#39ff14" stroke-width="1.5"/>
-        <line x1="296" y1="42" x2="370" y2="74" stroke="#39ff14" stroke-width="1.5"/>
-        <line x1="296" y1="132" x2="370" y2="92" stroke="#39ff14" stroke-width="1.5"/>
+        <polyline points="296,42 330,42 330,74 370,74" stroke="#39ff14" stroke-width="1.5" fill="none"/>
+        <polyline points="296,132 330,132 330,92 370,92" stroke="#39ff14" stroke-width="1.5" fill="none"/>
         <line x1="446" y1="82" x2="470" y2="82" stroke="#39ff14" stroke-width="1.5"/>
+        <!-- Labels -->
+        <text x="148" y="18" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">A1⊕B1</text>
+        <text x="258" y="18" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">¬(A1⊕B1)</text>
+        <text x="148" y="108" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">A0⊕B0</text>
+        <text x="258" y="108" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">¬(A0⊕B0)</text>
+        <text x="408" y="58" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">EQ</text>
+        <text x="260" y="195" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">EQ = ¬(A1⊕B1) · ¬(A0⊕B0)</text>
       </svg>`,
     },
     nodes: [
@@ -1807,7 +2031,12 @@ const LEVELS = [
       gatesUsed: ['NOT', 'AND', 'XOR', 'NOT'],
       explanation: '1-Bit Comparator — compares bits: GT (greater than) is ON when A=1 and B=0, EQ (equal) is ON when bits are identical. GT is built from AND(A, NOT B), EQ from NOT(XOR(A,B)). Used in ALUs and sorting circuits.',
       blockSvg: `<svg viewBox="0 0 420 160" width="500" height="195"><text x="12" y="55" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text><line x1="28" y1="50" x2="95" y2="50" stroke="#39ff14" stroke-width="2.5"/><text x="12" y="115" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">B</text><line x1="28" y1="110" x2="95" y2="110" stroke="#39ff14" stroke-width="2.5"/><rect x="95" y="22" width="210" height="118" rx="8" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/><text x="200" y="72" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#00d4ff">COMPARATOR</text><text x="200" y="95" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" fill="#4a6080">1-bit</text><line x1="305" y1="52" x2="365" y2="52" stroke="#c8d8f0" stroke-width="2.5"/><text x="372" y="57" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">GT</text><line x1="305" y1="108" x2="365" y2="108" stroke="#c8d8f0" stroke-width="2.5"/><text x="372" y="113" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">EQ</text></svg>`,
-      circuitSvg: `<svg viewBox="0 0 560 200" width="680" height="245"><text x="12" y="52" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text><text x="12" y="162" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">B</text><rect x="110" y="140" width="80" height="36" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="150" y="164" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#a0c8ff">NOT</text><rect x="260" y="22" width="80" height="36" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="300" y="46" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#a0c8ff">AND</text><rect x="260" y="102" width="80" height="36" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="300" y="126" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#a0c8ff">XOR</text><rect x="410" y="102" width="80" height="36" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="450" y="126" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#a0c8ff">NOT</text><text x="520" y="46" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">GT</text><text x="520" y="126" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">EQ</text><polyline points="30,48 60,48 60,30 260,30" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="60,48 60,110 260,110" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="30,158 110,158" stroke="#39ff14" stroke-width="2" fill="none"/><line x1="190" y1="158" x2="260" y2="50" stroke="#39ff14" stroke-width="2"/><polyline points="90,158 90,130 260,130" stroke="#39ff14" stroke-width="2" fill="none"/><line x1="340" y1="40" x2="510" y2="40" stroke="#39ff14" stroke-width="2"/><line x1="340" y1="120" x2="410" y2="120" stroke="#39ff14" stroke-width="2"/><line x1="490" y1="120" x2="510" y2="120" stroke="#39ff14" stroke-width="2"/></svg>`,
+      circuitSvg: `<svg viewBox="0 0 560 200" width="680" height="245"><text x="12" y="52" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text><text x="12" y="162" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">B</text><rect x="110" y="140" width="80" height="36" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="150" y="164" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#a0c8ff">NOT</text><rect x="260" y="22" width="80" height="36" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="300" y="46" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#a0c8ff">AND</text><rect x="260" y="102" width="80" height="36" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="300" y="126" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#a0c8ff">XOR</text><rect x="410" y="102" width="80" height="36" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="450" y="126" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#a0c8ff">NOT</text><text x="520" y="46" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">GT</text><text x="520" y="126" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">EQ</text><polyline points="30,48 60,48 60,30 260,30" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="60,48 60,110 260,110" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="30,158 110,158" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="190,158 220,158 220,50 260,50" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="90,158 90,130 260,130" stroke="#39ff14" stroke-width="2" fill="none"/><line x1="340" y1="40" x2="510" y2="40" stroke="#39ff14" stroke-width="2"/><line x1="340" y1="120" x2="410" y2="120" stroke="#39ff14" stroke-width="2"/><line x1="490" y1="120" x2="510" y2="120" stroke="#39ff14" stroke-width="2"/>
+        <text x="150" y="134" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">¬B</text>
+        <text x="300" y="16" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">A·¬B</text>
+        <text x="300" y="96" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">A⊕B</text>
+        <text x="450" y="96" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">¬(A⊕B)</text>
+        <text x="280" y="195" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">GT = A·¬B, EQ = ¬(A⊕B)</text></svg>`,
     },
     nodes: [
       // Case 1: A=0, B=0 → GT=0, EQ=1   (cx = -420)
@@ -1906,7 +2135,11 @@ const LEVELS = [
       gatesUsed: ['NOT', 'OR', 'AND'],
       explanation: 'Priority Encoder — encodes priority: VALID is ON when at least one input is active. CODE indicates the active input with lowest priority (B is active only if A is not). Used in interrupt handling and hardware priority queues.',
       blockSvg: `<svg viewBox="0 0 440 160" width="520" height="195"><text x="12" y="55" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text><line x1="28" y1="50" x2="95" y2="50" stroke="#39ff14" stroke-width="2.5"/><text x="12" y="115" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">B</text><line x1="28" y1="110" x2="95" y2="110" stroke="#39ff14" stroke-width="2.5"/><rect x="95" y="22" width="220" height="118" rx="8" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/><text x="205" y="70" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#00d4ff">PRIORITY</text><text x="205" y="95" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#00d4ff">ENCODER</text><line x1="315" y1="50" x2="375" y2="50" stroke="#c8d8f0" stroke-width="2.5"/><text x="380" y="55" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#c8d8f0">VALID</text><line x1="315" y1="110" x2="375" y2="110" stroke="#c8d8f0" stroke-width="2.5"/><text x="380" y="115" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#c8d8f0">CODE</text></svg>`,
-      circuitSvg: `<svg viewBox="0 0 480 180" width="580" height="220"><text x="12" y="52" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text><text x="12" y="142" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">B</text><rect x="110" y="30" width="80" height="36" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="150" y="54" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#a0c8ff">NOT</text><rect x="270" y="30" width="80" height="40" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="310" y="56" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#a0c8ff">OR</text><rect x="270" y="118" width="80" height="40" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="310" y="144" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#a0c8ff">AND</text><text x="415" y="55" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#c8d8f0">VALID</text><text x="415" y="143" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#c8d8f0">CODE</text><polyline points="30,48 70,48 110,48" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="70,48 70,38 270,38" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="30,138 80,138 80,62 270,62" stroke="#39ff14" stroke-width="2" fill="none"/><line x1="190" y1="48" x2="270" y2="126" stroke="#39ff14" stroke-width="2"/><polyline points="80,138 80,150 270,150" stroke="#39ff14" stroke-width="2" fill="none"/><line x1="350" y1="50" x2="405" y2="50" stroke="#39ff14" stroke-width="2"/><line x1="350" y1="138" x2="405" y2="138" stroke="#39ff14" stroke-width="2"/></svg>`,
+      circuitSvg: `<svg viewBox="0 0 480 180" width="580" height="220"><text x="12" y="52" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text><text x="12" y="142" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">B</text><rect x="110" y="30" width="80" height="36" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="150" y="54" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#a0c8ff">NOT</text><rect x="270" y="30" width="80" height="40" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="310" y="56" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#a0c8ff">OR</text><rect x="270" y="118" width="80" height="40" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="310" y="144" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#a0c8ff">AND</text><text x="415" y="55" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#c8d8f0">VALID</text><text x="415" y="143" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#c8d8f0">CODE</text><polyline points="30,48 70,48 110,48" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="70,48 70,38 270,38" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="30,138 80,138 80,62 270,62" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="190,48 220,48 220,126 270,126" stroke="#39ff14" stroke-width="2" fill="none"/><polyline points="80,138 80,150 270,150" stroke="#39ff14" stroke-width="2" fill="none"/><line x1="350" y1="50" x2="405" y2="50" stroke="#39ff14" stroke-width="2"/><line x1="350" y1="138" x2="405" y2="138" stroke="#39ff14" stroke-width="2"/>
+        <text x="150" y="24" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">¬A</text>
+        <text x="310" y="24" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">A+B</text>
+        <text x="310" y="112" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">¬A·B</text>
+        <text x="240" y="175" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">VALID = A+B, CODE = ¬A·B</text></svg>`,
     },
     nodes: [
       // Case 1: A=0, B=0 → VALID=0, CODE=0   (cx = -420)
@@ -1993,7 +2226,14 @@ const LEVELS = [
       gatesUsed: ['NOT', 'NOT', 'AND', 'AND', 'AND', 'AND'],
       explanation: '2-to-4 Decoder — converts a 2-bit binary address to one of 4 outputs. Exactly one output is ON at any time. Used in memory address decoding and component selection on motherboards.',
       blockSvg: `<svg viewBox="0 0 440 200" width="520" height="240"><text x="12" y="72" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#39ff14">S0</text><line x1="38" y1="67" x2="90" y2="67" stroke="#39ff14" stroke-width="2.5"/><text x="12" y="127" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#39ff14">S1</text><line x1="38" y1="122" x2="90" y2="122" stroke="#39ff14" stroke-width="2.5"/><rect x="90" y="20" width="210" height="165" rx="8" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/><text x="195" y="95" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="18" font-weight="bold" fill="#00d4ff">DECODER</text><text x="195" y="118" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" fill="#4a6080">2-to-4</text><line x1="300" y1="45" x2="370" y2="45" stroke="#c8d8f0" stroke-width="2.5"/><text x="378" y="50" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">Y0</text><line x1="300" y1="80" x2="370" y2="80" stroke="#c8d8f0" stroke-width="2.5"/><text x="378" y="85" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">Y1</text><line x1="300" y1="120" x2="370" y2="120" stroke="#c8d8f0" stroke-width="2.5"/><text x="378" y="125" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">Y2</text><line x1="300" y1="158" x2="370" y2="158" stroke="#c8d8f0" stroke-width="2.5"/><text x="378" y="163" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">Y3</text></svg>`,
-      circuitSvg: `<svg viewBox="0 0 560 230" width="680" height="280"><text x="10" y="72" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#39ff14">S0</text><text x="10" y="172" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#39ff14">S1</text><rect x="110" y="52" width="70" height="32" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="145" y="74" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#a0c8ff">NOT</text><rect x="110" y="152" width="70" height="32" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="145" y="174" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#a0c8ff">NOT</text><rect x="280" y="14" width="70" height="30" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/><text x="315" y="34" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#a0c8ff">AND</text><rect x="280" y="62" width="70" height="30" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/><text x="315" y="82" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#a0c8ff">AND</text><rect x="280" y="114" width="70" height="30" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/><text x="315" y="134" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#a0c8ff">AND</text><rect x="280" y="166" width="70" height="30" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/><text x="315" y="186" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#a0c8ff">AND</text><text x="400" y="34" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#c8d8f0">Y0</text><text x="400" y="82" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#c8d8f0">Y1</text><text x="400" y="134" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#c8d8f0">Y2</text><text x="400" y="186" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#c8d8f0">Y3</text><polyline points="36,68 80,68 110,68" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="36,168 80,168 110,168" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="180,168 220,168 220,22 280,22" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="180,68 240,68 240,36 280,36" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="220,168 220,70 280,70" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="80,68 80,84 280,84" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="80,168 80,122 280,122" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="240,68 240,136 280,136" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="80,168 80,174 280,174" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="80,68 80,188 280,188" stroke="#39ff14" stroke-width="1.5" fill="none"/><line x1="350" y1="29" x2="390" y2="29" stroke="#39ff14" stroke-width="1.5"/><line x1="350" y1="77" x2="390" y2="77" stroke="#39ff14" stroke-width="1.5"/><line x1="350" y1="129" x2="390" y2="129" stroke="#39ff14" stroke-width="1.5"/><line x1="350" y1="181" x2="390" y2="181" stroke="#39ff14" stroke-width="1.5"/></svg>`,
+      circuitSvg: `<svg viewBox="0 0 560 230" width="680" height="280"><text x="10" y="72" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#39ff14">S0</text><text x="10" y="172" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#39ff14">S1</text><rect x="110" y="52" width="70" height="32" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="145" y="74" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#a0c8ff">NOT</text><rect x="110" y="152" width="70" height="32" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/><text x="145" y="174" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#a0c8ff">NOT</text><rect x="280" y="14" width="70" height="30" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/><text x="315" y="34" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#a0c8ff">AND</text><rect x="280" y="62" width="70" height="30" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/><text x="315" y="82" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#a0c8ff">AND</text><rect x="280" y="114" width="70" height="30" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/><text x="315" y="134" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#a0c8ff">AND</text><rect x="280" y="166" width="70" height="30" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/><text x="315" y="186" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#a0c8ff">AND</text><text x="400" y="34" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#c8d8f0">Y0</text><text x="400" y="82" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#c8d8f0">Y1</text><text x="400" y="134" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#c8d8f0">Y2</text><text x="400" y="186" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#c8d8f0">Y3</text><polyline points="36,68 80,68 110,68" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="36,168 80,168 110,168" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="180,168 220,168 220,22 280,22" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="180,68 240,68 240,36 280,36" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="220,168 220,70 280,70" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="80,68 80,84 280,84" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="80,168 80,122 280,122" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="240,68 240,136 280,136" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="80,168 80,174 280,174" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="80,68 80,188 280,188" stroke="#39ff14" stroke-width="1.5" fill="none"/><line x1="350" y1="29" x2="390" y2="29" stroke="#39ff14" stroke-width="1.5"/><line x1="350" y1="77" x2="390" y2="77" stroke="#39ff14" stroke-width="1.5"/><line x1="350" y1="129" x2="390" y2="129" stroke="#39ff14" stroke-width="1.5"/><line x1="350" y1="181" x2="390" y2="181" stroke="#39ff14" stroke-width="1.5"/>
+        <text x="145" y="46" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">¬S0</text>
+        <text x="145" y="146" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">¬S1</text>
+        <text x="315" y="8" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">¬S1·¬S0</text>
+        <text x="315" y="56" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">¬S1·S0</text>
+        <text x="315" y="108" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">S1·¬S0</text>
+        <text x="315" y="160" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">S1·S0</text>
+        <text x="280" y="225" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">Yn = 1 when address = n</text></svg>`,
     },
     nodes: [
       // Case 1: S0=0, S1=0 → Y0=1,Y1=0,Y2=0,Y3=0   (cx = -480)
@@ -2125,7 +2365,7 @@ const LEVELS = [
     hint: 'XOR1(A,B)→XOR2(…,Cin)→SUM. AND stages for carry bits, OR merges into COUT.',
     truthTable: { inputs: ['A','B','Cin'], outputs: ['SUM','COUT'], rows: [[[0,0,0],[0,0]],[[0,0,1],[1,0]],[[0,1,0],[1,0]],[[0,1,1],[0,1]],[[1,0,0],[1,0]],[[1,0,1],[0,1]],[[1,1,0],[0,1]],[[1,1,1],[1,1]]] },
     solution: {
-      gatesUsed: ['XOR', 'XOR', 'AND', 'AND', 'OR'],
+      gatesUsed: ['XOR', 'AND', 'XOR', 'AND', 'OR'],
       explanation: 'Full Adder — the building block of all addition circuits in processors. It adds two bits (A and B) together with a carry-in bit (Cin), producing a sum (SUM) and carry-out (COUT). Chaining full adders enables multi-bit number addition.',
       blockSvg: `<svg viewBox="0 0 440 230" width="520" height="270">
         <!-- Cin from top -->
@@ -2170,6 +2410,13 @@ const LEVELS = [
         <polyline points="386,150 420,150 420,170 455,170" stroke="#39ff14" stroke-width="2" fill="none"/>
         <line x1="386" y1="40" x2="555" y2="40" stroke="#39ff14" stroke-width="2"/>
         <line x1="525" y1="160" x2="555" y2="160" stroke="#39ff14" stroke-width="2"/>
+        <!-- Labels -->
+        <text x="183" y="26" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">A⊕B</text>
+        <text x="183" y="136" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">A·B</text>
+        <text x="348" y="16" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">(A⊕B)⊕Cin</text>
+        <text x="348" y="126" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">(A⊕B)·Cin</text>
+        <text x="490" y="136" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">COUT</text>
+        <text x="310" y="245" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">SUM = A⊕B⊕Cin, COUT = A·B + (A⊕B)·Cin</text>
       </svg>`,
     },
     nodes: [
@@ -2303,22 +2550,68 @@ const LEVELS = [
         <line x1="310" y1="135" x2="365" y2="135" stroke="#c8d8f0" stroke-width="2.5"/><text x="370" y="140" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#c8d8f0">PAR</text>
       </svg>`,
       circuitSvg: `<svg viewBox="0 0 560 280" width="680" height="340">
+        <!-- Inputs -->
         <text x="8" y="52" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#39ff14">A</text>
         <text x="8" y="142" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#39ff14">B</text>
         <text x="8" y="232" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#39ff14">C</text>
+        <!-- MAJ path label -->
         <text x="90" y="16" fill="#4a6080" font-size="10" font-family="monospace">— MAJ path —</text>
-        <rect x="100" y="28" width="66" height="30" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/><text x="133" y="48" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#a0c8ff">AND</text>
-        <rect x="100" y="78" width="66" height="30" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/><text x="133" y="98" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#a0c8ff">AND</text>
-        <rect x="100" y="128" width="66" height="30" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/><text x="133" y="148" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#a0c8ff">AND</text>
-        <rect x="220" y="50" width="66" height="30" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/><text x="253" y="70" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#a0c8ff">OR</text>
-        <rect x="330" y="80" width="66" height="30" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/><text x="363" y="100" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#a0c8ff">OR</text>
+        <!-- AND gates -->
+        <rect x="100" y="28" width="66" height="30" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/>
+        <text x="133" y="48" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#a0c8ff">AND</text>
+        <text x="133" y="22" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">A·B</text>
+        <rect x="100" y="78" width="66" height="30" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/>
+        <text x="133" y="98" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#a0c8ff">AND</text>
+        <text x="133" y="72" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">B·C</text>
+        <rect x="100" y="128" width="66" height="30" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/>
+        <text x="133" y="148" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#a0c8ff">AND</text>
+        <text x="133" y="122" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">A·C</text>
+        <!-- OR gates -->
+        <rect x="220" y="50" width="66" height="30" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/>
+        <text x="253" y="70" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#a0c8ff">OR</text>
+        <rect x="330" y="80" width="66" height="30" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/>
+        <text x="363" y="100" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#a0c8ff">OR</text>
+        <!-- PAR path label -->
         <text x="90" y="196" fill="#4a6080" font-size="10" font-family="monospace">— PAR path —</text>
-        <rect x="100" y="208" width="66" height="30" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/><text x="133" y="228" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#a0c8ff">XOR</text>
-        <rect x="240" y="218" width="66" height="30" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/><text x="273" y="238" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#a0c8ff">XOR</text>
+        <!-- XOR gates -->
+        <rect x="100" y="208" width="66" height="30" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/>
+        <text x="133" y="228" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#a0c8ff">XOR</text>
+        <rect x="240" y="218" width="66" height="30" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/>
+        <text x="273" y="238" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#a0c8ff">XOR</text>
+        <!-- Outputs -->
         <text x="480" y="100" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#c8d8f0">MAJ</text>
         <text x="480" y="238" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#c8d8f0">PAR</text>
+        <!-- Wires: inputs → AND gates -->
+        <polyline points="24,48 60,48 60,36 100,36" stroke="#39ff14" stroke-width="1.5" fill="none"/>
+        <polyline points="24,138 60,138 60,50 100,50" stroke="#39ff14" stroke-width="1.5" fill="none"/>
+        <polyline points="60,138 60,86 100,86" stroke="#39ff14" stroke-width="1.5" fill="none"/>
+        <polyline points="24,228 80,228 80,100 100,100" stroke="#39ff14" stroke-width="1.5" fill="none"/>
+        <polyline points="60,48 60,136 100,136" stroke="#39ff14" stroke-width="1.5" fill="none"/>
+        <polyline points="80,228 80,150 100,150" stroke="#39ff14" stroke-width="1.5" fill="none"/>
+        <!-- AND → OR1 -->
+        <polyline points="166,43 193,43 193,58 220,58" stroke="#39ff14" stroke-width="1.5" fill="none"/>
+        <polyline points="166,93 193,93 193,72 220,72" stroke="#39ff14" stroke-width="1.5" fill="none"/>
+        <!-- OR1 → OR2 -->
+        <polyline points="286,65 308,65 308,88 330,88" stroke="#39ff14" stroke-width="1.5" fill="none"/>
+        <!-- AND3 → OR2 -->
+        <polyline points="166,143 308,143 308,102 330,102" stroke="#39ff14" stroke-width="1.5" fill="none"/>
+        <!-- OR2 → MAJ -->
         <line x1="396" y1="95" x2="470" y2="95" stroke="#39ff14" stroke-width="1.5"/>
+        <!-- Wires: inputs → XOR gates -->
+        <polyline points="40,48 40,216 100,216" stroke="#39ff14" stroke-width="1.5" fill="none"/>
+        <polyline points="50,138 50,230 100,230" stroke="#39ff14" stroke-width="1.5" fill="none"/>
+        <!-- XOR1 → XOR2 -->
+        <polyline points="166,223 203,223 203,226 240,226" stroke="#39ff14" stroke-width="1.5" fill="none"/>
+        <!-- C → XOR2 -->
+        <polyline points="80,240 203,240 240,240" stroke="#39ff14" stroke-width="1.5" fill="none"/>
+        <!-- XOR2 → PAR -->
         <line x1="306" y1="233" x2="470" y2="233" stroke="#39ff14" stroke-width="1.5"/>
+        <!-- Labels -->
+        <text x="253" y="44" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">A·B+B·C</text>
+        <text x="363" y="74" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">MAJ</text>
+        <text x="133" y="202" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">A⊕B</text>
+        <text x="273" y="212" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">A⊕B⊕C</text>
+        <text x="280" y="275" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">MAJ = A·B+B·C+A·C, PAR = A⊕B⊕C</text>
       </svg>`,
     },
     nodes: [
@@ -2380,7 +2673,19 @@ const LEVELS = [
       gatesUsed: ['NOT', 'NOT', 'AND', 'AND', 'OR', 'AND', 'AND', 'OR', 'AND', 'AND', 'OR'],
       explanation: '4:1 MUX Tree — multiplexer tree: selects one of 4 data inputs using 2 control bits (S0,S1). Built from 3 cascaded 2:1 MUXes. Large multiplexers are the basis for data routing in processors, memories, and FPGAs.',
       blockSvg: `<svg viewBox="0 0 480 220" width="560" height="260"><text x="12" y="42" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">D0</text><line x1="38" y1="37" x2="90" y2="37" stroke="#39ff14" stroke-width="2.5"/><text x="12" y="67" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">D1</text><line x1="38" y1="62" x2="90" y2="62" stroke="#39ff14" stroke-width="2.5"/><text x="12" y="97" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">D2</text><line x1="38" y1="92" x2="90" y2="92" stroke="#39ff14" stroke-width="2.5"/><text x="12" y="127" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">D3</text><line x1="38" y1="122" x2="90" y2="122" stroke="#39ff14" stroke-width="2.5"/><text x="160" y="16" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">S0</text><line x1="160" y1="22" x2="160" y2="40" stroke="#39ff14" stroke-width="2.5"/><text x="220" y="16" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">S1</text><line x1="220" y1="22" x2="220" y2="40" stroke="#39ff14" stroke-width="2.5"/><rect x="90" y="22" width="240" height="145" rx="8" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/><text x="210" y="90" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="18" font-weight="bold" fill="#00d4ff">4:1 MUX</text><text x="210" y="115" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" fill="#4a6080">3×(2:1 MUX)</text><line x1="330" y1="95" x2="400" y2="95" stroke="#c8d8f0" stroke-width="2.5"/><text x="408" y="100" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Y</text></svg>`,
-      circuitSvg: `<svg viewBox="0 0 700 400" width="760" height="435"><text x="8" y="42" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#39ff14">D0</text><text x="8" y="92" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#39ff14">D1</text><text x="8" y="182" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#39ff14">D2</text><text x="8" y="232" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#39ff14">D3</text><text x="8" y="312" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#39ff14">S0</text><text x="8" y="372" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#39ff14">S1</text><rect x="100" y="298" width="60" height="26" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/><text x="130" y="316" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#a0c8ff">NOT</text><rect x="100" y="358" width="60" height="26" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/><text x="130" y="376" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#a0c8ff">NOT</text><rect x="230" y="26" width="60" height="26" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/><text x="260" y="44" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#a0c8ff">AND</text><rect x="230" y="72" width="60" height="26" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/><text x="260" y="90" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#a0c8ff">AND</text><rect x="370" y="50" width="55" height="26" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/><text x="397" y="68" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#a0c8ff">OR</text><rect x="230" y="166" width="60" height="26" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/><text x="260" y="184" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#a0c8ff">AND</text><rect x="230" y="216" width="60" height="26" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/><text x="260" y="234" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#a0c8ff">AND</text><rect x="370" y="192" width="55" height="26" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/><text x="397" y="210" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#a0c8ff">OR</text><rect x="490" y="90" width="60" height="26" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/><text x="520" y="108" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#a0c8ff">AND</text><rect x="490" y="160" width="60" height="26" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/><text x="520" y="178" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#a0c8ff">AND</text><rect x="610" y="126" width="55" height="26" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/><text x="637" y="144" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#a0c8ff">OR</text><text x="680" y="144" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">Y</text><line x1="35" y1="38" x2="230" y2="34" stroke="#39ff14" stroke-width="1.5"/><line x1="160" y1="311" x2="230" y2="46" stroke="#39ff14" stroke-width="1.5"/><line x1="35" y1="88" x2="230" y2="80" stroke="#39ff14" stroke-width="1.5"/><polyline points="35,308 100,308" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="75,308 75,90 230,90" stroke="#39ff14" stroke-width="1.5" fill="none"/><line x1="290" y1="39" x2="370" y2="56" stroke="#39ff14" stroke-width="1.5"/><line x1="290" y1="85" x2="370" y2="70" stroke="#39ff14" stroke-width="1.5"/><line x1="35" y1="178" x2="230" y2="174" stroke="#39ff14" stroke-width="1.5"/><line x1="160" y1="311" x2="230" y2="186" stroke="#39ff14" stroke-width="1.5"/><line x1="35" y1="228" x2="230" y2="224" stroke="#39ff14" stroke-width="1.5"/><line x1="75" y1="308" x2="230" y2="234" stroke="#39ff14" stroke-width="1.5"/><line x1="290" y1="179" x2="370" y2="198" stroke="#39ff14" stroke-width="1.5"/><line x1="290" y1="229" x2="370" y2="212" stroke="#39ff14" stroke-width="1.5"/><line x1="425" y1="63" x2="490" y2="98" stroke="#39ff14" stroke-width="1.5"/><line x1="160" y1="371" x2="490" y2="110" stroke="#39ff14" stroke-width="1.5"/><line x1="425" y1="205" x2="490" y2="168" stroke="#39ff14" stroke-width="1.5"/><polyline points="35,368 100,368" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="85,368 85,180 490,180" stroke="#39ff14" stroke-width="1.5" fill="none"/><line x1="550" y1="103" x2="610" y2="133" stroke="#39ff14" stroke-width="1.5"/><line x1="550" y1="173" x2="610" y2="146" stroke="#39ff14" stroke-width="1.5"/><line x1="665" y1="139" x2="675" y2="139" stroke="#39ff14" stroke-width="1.5"/></svg>`,
+      circuitSvg: `<svg viewBox="0 0 700 400" width="760" height="435"><text x="8" y="42" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#39ff14">D0</text><text x="8" y="92" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#39ff14">D1</text><text x="8" y="182" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#39ff14">D2</text><text x="8" y="232" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#39ff14">D3</text><text x="8" y="312" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#39ff14">S0</text><text x="8" y="372" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#39ff14">S1</text><rect x="100" y="298" width="60" height="26" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/><text x="130" y="316" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#a0c8ff">NOT</text><rect x="100" y="358" width="60" height="26" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/><text x="130" y="376" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#a0c8ff">NOT</text><rect x="230" y="26" width="60" height="26" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/><text x="260" y="44" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#a0c8ff">AND</text><rect x="230" y="72" width="60" height="26" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/><text x="260" y="90" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#a0c8ff">AND</text><rect x="370" y="50" width="55" height="26" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/><text x="397" y="68" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#a0c8ff">OR</text><rect x="230" y="166" width="60" height="26" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/><text x="260" y="184" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#a0c8ff">AND</text><rect x="230" y="216" width="60" height="26" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/><text x="260" y="234" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#a0c8ff">AND</text><rect x="370" y="192" width="55" height="26" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/><text x="397" y="210" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#a0c8ff">OR</text><rect x="490" y="90" width="60" height="26" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/><text x="520" y="108" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#a0c8ff">AND</text><rect x="490" y="160" width="60" height="26" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/><text x="520" y="178" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#a0c8ff">AND</text><rect x="610" y="126" width="55" height="26" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/><text x="637" y="144" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#a0c8ff">OR</text><text x="680" y="144" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">Y</text><polyline points="35,38 230,34" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="160,311 190,311 190,46 230,46" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="35,88 230,80" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="35,308 100,308" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="75,308 75,90 230,90" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="290,39 330,39 330,56 370,56" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="290,85 330,85 330,70 370,70" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="35,178 230,174" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="160,311 190,311 190,186 230,186" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="35,228 230,224" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="75,308 75,234 230,234" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="290,179 330,179 330,198 370,198" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="290,229 330,229 330,212 370,212" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="425,63 458,63 458,98 490,98" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="160,371 170,371 170,110 490,110" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="425,205 458,205 458,168 490,168" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="35,368 100,368" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="85,368 85,180 490,180" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="550,103 580,103 580,133 610,133" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="550,173 580,173 580,146 610,146" stroke="#39ff14" stroke-width="1.5" fill="none"/><line x1="665" y1="139" x2="675" y2="139" stroke="#39ff14" stroke-width="1.5"/>
+        <text x="130" y="292" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">¬S0</text>
+        <text x="130" y="352" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">¬S1</text>
+        <text x="260" y="20" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">D0·¬S0</text>
+        <text x="260" y="66" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">D1·S0</text>
+        <text x="397" y="44" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">MUX01</text>
+        <text x="260" y="160" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">D2·¬S0</text>
+        <text x="260" y="210" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">D3·S0</text>
+        <text x="397" y="186" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">MUX23</text>
+        <text x="520" y="84" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">MUX01·¬S1</text>
+        <text x="520" y="154" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">MUX23·S1</text>
+        <text x="637" y="120" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">Y</text>
+        <text x="350" y="395" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">Y = MUX(D0..D3, S1,S0)</text></svg>`,
     },
     nodes: [
       // Case 1: D0=0,D1=1,D2=0,D3=1,S0=1,S1=0 → Y=1  (cx = -480)
@@ -2501,10 +2806,19 @@ const LEVELS = [
       ],
     },
     solution: {
-      gatesUsed: ['XOR', 'AND', 'XOR', 'XOR', 'AND', 'AND', 'OR'],
+      gatesUsed: ['XOR', 'AND', 'XOR', 'AND', 'XOR', 'AND', 'OR'],
       explanation: '2-Bit Ripple Carry Adder — half adder (HA) handles bit 0, and full adder (FA) handles bit 1 with the carry from HA. This chaining is the basis for all multi-bit adders in processors.',
       blockSvg: `<svg viewBox="0 0 480 200" width="560" height="235"><text x="12" y="42" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#39ff14">A1</text><line x1="38" y1="37" x2="95" y2="37" stroke="#39ff14" stroke-width="2.5"/><text x="12" y="72" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#39ff14">B1</text><line x1="38" y1="67" x2="95" y2="67" stroke="#39ff14" stroke-width="2.5"/><text x="12" y="117" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#39ff14">A0</text><line x1="38" y1="112" x2="95" y2="112" stroke="#39ff14" stroke-width="2.5"/><text x="12" y="152" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#39ff14">B0</text><line x1="38" y1="147" x2="95" y2="147" stroke="#39ff14" stroke-width="2.5"/><rect x="95" y="15" width="260" height="160" rx="8" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/><text x="225" y="85" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#00d4ff">2-BIT RIPPLE</text><text x="225" y="110" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#00d4ff">CARRY ADDER</text><line x1="355" y1="45" x2="420" y2="45" stroke="#c8d8f0" stroke-width="2.5"/><text x="428" y="50" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">S1</text><line x1="355" y1="95" x2="420" y2="95" stroke="#c8d8f0" stroke-width="2.5"/><text x="428" y="100" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">S0</text><line x1="355" y1="145" x2="420" y2="145" stroke="#c8d8f0" stroke-width="2.5"/><text x="425" y="150" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#c8d8f0">COUT</text></svg>`,
-      circuitSvg: `<svg viewBox="0 0 700 340" width="760" height="370"><text x="8" y="32" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">A1</text><text x="8" y="72" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">B1</text><text x="8" y="232" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">A0</text><text x="8" y="272" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">B0</text><text x="80" y="210" font-family="JetBrains Mono,monospace" font-size="11" fill="#4a6080">— HA —</text><text x="200" y="10" font-family="JetBrains Mono,monospace" font-size="11" fill="#4a6080">— FA —</text><rect x="110" y="222" width="70" height="30" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/><text x="145" y="242" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#a0c8ff">XOR</text><rect x="110" y="280" width="70" height="30" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/><text x="145" y="300" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#a0c8ff">AND</text><rect x="220" y="18" width="70" height="30" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/><text x="255" y="38" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#a0c8ff">XOR</text><rect x="220" y="80" width="70" height="30" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/><text x="255" y="100" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#a0c8ff">AND</text><rect x="380" y="45" width="70" height="30" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/><text x="415" y="65" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#a0c8ff">XOR</text><rect x="380" y="110" width="70" height="30" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/><text x="415" y="130" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#a0c8ff">AND</text><rect x="520" y="90" width="60" height="30" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/><text x="550" y="110" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#a0c8ff">OR</text><text x="635" y="65" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">S1</text><text x="635" y="242" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">S0</text><text x="630" y="110" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#c8d8f0">COUT</text><polyline points="35,228 70,228 70,230 110,230" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="70,228 70,288 110,288" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="35,268 90,268 90,244 110,244" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="90,268 90,302 110,302" stroke="#39ff14" stroke-width="1.5" fill="none"/><line x1="180" y1="237" x2="625" y2="237" stroke="#39ff14" stroke-width="1.5"/><polyline points="35,28 60,28 60,26 220,26" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="60,28 60,88 220,88" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="35,68 80,68 80,40 220,40" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="80,68 80,102 220,102" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="290,33 330,33 330,53 380,53" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="330,33 330,118 380,118" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="180,295 200,295 200,67 380,67" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="200,295 200,132 380,132" stroke="#39ff14" stroke-width="1.5" fill="none"/><line x1="290" y1="95" x2="520" y2="98" stroke="#39ff14" stroke-width="1.5"/><line x1="450" y1="125" x2="520" y2="112" stroke="#39ff14" stroke-width="1.5"/><line x1="450" y1="60" x2="625" y2="60" stroke="#39ff14" stroke-width="1.5"/><line x1="580" y1="105" x2="625" y2="105" stroke="#39ff14" stroke-width="1.5"/></svg>`,
+      circuitSvg: `<svg viewBox="0 0 700 340" width="760" height="370"><text x="8" y="32" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">A1</text><text x="8" y="72" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">B1</text><text x="8" y="232" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">A0</text><text x="8" y="272" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">B0</text><text x="80" y="210" font-family="JetBrains Mono,monospace" font-size="11" fill="#4a6080">— HA —</text><text x="200" y="10" font-family="JetBrains Mono,monospace" font-size="11" fill="#4a6080">— FA —</text><rect x="110" y="222" width="70" height="30" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/><text x="145" y="242" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#a0c8ff">XOR</text><rect x="110" y="280" width="70" height="30" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/><text x="145" y="300" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#a0c8ff">AND</text><rect x="220" y="18" width="70" height="30" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/><text x="255" y="38" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#a0c8ff">XOR</text><rect x="220" y="80" width="70" height="30" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/><text x="255" y="100" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#a0c8ff">AND</text><rect x="380" y="45" width="70" height="30" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/><text x="415" y="65" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#a0c8ff">XOR</text><rect x="380" y="110" width="70" height="30" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/><text x="415" y="130" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#a0c8ff">AND</text><rect x="520" y="90" width="60" height="30" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/><text x="550" y="110" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#a0c8ff">OR</text><text x="635" y="65" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">S1</text><text x="635" y="242" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">S0</text><text x="630" y="110" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#c8d8f0">COUT</text><polyline points="35,228 70,228 70,230 110,230" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="70,228 70,288 110,288" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="35,268 90,268 90,244 110,244" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="90,268 90,302 110,302" stroke="#39ff14" stroke-width="1.5" fill="none"/><line x1="180" y1="237" x2="625" y2="237" stroke="#39ff14" stroke-width="1.5"/><polyline points="35,28 60,28 60,26 220,26" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="60,28 60,88 220,88" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="35,68 80,68 80,40 220,40" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="80,68 80,102 220,102" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="290,33 330,33 330,53 380,53" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="330,33 330,118 380,118" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="180,295 200,295 200,67 380,67" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="200,295 200,132 380,132" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="290,95 520,98" stroke="#39ff14" stroke-width="1.5" fill="none"/><polyline points="450,125 485,125 485,112 520,112" stroke="#39ff14" stroke-width="1.5" fill="none"/><line x1="450" y1="60" x2="625" y2="60" stroke="#39ff14" stroke-width="1.5"/><line x1="580" y1="105" x2="625" y2="105" stroke="#39ff14" stroke-width="1.5"/>
+        <!-- Labels -->
+        <text x="145" y="216" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">A0⊕B0</text>
+        <text x="145" y="274" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">A0·B0</text>
+        <text x="255" y="12" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">A1⊕B1</text>
+        <text x="255" y="74" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">A1·B1</text>
+        <text x="415" y="39" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">(A1⊕B1)⊕C0</text>
+        <text x="415" y="104" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">(A1⊕B1)·C0</text>
+        <text x="550" y="84" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">COUT</text>
+        <text x="350" y="335" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">S0=A0⊕B0, S1=A1⊕B1⊕C0, COUT=A1·B1+(A1⊕B1)·C0</text></svg>`,
     },
     nodes: [
       // Case 1: A1=1,B1=0,A0=1,B0=1 → S1=0,S0=0,COUT=1   (cx = -480)
@@ -2635,27 +2949,94 @@ const LEVELS = [
         <line x1="310" y1="30" x2="355" y2="30" stroke="#c8d8f0" stroke-width="2"/><text x="360" y="35" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#c8d8f0">O1..O8</text>
       </svg>`,
       circuitSvg: `<svg viewBox="0 0 600 300" width="720" height="360">
+        <!-- Inputs -->
         <text x="8" y="38" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#39ff14">A</text>
         <text x="8" y="88" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#39ff14">B</text>
         <text x="8" y="138" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#39ff14">C</text>
         <text x="8" y="188" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#39ff14">D</text>
         <text x="8" y="238" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#39ff14">E</text>
+        <!-- Layer labels -->
         <text x="90" y="16" fill="#4a6080" font-size="9" font-family="monospace">Layer 1</text>
         <text x="230" y="16" fill="#4a6080" font-size="9" font-family="monospace">Layer 2</text>
         <text x="380" y="16" fill="#4a6080" font-size="9" font-family="monospace">Layer 3</text>
+        <!-- Layer 1: g1=OR(A,B) g2=NOR(A,C) g3=AND(B,E) g4=OR(C,D) -->
         <rect x="90" y="24" width="56" height="24" rx="3" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1"/><text x="118" y="40" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#a0c8ff">OR</text>
-        <rect x="90" y="64" width="56" height="24" rx="3" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1"/><text x="118" y="80" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#a0c8ff">NOR</text>
-        <rect x="90" y="104" width="56" height="24" rx="3" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1"/><text x="118" y="120" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#a0c8ff">AND</text>
-        <rect x="90" y="144" width="56" height="24" rx="3" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1"/><text x="118" y="160" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#a0c8ff">OR</text>
+        <rect x="90" y="74" width="56" height="24" rx="3" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1"/><text x="118" y="90" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#a0c8ff">NOR</text>
+        <rect x="90" y="124" width="56" height="24" rx="3" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1"/><text x="118" y="140" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#a0c8ff">AND</text>
+        <rect x="90" y="174" width="56" height="24" rx="3" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1"/><text x="118" y="190" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#a0c8ff">OR</text>
+        <!-- Layer 2: g5=OR(g1,g2) g6=NAND(g2,g3) g7=NOR(g3,g4) -->
         <rect x="230" y="44" width="56" height="24" rx="3" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1"/><text x="258" y="60" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#a0c8ff">OR</text>
-        <rect x="230" y="94" width="56" height="24" rx="3" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1"/><text x="258" y="110" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" font-weight="bold" fill="#a0c8ff">NAND</text>
-        <rect x="230" y="144" width="56" height="24" rx="3" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1"/><text x="258" y="160" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#a0c8ff">NOR</text>
+        <rect x="230" y="104" width="56" height="24" rx="3" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1"/><text x="258" y="120" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" font-weight="bold" fill="#a0c8ff">NAND</text>
+        <rect x="230" y="164" width="56" height="24" rx="3" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1"/><text x="258" y="180" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#a0c8ff">NOR</text>
+        <!-- Layer 3: g8=OR(g5,E) g9=AND(g5,g6) g10=XOR(g6,g7) g11=NOR(g7,D) g12=AND(g9,g11) -->
         <rect x="380" y="24" width="56" height="24" rx="3" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1"/><text x="408" y="40" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#a0c8ff">OR</text>
         <rect x="380" y="64" width="56" height="24" rx="3" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1"/><text x="408" y="80" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#a0c8ff">AND</text>
-        <rect x="380" y="104" width="56" height="24" rx="3" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1"/><text x="408" y="120" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#a0c8ff">XOR</text>
-        <rect x="380" y="144" width="56" height="24" rx="3" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1"/><text x="408" y="160" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#a0c8ff">NOR</text>
-        <rect x="380" y="184" width="56" height="24" rx="3" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1"/><text x="408" y="200" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#a0c8ff">AND</text>
-        <text x="510" y="40" font-family="JetBrains Mono,monospace" font-size="10" fill="#c8d8f0">O1..O8</text>
+        <rect x="380" y="114" width="56" height="24" rx="3" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1"/><text x="408" y="130" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#a0c8ff">XOR</text>
+        <rect x="380" y="164" width="56" height="24" rx="3" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1"/><text x="408" y="180" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#a0c8ff">NOR</text>
+        <rect x="380" y="214" width="56" height="24" rx="3" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1"/><text x="408" y="230" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#a0c8ff">AND</text>
+        <!-- Outputs -->
+        <text x="510" y="30" font-family="JetBrains Mono,monospace" font-size="9" fill="#c8d8f0">O1</text>
+        <text x="510" y="60" font-family="JetBrains Mono,monospace" font-size="9" fill="#c8d8f0">O2</text>
+        <text x="510" y="80" font-family="JetBrains Mono,monospace" font-size="9" fill="#c8d8f0">O3</text>
+        <text x="510" y="100" font-family="JetBrains Mono,monospace" font-size="9" fill="#c8d8f0">O4</text>
+        <text x="510" y="130" font-family="JetBrains Mono,monospace" font-size="9" fill="#c8d8f0">O5</text>
+        <text x="510" y="160" font-family="JetBrains Mono,monospace" font-size="9" fill="#c8d8f0">O6</text>
+        <text x="510" y="190" font-family="JetBrains Mono,monospace" font-size="9" fill="#c8d8f0">O7</text>
+        <text x="510" y="230" font-family="JetBrains Mono,monospace" font-size="9" fill="#c8d8f0">O8</text>
+        <!-- Wires: Inputs → Layer 1 -->
+        <polyline points="22,34 55,34 55,30 90,30" stroke="#39ff14" stroke-width="1" fill="none"/>
+        <polyline points="22,84 55,84 55,40 90,40" stroke="#39ff14" stroke-width="1" fill="none"/>
+        <polyline points="55,34 55,80 90,80" stroke="#39ff14" stroke-width="1" fill="none"/>
+        <polyline points="22,134 65,134 65,90 90,90" stroke="#39ff14" stroke-width="1" fill="none"/>
+        <polyline points="55,84 55,130 90,130" stroke="#39ff14" stroke-width="1" fill="none"/>
+        <polyline points="22,234 75,234 75,140 90,140" stroke="#39ff14" stroke-width="1" fill="none"/>
+        <polyline points="65,134 65,180 90,180" stroke="#39ff14" stroke-width="1" fill="none"/>
+        <polyline points="22,184 45,184 45,190 90,190" stroke="#39ff14" stroke-width="1" fill="none"/>
+        <!-- Layer 1 → Layer 2 -->
+        <polyline points="146,36 188,36 188,50 230,50" stroke="#39ff14" stroke-width="1" fill="none"/>
+        <polyline points="146,86 188,86 188,62 230,62" stroke="#39ff14" stroke-width="1" fill="none"/>
+        <polyline points="188,86 188,110 230,110" stroke="#39ff14" stroke-width="1" fill="none"/>
+        <polyline points="146,136 198,136 198,122 230,122" stroke="#39ff14" stroke-width="1" fill="none"/>
+        <polyline points="198,136 198,170 230,170" stroke="#39ff14" stroke-width="1" fill="none"/>
+        <polyline points="146,186 208,186 208,182 230,182" stroke="#39ff14" stroke-width="1" fill="none"/>
+        <!-- Layer 2 → Layer 3 -->
+        <polyline points="286,56 330,56 330,30 380,30" stroke="#39ff14" stroke-width="1" fill="none"/>
+        <polyline points="330,56 330,70 380,70" stroke="#39ff14" stroke-width="1" fill="none"/>
+        <polyline points="286,116 340,116 340,82 380,82" stroke="#39ff14" stroke-width="1" fill="none"/>
+        <polyline points="340,116 340,120 380,120" stroke="#39ff14" stroke-width="1" fill="none"/>
+        <polyline points="286,176 350,176 350,132 380,132" stroke="#39ff14" stroke-width="1" fill="none"/>
+        <polyline points="350,176 350,170 380,170" stroke="#39ff14" stroke-width="1" fill="none"/>
+        <!-- E → g8 -->
+        <polyline points="75,234 75,256 360,256 360,42 380,42" stroke="#39ff14" stroke-width="1" fill="none"/>
+        <!-- D → g11 -->
+        <polyline points="45,184 45,270 370,270 370,182 380,182" stroke="#39ff14" stroke-width="1" fill="none"/>
+        <!-- g9,g11 → g12 -->
+        <polyline points="436,76 460,76 460,220 380,220" stroke="#39ff14" stroke-width="1" fill="none"/>
+        <polyline points="436,176 460,176 460,232 380,232" stroke="#39ff14" stroke-width="1" fill="none"/>
+        <!-- Layer 3 → Outputs -->
+        <line x1="146" y1="36" x2="500" y2="26" stroke="rgba(57,255,20,0.3)" stroke-width="0.8"/>
+        <line x1="146" y1="86" x2="500" y2="56" stroke="rgba(57,255,20,0.3)" stroke-width="0.8"/>
+        <line x1="436" y1="36" x2="500" y2="36" stroke="#39ff14" stroke-width="1"/>
+        <line x1="286" y1="56" x2="500" y2="76" stroke="rgba(57,255,20,0.3)" stroke-width="0.8"/>
+        <line x1="436" y1="36" x2="500" y2="96" stroke="rgba(57,255,20,0.3)" stroke-width="0.8"/>
+        <line x1="436" y1="76" x2="500" y2="126" stroke="#39ff14" stroke-width="1"/>
+        <line x1="436" y1="126" x2="500" y2="156" stroke="#39ff14" stroke-width="1"/>
+        <line x1="436" y1="176" x2="500" y2="186" stroke="#39ff14" stroke-width="1"/>
+        <line x1="436" y1="226" x2="500" y2="226" stroke="#39ff14" stroke-width="1"/>
+        <!-- Labels -->
+        <text x="118" y="20" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" font-weight="bold" fill="#ffcc00">A+B</text>
+        <text x="118" y="70" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" font-weight="bold" fill="#ffcc00">¬(A+C)</text>
+        <text x="118" y="120" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" font-weight="bold" fill="#ffcc00">B·E</text>
+        <text x="118" y="170" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" font-weight="bold" fill="#ffcc00">C+D</text>
+        <text x="258" y="40" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" font-weight="bold" fill="#ffcc00">g1+g2</text>
+        <text x="258" y="100" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" font-weight="bold" fill="#ffcc00">¬(g2·g3)</text>
+        <text x="258" y="160" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" font-weight="bold" fill="#ffcc00">¬(g3+g4)</text>
+        <text x="408" y="20" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" font-weight="bold" fill="#ffcc00">g5+E</text>
+        <text x="408" y="58" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" font-weight="bold" fill="#ffcc00">g5·g6</text>
+        <text x="408" y="110" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" font-weight="bold" fill="#ffcc00">g6⊕g7</text>
+        <text x="408" y="160" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" font-weight="bold" fill="#ffcc00">¬(g7+D)</text>
+        <text x="408" y="210" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" font-weight="bold" fill="#ffcc00">g9·g11</text>
+        <text x="300" y="296" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">12 gates, 3 layers: inputs → combine → outputs</text>
       </svg>`,
     },
     nodes: [
@@ -2749,16 +3130,18 @@ const LEVELS = [
         <line x1="290" y1="80" x2="350" y2="80" stroke="#c8d8f0" stroke-width="2.5"/>
         <text x="358" y="85" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Q</text>
       </svg>`,
-      circuitSvg: `<svg viewBox="0 0 380 180" width="460" height="220">
+      circuitSvg: `<svg viewBox="0 0 380 200" width="460" height="245">
         <text x="18" y="52" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">T=1</text>
         <text x="18" y="142" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#ffcc00">CLK</text>
         <text x="18" y="100" font-family="JetBrains Mono,monospace" font-size="12" fill="#888">Q₀=1</text>
+        <text x="180" y="24" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">Q' = Q ⊕ T</text>
         <rect x="120" y="30" width="120" height="130" rx="6" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
         <text x="180" y="100" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="18" font-weight="bold" fill="#a0c8ff">T-FF</text>
         <text x="310" y="100" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">Q=0</text>
-        <line x1="52" y1="48" x2="120" y2="62" stroke="#39ff14" stroke-width="2"/>
+        <polyline points="52,48 86,48 86,62 120,62" stroke="#39ff14" stroke-width="2" fill="none"/>
         <line x1="50" y1="138" x2="120" y2="138" stroke="#ffcc00" stroke-width="2"/>
         <line x1="240" y1="95" x2="300" y2="95" stroke="#39ff14" stroke-width="2"/>
+        <text x="180" y="185" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">T-FF: Q' = Q ⊕ T = 1 ⊕ 1 = 0</text>
       </svg>`,
     },
     nodes: [
@@ -2794,10 +3177,11 @@ const LEVELS = [
         <line x1="290" y1="80" x2="350" y2="80" stroke="#c8d8f0" stroke-width="2.5"/>
         <text x="358" y="85" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Q</text>
       </svg>`,
-      circuitSvg: `<svg viewBox="0 0 420 310" width="510" height="380">
+      circuitSvg: `<svg viewBox="0 0 420 330" width="510" height="400">
         <!-- Case 1 -->
         <text x="10" y="20" font-family="JetBrains Mono,monospace" font-size="12" fill="#888">CASE 1: Q₀=0</text>
         <text x="18" y="62" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">D=1</text>
+        <text x="180" y="26" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">Q' = D = 1</text>
         <rect x="120" y="30" width="120" height="100" rx="6" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
         <text x="180" y="85" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="18" font-weight="bold" fill="#a0c8ff">D-FF</text>
         <text x="280" y="67" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#39ff14">Q=1</text>
@@ -2806,11 +3190,14 @@ const LEVELS = [
         <!-- Case 2 -->
         <text x="10" y="170" font-family="JetBrains Mono,monospace" font-size="12" fill="#888">CASE 2: Q₀=1</text>
         <text x="18" y="212" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#ff4444">D=0</text>
+        <text x="180" y="176" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">Q' = D = 0</text>
         <rect x="120" y="180" width="120" height="100" rx="6" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
         <text x="180" y="235" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="18" font-weight="bold" fill="#a0c8ff">D-FF</text>
         <text x="280" y="217" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#39ff14">Q=0</text>
         <line x1="58" y1="208" x2="120" y2="208" stroke="#ff4444" stroke-width="2"/>
         <line x1="240" y1="212" x2="270" y2="212" stroke="#39ff14" stroke-width="2"/>
+        <!-- Formula -->
+        <text x="180" y="315" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">D-FF: Q' = D (captures input on clock edge)</text>
       </svg>`,
     },
     nodes: [
@@ -2860,13 +3247,14 @@ const LEVELS = [
         <line x1="290" y1="90" x2="350" y2="90" stroke="#c8d8f0" stroke-width="2.5"/>
         <text x="358" y="95" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Q</text>
       </svg>`,
-      circuitSvg: `<svg viewBox="0 0 420 420" width="510" height="510">
+      circuitSvg: `<svg viewBox="0 0 420 440" width="510" height="535">
         <!-- Case 1: RESET -->
         <text x="10" y="20" font-family="JetBrains Mono,monospace" font-size="11" fill="#888">CASE 1: RESET (Q₀=1)</text>
         <text x="18" y="52" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#ff4444">S=0</text>
         <text x="18" y="82" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">R=1</text>
-        <line x1="55" y1="48" x2="120" y2="50" stroke="#ff4444" stroke-width="2"/>
-        <line x1="55" y1="78" x2="120" y2="72" stroke="#39ff14" stroke-width="2"/>
+        <text x="170" y="26" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">Q' = S + ¬R·Q = 0</text>
+        <polyline points="55,48 88,48 88,50 120,50" stroke="#ff4444" stroke-width="2" fill="none"/>
+        <polyline points="55,78 88,78 88,72 120,72" stroke="#39ff14" stroke-width="2" fill="none"/>
         <rect x="120" y="30" width="100" height="75" rx="6" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
         <text x="170" y="73" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">SR-FF</text>
         <line x1="220" y1="67" x2="250" y2="67" stroke="#39ff14" stroke-width="2"/>
@@ -2875,8 +3263,9 @@ const LEVELS = [
         <text x="10" y="140" font-family="JetBrains Mono,monospace" font-size="11" fill="#888">CASE 2: HOLD (Q₀=1)</text>
         <text x="18" y="172" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#ff4444">S=0</text>
         <text x="18" y="202" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#ff4444">R=0</text>
-        <line x1="55" y1="168" x2="120" y2="170" stroke="#ff4444" stroke-width="2"/>
-        <line x1="55" y1="198" x2="120" y2="192" stroke="#ff4444" stroke-width="2"/>
+        <text x="170" y="146" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">Q' = S + ¬R·Q = 1</text>
+        <polyline points="55,168 88,168 88,170 120,170" stroke="#ff4444" stroke-width="2" fill="none"/>
+        <polyline points="55,198 88,198 88,192 120,192" stroke="#ff4444" stroke-width="2" fill="none"/>
         <rect x="120" y="150" width="100" height="75" rx="6" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
         <text x="170" y="193" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">SR-FF</text>
         <line x1="220" y1="187" x2="250" y2="187" stroke="#39ff14" stroke-width="2"/>
@@ -2885,12 +3274,15 @@ const LEVELS = [
         <text x="10" y="260" font-family="JetBrains Mono,monospace" font-size="11" fill="#888">CASE 3: S=R=1 (Q₀=1)</text>
         <text x="18" y="292" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">S=1</text>
         <text x="18" y="322" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">R=1</text>
-        <line x1="55" y1="288" x2="120" y2="290" stroke="#39ff14" stroke-width="2"/>
-        <line x1="55" y1="318" x2="120" y2="312" stroke="#39ff14" stroke-width="2"/>
+        <text x="170" y="266" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">Q' = S + ¬R·Q = 1</text>
+        <polyline points="55,288 88,288 88,290 120,290" stroke="#39ff14" stroke-width="2" fill="none"/>
+        <polyline points="55,318 88,318 88,312 120,312" stroke="#39ff14" stroke-width="2" fill="none"/>
         <rect x="120" y="270" width="100" height="75" rx="6" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
         <text x="170" y="313" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">SR-FF</text>
         <line x1="220" y1="307" x2="250" y2="307" stroke="#39ff14" stroke-width="2"/>
         <text x="260" y="313" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">Q=1</text>
+        <!-- Formula -->
+        <text x="170" y="420" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">SR-FF: Q' = S + ¬R·Q (SET dominates when S=R=1)</text>
       </svg>`,
     },
     nodes: [
@@ -2955,13 +3347,14 @@ const LEVELS = [
         <line x1="290" y1="90" x2="350" y2="90" stroke="#c8d8f0" stroke-width="2.5"/>
         <text x="358" y="95" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Q</text>
       </svg>`,
-      circuitSvg: `<svg viewBox="0 0 420 420" width="510" height="510">
+      circuitSvg: `<svg viewBox="0 0 420 440" width="510" height="535">
         <!-- Case 1: TOGGLE -->
         <text x="10" y="20" font-family="JetBrains Mono,monospace" font-size="11" fill="#888">CASE 1: TOGGLE (Q₀=1)</text>
         <text x="18" y="52" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">J=1</text>
         <text x="18" y="82" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">K=1</text>
-        <line x1="55" y1="48" x2="120" y2="50" stroke="#39ff14" stroke-width="2"/>
-        <line x1="55" y1="78" x2="120" y2="72" stroke="#39ff14" stroke-width="2"/>
+        <text x="170" y="26" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">Q' = J·¬Q + ¬K·Q = 0</text>
+        <polyline points="55,48 88,48 88,50 120,50" stroke="#39ff14" stroke-width="2" fill="none"/>
+        <polyline points="55,78 88,78 88,72 120,72" stroke="#39ff14" stroke-width="2" fill="none"/>
         <rect x="120" y="30" width="100" height="75" rx="6" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
         <text x="170" y="73" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">JK-FF</text>
         <line x1="220" y1="67" x2="250" y2="67" stroke="#39ff14" stroke-width="2"/>
@@ -2970,8 +3363,9 @@ const LEVELS = [
         <text x="10" y="140" font-family="JetBrains Mono,monospace" font-size="11" fill="#888">CASE 2: SET (Q₀=1)</text>
         <text x="18" y="172" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">J=1</text>
         <text x="18" y="202" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#ff4444">K=0</text>
-        <line x1="55" y1="168" x2="120" y2="170" stroke="#39ff14" stroke-width="2"/>
-        <line x1="55" y1="198" x2="120" y2="192" stroke="#ff4444" stroke-width="2"/>
+        <text x="170" y="146" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">Q' = J·¬Q + ¬K·Q = 1</text>
+        <polyline points="55,168 88,168 88,170 120,170" stroke="#39ff14" stroke-width="2" fill="none"/>
+        <polyline points="55,198 88,198 88,192 120,192" stroke="#ff4444" stroke-width="2" fill="none"/>
         <rect x="120" y="150" width="100" height="75" rx="6" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
         <text x="170" y="193" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">JK-FF</text>
         <line x1="220" y1="187" x2="250" y2="187" stroke="#39ff14" stroke-width="2"/>
@@ -2980,12 +3374,15 @@ const LEVELS = [
         <text x="10" y="260" font-family="JetBrains Mono,monospace" font-size="11" fill="#888">CASE 3: HOLD (Q₀=1)</text>
         <text x="18" y="292" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#ff4444">J=0</text>
         <text x="18" y="322" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#ff4444">K=0</text>
-        <line x1="55" y1="288" x2="120" y2="290" stroke="#ff4444" stroke-width="2"/>
-        <line x1="55" y1="318" x2="120" y2="312" stroke="#ff4444" stroke-width="2"/>
+        <text x="170" y="266" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">Q' = J·¬Q + ¬K·Q = 1</text>
+        <polyline points="55,288 88,288 88,290 120,290" stroke="#ff4444" stroke-width="2" fill="none"/>
+        <polyline points="55,318 88,318 88,312 120,312" stroke="#ff4444" stroke-width="2" fill="none"/>
         <rect x="120" y="270" width="100" height="75" rx="6" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
         <text x="170" y="313" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">JK-FF</text>
         <line x1="220" y1="307" x2="250" y2="307" stroke="#39ff14" stroke-width="2"/>
         <text x="260" y="313" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">Q=1</text>
+        <!-- Formula -->
+        <text x="170" y="420" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">JK-FF: Q' = J·¬Q + ¬K·Q (J=K=1 toggles, J=K=0 holds)</text>
       </svg>`,
     },
     nodes: [
@@ -3030,13 +3427,12 @@ const LEVELS = [
   // FF1: T=1. FF2: T=Q1. After 2 steps: Q1=0, Q2=1.
   {
     id: 35, name: 'RIPPLE COUNTER', difficulty: 'Flip-Flops',
-
-
+    minSteps: 2,
     description: 'Ripple counter — two flip-flops in series. FF1 receives a constant input, Q1 feeds FF2. After 2 clock pulses, reach the target output.',
     instruction: 'Place the correct flip-flop in both slots and click STEP twice',
     hint: 'STEP 1: Q1=1, Q2=0. STEP 2: Q1 returns to 0, Q2 rises to 1. Which flip-flop toggles state when input is 1?',
     solution: {
-      ffsUsed: ['T-FF', 'T-FF'],
+      ffsUsed: ['T-FF'],
       explanation: 'Ripple Counter — Two T flip-flops form a 2-bit binary counter. Each flip-flop divides the frequency by 2. This is the foundation of all digital counters.',
       blockSvg: `<svg viewBox="0 0 400 160" width="480" height="195">
         <text x="12" y="52" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">T</text>
@@ -3051,21 +3447,25 @@ const LEVELS = [
         <line x1="290" y1="105" x2="350" y2="105" stroke="#c8d8f0" stroke-width="2.5"/>
         <text x="358" y="110" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">Q2</text>
       </svg>`,
-      circuitSvg: `<svg viewBox="0 0 520 180" width="630" height="220">
+      circuitSvg: `<svg viewBox="0 0 520 200" width="630" height="245">
         <text x="18" y="72" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">T=1</text>
         <text x="18" y="152" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#ffcc00">CLK</text>
+        <text x="160" y="34" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">Q1' = Q1 ⊕ 1</text>
         <rect x="110" y="40" width="100" height="80" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
         <text x="160" y="86" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#a0c8ff">T-FF1</text>
+        <text x="340" y="34" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">Q2' = Q2 ⊕ Q1</text>
         <rect x="290" y="40" width="100" height="80" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
         <text x="340" y="86" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#a0c8ff">T-FF2</text>
         <text x="460" y="57" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">Q1=0</text>
         <text x="460" y="107" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">Q2=1</text>
         <line x1="50" y1="68" x2="110" y2="68" stroke="#39ff14" stroke-width="2"/>
         <line x1="210" y1="68" x2="290" y2="68" stroke="#39ff14" stroke-width="2"/>
-        <line x1="50" y1="148" x2="110" y2="110" stroke="#ffcc00" stroke-width="2"/>
-        <line x1="50" y1="148" x2="290" y2="110" stroke="#ffcc00" stroke-width="2"/>
+        <polyline points="50,148 80,148 80,120 110,120" stroke="#ffcc00" stroke-width="2" fill="none"/>
+        <polyline points="80,148 260,148 260,120 290,120" stroke="#ffcc00" stroke-width="2" fill="none"/>
         <line x1="390" y1="52" x2="450" y2="52" stroke="#39ff14" stroke-width="2"/>
         <line x1="390" y1="102" x2="450" y2="102" stroke="#39ff14" stroke-width="2"/>
+        <!-- Formula -->
+        <text x="260" y="190" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">T-FF: Q' = Q ⊕ T  |  Q1' = Q1 ⊕ 1, Q2' = Q2 ⊕ Q1</text>
       </svg>`,
     },
     nodes: [
@@ -3107,11 +3507,13 @@ const LEVELS = [
         <line x1="290" y1="105" x2="350" y2="105" stroke="#c8d8f0" stroke-width="2.5"/>
         <text x="358" y="110" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">Q2</text>
       </svg>`,
-      circuitSvg: `<svg viewBox="0 0 500 200" width="600" height="245">
+      circuitSvg: `<svg viewBox="0 0 500 220" width="600" height="270">
         <text x="12" y="20" font-family="JetBrains Mono,monospace" font-size="11" fill="#888">00 → 10 → 11 → 01 → 00 (period=4)</text>
+        <text x="150" y="30" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">Q1' = Q̄2</text>
         <rect x="100" y="35" width="100" height="70" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
         <text x="150" y="77" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">D-FF1</text>
         <line x1="200" y1="60" x2="240" y2="60" stroke="#39ff14" stroke-width="2"/>
+        <text x="290" y="30" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">Q2' = Q1</text>
         <rect x="240" y="35" width="100" height="70" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
         <text x="290" y="77" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">D-FF2</text>
         <text x="370" y="55" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">Q1=1</text>
@@ -3121,6 +3523,8 @@ const LEVELS = [
         <polyline points="340,90 380,90 380,145 60,145 60,55 100,55" stroke="#ff6b6b" stroke-width="2" fill="none" stroke-dasharray="6,3"/>
         <text x="220" y="160" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ff6b6b">Q̄2 → D1</text>
         <text x="12" y="125" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#ffcc00">CLK</text>
+        <!-- Formula -->
+        <text x="220" y="200" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">D-FF: Q'=D  |  Q1'=Q̄2, Q2'=Q1 (Johnson counter)</text>
       </svg>`,
     },
     nodes: [
@@ -3148,11 +3552,12 @@ const LEVELS = [
   // Data "shifts" one stage per clock. Classic serial-to-parallel converter.
   {
     id: 37, name: '4-BIT SHIFT REGISTER', difficulty: 'Flip-Flops',
+    minSteps: 4,
     description: '4-bit shift register — four flip-flops in series. Data shifts one stage forward on each clock pulse. Click STEP four times to fill the entire register.',
     instruction: 'Place the correct flip-flop in all four slots and click STEP 4 times',
     hint: 'Each STEP pushes data one stage forward. Which flip-flop always captures its input?',
     solution: {
-      ffsUsed: ['D-FF', 'D-FF', 'D-FF', 'D-FF'],
+      ffsUsed: ['D-FF', 'D-FF'],
       explanation: '4-Bit Shift Register — Four D flip-flops in series. On each clock pulse, each FF captures the value of the previous FF. This is the basis of serial communication (UART, SPI) and serial-to-parallel conversion.',
       blockSvg: `<svg viewBox="0 0 420 200" width="500" height="245">
         <text x="12" y="52" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">D</text>
@@ -3171,10 +3576,15 @@ const LEVELS = [
         <line x1="300" y1="150" x2="360" y2="150" stroke="#c8d8f0" stroke-width="2.5"/>
         <text x="368" y="155" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">Q4</text>
       </svg>`,
-      circuitSvg: `<svg viewBox="0 0 700 150" width="850" height="185">
+      circuitSvg: `<svg viewBox="0 0 700 160" width="850" height="195">
         <!-- D input -->
         <text x="12" y="47" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">D</text>
         <line x1="30" y1="43" x2="80" y2="43" stroke="#39ff14" stroke-width="2"/>
+        <!-- State equation labels -->
+        <text x="120" y="16" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">Q1' = D</text>
+        <text x="240" y="16" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">Q2' = Q1</text>
+        <text x="360" y="16" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">Q3' = Q2</text>
+        <text x="480" y="16" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">Q4' = Q3</text>
         <!-- 4 D-FFs in chain -->
         <rect x="80" y="22" width="80" height="50" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
         <text x="120" y="52" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#a0c8ff">D-FF1</text>
@@ -3190,7 +3600,7 @@ const LEVELS = [
         <!-- Outputs -->
         <line x1="520" y1="33" x2="555" y2="33" stroke="#c8d8f0" stroke-width="2"/>
         <text x="560" y="37" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#c8d8f0">Q1</text>
-        <line x1="520" y1="43" x2="555" y2="48" stroke="#c8d8f0" stroke-width="1.5"/>
+        <polyline points="520,43 538,43 538,48 555,48" stroke="#c8d8f0" stroke-width="1.5" fill="none"/>
         <text x="560" y="52" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#c8d8f0">Q2</text>
         <text x="560" y="67" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#c8d8f0">Q3</text>
         <text x="560" y="82" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#c8d8f0">Q4</text>
@@ -3203,6 +3613,8 @@ const LEVELS = [
         <line x1="480" y1="72" x2="480" y2="101" stroke="#ffcc00" stroke-width="1.5"/>
         <!-- Label -->
         <text x="12" y="135" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">Data shifts one stage per clock cycle</text>
+        <!-- Formula -->
+        <text x="300" y="152" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">D-FF: Q'=D  |  Q1'=D, Q2'=Q1, Q3'=Q2, Q4'=Q3 (serial shift)</text>
       </svg>`,
     },
     nodes: [
@@ -3260,13 +3672,14 @@ const LEVELS = [
         <line x1="290" y1="90" x2="350" y2="90" stroke="#c8d8f0" stroke-width="2.5"/>
         <text x="358" y="95" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Q</text>
       </svg>`,
-      circuitSvg: `<svg viewBox="0 0 420 310" width="510" height="380">
+      circuitSvg: `<svg viewBox="0 0 420 330" width="510" height="400">
         <!-- Case 1: SET then HOLD -->
         <text x="10" y="20" font-family="JetBrains Mono,monospace" font-size="11" fill="#888">CASE 1: SET → HOLD (Q₀=0)</text>
         <text x="18" y="52" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">S: 1→0</text>
         <text x="18" y="82" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#ff4444">R=0</text>
-        <line x1="75" y1="48" x2="120" y2="50" stroke="#39ff14" stroke-width="2"/>
-        <line x1="55" y1="78" x2="120" y2="72" stroke="#ff4444" stroke-width="2"/>
+        <text x="170" y="26" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">Q' = S + ¬R·Q</text>
+        <polyline points="75,48 98,48 98,50 120,50" stroke="#39ff14" stroke-width="2" fill="none"/>
+        <polyline points="55,78 88,78 88,72 120,72" stroke="#ff4444" stroke-width="2" fill="none"/>
         <rect x="120" y="30" width="100" height="75" rx="6" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
         <text x="170" y="73" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">SR-FF</text>
         <line x1="220" y1="67" x2="250" y2="67" stroke="#39ff14" stroke-width="2"/>
@@ -3275,12 +3688,15 @@ const LEVELS = [
         <text x="10" y="150" font-family="JetBrains Mono,monospace" font-size="11" fill="#888">CASE 2: S=R=1 (Q₀=0)</text>
         <text x="18" y="182" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">S=1</text>
         <text x="18" y="212" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">R=1</text>
-        <line x1="55" y1="178" x2="120" y2="180" stroke="#39ff14" stroke-width="2"/>
-        <line x1="55" y1="208" x2="120" y2="202" stroke="#39ff14" stroke-width="2"/>
+        <text x="170" y="156" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">Q' = S + ¬R·Q = 1</text>
+        <polyline points="55,178 88,178 88,180 120,180" stroke="#39ff14" stroke-width="2" fill="none"/>
+        <polyline points="55,208 88,208 88,202 120,202" stroke="#39ff14" stroke-width="2" fill="none"/>
         <rect x="120" y="160" width="100" height="75" rx="6" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
         <text x="170" y="203" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">SR-FF</text>
         <line x1="220" y1="197" x2="250" y2="197" stroke="#39ff14" stroke-width="2"/>
         <text x="260" y="203" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">Q=1</text>
+        <!-- Formula -->
+        <text x="170" y="310" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">SR-FF: Q' = S + ¬R·Q  |  SET→HOLD retains value</text>
       </svg>`,
     },
     nodes: [
@@ -3336,7 +3752,12 @@ const LEVELS = [
         <line x1="300" y1="150" x2="360" y2="150" stroke="#c8d8f0" stroke-width="2.5"/>
         <text x="368" y="155" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">Q4</text>
       </svg>`,
-      circuitSvg: `<svg viewBox="0 0 700 140" width="850" height="170">
+      circuitSvg: `<svg viewBox="0 0 700 155" width="850" height="190">
+        <!-- State equation labels -->
+        <text x="100" y="18" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">Q1' = Q4</text>
+        <text x="220" y="18" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">Q2' = Q1</text>
+        <text x="340" y="18" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">Q3' = Q2</text>
+        <text x="460" y="18" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">Q4' = Q3</text>
         <text x="12" y="52" font-family="JetBrains Mono,monospace" font-size="12" fill="#888">Q₀=1</text>
         <rect x="60" y="25" width="80" height="55" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
         <text x="100" y="57" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#a0c8ff">D-FF1</text>
@@ -3355,6 +3776,8 @@ const LEVELS = [
         <text x="520" y="52" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#39ff14">Q4=1</text>
         <polyline points="500,55 540,55 540,100 30,100 30,48 60,48" stroke="#ff6b6b" stroke-width="2" fill="none" stroke-dasharray="6,3"/>
         <text x="280" y="115" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ff6b6b">Q4 → D1 FEEDBACK</text>
+        <!-- Formula -->
+        <text x="280" y="145" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">D-FF: Q'=D  |  Q1'=Q4, Q2'=Q1, Q3'=Q2, Q4'=Q3 (ring)</text>
       </svg>`,
     },
     minSteps: 3,
@@ -3422,7 +3845,7 @@ const LEVELS = [
         <line x1="310" y1="150" x2="370" y2="150" stroke="#c8d8f0" stroke-width="2.5"/>
         <text x="378" y="155" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">Q3</text>
       </svg>`,
-      circuitSvg: `<svg viewBox="0 0 480 220" width="580" height="270">
+      circuitSvg: `<svg viewBox="0 0 480 230" width="580" height="280">
         <text x="8" y="18" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">4 D-FFs in parallel — each captures its own input on clock edge</text>
         <!-- D inputs -->
         <text x="8" y="48" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#39ff14">D0</text>
@@ -3433,13 +3856,18 @@ const LEVELS = [
         <line x1="35" y1="104" x2="100" y2="104" stroke="#39ff14" stroke-width="2"/>
         <text x="8" y="138" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#39ff14">D3</text>
         <line x1="35" y1="134" x2="100" y2="134" stroke="#39ff14" stroke-width="2"/>
+        <!-- State equation labels above each D-FF -->
+        <text x="140" y="26" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">Q0' = D0</text>
         <!-- 4 D-FFs stacked vertically -->
         <rect x="100" y="28" width="80" height="30" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
         <text x="140" y="48" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#a0c8ff">D-FF0</text>
+        <text x="140" y="60" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">Q1' = D1</text>
         <rect x="100" y="62" width="80" height="30" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
         <text x="140" y="82" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#a0c8ff">D-FF1</text>
+        <text x="140" y="90" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">Q2' = D2</text>
         <rect x="100" y="92" width="80" height="30" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
         <text x="140" y="112" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#a0c8ff">D-FF2</text>
+        <text x="140" y="120" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">Q3' = D3</text>
         <rect x="100" y="122" width="80" height="30" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
         <text x="140" y="142" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#a0c8ff">D-FF3</text>
         <!-- Q outputs -->
@@ -3459,8 +3887,10 @@ const LEVELS = [
         <line x1="80" y1="86" x2="100" y2="86" stroke="#ffcc00" stroke-width="1.5"/>
         <line x1="80" y1="116" x2="100" y2="116" stroke="#ffcc00" stroke-width="1.5"/>
         <line x1="80" y1="146" x2="100" y2="146" stroke="#ffcc00" stroke-width="1.5"/>
+        <!-- Formula summary -->
+        <text x="8" y="198" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">D-FF: Q'=D  |  Q0'=D0, Q1'=D1, Q2'=D2, Q3'=D3 (parallel capture)</text>
         <!-- Label -->
-        <text x="8" y="205" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">Each D-FF captures its input independently on the same clock edge</text>
+        <text x="8" y="215" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">Each D-FF captures its input independently on the same clock edge</text>
       </svg>`,
     },
     nodes: [
@@ -3519,11 +3949,11 @@ const LEVELS = [
       blockSvg: `<svg viewBox="0 0 400 160" width="480" height="195">
         <!-- Inputs -->
         <text x="12" y="42" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text>
-        <line x1="30" y1="37" x2="100" y2="47" stroke="#39ff14" stroke-width="2.5"/>
+        <polyline points="30,37 65,37 65,47 100,47" fill="none" stroke="#39ff14" stroke-width="2.5"/>
         <text x="12" y="82" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">B</text>
-        <line x1="30" y1="77" x2="100" y2="67" stroke="#39ff14" stroke-width="2.5"/>
+        <polyline points="30,77 65,77 65,67 100,67" fill="none" stroke="#39ff14" stroke-width="2.5"/>
         <text x="12" y="122" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#ffcc00">CLK</text>
-        <line x1="45" y1="117" x2="100" y2="107" stroke="#ffcc00" stroke-width="2.5"/>
+        <polyline points="45,117 73,117 73,107 100,107" fill="none" stroke="#ffcc00" stroke-width="2.5"/>
         <!-- Box -->
         <rect x="100" y="20" width="190" height="125" rx="8" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/>
         <text x="195" y="85" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#00d4ff">SYNCHRONIZE</text>
@@ -3533,25 +3963,33 @@ const LEVELS = [
         <line x1="290" y1="102" x2="345" y2="102" stroke="#c8d8f0" stroke-width="2.5"/>
         <text x="353" y="107" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Q</text>
       </svg>`,
-      circuitSvg: `<svg viewBox="0 0 520 200" width="630" height="245">
+      circuitSvg: `<svg viewBox="0 0 520 210" width="630" height="255">
         <text x="8" y="18" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">STEP 1: AND(0,1)=0 → hold | STEP 2: AND(1,1)=1 → toggle! | STEP 3: AND(1,0)=0 → hold</text>
         <text x="8" y="62" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#39ff14">A: 0→1→1</text>
         <text x="8" y="92" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#39ff14">B: 1→1→0</text>
-        <line x1="95" y1="58" x2="140" y2="62" stroke="#39ff14" stroke-width="2"/>
-        <line x1="95" y1="88" x2="140" y2="78" stroke="#39ff14" stroke-width="2"/>
+        <!-- Wires to AND gate (polyline to avoid diagonal) -->
+        <polyline points="95,58 118,58 118,62 140,62" fill="none" stroke="#39ff14" stroke-width="2"/>
+        <polyline points="95,88 118,88 118,78 140,78" fill="none" stroke="#39ff14" stroke-width="2"/>
+        <!-- Gate label -->
+        <text x="175" y="40" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">A · B</text>
         <rect x="140" y="45" width="70" height="50" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
         <text x="175" y="75" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">AND</text>
         <line x1="210" y1="70" x2="240" y2="70" stroke="#39ff14" stroke-width="2"/>
         <line x1="240" y1="70" x2="240" y2="55" stroke="#39ff14" stroke-width="2"/>
         <line x1="240" y1="55" x2="280" y2="55" stroke="#39ff14" stroke-width="2"/>
         <text x="288" y="60" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#c8d8f0">Z: 0→1→0</text>
-        <line x1="240" y1="70" x2="280" y2="90" stroke="#39ff14" stroke-width="2"/>
+        <!-- Wire to T-FF (polyline to avoid diagonal) -->
+        <polyline points="240,70 240,90 280,90" fill="none" stroke="#39ff14" stroke-width="2"/>
+        <!-- FF label -->
+        <text x="320" y="72" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">Q' = Q ⊕ T</text>
         <rect x="280" y="75" width="80" height="45" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
         <text x="320" y="103" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">T-FF</text>
         <line x1="360" y1="97" x2="400" y2="97" stroke="#39ff14" stroke-width="2"/>
         <text x="408" y="102" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#c8d8f0">Q: 0→1→1</text>
         <text x="8" y="150" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#ffcc00">CLK ×3</text>
-        <text x="8" y="175" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">T-FF toggles only at STEP 2 (AND=1) → Q stays 1</text>
+        <text x="8" y="170" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">T-FF toggles only at STEP 2 (AND=1) → Q stays 1</text>
+        <!-- Formula summary -->
+        <text x="8" y="190" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">T-FF: Q' = Q ⊕ T  |  T = A · B  |  Q' = Q ⊕ (A · B)</text>
       </svg>`,
     },
     nodes: [
@@ -3590,11 +4028,11 @@ const LEVELS = [
       blockSvg: `<svg viewBox="0 0 400 160" width="480" height="195">
         <!-- Inputs -->
         <text x="12" y="42" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">A</text>
-        <line x1="30" y1="37" x2="100" y2="47" stroke="#39ff14" stroke-width="2.5"/>
+        <polyline points="30,37 65,37 65,47 100,47" fill="none" stroke="#39ff14" stroke-width="2.5"/>
         <text x="12" y="82" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#39ff14">B</text>
-        <line x1="30" y1="77" x2="100" y2="67" stroke="#39ff14" stroke-width="2.5"/>
+        <polyline points="30,77 65,77 65,67 100,67" fill="none" stroke="#39ff14" stroke-width="2.5"/>
         <text x="12" y="122" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#ffcc00">CLK</text>
-        <line x1="45" y1="117" x2="100" y2="107" stroke="#ffcc00" stroke-width="2.5"/>
+        <polyline points="45,117 73,117 73,107 100,107" fill="none" stroke="#ffcc00" stroke-width="2.5"/>
         <!-- Box -->
         <rect x="100" y="20" width="190" height="125" rx="8" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/>
         <text x="195" y="85" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#00d4ff">FILTER ZERO</text>
@@ -3604,25 +4042,33 @@ const LEVELS = [
         <line x1="290" y1="102" x2="345" y2="102" stroke="#c8d8f0" stroke-width="2.5"/>
         <text x="353" y="107" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Q</text>
       </svg>`,
-      circuitSvg: `<svg viewBox="0 0 520 200" width="630" height="245">
+      circuitSvg: `<svg viewBox="0 0 520 210" width="630" height="255">
         <text x="8" y="18" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">STEP 1: NAND(1,0)=1 → toggle! | STEP 2: NAND(1,1)=0 → hold | STEP 3: NAND(0,0)=1 → toggle!</text>
         <text x="8" y="62" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#39ff14">A: 1→1→0</text>
         <text x="8" y="92" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#39ff14">B: 0→1→0</text>
-        <line x1="95" y1="58" x2="140" y2="62" stroke="#39ff14" stroke-width="2"/>
-        <line x1="95" y1="88" x2="140" y2="78" stroke="#39ff14" stroke-width="2"/>
+        <!-- Wires to NAND gate (polyline to avoid diagonal) -->
+        <polyline points="95,58 118,58 118,62 140,62" fill="none" stroke="#39ff14" stroke-width="2"/>
+        <polyline points="95,88 118,88 118,78 140,78" fill="none" stroke="#39ff14" stroke-width="2"/>
+        <!-- Gate label -->
+        <text x="180" y="40" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">¬(A · B)</text>
         <rect x="140" y="45" width="80" height="50" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
         <text x="180" y="75" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#a0c8ff">NAND</text>
         <line x1="220" y1="70" x2="250" y2="70" stroke="#39ff14" stroke-width="2"/>
         <line x1="250" y1="70" x2="250" y2="55" stroke="#39ff14" stroke-width="2"/>
         <line x1="250" y1="55" x2="290" y2="55" stroke="#39ff14" stroke-width="2"/>
         <text x="298" y="60" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#c8d8f0">Z: 1→0→1</text>
-        <line x1="250" y1="70" x2="290" y2="90" stroke="#39ff14" stroke-width="2"/>
+        <!-- Wire to T-FF (polyline to avoid diagonal) -->
+        <polyline points="250,70 250,90 290,90" fill="none" stroke="#39ff14" stroke-width="2"/>
+        <!-- FF label -->
+        <text x="330" y="72" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">Q' = Q ⊕ T</text>
         <rect x="290" y="75" width="80" height="45" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
         <text x="330" y="103" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">T-FF</text>
         <line x1="370" y1="97" x2="410" y2="97" stroke="#39ff14" stroke-width="2"/>
         <text x="418" y="102" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#c8d8f0">Q: 1→1→0</text>
         <text x="8" y="150" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#ffcc00">CLK ×3</text>
-        <text x="8" y="175" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">T-FF: toggle(1)→hold(0)→toggle(1) → back to 0</text>
+        <text x="8" y="170" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">T-FF: toggle(1)→hold(0)→toggle(1) → back to 0</text>
+        <!-- Formula summary -->
+        <text x="8" y="190" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">T-FF: Q' = Q ⊕ T  |  T = ¬(A · B)  |  Q' = Q ⊕ ¬(A · B)</text>
       </svg>`,
     },
     nodes: [
@@ -3675,25 +4121,31 @@ const LEVELS = [
         <line x1="290" y1="102" x2="345" y2="102" stroke="#c8d8f0" stroke-width="2.5"/>
         <text x="353" y="107" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Q</text>
       </svg>`,
-      circuitSvg: `<svg viewBox="0 0 520 200" width="630" height="245">
+      circuitSvg: `<svg viewBox="0 0 520 220" width="630" height="270">
         <text x="8" y="18" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">STEP 1: NAND(0,1)=1→toggle | STEP 2: NAND(1,1)=0→hold | STEP 3: hold | STEP 4: NAND(0,0)=1→toggle</text>
         <text x="8" y="62" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#39ff14">A: 0→1→1→0</text>
         <text x="8" y="92" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#39ff14">B: 1→1→1→0</text>
-        <line x1="95" y1="58" x2="140" y2="62" stroke="#39ff14" stroke-width="2"/>
-        <line x1="95" y1="88" x2="140" y2="78" stroke="#39ff14" stroke-width="2"/>
+        <polyline points="95,58 118,58 140,62" stroke="#39ff14" stroke-width="2" fill="none"/>
+        <polyline points="95,88 118,88 140,78" stroke="#39ff14" stroke-width="2" fill="none"/>
+        <!-- NAND gate: ¬(A · B) -->
+        <text x="180" y="40" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">¬(A · B)</text>
         <rect x="140" y="45" width="80" height="50" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
         <text x="180" y="75" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#a0c8ff">NAND</text>
         <line x1="220" y1="70" x2="250" y2="70" stroke="#39ff14" stroke-width="2"/>
         <line x1="250" y1="70" x2="250" y2="55" stroke="#39ff14" stroke-width="2"/>
         <line x1="250" y1="55" x2="290" y2="55" stroke="#39ff14" stroke-width="2"/>
         <text x="298" y="60" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#c8d8f0">Z: 1→0→0→1</text>
-        <line x1="250" y1="70" x2="290" y2="90" stroke="#39ff14" stroke-width="2"/>
+        <polyline points="250,70 250,90 290,90" stroke="#39ff14" stroke-width="2" fill="none"/>
+        <!-- T-FF: Q' = Q ⊕ T -->
+        <text x="330" y="70" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">Q' = Q ⊕ T</text>
         <rect x="290" y="75" width="80" height="45" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
         <text x="330" y="103" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">T-FF</text>
         <line x1="370" y1="97" x2="410" y2="97" stroke="#39ff14" stroke-width="2"/>
         <text x="418" y="102" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#c8d8f0">Q: 1→1→1→0</text>
         <text x="8" y="150" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#ffcc00">CLK ×3</text>
         <text x="8" y="175" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">Q₀=0 → toggle at STEP 1 (Q=1) → toggle at STEP 4 (Q=0)</text>
+        <!-- Formulas -->
+        <text x="8" y="210" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">T-FF: Q' = Q ⊕ T  |  T = ¬(A · B)  |  Z = NAND(A,B)</text>
       </svg>`,
     },
     nodes: [
@@ -3748,28 +4200,36 @@ const LEVELS = [
         <line x1="290" y1="82" x2="345" y2="82" stroke="#c8d8f0" stroke-width="2.5"/>
         <text x="353" y="87" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Q</text>
       </svg>`,
-      circuitSvg: `<svg viewBox="0 0 520 200" width="630" height="245">
+      circuitSvg: `<svg viewBox="0 0 520 220" width="630" height="270">
         <text x="8" y="18" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">STEP 1: S=1,R=1 → SET wins | STEP 2: S=0,R=0 → HOLD</text>
         <text x="8" y="52" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#39ff14">A=1 (const)</text>
         <text x="8" y="77" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#39ff14">B: 1→0</text>
         <text x="8" y="112" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#39ff14">C: 0→1</text>
-        <line x1="100" y1="48" x2="140" y2="55" stroke="#39ff14" stroke-width="2"/>
-        <line x1="100" y1="73" x2="140" y2="65" stroke="#39ff14" stroke-width="2"/>
+        <polyline points="100,48 120,48 140,55" stroke="#39ff14" stroke-width="2" fill="none"/>
+        <polyline points="100,73 120,73 140,65" stroke="#39ff14" stroke-width="2" fill="none"/>
+        <!-- AND gate: A · B -->
+        <text x="170" y="38" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">A · B</text>
         <rect x="140" y="42" width="60" height="38" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
         <text x="170" y="66" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#a0c8ff">AND</text>
-        <line x1="200" y1="61" x2="250" y2="80" stroke="#39ff14" stroke-width="2"/>
+        <polyline points="200,61 225,61 250,80" stroke="#39ff14" stroke-width="2" fill="none"/>
         <text x="215" y="57" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">S: 1→0</text>
         <line x1="100" y1="108" x2="140" y2="108" stroke="#39ff14" stroke-width="2"/>
+        <!-- NOT gate: ¬C -->
+        <text x="170" y="88" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">¬C</text>
         <rect x="140" y="92" width="60" height="35" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
         <text x="170" y="114" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#a0c8ff">NOT</text>
-        <line x1="200" y1="109" x2="250" y2="100" stroke="#39ff14" stroke-width="2"/>
+        <polyline points="200,109 225,109 250,100" stroke="#39ff14" stroke-width="2" fill="none"/>
         <text x="215" y="122" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">R: 1→0</text>
+        <!-- SR-FF: Q' = S + ¬R·Q -->
+        <text x="290" y="60" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">Q' = S + ¬R·Q</text>
         <rect x="250" y="65" width="80" height="50" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
         <text x="290" y="95" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#a0c8ff">SR-FF</text>
         <line x1="330" y1="90" x2="370" y2="90" stroke="#39ff14" stroke-width="2"/>
         <text x="378" y="95" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#c8d8f0">Q: 1→1</text>
         <text x="8" y="160" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#ffcc00">CLK ×2</text>
         <text x="8" y="180" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">Q₀=1 → SET wins at STEP 1 → HOLD at STEP 2 → Q stays 1</text>
+        <!-- Formulas -->
+        <text x="8" y="210" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">SR-FF: Q' = S + ¬R·Q  |  S = A · B  |  R = ¬C</text>
       </svg>`,
     },
     nodes: [
@@ -3825,25 +4285,31 @@ const LEVELS = [
         <line x1="290" y1="102" x2="345" y2="102" stroke="#c8d8f0" stroke-width="2.5"/>
         <text x="353" y="107" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Q</text>
       </svg>`,
-      circuitSvg: `<svg viewBox="0 0 520 200" width="630" height="245">
+      circuitSvg: `<svg viewBox="0 0 520 220" width="630" height="270">
         <text x="8" y="18" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">STEP 1: AND(1,0)=0→hold | STEP 2: AND(0,1)=0→hold | STEP 3: AND(1,1)=1→toggle!</text>
         <text x="8" y="62" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#39ff14">DATA: 1→0→1</text>
         <text x="8" y="92" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#39ff14">WE: 0→1→1</text>
-        <line x1="110" y1="58" x2="150" y2="62" stroke="#39ff14" stroke-width="2"/>
-        <line x1="110" y1="88" x2="150" y2="78" stroke="#39ff14" stroke-width="2"/>
+        <polyline points="110,58 130,58 150,62" stroke="#39ff14" stroke-width="2" fill="none"/>
+        <polyline points="110,88 130,88 150,78" stroke="#39ff14" stroke-width="2" fill="none"/>
+        <!-- AND gate: DATA · WE -->
+        <text x="185" y="40" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">DATA · WE</text>
         <rect x="150" y="45" width="70" height="50" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
         <text x="185" y="75" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">AND</text>
         <line x1="220" y1="70" x2="250" y2="70" stroke="#39ff14" stroke-width="2"/>
         <line x1="250" y1="70" x2="250" y2="55" stroke="#39ff14" stroke-width="2"/>
         <line x1="250" y1="55" x2="290" y2="55" stroke="#39ff14" stroke-width="2"/>
         <text x="298" y="60" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#c8d8f0">Z: 0→0→1</text>
-        <line x1="250" y1="70" x2="290" y2="90" stroke="#39ff14" stroke-width="2"/>
+        <polyline points="250,70 250,90 290,90" stroke="#39ff14" stroke-width="2" fill="none"/>
+        <!-- T-FF: Q' = Q ⊕ T -->
+        <text x="330" y="70" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">Q' = Q ⊕ T</text>
         <rect x="290" y="75" width="80" height="45" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
         <text x="330" y="103" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">T-FF</text>
         <line x1="370" y1="97" x2="410" y2="97" stroke="#39ff14" stroke-width="2"/>
         <text x="418" y="102" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#c8d8f0">Q: 0→0→1</text>
         <text x="8" y="150" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#ffcc00">CLK ×3</text>
         <text x="8" y="175" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">WE gates the data — T-FF toggles only when both are 1</text>
+        <!-- Formulas -->
+        <text x="8" y="210" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">T-FF: Q' = Q ⊕ T  |  T = DATA · WE  |  Z = AND(DATA,WE)</text>
       </svg>`,
     },
     nodes: [
@@ -3894,14 +4360,15 @@ const LEVELS = [
         <line x1="290" y1="102" x2="345" y2="102" stroke="#c8d8f0" stroke-width="2.5"/>
         <text x="353" y="107" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Q2</text>
       </svg>`,
-      circuitSvg: `<svg viewBox="0 0 520 200" width="630" height="245">
+      circuitSvg: `<svg viewBox="0 0 520 220" width="630" height="270">
         <text x="8" y="18" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">STEP 1: Q1 toggles 0→1, AND(0,1)=0 → Q2 holds | STEP 2: Q1 toggles 1→0, AND(1,1)=1 → Q2 toggles 0→1</text>
         <!-- T=1 input -->
         <text x="8" y="60" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#39ff14">T=1</text>
         <line x1="45" y1="56" x2="80" y2="56" stroke="#39ff14" stroke-width="2"/>
         <line x1="60" y1="56" x2="60" y2="120" stroke="#39ff14" stroke-width="1.5"/>
         <line x1="60" y1="120" x2="195" y2="120" stroke="#39ff14" stroke-width="1.5"/>
-        <!-- T-FF1 -->
+        <!-- T-FF1: Q' = Q ⊕ T -->
+        <text x="117" y="33" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">Q1' = Q1 ⊕ 1</text>
         <rect x="80" y="38" width="75" height="42" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
         <text x="117" y="64" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#a0c8ff">T-FF1</text>
         <!-- Q1 out -->
@@ -3910,12 +4377,14 @@ const LEVELS = [
         <line x1="185" y1="105" x2="195" y2="105" stroke="#39ff14" stroke-width="1.5"/>
         <line x1="185" y1="56" x2="400" y2="56" stroke="#39ff14" stroke-width="1.5"/>
         <text x="408" y="61" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#c8d8f0">Q1: 1→0</text>
-        <!-- AND -->
+        <!-- AND: Q1 · T -->
+        <text x="225" y="90" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">Q1 · T</text>
         <rect x="195" y="95" width="60" height="38" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
         <text x="225" y="119" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#a0c8ff">AND</text>
         <!-- AND out to T-FF2 -->
         <line x1="255" y1="114" x2="290" y2="114" stroke="#39ff14" stroke-width="2"/>
-        <!-- T-FF2 -->
+        <!-- T-FF2: Q' = Q ⊕ T -->
+        <text x="327" y="90" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">Q2' = Q2 ⊕ T2</text>
         <rect x="290" y="95" width="75" height="42" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
         <text x="327" y="121" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#a0c8ff">T-FF2</text>
         <!-- Q2 out -->
@@ -3924,6 +4393,8 @@ const LEVELS = [
         <!-- CLK -->
         <text x="8" y="165" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#ffcc00">CLK ×2</text>
         <text x="8" y="185" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">AND carry: FF2 toggles only when Q1=1 — synchronous counting</text>
+        <!-- Formulas -->
+        <text x="8" y="210" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">T-FF: Q' = Q ⊕ T  |  T2 = Q1 · T  |  Carry = AND(Q1,T)</text>
       </svg>`,
     },
     nodes: [
@@ -3976,23 +4447,31 @@ const LEVELS = [
         <line x1="290" y1="137" x2="345" y2="137" stroke="#c8d8f0" stroke-width="2.5"/>
         <text x="353" y="142" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Q4</text>
       </svg>`,
-      circuitSvg: `<svg viewBox="0 0 680 170" width="820" height="210">
+      circuitSvg: `<svg viewBox="0 0 680 190" width="820" height="230">
         <!-- Title -->
         <text x="8" y="20" font-family="JetBrains Mono,monospace" font-size="12" fill="#888">LFSR: XOR(Q3,Q4) → D1 → D2 → D3 → D4</text>
-        <!-- XOR gate -->
+        <!-- XOR gate: Q3 ⊕ Q4 -->
+        <text x="62" y="40" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">Q3 ⊕ Q4</text>
         <rect x="30" y="45" width="65" height="45" rx="6" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/>
         <text x="62" y="73" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#00d4ff">XOR</text>
         <line x1="95" y1="67" x2="130" y2="67" stroke="#39ff14" stroke-width="2.5"/>
-        <!-- 4 D-FFs -->
+        <!-- D-FF1: Q' = XOR(Q3,Q4) -->
+        <text x="170" y="40" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">Q1' = Q3⊕Q4</text>
         <rect x="130" y="45" width="80" height="50" rx="8" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/>
         <text x="170" y="75" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#00d4ff">D-FF1</text>
         <line x1="210" y1="67" x2="240" y2="67" stroke="#39ff14" stroke-width="2"/>
+        <!-- D-FF2: Q' = Q1 -->
+        <text x="280" y="40" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">Q2' = Q1</text>
         <rect x="240" y="45" width="80" height="50" rx="8" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/>
         <text x="280" y="75" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#00d4ff">D-FF2</text>
         <line x1="320" y1="67" x2="350" y2="67" stroke="#39ff14" stroke-width="2"/>
+        <!-- D-FF3: Q' = Q2 -->
+        <text x="390" y="40" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">Q3' = Q2</text>
         <rect x="350" y="45" width="80" height="50" rx="8" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/>
         <text x="390" y="75" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#00d4ff">D-FF3</text>
         <line x1="430" y1="67" x2="460" y2="67" stroke="#39ff14" stroke-width="2"/>
+        <!-- D-FF4: Q' = Q3 -->
+        <text x="500" y="40" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">Q4' = Q3</text>
         <rect x="460" y="45" width="80" height="50" rx="8" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/>
         <text x="500" y="75" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#00d4ff">D-FF4</text>
         <!-- Outputs with timelines -->
@@ -4008,7 +4487,8 @@ const LEVELS = [
         <polyline points="500,95 500,140 8,140 8,77 30,77" stroke="#ff6b6b" stroke-width="2" fill="none" stroke-dasharray="6,3"/>
         <text x="508" y="135" font-family="JetBrains Mono,monospace" font-size="10" fill="#ff6b6b">Q4</text>
         <text x="250" y="160" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ff6b6b">Q3,Q4 → XOR → D1 FEEDBACK</text>
-        <!-- Key insight -->
+        <!-- Formulas -->
+        <text x="8" y="180" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">D-FF: Q' = D  |  D1 = Q3 ⊕ Q4  |  D2 = Q1  |  D3 = Q2  |  D4 = Q3</text>
       </svg>`,
     },
     nodes: [
@@ -4084,42 +4564,51 @@ const LEVELS = [
         <line x1="300" y1="145" x2="355" y2="145" stroke="#c8d8f0" stroke-width="2.5"/>
         <text x="363" y="150" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">Z</text>
       </svg>`,
-      circuitSvg: `<svg viewBox="0 0 700 180" width="850" height="220">
+      circuitSvg: `<svg viewBox="0 0 700 200" width="850" height="245">
         <text x="8" y="20" font-family="JetBrains Mono,monospace" font-size="11" fill="#888">Pipeline: XOR → D-FF1 → D-FF2 → D-FF3 | Bypass: AND(Q1,Q3)</text>
         <!-- Inputs -->
         <text x="8" y="55" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#39ff14">A: 1→1→0</text>
         <text x="8" y="75" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#39ff14">B: 0→1→0</text>
-        <!-- XOR -->
-        <line x1="100" y1="55" x2="130" y2="60" stroke="#39ff14" stroke-width="2"/>
-        <line x1="100" y1="71" x2="130" y2="66" stroke="#39ff14" stroke-width="2"/>
+        <!-- XOR: A ⊕ B -->
+        <polyline points="100,55 115,55 130,60" stroke="#39ff14" stroke-width="2" fill="none"/>
+        <polyline points="100,71 115,71 130,66" stroke="#39ff14" stroke-width="2" fill="none"/>
+        <text x="157" y="40" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">A ⊕ B</text>
         <rect x="130" y="45" width="55" height="35" rx="5" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2"/>
         <text x="157" y="67" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#00d4ff">XOR</text>
         <line x1="185" y1="62" x2="215" y2="62" stroke="#39ff14" stroke-width="2"/>
-        <!-- 3 D-FFs -->
+        <!-- D-FF1: Q' = XOR(A,B) -->
+        <text x="250" y="40" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">Q1' = A⊕B</text>
         <rect x="215" y="45" width="70" height="40" rx="6" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/>
         <text x="250" y="70" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#00d4ff">D-FF1</text>
         <line x1="285" y1="62" x2="315" y2="62" stroke="#39ff14" stroke-width="2"/>
+        <!-- D-FF2: Q' = Q1 -->
+        <text x="350" y="40" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">Q2' = Q1</text>
         <rect x="315" y="45" width="70" height="40" rx="6" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/>
         <text x="350" y="70" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#00d4ff">D-FF2</text>
         <line x1="385" y1="62" x2="415" y2="62" stroke="#39ff14" stroke-width="2"/>
+        <!-- D-FF3: Q' = Q2 -->
+        <text x="450" y="40" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">Q3' = Q2</text>
         <rect x="415" y="45" width="70" height="40" rx="6" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/>
         <text x="450" y="70" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#00d4ff">D-FF3</text>
         <!-- Pipeline outputs -->
         <text x="500" y="55" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#c8d8f0">Q1: 1→0→0</text>
         <text x="500" y="70" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#c8d8f0">Q2: 0→1→0</text>
         <text x="500" y="85" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#c8d8f0">Q3: 0→0→1</text>
-        <!-- AND bypass detector -->
+        <!-- AND bypass detector: Q1 · Q3 -->
         <line x1="250" y1="85" x2="250" y2="120" stroke="#39ff14" stroke-width="1.5"/>
         <line x1="250" y1="120" x2="510" y2="120" stroke="#39ff14" stroke-width="1.5"/>
         <line x1="450" y1="85" x2="450" y2="130" stroke="#39ff14" stroke-width="1.5"/>
         <line x1="450" y1="130" x2="510" y2="130" stroke="#39ff14" stroke-width="1.5"/>
+        <text x="537" y="105" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">Q1 · Q3</text>
         <rect x="510" y="110" width="55" height="35" rx="5" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2"/>
         <text x="537" y="132" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#00d4ff">AND</text>
         <line x1="565" y1="127" x2="600" y2="127" stroke="#c8d8f0" stroke-width="2"/>
         <text x="608" y="132" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#c8d8f0">Z: 0→0→0</text>
         <!-- CLK -->
-        <text x="8" y="160" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#ffcc00">CLK ×3</text>
-        <text x="120" y="160" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">Data propagates through pipeline: 1 enters at step 1, reaches Q3 at step 3</text>
+        <text x="8" y="165" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#ffcc00">CLK ×3</text>
+        <text x="120" y="165" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">Data propagates through pipeline: 1 enters at step 1, reaches Q3 at step 3</text>
+        <!-- Formulas -->
+        <text x="8" y="190" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">D-FF: Q' = D  |  D1 = A ⊕ B  |  D2 = Q1  |  D3 = Q2  |  Z = Q1 · Q3</text>
       </svg>`,
     },
     nodes: [
@@ -4188,7 +4677,7 @@ const LEVELS = [
         <line x1="290" y1="102" x2="345" y2="102" stroke="#c8d8f0" stroke-width="2.5"/>
         <text x="353" y="107" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Q</text>
       </svg>`,
-      circuitSvg: `<svg viewBox="0 0 520 210" width="630" height="255">
+      circuitSvg: `<svg viewBox="0 0 520 230" width="630" height="280">
         <text x="8" y="18" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">STEP 1: A=0,Q=0→Z=0 | STEP 2: A=1,Q=0→Z=1 (change!) | STEP 3: A=1,Q=1→Z=0 (stable)</text>
         <!-- A input splits -->
         <text x="8" y="65" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#39ff14">A: 0→1→1</text>
@@ -4196,18 +4685,20 @@ const LEVELS = [
         <!-- A splits: down to D-FF, right to XOR -->
         <line x1="120" y1="61" x2="120" y2="100" stroke="#39ff14" stroke-width="1.5"/>
         <line x1="120" y1="100" x2="150" y2="100" stroke="#39ff14" stroke-width="2"/>
-        <line x1="120" y1="61" x2="280" y2="50" stroke="#39ff14" stroke-width="2"/>
-        <!-- D-FF -->
+        <polyline points="120,61 200,61 280,50" stroke="#39ff14" stroke-width="2" fill="none"/>
+        <!-- D-FF: Q' = A -->
+        <text x="185" y="77" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">Q' = A</text>
         <rect x="150" y="82" width="70" height="42" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
         <text x="185" y="108" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#a0c8ff">D-FF</text>
         <!-- Q output from D-FF -->
         <line x1="220" y1="100" x2="250" y2="100" stroke="#39ff14" stroke-width="2"/>
         <!-- Q branches: up to XOR, right to output -->
         <line x1="250" y1="100" x2="250" y2="65" stroke="#39ff14" stroke-width="1.5"/>
-        <line x1="250" y1="65" x2="280" y2="62" stroke="#39ff14" stroke-width="2"/>
+        <polyline points="250,65 265,65 280,62" stroke="#39ff14" stroke-width="2" fill="none"/>
         <line x1="250" y1="100" x2="420" y2="100" stroke="#39ff14" stroke-width="1.5"/>
         <text x="428" y="105" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#c8d8f0">Q: 0→1→1</text>
-        <!-- XOR gate -->
+        <!-- XOR gate: A ⊕ Q -->
+        <text x="312" y="30" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">A ⊕ Q</text>
         <rect x="280" y="35" width="65" height="42" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
         <text x="312" y="61" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#a0c8ff">XOR</text>
         <!-- Z output from XOR -->
@@ -4215,10 +4706,12 @@ const LEVELS = [
         <text x="428" y="61" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#c8d8f0">Z: 0→1→0</text>
         <!-- CLK -->
         <text x="8" y="145" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#ffcc00">CLK ×3</text>
-        <line x1="55" y1="141" x2="150" y2="118" stroke="#ffcc00" stroke-width="2"/>
+        <polyline points="55,141 100,141 150,118" stroke="#ffcc00" stroke-width="2" fill="none"/>
         <!-- Legend -->
         <text x="8" y="175" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">D-FF stores previous A. XOR(A_current, A_prev) detects change.</text>
         <text x="8" y="195" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">Z=1 only at STEP 2 when A changes from 0→1</text>
+        <!-- Formulas -->
+        <text x="8" y="220" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">D-FF: Q' = A  |  Z = A ⊕ Q  |  Detects edge when A ≠ prev(A)</text>
       </svg>`,
     },
     nodes: [
@@ -4270,7 +4763,7 @@ const LEVELS = [
         <line x1="290" y1="82" x2="345" y2="82" stroke="#c8d8f0" stroke-width="2.5"/>
         <text x="353" y="87" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Q</text>
       </svg>`,
-      circuitSvg: `<svg viewBox="0 0 520 220" width="630" height="270">
+      circuitSvg: `<svg viewBox="0 0 520 240" width="630" height="290">
         <text x="8" y="18" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">STEP 1: J=1,K=1 → TOGGLE | STEP 2: J=1,K=0 → SET | STEP 3: J=1,K=1 → TOGGLE</text>
         <!-- Inputs -->
         <text x="8" y="50" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#39ff14">A=1</text>
@@ -4278,22 +4771,25 @@ const LEVELS = [
         <text x="8" y="130" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#39ff14">C: 1→0→1</text>
         <!-- Lines to G1 -->
         <line x1="40" y1="46" x2="100" y2="46" stroke="#39ff14" stroke-width="2"/>
-        <line x1="40" y1="68" x2="100" y2="56" stroke="#39ff14" stroke-width="2"/>
-        <!-- G1 -->
+        <polyline points="40,68 70,68 100,56" stroke="#39ff14" stroke-width="2" fill="none"/>
+        <!-- G1: A · B -->
+        <text x="130" y="27" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">A · B</text>
         <rect x="100" y="32" width="60" height="36" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
         <text x="130" y="55" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#a0c8ff">AND</text>
-        <line x1="160" y1="50" x2="220" y2="68" stroke="#39ff14" stroke-width="2"/>
+        <polyline points="160,50 190,50 220,68" stroke="#39ff14" stroke-width="2" fill="none"/>
         <text x="175" y="42" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">J=1</text>
         <!-- A branch down to G2 -->
         <line x1="55" y1="46" x2="55" y2="108" stroke="#39ff14" stroke-width="1.5"/>
         <line x1="55" y1="108" x2="100" y2="108" stroke="#39ff14" stroke-width="1.5"/>
-        <line x1="65" y1="126" x2="100" y2="118" stroke="#39ff14" stroke-width="2"/>
-        <!-- G2 -->
+        <polyline points="65,126 82,126 100,118" stroke="#39ff14" stroke-width="2" fill="none"/>
+        <!-- G2: A · C -->
+        <text x="130" y="93" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">A · C</text>
         <rect x="100" y="98" width="60" height="36" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
         <text x="130" y="121" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#a0c8ff">AND</text>
-        <line x1="160" y1="116" x2="220" y2="92" stroke="#39ff14" stroke-width="2"/>
+        <polyline points="160,116 190,116 220,92" stroke="#39ff14" stroke-width="2" fill="none"/>
         <text x="175" y="130" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">K: 1→0→1</text>
-        <!-- JK-FF -->
+        <!-- JK-FF: Q' = J·¬Q + ¬K·Q -->
+        <text x="262" y="47" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">Q' = J·¬Q + ¬K·Q</text>
         <rect x="220" y="52" width="85" height="56" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
         <text x="262" y="86" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#a0c8ff">JK-FF</text>
         <!-- Q output -->
@@ -4303,6 +4799,8 @@ const LEVELS = [
         <text x="8" y="170" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#ffcc00">CLK ×3</text>
         <text x="8" y="195" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">Only JK-FF: TOGGLE when J=K=1, SET when J=1,K=0. T/D/SR all fail.</text>
         <text x="8" y="212" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">Used in: Ethernet FSM, PCI bus arbiter, cache control</text>
+        <!-- Formulas -->
+        <text x="8" y="232" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">JK-FF: Q' = J·¬Q + ¬K·Q  |  J = A · B  |  K = A · C</text>
       </svg>`,
     },
     nodes: [
@@ -4362,13 +4860,14 @@ const LEVELS = [
         <line x1="300" y1="112" x2="355" y2="112" stroke="#c8d8f0" stroke-width="2.5"/>
         <text x="363" y="117" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">DOOR</text>
       </svg>`,
-      circuitSvg: `<svg viewBox="0 0 520 200" width="630" height="245">
+      circuitSvg: `<svg viewBox="0 0 520 225" width="630" height="275">
         <text x="8" y="18" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">STEP 1: MOVE=1→up to F1, DOOR=1 | STEP 2: MOVE=0→stay F1, DOOR=1 | STEP 3: MOVE=1→down to F0, DOOR=0</text>
         <!-- Inputs -->
         <text x="8" y="55" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#39ff14">MOVE: 1→0→1</text>
         <text x="8" y="80" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#39ff14">CALL=1</text>
         <line x1="115" y1="51" x2="150" y2="51" stroke="#39ff14" stroke-width="2"/>
         <!-- T-FF -->
+        <text x="187" y="30" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">Q' = Q ⊕ T</text>
         <rect x="150" y="35" width="75" height="40" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
         <text x="187" y="60" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#a0c8ff">T-FF</text>
         <!-- FLOOR output -->
@@ -4378,8 +4877,9 @@ const LEVELS = [
         <line x1="260" y1="55" x2="400" y2="55" stroke="#39ff14" stroke-width="1.5"/>
         <text x="408" y="60" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#c8d8f0">FLOOR: 1→1→0</text>
         <!-- CALL to AND -->
-        <line x1="60" y1="76" x2="300" y2="105" stroke="#39ff14" stroke-width="1.5"/>
+        <polyline points="60,76 180,76 180,105 300,105" stroke="#39ff14" stroke-width="1.5" fill="none"/>
         <!-- AND gate -->
+        <text x="330" y="80" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">FLOOR · CALL</text>
         <rect x="300" y="85" width="60" height="35" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
         <text x="330" y="107" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#a0c8ff">AND</text>
         <!-- DOOR output -->
@@ -4389,6 +4889,7 @@ const LEVELS = [
         <text x="8" y="150" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#ffcc00">CLK x3</text>
         <text x="8" y="175" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">T-FF toggles floor on MOVE=1, holds on MOVE=0. AND opens door only at Floor 1.</text>
         <text x="8" y="195" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">Used in: elevator PLCs, building automation, industrial lift controllers</text>
+        <text x="8" y="215" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">T-FF: Q' = Q ⊕ T  |  DOOR = FLOOR · CALL</text>
       </svg>`,
     },
     nodes: [
@@ -4440,21 +4941,23 @@ const LEVELS = [
         <line x1="300" y1="82" x2="355" y2="82" stroke="#c8d8f0" stroke-width="2.5"/>
         <text x="363" y="87" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#ff4444">ALARM</text>
       </svg>`,
-      circuitSvg: `<svg viewBox="0 0 520 200" width="630" height="245">
+      circuitSvg: `<svg viewBox="0 0 520 225" width="630" height="275">
         <text x="8" y="18" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">S1: ZONE triggers→SET | S2: SENSOR triggers→SET | S3: both clear→HOLD (alarm stays!)</text>
         <text x="8" y="50" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#39ff14">SENSOR: 0→1→0</text>
         <text x="8" y="70" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#39ff14">ZONE: 1→0→0</text>
-        <line x1="130" y1="46" x2="170" y2="55" stroke="#39ff14" stroke-width="2"/>
-        <line x1="130" y1="66" x2="170" y2="62" stroke="#39ff14" stroke-width="2"/>
+        <polyline points="130,46 150,46 150,52 170,52" stroke="#39ff14" stroke-width="2" fill="none"/>
+        <polyline points="130,66 150,66 150,62 170,62" stroke="#39ff14" stroke-width="2" fill="none"/>
         <!-- OR gate -->
+        <text x="200" y="37" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">SEN + ZONE</text>
         <rect x="170" y="42" width="60" height="35" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
         <text x="200" y="64" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#a0c8ff">OR</text>
         <line x1="230" y1="59" x2="270" y2="59" stroke="#39ff14" stroke-width="2"/>
         <text x="242" y="52" font-family="JetBrains Mono,monospace" font-size="9" fill="#888">S: 1→1→0</text>
         <!-- RESET -->
         <text x="8" y="105" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#ff4444">RESET=0</text>
-        <line x1="80" y1="101" x2="270" y2="75" stroke="#ff4444" stroke-width="1.5"/>
+        <polyline points="80,101 250,101 250,75 270,75" stroke="#ff4444" stroke-width="1.5" fill="none"/>
         <!-- SR-FF -->
+        <text x="310" y="40" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">Q' = S + ¬R·Q</text>
         <rect x="270" y="45" width="80" height="45" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
         <text x="310" y="73" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#a0c8ff">SR-FF</text>
         <!-- ALARM output -->
@@ -4464,6 +4967,7 @@ const LEVELS = [
         <text x="8" y="150" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#ffcc00">CLK x3</text>
         <text x="8" y="175" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">OR: any sensor triggers. SR-FF: SET then HOLD — alarm remembers!</text>
         <text x="8" y="195" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">Used in: burglar alarms, fire systems, industrial safety latches</text>
+        <text x="8" y="215" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">SR-FF: Q' = S + ¬R·Q  |  S = SEN + ZONE</text>
       </svg>`,
     },
     nodes: [
@@ -4523,17 +5027,19 @@ const LEVELS = [
         <line x1="300" y1="112" x2="355" y2="112" stroke="#c8d8f0" stroke-width="2.5"/>
         <text x="363" y="117" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">SIGNAL</text>
       </svg>`,
-      circuitSvg: `<svg viewBox="0 0 520 200" width="630" height="245">
+      circuitSvg: `<svg viewBox="0 0 520 225" width="630" height="275">
         <text x="8" y="18" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">S1: AND(1,1)=1→SET | S2: AND(1,1)=1→SET | S3: AND(0,1)=0→HOLD (pump stays on!)</text>
         <text x="8" y="50" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#8b4513">MOISTURE: 1→1→0</text>
         <text x="8" y="70" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#39ff14">SCHEDULE: 1→1→1</text>
         <text x="8" y="90" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#ffcc00">TIMER: 1→1→0</text>
-        <line x1="130" y1="46" x2="170" y2="55" stroke="#8b4513" stroke-width="2"/>
-        <line x1="130" y1="66" x2="170" y2="62" stroke="#39ff14" stroke-width="2"/>
+        <polyline points="130,46 150,46 150,52 170,52" stroke="#8b4513" stroke-width="2" fill="none"/>
+        <polyline points="130,66 150,66 150,62 170,62" stroke="#39ff14" stroke-width="2" fill="none"/>
+        <text x="200" y="37" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">MOIST · SCHED</text>
         <rect x="170" y="42" width="60" height="35" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
         <text x="200" y="64" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#a0c8ff">AND</text>
         <line x1="230" y1="59" x2="280" y2="59" stroke="#39ff14" stroke-width="2"/>
-        <line x1="130" y1="86" x2="280" y2="72" stroke="#ffcc00" stroke-width="1.5"/>
+        <polyline points="130,86 260,86 260,72 280,72" stroke="#ffcc00" stroke-width="1.5" fill="none"/>
+        <text x="320" y="40" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">Q' = S + ¬R·Q</text>
         <rect x="280" y="45" width="80" height="40" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
         <text x="320" y="70" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#a0c8ff">SR-FF</text>
         <line x1="360" y1="65" x2="400" y2="65" stroke="#39ff14" stroke-width="2"/>
@@ -4542,6 +5048,7 @@ const LEVELS = [
         <text x="8" y="140" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#ffcc00">CLK x3</text>
         <text x="8" y="165" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">AND: both conditions needed. SR-FF: latches pump on, holds even when gate drops.</text>
         <text x="8" y="185" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">Used in: smart irrigation, greenhouse automation, agricultural controllers</text>
+        <text x="8" y="205" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">SR-FF: Q' = S + ¬R·Q  |  S = MOIST · SCHED  |  R = TIMER</text>
       </svg>`,
     },
     nodes: [
@@ -4598,17 +5105,19 @@ const LEVELS = [
         <line x1="300" y1="112" x2="355" y2="112" stroke="#c8d8f0" stroke-width="2.5"/>
         <text x="363" y="117" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">READY</text>
       </svg>`,
-      circuitSvg: `<svg viewBox="0 0 520 200" width="630" height="245">
+      circuitSvg: `<svg viewBox="0 0 520 225" width="630" height="275">
         <text x="8" y="18" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">S1: J=1,K=1→TOGGLE(locked→unlocked) | S2: J=1,K=0→SET(stays) | S3: J=1,K=1→TOGGLE(→locked)</text>
         <text x="8" y="50" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#ffcc00">COIN: 1→1→0</text>
         <text x="8" y="70" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#888">VALID: 0→0→0</text>
         <text x="8" y="90" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#ff4444">PUSH: 1→0→1</text>
-        <line x1="130" y1="46" x2="170" y2="55" stroke="#ffcc00" stroke-width="2"/>
-        <line x1="130" y1="66" x2="170" y2="62" stroke="#888" stroke-width="2"/>
+        <polyline points="130,46 150,46 150,52 170,52" stroke="#ffcc00" stroke-width="2" fill="none"/>
+        <polyline points="130,66 150,66 150,62 170,62" stroke="#888" stroke-width="2" fill="none"/>
+        <text x="202" y="37" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">¬(COIN·VALID)</text>
         <rect x="170" y="42" width="65" height="35" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
         <text x="202" y="64" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#a0c8ff">NAND</text>
         <line x1="235" y1="59" x2="270" y2="59" stroke="#39ff14" stroke-width="2"/>
-        <line x1="130" y1="86" x2="270" y2="72" stroke="#ff4444" stroke-width="1.5"/>
+        <polyline points="130,86 250,86 250,72 270,72" stroke="#ff4444" stroke-width="1.5" fill="none"/>
+        <text x="310" y="40" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">Q' = J·¬Q + ¬K·Q</text>
         <rect x="270" y="45" width="80" height="40" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
         <text x="310" y="70" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#a0c8ff">JK-FF</text>
         <line x1="350" y1="65" x2="400" y2="65" stroke="#39ff14" stroke-width="2"/>
@@ -4617,17 +5126,18 @@ const LEVELS = [
         <text x="8" y="140" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#ffcc00">CLK x3</text>
         <text x="8" y="165" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">NAND validates coin. JK-FF toggles lock state. Together: insert coin, pass through, re-locks.</text>
         <text x="8" y="185" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">Used in: metro turnstiles, amusement parks, stadium access control</text>
+        <text x="8" y="205" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">JK-FF: Q' = J·¬Q + ¬K·Q  |  J = ¬(COIN·VALID)  |  K = PUSH</text>
       </svg>`,
     },
     nodes: [
       { id: 'in_COIN',  type: 'INPUT',     x: 140, y: 380, fixedValue: 1, stepValues: [1, 1, 0], label: 'COIN' },
-      { id: 'in_VALID', type: 'INPUT',     x: 140, y: 470, fixedValue: 0, stepValues: [0, 0, 0], label: 'VALID' },
-      { id: 'in_PUSH',  type: 'INPUT',     x: 140, y: 560, fixedValue: 1, stepValues: [1, 0, 1], label: 'PUSH' },
+      { id: 'in_VALID', type: 'INPUT',     x: 140, y: 470, fixedValue: 1, stepValues: [1, 1, 0], label: 'VALID' },
+      { id: 'in_PUSH',  type: 'INPUT',     x: 140, y: 560, fixedValue: 0, stepValues: [0, 0, 0], label: 'PUSH' },
       { id: 'clk_1',    type: 'CLOCK',     x: 140, y: 670, value: 0, label: null },
       { id: 'g1',       type: 'GATE_SLOT', x: 400, y: 430 },
       { id: 'ff_1',     type: 'FF_SLOT',   ffType: null, x: 650, y: 480, initialQ: 0, label: 'FF' },
-      { id: 'out_UNL',  type: 'OUTPUT',    x: 900, y: 480, targetValue: 0, stepTargets: [1, 1, 0], label: 'UNLOCK' },
-      { id: 'out_RDY',  type: 'OUTPUT',    x: 900, y: 380, targetValue: 1, stepTargets: [1, 1, 1], label: 'READY' },
+      { id: 'out_UNL',  type: 'OUTPUT',    x: 900, y: 480, targetValue: 1, stepTargets: [0, 0, 1], label: 'UNLOCK' },
+      { id: 'out_RDY',  type: 'OUTPUT',    x: 900, y: 380, targetValue: 1, stepTargets: [0, 0, 1], label: 'READY' },
     ],
     wires: [
       { id: 'w1',   sourceId: 'in_COIN',  targetId: 'g1',      targetInputIndex: 0 },
@@ -4674,26 +5184,47 @@ const LEVELS = [
         <line x1="300" y1="112" x2="355" y2="112" stroke="#c8d8f0" stroke-width="2.5"/>
         <text x="363" y="117" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">HEATER</text>
       </svg>`,
-      circuitSvg: `<svg viewBox="0 0 580 200" width="700" height="245">
+      circuitSvg: `<svg viewBox="0 0 600 240" width="720" height="290">
         <text x="8" y="18" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">S1: NOR(0,1)=0→Q1=0,Q2=0 | S2: NOR(0,0)=1→Q1=1,Q2=0 | S3: NOR(0,1)=0→Q1=0,Q2=1</text>
-        <text x="8" y="50" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#ff4444">TEMP_HIGH: 0→0→0</text>
-        <text x="8" y="70" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#0066ff">TEMP_LOW: 1→0→1</text>
-        <line x1="130" y1="46" x2="170" y2="55" stroke="#ff4444" stroke-width="2"/>
-        <line x1="130" y1="66" x2="170" y2="62" stroke="#0066ff" stroke-width="2"/>
+        <!-- Inputs -->
+        <text x="8" y="50" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#ff4444">TEMP_HIGH</text>
+        <text x="8" y="80" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#0066ff">TEMP_LOW</text>
+        <!-- NOR gate -->
+        <text x="200" y="37" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">¬(HI + LO)</text>
         <rect x="170" y="42" width="60" height="35" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
         <text x="200" y="64" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#a0c8ff">NOR</text>
-        <line x1="230" y1="59" x2="270" y2="59" stroke="#39ff14" stroke-width="2"/>
-        <rect x="270" y="42" width="75" height="35" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
-        <text x="307" y="64" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#a0c8ff">D-FF1</text>
-        <line x1="345" y1="59" x2="385" y2="59" stroke="#39ff14" stroke-width="2"/>
-        <rect x="385" y="42" width="75" height="35" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
-        <text x="422" y="64" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#a0c8ff">D-FF2</text>
-        <line x1="460" y1="59" x2="490" y2="59" stroke="#39ff14" stroke-width="2"/>
-        <text x="498" y="50" font-family="JetBrains Mono,monospace" font-size="10" fill="#c8d8f0">STAGE1: 0→1→0</text>
-        <text x="498" y="67" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#39ff14">HEATER: 0→0→1</text>
-        <text x="8" y="120" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#ffcc00">CLK x3</text>
-        <text x="8" y="145" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">NOR: comfort zone (neither hot nor cold). 2 D-FFs: pipeline delay prevents flickering.</text>
-        <text x="8" y="165" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">Used in: HVAC systems, industrial ovens, climate control with debouncing</text>
+        <!-- D-FF1 -->
+        <text x="317" y="37" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">Q1' = D</text>
+        <rect x="280" y="42" width="75" height="35" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="317" y="64" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#a0c8ff">D-FF1</text>
+        <!-- D-FF2 -->
+        <text x="447" y="37" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">Q2' = D</text>
+        <rect x="410" y="42" width="75" height="35" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="447" y="64" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#a0c8ff">D-FF2</text>
+        <!-- Wires: inputs → NOR -->
+        <polyline points="95,46 140,46 140,52 170,52" stroke="#ff4444" stroke-width="2" fill="none"/>
+        <polyline points="85,76 140,76 140,68 170,68" stroke="#0066ff" stroke-width="2" fill="none"/>
+        <!-- NOR → D-FF1 -->
+        <line x1="230" y1="59" x2="280" y2="59" stroke="#39ff14" stroke-width="2"/>
+        <!-- D-FF1 → D-FF2 -->
+        <line x1="355" y1="59" x2="410" y2="59" stroke="#39ff14" stroke-width="2"/>
+        <!-- D-FF1 → STAGE1 output (branch up) -->
+        <polyline points="355,52 370,52 370,110 540,110" stroke="#c8d8f0" stroke-width="1.5" fill="none"/>
+        <circle cx="370" cy="52" r="3" fill="#39ff14"/>
+        <text x="548" y="114" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#c8d8f0">STAGE1</text>
+        <text x="548" y="128" font-family="JetBrains Mono,monospace" font-size="9" fill="#888">0→1→0</text>
+        <!-- D-FF2 → HEATER output -->
+        <line x1="485" y1="59" x2="540" y2="59" stroke="#39ff14" stroke-width="2"/>
+        <text x="548" y="54" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#39ff14">HEATER</text>
+        <text x="548" y="68" font-family="JetBrains Mono,monospace" font-size="9" fill="#888">0→0→1</text>
+        <!-- CLK -->
+        <text x="8" y="155" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#ffcc00">CLK x3</text>
+        <polyline points="50,160 317,160 317,77" stroke="#ffcc00" stroke-width="1.5" fill="none" stroke-dasharray="4,3"/>
+        <polyline points="317,160 447,160 447,77" stroke="#ffcc00" stroke-width="1.5" fill="none" stroke-dasharray="4,3"/>
+        <!-- Info -->
+        <text x="8" y="185" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">NOR: comfort zone (neither hot nor cold). 2 D-FFs: pipeline delay prevents flickering.</text>
+        <text x="8" y="205" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">Used in: HVAC systems, industrial ovens, climate control with debouncing</text>
+        <text x="8" y="225" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">D-FF: Q' = D  |  D = ¬(HI + LO)  |  Q2 = Q1(delayed)</text>
       </svg>`,
     },
     nodes: [
@@ -4757,7 +5288,7 @@ const LEVELS = [
         <line x1="300" y1="142" x2="355" y2="142" stroke="#c8d8f0" stroke-width="2.5"/>
         <text x="363" y="147" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">WALK</text>
       </svg>`,
-      circuitSvg: `<svg viewBox="0 0 620 250" width="750" height="305">
+      circuitSvg: `<svg viewBox="0 0 620 265" width="750" height="325">
         <text x="8" y="18" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">Ring counter: G→Y→R→G... | WALK = AND(RED, BUTTON)</text>
         <!-- Traffic light visualization -->
         <rect x="440" y="30" width="50" height="120" rx="8" fill="rgba(20,20,20,0.95)" stroke="#444" stroke-width="2"/>
@@ -4769,12 +5300,15 @@ const LEVELS = [
         <text x="465" y="129" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" font-weight="bold" fill="#fff">R</text>
         <text x="465" y="162" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#39ff14">WALK</text>
         <!-- Ring: D-FF_G → D-FF_Y → D-FF_R → feedback to D-FF_G -->
+        <text x="65" y="35" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">G' = D</text>
         <rect x="30" y="40" width="70" height="40" rx="5" fill="rgba(14,31,51,0.96)" stroke="#39ff14" stroke-width="2"/>
         <text x="65" y="65" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#39ff14">D-FF G</text>
         <line x1="100" y1="60" x2="140" y2="60" stroke="#39ff14" stroke-width="2"/>
+        <text x="175" y="35" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">Y' = D</text>
         <rect x="140" y="40" width="70" height="40" rx="5" fill="rgba(14,31,51,0.96)" stroke="#ffcc00" stroke-width="2"/>
         <text x="175" y="65" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#ffcc00">D-FF Y</text>
         <line x1="210" y1="60" x2="250" y2="60" stroke="#ffcc00" stroke-width="2"/>
+        <text x="285" y="35" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">R' = D</text>
         <rect x="250" y="40" width="70" height="40" rx="5" fill="rgba(14,31,51,0.96)" stroke="#ff4444" stroke-width="2"/>
         <text x="285" y="65" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#ff4444">D-FF R</text>
         <!-- Feedback R → G -->
@@ -4785,6 +5319,7 @@ const LEVELS = [
         <line x1="285" y1="155" x2="330" y2="155" stroke="#ff4444" stroke-width="1.5"/>
         <text x="8" y="170" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#39ff14">BTN=1</text>
         <line x1="60" y1="166" x2="330" y2="166" stroke="#39ff14" stroke-width="1.5"/>
+        <text x="357" y="138" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">R · BTN</text>
         <rect x="330" y="143" width="55" height="35" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
         <text x="357" y="165" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#a0c8ff">AND</text>
         <line x1="385" y1="160" x2="420" y2="160" stroke="#39ff14" stroke-width="2"/>
@@ -4793,6 +5328,7 @@ const LEVELS = [
         <text x="8" y="200" font-family="JetBrains Mono,monospace" font-size="11" fill="#888">init: G=1 Y=0 R=0 (GREEN)</text>
         <text x="8" y="218" font-family="JetBrains Mono,monospace" font-size="11" fill="#888">S1:   G=0 Y=1 R=0 (YELLOW) WALK=0</text>
         <text x="8" y="236" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#39ff14">S2:   G=0 Y=0 R=1 (RED)    WALK=1</text>
+        <text x="8" y="256" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">D-FF: Q' = D (ring: R→G, G→Y, Y→R)  |  WALK = R · BTN</text>
       </svg>`,
     },
     nodes: [
@@ -4863,39 +5399,59 @@ const LEVELS = [
         <line x1="300" y1="120" x2="345" y2="120" stroke="#c8d8f0" stroke-width="2.5"/>
         <text x="353" y="125" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">VEND</text>
       </svg>`,
-      circuitSvg: `<svg viewBox="0 0 580 200" width="700" height="245">
+      circuitSvg: `<svg viewBox="0 0 600 240" width="720" height="290">
         <text x="8" y="18" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">STEP 1: 5₪ inserted | STEP 2: 10₪ total | STEP 3: 15₪ → VEND!</text>
-        <text x="8" y="50" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#ffcc00">COIN=1</text>
-        <line x1="75" y1="46" x2="110" y2="46" stroke="#ffcc00" stroke-width="2"/>
-        <!-- 3 D-FFs -->
-        <rect x="110" y="30" width="70" height="38" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
-        <text x="145" y="54" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#a0c8ff">D-FF</text>
-        <text x="145" y="28" font-family="JetBrains Mono,monospace" font-size="9" fill="#ffcc00">5₪</text>
-        <line x1="180" y1="46" x2="210" y2="46" stroke="#39ff14" stroke-width="2"/>
-        <rect x="210" y="30" width="70" height="38" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
-        <text x="245" y="54" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#a0c8ff">D-FF</text>
-        <text x="245" y="28" font-family="JetBrains Mono,monospace" font-size="9" fill="#ffcc00">10₪</text>
-        <line x1="280" y1="46" x2="310" y2="46" stroke="#39ff14" stroke-width="2"/>
-        <rect x="310" y="30" width="70" height="38" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
-        <text x="345" y="54" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#a0c8ff">D-FF</text>
-        <text x="345" y="28" font-family="JetBrains Mono,monospace" font-size="9" fill="#ffcc00">15₪</text>
-        <!-- Outputs -->
-        <text x="400" y="37" font-family="JetBrains Mono,monospace" font-size="10" fill="#c8d8f0">5₪: 1→1→1</text>
-        <text x="400" y="52" font-family="JetBrains Mono,monospace" font-size="10" fill="#c8d8f0">10₪: 0→1→1</text>
-        <text x="400" y="67" font-family="JetBrains Mono,monospace" font-size="10" fill="#c8d8f0">15₪: 0→0→1</text>
-        <!-- AND decode -->
-        <line x1="245" y1="68" x2="245" y2="105" stroke="#39ff14" stroke-width="1.5"/>
-        <line x1="245" y1="105" x2="400" y2="105" stroke="#39ff14" stroke-width="1.5"/>
-        <line x1="345" y1="68" x2="345" y2="115" stroke="#39ff14" stroke-width="1.5"/>
-        <line x1="345" y1="115" x2="400" y2="115" stroke="#39ff14" stroke-width="1.5"/>
-        <rect x="400" y="98" width="55" height="30" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
-        <text x="427" y="117" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#a0c8ff">AND</text>
-        <line x1="455" y1="113" x2="490" y2="113" stroke="#39ff14" stroke-width="2"/>
-        <text x="498" y="118" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#39ff14">VEND: 0→0→1</text>
+        <!-- Input -->
+        <text x="8" y="55" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#ffcc00">COIN=1</text>
+        <!-- COIN → FF1 -->
+        <line x1="78" y1="51" x2="110" y2="51" stroke="#ffcc00" stroke-width="2"/>
+        <!-- D-FF1 (5₪) -->
+        <text x="145" y="18" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">Q1' = D</text>
+        <text x="145" y="30" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#ffcc00">5₪</text>
+        <rect x="110" y="34" width="70" height="38" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="145" y="58" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#a0c8ff">D-FF</text>
+        <!-- FF1 → FF2 -->
+        <line x1="180" y1="51" x2="220" y2="51" stroke="#39ff14" stroke-width="2"/>
+        <!-- D-FF2 (10₪) -->
+        <text x="255" y="18" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">Q2' = D</text>
+        <text x="255" y="30" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#ffcc00">10₪</text>
+        <rect x="220" y="34" width="70" height="38" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="255" y="58" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#a0c8ff">D-FF</text>
+        <!-- FF2 → FF3 -->
+        <line x1="290" y1="51" x2="330" y2="51" stroke="#39ff14" stroke-width="2"/>
+        <!-- D-FF3 (15₪) -->
+        <text x="365" y="18" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">Q3' = D</text>
+        <text x="365" y="30" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#ffcc00">15₪</text>
+        <rect x="330" y="34" width="70" height="38" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="365" y="58" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#a0c8ff">D-FF</text>
+        <!-- FF1 → 5₪ output (branch up) -->
+        <polyline points="180,44 190,44 190,100 530,100" stroke="#c8d8f0" stroke-width="1.5" fill="none"/>
+        <circle cx="190" cy="44" r="3" fill="#39ff14"/>
+        <text x="538" y="104" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#c8d8f0">5₪: 1→1→1</text>
+        <!-- FF2 → 10₪ output (branch up) -->
+        <polyline points="290,44 300,44 300,118 530,118" stroke="#c8d8f0" stroke-width="1.5" fill="none"/>
+        <circle cx="300" cy="44" r="3" fill="#39ff14"/>
+        <text x="538" y="122" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#c8d8f0">10₪: 0→1→1</text>
+        <!-- FF2 Q → AND input 0 -->
+        <polyline points="300,118 300,148 440,148" stroke="#39ff14" stroke-width="1.5" fill="none"/>
+        <!-- FF3 Q → AND input 1 -->
+        <polyline points="400,51 420,51 420,162 440,162" stroke="#39ff14" stroke-width="1.5" fill="none"/>
+        <!-- AND gate -->
+        <text x="467" y="137" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">Q2 · Q3</text>
+        <rect x="440" y="142" width="55" height="30" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="467" y="161" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#a0c8ff">AND</text>
+        <!-- AND → VEND -->
+        <line x1="495" y1="157" x2="530" y2="157" stroke="#39ff14" stroke-width="2"/>
+        <text x="538" y="142" font-family="JetBrains Mono,monospace" font-size="10" fill="#c8d8f0">15₪: 0→0→1</text>
+        <text x="538" y="162" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#39ff14">VEND: 0→0→1</text>
         <!-- CLK -->
-        <text x="8" y="150" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#ffcc00">CLK x3</text>
-        <text x="8" y="175" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">Each coin shifts through the register. AND vends only when 10₪+15₪ stages are full.</text>
-        <text x="8" y="195" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">Used in: coin-op machines, parking meters, arcade token systems</text>
+        <text x="8" y="190" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#ffcc00">CLK x3</text>
+        <polyline points="50,196 145,196 145,72" stroke="#ffcc00" stroke-width="1.5" fill="none" stroke-dasharray="4,3"/>
+        <polyline points="145,196 255,196 255,72" stroke="#ffcc00" stroke-width="1.5" fill="none" stroke-dasharray="4,3"/>
+        <polyline points="255,196 365,196 365,72" stroke="#ffcc00" stroke-width="1.5" fill="none" stroke-dasharray="4,3"/>
+        <!-- Info -->
+        <text x="8" y="214" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">Each coin shifts through the register. AND vends only when 10₪+15₪ stages are full.</text>
+        <text x="8" y="234" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">D-FF: Q' = D (shift register)  |  VEND = Q2 · Q3</text>
       </svg>`,
     },
     nodes: [
@@ -4950,52 +5506,72 @@ const LEVELS = [
         <line x1="300" y1="130" x2="355" y2="130" stroke="#c8d8f0" stroke-width="2.5"/>
         <text x="363" y="135" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">UNLOCK</text>
       </svg>`,
-      circuitSvg: `<svg viewBox="0 0 720 220" width="870" height="270">
-        <text x="8" y="18" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">KEY = 1→0→1→1 | NOT inverts the "0" | After 4 steps: Q1=1, Q2=1, Q3=1(inv!), Q4=0 → UNLOCK!</text>
+      circuitSvg: `<svg viewBox="0 0 720 260" width="870" height="315">
+        <text x="8" y="16" font-family="JetBrains Mono,monospace" font-size="9" fill="#888">KEY = 1→0→1→1 | NOT inverts the "0" | After 4 steps: Q1=1, Q2=1, Q3=1(inv!), Q4=0 → UNLOCK!</text>
         <!-- KEY input -->
-        <text x="8" y="55" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#39ff14">KEY</text>
-        <line x1="40" y1="51" x2="70" y2="51" stroke="#39ff14" stroke-width="2"/>
-        <!-- FF1 -->
-        <rect x="70" y="35" width="65" height="38" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
-        <text x="102" y="59" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#a0c8ff">D-FF1</text>
-        <line x1="135" y1="51" x2="160" y2="51" stroke="#39ff14" stroke-width="2"/>
-        <!-- FF2 -->
-        <rect x="160" y="35" width="65" height="38" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
-        <text x="192" y="59" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#a0c8ff">D-FF2</text>
-        <line x1="225" y1="51" x2="250" y2="51" stroke="#39ff14" stroke-width="2"/>
-        <!-- NOT gate (inverter) -->
-        <rect x="250" y="35" width="55" height="38" rx="5" fill="rgba(14,31,51,0.96)" stroke="#ff6b6b" stroke-width="2"/>
-        <text x="277" y="59" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ff6b6b">NOT</text>
-        <line x1="305" y1="51" x2="330" y2="51" stroke="#ff6b6b" stroke-width="2"/>
-        <!-- FF3 -->
-        <rect x="330" y="35" width="65" height="38" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
-        <text x="362" y="59" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#a0c8ff">D-FF3</text>
-        <line x1="395" y1="51" x2="420" y2="51" stroke="#39ff14" stroke-width="2"/>
-        <!-- FF4 -->
-        <rect x="420" y="35" width="65" height="38" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
-        <text x="452" y="59" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#a0c8ff">D-FF4</text>
-        <!-- Q outputs -->
-        <text x="505" y="37" font-family="JetBrains Mono,monospace" font-size="10" fill="#c8d8f0">Q1: 1→0→1→1</text>
-        <text x="505" y="52" font-family="JetBrains Mono,monospace" font-size="10" fill="#c8d8f0">Q2: 0→1→0→1</text>
-        <text x="505" y="67" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ff6b6b">Q3: 1→1→0→1 (inv)</text>
-        <text x="505" y="82" font-family="JetBrains Mono,monospace" font-size="10" fill="#c8d8f0">Q4: 0→1→1→0</text>
-        <!-- AND(Q1, Q2) decode -->
-        <line x1="102" y1="73" x2="102" y2="110" stroke="#39ff14" stroke-width="1.5"/>
-        <line x1="102" y1="110" x2="520" y2="110" stroke="#39ff14" stroke-width="1.5"/>
-        <line x1="192" y1="73" x2="192" y2="120" stroke="#39ff14" stroke-width="1.5"/>
-        <line x1="192" y1="120" x2="520" y2="120" stroke="#39ff14" stroke-width="1.5"/>
-        <rect x="520" y="103" width="55" height="30" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
-        <text x="547" y="122" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#a0c8ff">AND</text>
-        <line x1="575" y1="118" x2="610" y2="118" stroke="#39ff14" stroke-width="2"/>
-        <text x="618" y="123" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#39ff14">UNLOCK</text>
-        <!-- Safe -->
-        <rect x="620" y="30" width="70" height="60" rx="8" fill="#111" stroke="#555" stroke-width="2"/>
-        <circle cx="655" cy="55" r="10" fill="none" stroke="#39ff14" stroke-width="2"/>
-        <text x="655" y="59" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" font-weight="bold" fill="#39ff14">OPEN</text>
+        <text x="8" y="60" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#39ff14">KEY</text>
+        <line x1="40" y1="56" x2="70" y2="56" stroke="#39ff14" stroke-width="2"/>
+        <!-- FF1: Q'=KEY -->
+        <text x="102" y="34" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">Q' = KEY</text>
+        <rect x="70" y="40" width="65" height="38" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="102" y="64" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#a0c8ff">D-FF1</text>
+        <line x1="135" y1="56" x2="160" y2="56" stroke="#39ff14" stroke-width="2"/>
+        <!-- FF2: Q'=Q1 -->
+        <text x="192" y="34" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">Q' = Q1</text>
+        <rect x="160" y="40" width="65" height="38" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="192" y="64" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#a0c8ff">D-FF2</text>
+        <line x1="225" y1="56" x2="250" y2="56" stroke="#39ff14" stroke-width="2"/>
+        <!-- NOT gate: ¬Q2 -->
+        <text x="277" y="34" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">¬Q2</text>
+        <rect x="250" y="40" width="55" height="38" rx="5" fill="rgba(14,31,51,0.96)" stroke="#ff6b6b" stroke-width="2"/>
+        <text x="277" y="64" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ff6b6b">NOT</text>
+        <line x1="305" y1="56" x2="330" y2="56" stroke="#ff6b6b" stroke-width="2"/>
+        <!-- FF3: Q'=¬Q2 -->
+        <text x="362" y="34" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">Q' = ¬Q2</text>
+        <rect x="330" y="40" width="65" height="38" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="362" y="64" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#a0c8ff">D-FF3</text>
+        <line x1="395" y1="56" x2="420" y2="56" stroke="#39ff14" stroke-width="2"/>
+        <!-- FF4: Q'=Q3 -->
+        <text x="452" y="34" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">Q' = Q3</text>
+        <rect x="420" y="40" width="65" height="38" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="452" y="64" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#a0c8ff">D-FF4</text>
+        <!-- FF1 → Q1 output -->
+        <polyline points="135,48 145,48 145,100 550,100" stroke="#c8d8f0" stroke-width="1.5" fill="none"/>
+        <circle cx="145" cy="48" r="2.5" fill="#39ff14"/>
+        <text x="558" y="104" font-family="JetBrains Mono,monospace" font-size="10" fill="#c8d8f0">Q1: 1→0→1→1</text>
+        <!-- FF2 → Q2 output -->
+        <polyline points="225,48 235,48 235,115 550,115" stroke="#c8d8f0" stroke-width="1.5" fill="none"/>
+        <circle cx="235" cy="48" r="2.5" fill="#39ff14"/>
+        <text x="558" y="119" font-family="JetBrains Mono,monospace" font-size="10" fill="#c8d8f0">Q2: 0→1→0→1</text>
+        <!-- FF3 → Q3 output -->
+        <polyline points="395,48 405,48 405,130 550,130" stroke="#ff6b6b" stroke-width="1.5" fill="none"/>
+        <circle cx="405" cy="48" r="2.5" fill="#ff6b6b"/>
+        <text x="558" y="134" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ff6b6b">Q3: 1→1→0→1 (inv)</text>
+        <!-- FF4 → Q4 output -->
+        <polyline points="485,56 500,56 500,145 550,145" stroke="#c8d8f0" stroke-width="1.5" fill="none"/>
+        <text x="558" y="149" font-family="JetBrains Mono,monospace" font-size="10" fill="#c8d8f0">Q4: 0→1→1→0</text>
+        <!-- AND gate: Q1·Q2 -->
+        <text x="547" y="162" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">Q1 · Q2</text>
+        <polyline points="145,100 145,175 520,175" stroke="#39ff14" stroke-width="1.5" fill="none"/>
+        <polyline points="235,115 235,188 520,188" stroke="#39ff14" stroke-width="1.5" fill="none"/>
+        <rect x="520" y="168" width="55" height="30" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="547" y="187" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#a0c8ff">AND</text>
+        <!-- AND → UNLOCK -->
+        <line x1="575" y1="183" x2="620" y2="183" stroke="#39ff14" stroke-width="2"/>
+        <text x="628" y="188" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#39ff14">UNLOCK</text>
+        <text x="628" y="202" font-family="JetBrains Mono,monospace" font-size="9" fill="#888">0→0→0→1</text>
+        <!-- Safe icon -->
+        <rect x="628" y="40" width="60" height="50" rx="8" fill="#111" stroke="#555" stroke-width="2"/>
+        <circle cx="658" cy="60" r="8" fill="none" stroke="#39ff14" stroke-width="1.5"/>
+        <text x="658" y="64" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="6" font-weight="bold" fill="#39ff14">OPEN</text>
         <!-- CLK -->
-        <text x="8" y="155" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#ffcc00">CLK x4</text>
-        <text x="8" y="180" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">NOT inverts the "0" in the code so FF3 stores 1. AND(Q1,Q2) unlocks only at step 4.</text>
-        <text x="8" y="200" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">Used in: keycard readers with bit masking, serial pattern matching</text>
+        <text x="8" y="228" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#ffcc00">CLK x4</text>
+        <polyline points="50,234 102,234 102,78" stroke="#ffcc00" stroke-width="1" fill="none" stroke-dasharray="4,3"/>
+        <polyline points="102,234 192,234 192,78" stroke="#ffcc00" stroke-width="1" fill="none" stroke-dasharray="4,3"/>
+        <polyline points="192,234 362,234 362,78" stroke="#ffcc00" stroke-width="1" fill="none" stroke-dasharray="4,3"/>
+        <polyline points="362,234 452,234 452,78" stroke="#ffcc00" stroke-width="1" fill="none" stroke-dasharray="4,3"/>
+        <!-- Formulas -->
+        <text x="8" y="252" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">D-FF: Q'=D  |  UNLOCK = Q1 · Q2  |  NOT inverts Q2 before FF3</text>
       </svg>`,
     },
     nodes: [
@@ -5080,45 +5656,75 @@ const LEVELS = [
         <line x1="360" y1="120" x2="400" y2="120" stroke="#ffcc00" stroke-width="2.5"/>
         <text x="408" y="125" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#ffcc00">ARMED</text>
       </svg>`,
-      circuitSvg: `<svg viewBox="0 0 620 220" width="750" height="270">
-        <text x="8" y="16" font-family="JetBrains Mono,monospace" font-size="9" fill="#888">S1: AND(1,1)=1→FUEL | S2: 1→PRESS | S3: 1→IGNITE | S4: AND(1,0)=0 gap | S5: AND(1,1)=1→LIFTOFF</text>
-        <text x="8" y="42" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#00b4ff">CMD:  1→1→1→1→1</text>
-        <text x="8" y="58" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#ffcc00">SAFE: 1→1→1→0→1</text>
-        <line x1="140" y1="38" x2="170" y2="48" stroke="#00b4ff" stroke-width="1.5"/>
-        <line x1="140" y1="54" x2="170" y2="52" stroke="#ffcc00" stroke-width="1.5"/>
-        <rect x="170" y="36" width="50" height="28" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/>
-        <text x="195" y="54" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#a0c8ff">AND</text>
-        <line x1="220" y1="50" x2="240" y2="50" stroke="#39ff14" stroke-width="1.5"/>
-        <rect x="240" y="36" width="42" height="28" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/>
-        <text x="261" y="54" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#a0c8ff">D-FF1</text>
-        <line x1="282" y1="50" x2="292" y2="50" stroke="#39ff14" stroke-width="1.5"/>
-        <rect x="292" y="36" width="42" height="28" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/>
-        <text x="313" y="54" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#a0c8ff">D-FF2</text>
-        <line x1="334" y1="50" x2="344" y2="50" stroke="#39ff14" stroke-width="1.5"/>
-        <rect x="344" y="36" width="42" height="28" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/>
-        <text x="365" y="54" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#a0c8ff">D-FF3</text>
-        <line x1="386" y1="50" x2="396" y2="50" stroke="#39ff14" stroke-width="1.5"/>
-        <rect x="396" y="36" width="42" height="28" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/>
-        <text x="417" y="54" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#a0c8ff">D-FF4</text>
-        <line x1="438" y1="50" x2="448" y2="50" stroke="#39ff14" stroke-width="1.5"/>
-        <rect x="448" y="36" width="42" height="28" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/>
-        <text x="469" y="54" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#a0c8ff">D-FF5</text>
-        <line x1="490" y1="50" x2="520" y2="50" stroke="#ff4444" stroke-width="1.5"/>
-        <text x="525" y="54" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ff4444">ENGINE: 0→0→0→0→1</text>
-        <text x="525" y="104" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#39ff14">STATUS: 0→0→1→1→0</text>
-        <text x="525" y="134" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">ARMED: 0→1→1→0→0</text>
-        <polyline points="313,64 313,90 365,90 365,80" stroke="#39ff14" stroke-width="1" fill="none"/>
-        <rect x="290" y="90" width="50" height="22" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/>
-        <text x="315" y="105" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#a0c8ff">AND</text>
-        <line x1="340" y1="101" x2="520" y2="101" stroke="#39ff14" stroke-width="1.5"/>
-        <polyline points="261,64 261,120 270,120" stroke="#ffcc00" stroke-width="1" fill="none"/>
-        <polyline points="313,64 313,130 270,130" stroke="#ffcc00" stroke-width="1" fill="none"/>
-        <rect x="240" y="116" width="50" height="22" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/>
-        <text x="265" y="131" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#a0c8ff">AND</text>
-        <line x1="290" y1="127" x2="520" y2="127" stroke="#ffcc00" stroke-width="1.5"/>
-        <text x="8" y="180" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#ffcc00">CLK x5</text>
-        <text x="8" y="198" font-family="JetBrains Mono,monospace" font-size="9" fill="#888">AND gates verify both signals. D-FFs shift authorization through 5 stages. ARMED when stages 1+2 loaded.</text>
-        <text x="8" y="214" font-family="JetBrains Mono,monospace" font-size="9" fill="#888">Used in: launch control systems, staged ignition, mission-critical state machines</text>
+      circuitSvg: `<svg viewBox="0 0 640 240" width="770" height="290">
+        <text x="8" y="14" font-family="JetBrains Mono,monospace" font-size="9" fill="#888">S1: AND(1,1)=1→FUEL | S2: →PRESS | S3: →IGNITE | S4: AND(1,0)=0 gap | S5: →LIFTOFF</text>
+        <!-- Inputs -->
+        <text x="8" y="42" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#00b4ff">CMD</text>
+        <text x="8" y="58" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#ffcc00">SAFE</text>
+        <!-- Inputs → AND -->
+        <polyline points="45,38 80,38 80,42 170,42" stroke="#00b4ff" stroke-width="1.5" fill="none"/>
+        <polyline points="45,54 80,54 80,54 170,54" stroke="#ffcc00" stroke-width="1.5" fill="none"/>
+        <!-- AND gate: CMD·SAFE -->
+        <text x="195" y="30" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" font-weight="bold" fill="#ffcc00">CMD·SAFE</text>
+        <rect x="170" y="34" width="50" height="28" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/>
+        <text x="195" y="52" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#a0c8ff">AND</text>
+        <line x1="220" y1="48" x2="240" y2="48" stroke="#39ff14" stroke-width="1.5"/>
+        <!-- D-FF1 FUEL -->
+        <rect x="240" y="34" width="42" height="28" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/>
+        <text x="261" y="52" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#a0c8ff">D-FF1</text>
+        <text x="261" y="72" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="#00d4ff">Q: 1→1→1→0→1</text>
+        <text x="261" y="80" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="6" fill="#888">FUEL</text>
+        <line x1="282" y1="48" x2="292" y2="48" stroke="#39ff14" stroke-width="1.5"/>
+        <!-- D-FF2 PRESS -->
+        <rect x="292" y="34" width="42" height="28" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/>
+        <text x="313" y="52" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#a0c8ff">D-FF2</text>
+        <text x="313" y="72" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="#00d4ff">Q: 0→1→1→1→0</text>
+        <text x="313" y="80" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="6" fill="#888">PRESS</text>
+        <line x1="334" y1="48" x2="344" y2="48" stroke="#39ff14" stroke-width="1.5"/>
+        <!-- D-FF3 IGNITE -->
+        <rect x="344" y="34" width="42" height="28" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/>
+        <text x="365" y="52" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#a0c8ff">D-FF3</text>
+        <text x="365" y="72" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="#00d4ff">Q: 0→0→1→1→1</text>
+        <text x="365" y="80" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="6" fill="#888">IGNITE</text>
+        <line x1="386" y1="48" x2="396" y2="48" stroke="#39ff14" stroke-width="1.5"/>
+        <!-- D-FF4 RELEASE -->
+        <rect x="396" y="34" width="42" height="28" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/>
+        <text x="417" y="52" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#a0c8ff">D-FF4</text>
+        <text x="417" y="72" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="#00d4ff">Q: 0→0→0→1→1</text>
+        <text x="417" y="80" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="6" fill="#888">RELEASE</text>
+        <line x1="438" y1="48" x2="448" y2="48" stroke="#39ff14" stroke-width="1.5"/>
+        <!-- D-FF5 LIFTOFF -->
+        <rect x="448" y="34" width="42" height="28" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/>
+        <text x="469" y="52" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#a0c8ff">D-FF5</text>
+        <text x="469" y="72" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="#00d4ff">Q: 0→0→0→0→1</text>
+        <text x="469" y="80" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="6" fill="#888">LIFTOFF</text>
+        <!-- ENGINE output -->
+        <line x1="490" y1="48" x2="530" y2="48" stroke="#ff4444" stroke-width="1.5"/>
+        <text x="535" y="52" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ff4444">ENGINE: 0→0→0→0→1</text>
+        <!-- AND2: STATUS = Q2·Q3 -->
+        <polyline points="313,62 313,100 290,100" stroke="#39ff14" stroke-width="1" fill="none"/>
+        <circle cx="313" cy="62" r="2" fill="#39ff14"/>
+        <polyline points="365,62 365,112 290,112" stroke="#39ff14" stroke-width="1" fill="none"/>
+        <circle cx="365" cy="62" r="2" fill="#39ff14"/>
+        <text x="315" y="92" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" font-weight="bold" fill="#ffcc00">Q2 · Q3</text>
+        <rect x="260" y="96" width="50" height="22" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/>
+        <text x="285" y="111" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#a0c8ff">AND</text>
+        <line x1="310" y1="107" x2="530" y2="107" stroke="#39ff14" stroke-width="1.5"/>
+        <text x="535" y="111" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#39ff14">STATUS: 0→0→1→1→0</text>
+        <!-- AND3: ARMED = Q1·Q2 -->
+        <polyline points="261,62 261,140 230,140" stroke="#ffcc00" stroke-width="1" fill="none"/>
+        <circle cx="261" cy="62" r="2" fill="#39ff14"/>
+        <polyline points="313,100 313,152 230,152" stroke="#ffcc00" stroke-width="1" fill="none"/>
+        <text x="255" y="132" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" font-weight="bold" fill="#ffcc00">Q1 · Q2</text>
+        <rect x="200" y="136" width="50" height="22" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/>
+        <text x="225" y="151" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#a0c8ff">AND</text>
+        <line x1="250" y1="147" x2="530" y2="147" stroke="#ffcc00" stroke-width="1.5"/>
+        <text x="535" y="151" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">ARMED: 0→1→1→0→0</text>
+        <!-- CLK -->
+        <text x="8" y="190" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#ffcc00">CLK x5</text>
+        <!-- Formulas -->
+        <text x="8" y="210" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">D-FF: Q'=D  |  Shift: Q1=AND(CMD,SAFE), Q2=Q1, Q3=Q2, Q4=Q3, Q5=Q4</text>
+        <text x="8" y="226" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">STATUS = Q2·Q3  |  ARMED = Q1·Q2  |  ENGINE = Q5</text>
       </svg>`,
     },
     nodes: [
@@ -5199,43 +5805,83 @@ const LEVELS = [
         <line x1="360" y1="120" x2="400" y2="120" stroke="#00b4ff" stroke-width="2.5"/>
         <text x="408" y="125" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#00b4ff">ACTIVE</text>
       </svg>`,
-      circuitSvg: `<svg viewBox="0 0 620 220" width="750" height="270">
-        <text x="8" y="16" font-family="JetBrains Mono,monospace" font-size="9" fill="#888">S1: INSTR=1→FETCH | S2: 1→DECODE | S3: 0 gap | S4: 1→EXECUTE | S5: branch+MEM→RESULT</text>
-        <text x="8" y="42" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#00b4ff">INSTR:  1→1→0→1→1</text>
-        <text x="8" y="58" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#ff6b6b">BRANCH: 0→1→1→0→1</text>
-        <line x1="140" y1="38" x2="170" y2="44" stroke="#00b4ff" stroke-width="1.5"/>
-        <rect x="170" y="32" width="42" height="28" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/>
-        <text x="191" y="50" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#a0c8ff">D-FF1</text>
-        <line x1="212" y1="46" x2="222" y2="46" stroke="#39ff14" stroke-width="1.5"/>
-        <rect x="222" y="32" width="42" height="28" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/>
-        <text x="243" y="50" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#a0c8ff">D-FF2</text>
-        <line x1="264" y1="46" x2="274" y2="46" stroke="#39ff14" stroke-width="1.5"/>
-        <rect x="274" y="32" width="42" height="28" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/>
-        <text x="295" y="50" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#a0c8ff">D-FF3</text>
-        <line x1="316" y1="46" x2="326" y2="46" stroke="#39ff14" stroke-width="1.5"/>
-        <rect x="326" y="32" width="42" height="28" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/>
-        <text x="347" y="50" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#a0c8ff">D-FF4</text>
-        <line x1="368" y1="46" x2="378" y2="46" stroke="#39ff14" stroke-width="1.5"/>
-        <rect x="378" y="32" width="42" height="28" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/>
-        <text x="399" y="50" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#a0c8ff">D-FF5</text>
-        <text x="445" y="50" font-family="JetBrains Mono,monospace" font-size="9" fill="#888">FETCH→DECODE→EXEC→MEM→WB</text>
-        <polyline points="243,60 243,82 140,82 140,92" stroke="#ff6b6b" stroke-width="1" fill="none"/>
-        <rect x="120" y="82" width="50" height="22" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/>
-        <text x="145" y="97" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#a0c8ff">AND</text>
-        <line x1="170" y1="93" x2="445" y2="93" stroke="#ff6b6b" stroke-width="1.5"/>
-        <text x="450" y="97" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ff6b6b">HAZARD: 0→1→1→0→1</text>
-        <polyline points="295,60 295,118 200,118 200,128" stroke="#00b4ff" stroke-width="1" fill="none"/>
-        <rect x="180" y="118" width="50" height="22" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/>
-        <text x="205" y="133" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#a0c8ff">AND</text>
-        <line x1="230" y1="129" x2="445" y2="129" stroke="#00b4ff" stroke-width="1.5"/>
-        <text x="450" y="133" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#00b4ff">ACTIVE: 0→0→0→1→0</text>
-        <polyline points="347,60 347,155 260,155 260,165" stroke="#39ff14" stroke-width="1" fill="none"/>
-        <rect x="240" y="155" width="50" height="22" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/>
-        <text x="265" y="170" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#a0c8ff">AND</text>
-        <line x1="290" y1="166" x2="445" y2="166" stroke="#39ff14" stroke-width="1.5"/>
-        <text x="450" y="170" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#39ff14">RESULT: 0→0→0→0→1</text>
-        <text x="8" y="198" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#ffcc00">CLK x5</text>
-        <text x="100" y="214" font-family="JetBrains Mono,monospace" font-size="9" fill="#888">Used in: CPUs (x86, ARM, RISC-V), GPU shader cores, DSP processors</text>
+      circuitSvg: `<svg viewBox="0 0 650 280" width="780" height="340">
+        <!-- Header -->
+        <text x="8" y="14" font-family="JetBrains Mono,monospace" font-size="9" fill="#888">S1: INSTR→FETCH | S2: →DECODE | S3: gap | S4: →EXECUTE | S5: branch+MEM→RESULT</text>
+        <!-- Inputs -->
+        <text x="8" y="48" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#00b4ff">INSTR</text>
+        <text x="8" y="64" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#ff6b6b">BRANCH</text>
+        <!-- INSTR → FF1 -->
+        <line x1="60" y1="44" x2="100" y2="44" stroke="#00b4ff" stroke-width="1.5"/>
+        <!-- D-FF1 (FETCH): Q'=D=INSTR -->
+        <text x="121" y="28" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" font-weight="bold" fill="#ffcc00">Q'=INSTR</text>
+        <rect x="100" y="32" width="42" height="28" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/>
+        <text x="121" y="50" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#a0c8ff">D-FF1</text>
+        <text x="121" y="72" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="#00d4ff">Q: 1→1→0→1→1</text>
+        <text x="121" y="82" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="#888">FETCH</text>
+        <line x1="142" y1="46" x2="160" y2="46" stroke="#39ff14" stroke-width="1.5"/>
+        <!-- D-FF2 (DECODE): Q'=Q1 -->
+        <text x="181" y="28" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" font-weight="bold" fill="#ffcc00">Q'=Q1</text>
+        <rect x="160" y="32" width="42" height="28" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/>
+        <text x="181" y="50" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#a0c8ff">D-FF2</text>
+        <text x="181" y="72" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="#00d4ff">Q: 0→1→1→0→1</text>
+        <text x="181" y="82" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="#888">DECODE</text>
+        <line x1="202" y1="46" x2="220" y2="46" stroke="#39ff14" stroke-width="1.5"/>
+        <!-- D-FF3 (EXEC): Q'=Q2 -->
+        <text x="241" y="28" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" font-weight="bold" fill="#ffcc00">Q'=Q2</text>
+        <rect x="220" y="32" width="42" height="28" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/>
+        <text x="241" y="50" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#a0c8ff">D-FF3</text>
+        <text x="241" y="72" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="#00d4ff">Q: 0→0→1→1→0</text>
+        <text x="241" y="82" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="#888">EXEC</text>
+        <line x1="262" y1="46" x2="280" y2="46" stroke="#39ff14" stroke-width="1.5"/>
+        <!-- D-FF4 (MEM): Q'=Q3 -->
+        <text x="301" y="28" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" font-weight="bold" fill="#ffcc00">Q'=Q3</text>
+        <rect x="280" y="32" width="42" height="28" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/>
+        <text x="301" y="50" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#a0c8ff">D-FF4</text>
+        <text x="301" y="72" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="#00d4ff">Q: 0→0→0→1→1</text>
+        <text x="301" y="82" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="#888">MEM</text>
+        <line x1="322" y1="46" x2="340" y2="46" stroke="#39ff14" stroke-width="1.5"/>
+        <!-- D-FF5 (WB): Q'=Q4 -->
+        <text x="361" y="28" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" font-weight="bold" fill="#ffcc00">Q'=Q4</text>
+        <rect x="340" y="32" width="42" height="28" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/>
+        <text x="361" y="50" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#a0c8ff">D-FF5</text>
+        <text x="361" y="72" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="#00d4ff">Q: 0→0→0→0→1</text>
+        <text x="361" y="82" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="#888">WB</text>
+        <!-- AND1: HAZARD = BRANCH · Q2 -->
+        <polyline points="181,60 181,105 110,105 110,112" stroke="#ff6b6b" stroke-width="1" fill="none"/>
+        <circle cx="181" cy="60" r="2" fill="#39ff14"/>
+        <polyline points="60,60 80,60 80,118 110,118" stroke="#ff6b6b" stroke-width="1" fill="none"/>
+        <text x="135" y="100" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" font-weight="bold" fill="#ffcc00">BRANCH · Q2</text>
+        <rect x="110" y="106" width="50" height="22" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/>
+        <text x="135" y="121" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#a0c8ff">AND</text>
+        <line x1="160" y1="117" x2="470" y2="117" stroke="#ff6b6b" stroke-width="1.5"/>
+        <text x="478" y="114" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ff6b6b">HAZARD</text>
+        <text x="478" y="126" font-family="JetBrains Mono,monospace" font-size="7" fill="#ff6b6b">0→1→1→0→1</text>
+        <!-- AND2: ACTIVE = INSTR · Q3 -->
+        <polyline points="241,60 241,145 170,145 170,152" stroke="#00b4ff" stroke-width="1" fill="none"/>
+        <circle cx="241" cy="60" r="2" fill="#39ff14"/>
+        <polyline points="60,44 70,44 70,158 170,158" stroke="#00b4ff" stroke-width="1" fill="none"/>
+        <text x="195" y="142" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" font-weight="bold" fill="#ffcc00">INSTR · Q3</text>
+        <rect x="170" y="146" width="50" height="22" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/>
+        <text x="195" y="161" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#a0c8ff">AND</text>
+        <line x1="220" y1="157" x2="470" y2="157" stroke="#00b4ff" stroke-width="1.5"/>
+        <text x="478" y="154" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#00b4ff">ACTIVE</text>
+        <text x="478" y="166" font-family="JetBrains Mono,monospace" font-size="7" fill="#00b4ff">0→0→0→1→0</text>
+        <!-- AND3: RESULT = BRANCH · Q4 -->
+        <polyline points="301,60 301,185 230,185 230,192" stroke="#39ff14" stroke-width="1" fill="none"/>
+        <circle cx="301" cy="60" r="2" fill="#39ff14"/>
+        <polyline points="80,60 80,198 230,198" stroke="#39ff14" stroke-width="1" fill="none"/>
+        <text x="255" y="182" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" font-weight="bold" fill="#ffcc00">BRANCH · Q4</text>
+        <rect x="230" y="186" width="50" height="22" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/>
+        <text x="255" y="201" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#a0c8ff">AND</text>
+        <line x1="280" y1="197" x2="470" y2="197" stroke="#39ff14" stroke-width="1.5"/>
+        <text x="478" y="194" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#39ff14">RESULT</text>
+        <text x="478" y="206" font-family="JetBrains Mono,monospace" font-size="7" fill="#39ff14">0→0→0→0→1</text>
+        <!-- CLK -->
+        <text x="8" y="240" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#ffcc00">CLK x5</text>
+        <!-- Formulas -->
+        <text x="8" y="258" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">D-FF: Q'(next) = D  |  Pipeline: Q1=INSTR, Q2=Q1, Q3=Q2, Q4=Q3, Q5=Q4</text>
+        <text x="8" y="274" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">HAZARD = BRANCH·Q2  |  ACTIVE = INSTR·Q3  |  RESULT = BRANCH·Q4</text>
       </svg>`,
     },
     nodes: [

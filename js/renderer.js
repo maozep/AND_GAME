@@ -219,6 +219,11 @@ const Renderer = (() => {
 
     ctx.restore();
 
+    // Tooltip on hovered node
+    if (hoveredNodeId) {
+      _drawNodeTooltip(level, hoveredNodeId, nodeValues);
+    }
+
     if (solved) _drawSolvedHalo();
   }
 
@@ -1388,6 +1393,86 @@ const Renderer = (() => {
   const SOLVE_ANIM_MS = 1800;
 
   function startSolveAnim() { _solveAnimStart = Date.now(); }
+
+  // ── Node Tooltip ───────────────────────────────────────────
+  function _drawNodeTooltip(level, hoveredId, nodeValues) {
+    const node = level.nodes.find(n => n.id === hoveredId);
+    if (!node) return;
+
+    // Build tooltip lines
+    const lines = [];
+    const val = nodeValues.get(node.id) ?? null;
+
+    if (node.type === 'INPUT') {
+      lines.push(node.label || node.id);
+      lines.push('Value: ' + (val !== null ? val : '?'));
+      if (node.stepValues) lines.push('Steps: ' + node.stepValues.join(','));
+    } else if (node.type === 'OUTPUT') {
+      lines.push(node.label || node.id);
+      const correct = val !== null && val === node.targetValue;
+      lines.push('Current: ' + (val !== null ? val : '?') + (correct ? ' \u2713' : ' \u2717'));
+      lines.push('Target: ' + (node.targetValue ?? '?'));
+      if (node.stepTargets) lines.push('Steps: ' + node.stepTargets.join(','));
+    } else if (node.type === 'GATE_SLOT') {
+      lines.push(node.label || node.id);
+      lines.push(node.gate ? node.gate + ' gate' : 'Empty \u2014 drag a gate');
+      if (val !== null) lines.push('Output: ' + val);
+    } else if (node.type === 'FF_SLOT') {
+      lines.push(node.label || node.id);
+      lines.push(node.ffType ? node.ffType + '-FF' : 'Empty \u2014 drag a FF');
+      const ffState = State.getFfStates().get(node.id);
+      if (ffState) lines.push('Q=' + ffState.q);
+    } else if (node.type === 'CLOCK') {
+      lines.push('CLOCK');
+      lines.push('Step: ' + (_stepCount || 0));
+    } else if (node.type === 'MUX_SELECT') {
+      lines.push(node.label || 'SWITCH');
+      lines.push('Value: ' + (node.value ?? 0));
+    }
+
+    if (lines.length === 0) return;
+
+    // Position: screen coords of node
+    const sx = node.x * _scale + _offsetX;
+    const sy = node.y * _scale + _offsetY;
+
+    // Measure text
+    ctx.save();
+    ctx.font = 'bold 11px JetBrains Mono, monospace';
+    const lineH = 16;
+    const pad = 8;
+    let maxW = 0;
+    lines.forEach(l => { maxW = Math.max(maxW, ctx.measureText(l).width); });
+    const boxW = maxW + pad * 2;
+    const boxH = lines.length * lineH + pad * 2;
+
+    // Position tooltip above node, clamped to screen
+    let tx = sx - boxW / 2;
+    let ty = sy - 55 * _scale - boxH;
+    if (tx < 4) tx = 4;
+    if (tx + boxW > W - 4) tx = W - 4 - boxW;
+    if (ty < 4) ty = sy + 50 * _scale + 8;
+
+    // Background
+    ctx.fillStyle = 'rgba(10, 14, 20, 0.94)';
+    ctx.strokeStyle = '#00d4ff';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.roundRect(tx, ty, boxW, boxH, 6);
+    ctx.fill();
+    ctx.stroke();
+
+    // Text
+    ctx.fillStyle = '#c8d8f0';
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'top';
+    lines.forEach((line, i) => {
+      if (i === 0) ctx.fillStyle = '#00d4ff';
+      else ctx.fillStyle = '#c8d8f0';
+      ctx.fillText(line, tx + pad, ty + pad + i * lineH);
+    });
+    ctx.restore();
+  }
 
   function _drawSolvedHalo() {
     const elapsed = _solveAnimStart ? Date.now() - _solveAnimStart : SOLVE_ANIM_MS;

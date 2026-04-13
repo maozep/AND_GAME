@@ -4490,13 +4490,242 @@ const LEVELS = [
     ],
   },
 
-  // L53 — TRAFFIC LIGHT CONTROLLER (3 D-FFs ring + AND gate for pedestrian walk signal)
+  // L53 — IRRIGATION TIMER (AND gate + SR-FF)
+  // MOISTURE=[1,1,0], SCHEDULE=[1,1,1], TIMER=[1,1,0].
+  // AND(MOISTURE,SCHEDULE)->S, TIMER->R.
+  // SR-FF: S=1,R=1→SET(dom), S=1,R=1→SET, S=0,R=0→HOLD. Q=[1,1,1].
+  // Unique: AND+SR is the only combo giving (PUMP=1, SIGNAL=0).
+  {
+    id: 53, name: 'IRRIGATION', difficulty: 'FSM Applications',
+    minSteps: 3,
+    description: 'Irrigation Timer — soil moisture sensors and a watering schedule control a water pump. The pump turns on when moisture is needed AND the schedule allows it. Once on, the pump stays on (latches) until the timer resets it. Found in smart irrigation systems, greenhouse controllers, and agricultural automation.',
+    instruction: 'Build an irrigation controller. Water when soil is dry AND scheduled.',
+    instructionHtml: '<div style="text-align:center;margin:18px 0"><svg viewBox="0 0 200 220" width="150" height="165"><rect x="20" y="10" width="160" height="170" rx="10" fill="#111" stroke="#444" stroke-width="2"/><rect x="35" y="25" width="130" height="70" rx="6" fill="rgba(0,100,255,0.08)" stroke="#0066ff" stroke-width="1.5"/><text x="100" y="55" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="12" fill="#0066ff">IRRIGATION</text><text x="100" y="75" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="12" fill="#0066ff">CONTROLLER</text><circle cx="50" cy="130" r="10" fill="rgba(139,69,19,0.3)" stroke="#8b4513" stroke-width="1.5"/><text x="50" y="134" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="#8b4513">DRY</text><circle cx="100" cy="130" r="10" fill="rgba(57,255,20,0.15)" stroke="#39ff14" stroke-width="1.5"/><text x="100" y="134" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="#39ff14">SCH</text><circle cx="150" cy="130" r="10" fill="rgba(255,204,0,0.15)" stroke="#ffcc00" stroke-width="1.5"/><text x="150" y="134" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="#ffcc00">TMR</text><text x="100" y="195" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">DRY + SCHEDULED = pump ON</text></svg></div><p style="text-align:center;color:#c8d8f0;font-size:14px;margin:8px 0">The pump needs <span style="color:#8b4513;font-weight:bold">BOTH</span> dry soil AND an active schedule to turn on.</p><p style="text-align:center;color:#c8d8f0;font-size:14px;margin:4px 0">Once on, the pump <span style="color:#0066ff;font-weight:bold">stays on</span> (latches) until the timer resets.</p><p style="text-align:center;color:#888;font-size:12px;margin:4px 0">Place a gate and flip-flop, then STEP three times.</p>',
+    hint: 'The pump should turn on only when BOTH conditions are met: soil is dry AND the schedule says to water. Which gate requires both inputs to be 1? The pump must LATCH on — which flip-flop has SET and RESET inputs that can hold state?',
+    solution: {
+      gatesUsed: ['AND'],
+      ffsUsed: ['SR-FF'],
+      explanation: 'Irrigation Timer — AND(MOISTURE,SCHEDULE) activates the pump only when both conditions are met. SR-FF latches: once SET, the pump stays on even when the gate output drops to 0 (HOLD). The TIMER input resets the pump when watering is done. OR would activate on either condition alone. D-FF would turn off immediately when the gate goes to 0. Used in smart irrigation and greenhouse controllers.',
+      blockSvg: `<svg viewBox="0 0 420 200" width="510" height="245">
+        <text x="12" y="42" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#8b4513">MOISTURE</text>
+        <line x1="90" y1="37" x2="110" y2="47" stroke="#8b4513" stroke-width="2.5"/>
+        <text x="12" y="72" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">SCHEDULE</text>
+        <line x1="90" y1="67" x2="110" y2="67" stroke="#39ff14" stroke-width="2.5"/>
+        <text x="12" y="102" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#ffcc00">TIMER</text>
+        <line x1="60" y1="97" x2="110" y2="97" stroke="#ffcc00" stroke-width="2.5"/>
+        <text x="12" y="152" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#ffcc00">CLK</text>
+        <line x1="45" y1="147" x2="110" y2="127" stroke="#ffcc00" stroke-width="2.5"/>
+        <rect x="110" y="20" width="190" height="130" rx="8" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/>
+        <text x="205" y="72" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#00d4ff">IRRIGATION</text>
+        <text x="205" y="97" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#00d4ff">TIMER</text>
+        <line x1="300" y1="52" x2="355" y2="52" stroke="#c8d8f0" stroke-width="2.5"/>
+        <text x="363" y="57" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#0066ff">PUMP</text>
+        <line x1="300" y1="112" x2="355" y2="112" stroke="#c8d8f0" stroke-width="2.5"/>
+        <text x="363" y="117" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">SIGNAL</text>
+      </svg>`,
+      circuitSvg: `<svg viewBox="0 0 520 200" width="630" height="245">
+        <text x="8" y="18" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">S1: AND(1,1)=1→SET | S2: AND(1,1)=1→SET | S3: AND(0,1)=0→HOLD (pump stays on!)</text>
+        <text x="8" y="50" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#8b4513">MOISTURE: 1→1→0</text>
+        <text x="8" y="70" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#39ff14">SCHEDULE: 1→1→1</text>
+        <text x="8" y="90" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#ffcc00">TIMER: 1→1→0</text>
+        <line x1="130" y1="46" x2="170" y2="55" stroke="#8b4513" stroke-width="2"/>
+        <line x1="130" y1="66" x2="170" y2="62" stroke="#39ff14" stroke-width="2"/>
+        <rect x="170" y="42" width="60" height="35" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="200" y="64" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#a0c8ff">AND</text>
+        <line x1="230" y1="59" x2="280" y2="59" stroke="#39ff14" stroke-width="2"/>
+        <line x1="130" y1="86" x2="280" y2="72" stroke="#ffcc00" stroke-width="1.5"/>
+        <rect x="280" y="45" width="80" height="40" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="320" y="70" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#a0c8ff">SR-FF</text>
+        <line x1="360" y1="65" x2="400" y2="65" stroke="#39ff14" stroke-width="2"/>
+        <text x="408" y="60" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#0066ff">PUMP: 1→1→1</text>
+        <text x="408" y="80" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#39ff14">SIGNAL: 1→1→0</text>
+        <text x="8" y="140" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#ffcc00">CLK x3</text>
+        <text x="8" y="165" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">AND: both conditions needed. SR-FF: latches pump on, holds even when gate drops.</text>
+        <text x="8" y="185" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">Used in: smart irrigation, greenhouse automation, agricultural controllers</text>
+      </svg>`,
+    },
+    nodes: [
+      { id: 'in_MOIST', type: 'INPUT',     x: 140, y: 380, fixedValue: 1, stepValues: [1, 1, 0], label: 'MOISTURE' },
+      { id: 'in_SCHED', type: 'INPUT',     x: 140, y: 470, fixedValue: 1, stepValues: [1, 1, 1], label: 'SCHEDULE' },
+      { id: 'in_TIMER', type: 'INPUT',     x: 140, y: 560, fixedValue: 1, stepValues: [1, 1, 0], label: 'TIMER' },
+      { id: 'clk_1',    type: 'CLOCK',     x: 140, y: 670, value: 0, label: null },
+      { id: 'g1',       type: 'GATE_SLOT', x: 400, y: 430 },
+      { id: 'ff_1',     type: 'FF_SLOT',   ffType: null, x: 650, y: 480, initialQ: 0, label: 'FF' },
+      { id: 'out_PUMP', type: 'OUTPUT',    x: 900, y: 480, targetValue: 1, stepTargets: [1, 1, 1], label: 'PUMP' },
+      { id: 'out_SIG',  type: 'OUTPUT',    x: 900, y: 380, targetValue: 0, stepTargets: [1, 1, 0], label: 'SIGNAL' },
+    ],
+    wires: [
+      { id: 'w1',   sourceId: 'in_MOIST', targetId: 'g1',       targetInputIndex: 0 },
+      { id: 'w2',   sourceId: 'in_SCHED', targetId: 'g1',       targetInputIndex: 1 },
+      { id: 'w3',   sourceId: 'g1',       targetId: 'ff_1',     targetInputIndex: 0 },
+      { id: 'w4',   sourceId: 'in_TIMER', targetId: 'ff_1',     targetInputIndex: 1 },
+      { id: 'wclk', sourceId: 'clk_1',    targetId: 'ff_1',     targetInputIndex: 2, isClockWire: true },
+      { id: 'woP',  sourceId: 'ff_1',     targetId: 'out_PUMP', targetInputIndex: 0, sourceOutputIndex: 0 },
+      { id: 'woS',  sourceId: 'g1',       targetId: 'out_SIG',  targetInputIndex: 0 },
+    ],
+  },
+
+  // L54 — TURNSTILE (NAND gate + JK-FF)
+  // COIN=[1,1,0], VALID=[0,0,0], PUSH=[1,0,1].
+  // NAND(COIN,VALID)->J, PUSH->K.
+  // JK-FF: J=1,K=1→toggle(0→1), J=1,K=0→SET(1), J=1,K=1→toggle(1→0). Q=[1,1,0].
+  // Unique: NAND+JK is the only combo giving (UNLOCK=0, READY=1).
+  {
+    id: 54, name: 'TURNSTILE', difficulty: 'FSM Applications',
+    minSteps: 3,
+    description: 'Subway Turnstile — insert a coin to unlock, push to pass through and re-lock. The NAND gate validates the coin signal, and the JK flip-flop tracks locked/unlocked state. The TOGGLE behavior of JK-FF is key: it cycles the lock. Found in metro stations, amusement parks, and access control systems.',
+    instruction: 'Build a turnstile: coin unlocks, push re-locks.',
+    instructionHtml: '<div style="text-align:center;margin:18px 0"><svg viewBox="0 0 200 220" width="150" height="165"><rect x="30" y="10" width="140" height="170" rx="10" fill="#111" stroke="#444" stroke-width="2"/><line x1="100" y1="30" x2="100" y2="80" stroke="#39ff14" stroke-width="3"/><line x1="70" y1="55" x2="130" y2="55" stroke="#39ff14" stroke-width="3"/><line x1="80" y1="35" x2="120" y2="75" stroke="#39ff14" stroke-width="2" stroke-dasharray="5,3"/><circle cx="60" cy="130" r="12" fill="rgba(255,204,0,0.2)" stroke="#ffcc00" stroke-width="1.5"/><text x="60" y="134" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="#ffcc00">COIN</text><circle cx="140" cy="130" r="12" fill="rgba(255,68,68,0.2)" stroke="#ff4444" stroke-width="1.5"/><text x="140" y="134" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="#ff4444">PUSH</text><text x="100" y="100" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#ff4444">LOCKED</text><text x="100" y="205" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">Coin → unlock → push → lock</text></svg></div><p style="text-align:center;color:#c8d8f0;font-size:14px;margin:8px 0">A <span style="color:#ffcc00;font-weight:bold">COIN</span> signal unlocks the turnstile. <span style="color:#ff4444;font-weight:bold">PUSH</span> passes through and re-locks.</p><p style="text-align:center;color:#c8d8f0;font-size:14px;margin:4px 0">The flip-flop must <span style="color:#39ff14;font-weight:bold">toggle</span> between locked and unlocked states.</p><p style="text-align:center;color:#888;font-size:12px;margin:4px 0">Place a gate and flip-flop, then STEP three times.</p>',
+    hint: 'NAND gives 1 when inputs are not both 1 (validates the coin). The turnstile must toggle: J=K=1 flips the state. Which flip-flop has J and K inputs that can toggle? JK-FF toggles when J=K=1.',
+    solution: {
+      gatesUsed: ['NAND'],
+      ffsUsed: ['JK-FF'],
+      explanation: 'Turnstile — NAND(COIN,VALID) produces J=1 (always, since VALID=0). JK-FF toggles on J=K=1 (step 1: lock→unlock), SETs on J=1,K=0 (step 2: stays unlocked), toggles on J=K=1 (step 3: unlock→lock). AND would give J=0 (turnstile never unlocks). SR-FF has no toggle mode. Used in metro turnstiles and access control.',
+      blockSvg: `<svg viewBox="0 0 420 200" width="510" height="245">
+        <text x="12" y="42" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#ffcc00">COIN</text>
+        <line x1="55" y1="37" x2="110" y2="47" stroke="#ffcc00" stroke-width="2.5"/>
+        <text x="12" y="72" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#888">VALID</text>
+        <line x1="60" y1="67" x2="110" y2="67" stroke="#888" stroke-width="2.5"/>
+        <text x="12" y="102" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#ff4444">PUSH</text>
+        <line x1="55" y1="97" x2="110" y2="97" stroke="#ff4444" stroke-width="2.5"/>
+        <text x="12" y="152" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#ffcc00">CLK</text>
+        <line x1="45" y1="147" x2="110" y2="127" stroke="#ffcc00" stroke-width="2.5"/>
+        <rect x="110" y="20" width="190" height="130" rx="8" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/>
+        <text x="205" y="72" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#00d4ff">TURNSTILE</text>
+        <text x="205" y="97" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#00d4ff">GATE</text>
+        <line x1="300" y1="52" x2="355" y2="52" stroke="#c8d8f0" stroke-width="2.5"/>
+        <text x="363" y="57" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">UNLOCK</text>
+        <line x1="300" y1="112" x2="355" y2="112" stroke="#c8d8f0" stroke-width="2.5"/>
+        <text x="363" y="117" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#c8d8f0">READY</text>
+      </svg>`,
+      circuitSvg: `<svg viewBox="0 0 520 200" width="630" height="245">
+        <text x="8" y="18" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">S1: J=1,K=1→TOGGLE(locked→unlocked) | S2: J=1,K=0→SET(stays) | S3: J=1,K=1→TOGGLE(→locked)</text>
+        <text x="8" y="50" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#ffcc00">COIN: 1→1→0</text>
+        <text x="8" y="70" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#888">VALID: 0→0→0</text>
+        <text x="8" y="90" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#ff4444">PUSH: 1→0→1</text>
+        <line x1="130" y1="46" x2="170" y2="55" stroke="#ffcc00" stroke-width="2"/>
+        <line x1="130" y1="66" x2="170" y2="62" stroke="#888" stroke-width="2"/>
+        <rect x="170" y="42" width="65" height="35" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="202" y="64" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#a0c8ff">NAND</text>
+        <line x1="235" y1="59" x2="270" y2="59" stroke="#39ff14" stroke-width="2"/>
+        <line x1="130" y1="86" x2="270" y2="72" stroke="#ff4444" stroke-width="1.5"/>
+        <rect x="270" y="45" width="80" height="40" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="310" y="70" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#a0c8ff">JK-FF</text>
+        <line x1="350" y1="65" x2="400" y2="65" stroke="#39ff14" stroke-width="2"/>
+        <text x="408" y="60" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#39ff14">UNLOCK: 1→1→0</text>
+        <text x="408" y="80" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#c8d8f0">READY: 1→1→1</text>
+        <text x="8" y="140" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#ffcc00">CLK x3</text>
+        <text x="8" y="165" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">NAND validates coin. JK-FF toggles lock state. Together: insert coin, pass through, re-locks.</text>
+        <text x="8" y="185" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">Used in: metro turnstiles, amusement parks, stadium access control</text>
+      </svg>`,
+    },
+    nodes: [
+      { id: 'in_COIN',  type: 'INPUT',     x: 140, y: 380, fixedValue: 1, stepValues: [1, 1, 0], label: 'COIN' },
+      { id: 'in_VALID', type: 'INPUT',     x: 140, y: 470, fixedValue: 0, stepValues: [0, 0, 0], label: 'VALID' },
+      { id: 'in_PUSH',  type: 'INPUT',     x: 140, y: 560, fixedValue: 1, stepValues: [1, 0, 1], label: 'PUSH' },
+      { id: 'clk_1',    type: 'CLOCK',     x: 140, y: 670, value: 0, label: null },
+      { id: 'g1',       type: 'GATE_SLOT', x: 400, y: 430 },
+      { id: 'ff_1',     type: 'FF_SLOT',   ffType: null, x: 650, y: 480, initialQ: 0, label: 'FF' },
+      { id: 'out_UNL',  type: 'OUTPUT',    x: 900, y: 480, targetValue: 0, stepTargets: [1, 1, 0], label: 'UNLOCK' },
+      { id: 'out_RDY',  type: 'OUTPUT',    x: 900, y: 380, targetValue: 1, stepTargets: [1, 1, 1], label: 'READY' },
+    ],
+    wires: [
+      { id: 'w1',   sourceId: 'in_COIN',  targetId: 'g1',      targetInputIndex: 0 },
+      { id: 'w2',   sourceId: 'in_VALID', targetId: 'g1',      targetInputIndex: 1 },
+      { id: 'w3',   sourceId: 'g1',       targetId: 'ff_1',    targetInputIndex: 0 },
+      { id: 'w4',   sourceId: 'in_PUSH',  targetId: 'ff_1',    targetInputIndex: 1 },
+      { id: 'wclk', sourceId: 'clk_1',    targetId: 'ff_1',    targetInputIndex: 2, isClockWire: true },
+      { id: 'woU',  sourceId: 'ff_1',     targetId: 'out_UNL', targetInputIndex: 0, sourceOutputIndex: 0 },
+      { id: 'woR',  sourceId: 'g1',       targetId: 'out_RDY', targetInputIndex: 0 },
+    ],
+  },
+
+  // L55 — THERMOSTAT (NOR gate + 2 D-FFs in chain)
+  // TEMP_HIGH=[0,0,1], TEMP_LOW=[1,0,0].
+  // NOR(TEMP_HIGH,TEMP_LOW)->D-FF1->D-FF2. Two stages of delay.
+  // FF1: captures NOR output. FF2: captures FF1 previous output.
+  // Step 1: NOR(0,1)=0, Q1:0→0, Q2:0→0
+  // Step 2: NOR(0,0)=1, Q1:0→1, Q2:0→0
+  // Step 3: NOR(1,0)=0, Q1:1→0, Q2:0→1
+  // Unique: NOR+D is the only gate+ff combo giving (Q1=0, Q2=1).
+  {
+    id: 55, name: 'THERMOSTAT', difficulty: 'FSM Applications',
+    minSteps: 3,
+    description: 'Digital Thermostat — monitors HIGH and LOW temperature sensors. The heater should activate only after a delay: when NEITHER sensor was triggered (comfortable zone) the signal propagates through a 2-stage pipeline. The NOR gate detects the "all clear" condition, and D-FFs create the delay. Found in HVAC systems, industrial ovens, and climate control.',
+    instruction: 'Build a thermostat with delayed activation. NOR detects comfort zone.',
+    instructionHtml: '<div style="text-align:center;margin:18px 0"><svg viewBox="0 0 200 220" width="150" height="165"><rect x="20" y="10" width="160" height="170" rx="10" fill="#111" stroke="#444" stroke-width="2"/><rect x="35" y="25" width="130" height="60" rx="6" fill="rgba(255,68,68,0.05)" stroke="#ff4444" stroke-width="1.5"/><rect x="65" y="35" width="10" height="40" rx="2" fill="#222" stroke="#666" stroke-width="1"/><rect x="65" y="50" width="10" height="25" rx="2" fill="rgba(255,68,68,0.6)"/><text x="100" y="55" font-family="JetBrains Mono,monospace" font-size="10" fill="#ff4444">TEMP</text><circle cx="60" cy="120" r="10" fill="rgba(255,68,68,0.15)" stroke="#ff4444" stroke-width="1.5"/><text x="60" y="124" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="#ff4444">HOT</text><circle cx="140" cy="120" r="10" fill="rgba(0,100,255,0.15)" stroke="#0066ff" stroke-width="1.5"/><text x="140" y="124" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="#0066ff">COLD</text><text x="100" y="155" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#39ff14">HEATER</text><text x="100" y="200" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">Neither too hot nor cold → heat</text></svg></div><p style="text-align:center;color:#c8d8f0;font-size:14px;margin:8px 0">The gate detects the <span style="color:#39ff14;font-weight:bold">comfort zone</span>: neither too hot nor too cold.</p><p style="text-align:center;color:#c8d8f0;font-size:14px;margin:4px 0">Two flip-flops create a <span style="color:#00d4ff;font-weight:bold">2-stage delay</span> before the heater activates.</p><p style="text-align:center;color:#888;font-size:12px;margin:4px 0">Place a gate and two flip-flops, then STEP three times.</p>',
+    hint: 'NOR outputs 1 only when BOTH inputs are 0 — the "all clear" signal. D-FFs pass the signal through with a 1-step delay each. After 2 steps of delay, the heater turns on. Which gate gives 1 only when all inputs are 0?',
+    solution: {
+      gatesUsed: ['NOR'],
+      ffsUsed: ['D-FF', 'D-FF'],
+      explanation: 'Thermostat — NOR(TEMP_HIGH, TEMP_LOW) = 1 only when neither sensor is triggered (comfort zone). The 2 D-FFs create a pipeline delay: FF1 captures the NOR output, FF2 captures FF1 one step later. This prevents the heater from flickering on brief temperature spikes. AND would require both sensors ON. OR/XOR would trigger on any single sensor. T-FF would toggle instead of capturing. Used in HVAC debouncing and industrial temperature control.',
+      blockSvg: `<svg viewBox="0 0 420 200" width="510" height="245">
+        <text x="12" y="42" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#ff4444">TEMP_HIGH</text>
+        <line x1="100" y1="37" x2="110" y2="47" stroke="#ff4444" stroke-width="2.5"/>
+        <text x="12" y="72" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#0066ff">TEMP_LOW</text>
+        <line x1="90" y1="67" x2="110" y2="67" stroke="#0066ff" stroke-width="2.5"/>
+        <text x="12" y="142" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#ffcc00">CLK</text>
+        <line x1="45" y1="137" x2="110" y2="117" stroke="#ffcc00" stroke-width="2.5"/>
+        <rect x="110" y="20" width="190" height="130" rx="8" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/>
+        <text x="205" y="72" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#00d4ff">DIGITAL</text>
+        <text x="205" y="97" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="15" font-weight="bold" fill="#00d4ff">THERMOSTAT</text>
+        <line x1="300" y1="42" x2="355" y2="42" stroke="#c8d8f0" stroke-width="2.5"/>
+        <text x="363" y="47" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#c8d8f0">STAGE1</text>
+        <line x1="300" y1="112" x2="355" y2="112" stroke="#c8d8f0" stroke-width="2.5"/>
+        <text x="363" y="117" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#39ff14">HEATER</text>
+      </svg>`,
+      circuitSvg: `<svg viewBox="0 0 580 200" width="700" height="245">
+        <text x="8" y="18" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">S1: NOR(0,1)=0→Q1=0,Q2=0 | S2: NOR(0,0)=1→Q1=1,Q2=0 | S3: NOR(0,1)=0→Q1=0,Q2=1</text>
+        <text x="8" y="50" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#ff4444">TEMP_HIGH: 0→0→0</text>
+        <text x="8" y="70" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#0066ff">TEMP_LOW: 1→0→1</text>
+        <line x1="130" y1="46" x2="170" y2="55" stroke="#ff4444" stroke-width="2"/>
+        <line x1="130" y1="66" x2="170" y2="62" stroke="#0066ff" stroke-width="2"/>
+        <rect x="170" y="42" width="60" height="35" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="200" y="64" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#a0c8ff">NOR</text>
+        <line x1="230" y1="59" x2="270" y2="59" stroke="#39ff14" stroke-width="2"/>
+        <rect x="270" y="42" width="75" height="35" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="307" y="64" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#a0c8ff">D-FF1</text>
+        <line x1="345" y1="59" x2="385" y2="59" stroke="#39ff14" stroke-width="2"/>
+        <rect x="385" y="42" width="75" height="35" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="422" y="64" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#a0c8ff">D-FF2</text>
+        <line x1="460" y1="59" x2="490" y2="59" stroke="#39ff14" stroke-width="2"/>
+        <text x="498" y="50" font-family="JetBrains Mono,monospace" font-size="10" fill="#c8d8f0">STAGE1: 0→1→0</text>
+        <text x="498" y="67" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#39ff14">HEATER: 0→0→1</text>
+        <text x="8" y="120" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#ffcc00">CLK x3</text>
+        <text x="8" y="145" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">NOR: comfort zone (neither hot nor cold). 2 D-FFs: pipeline delay prevents flickering.</text>
+        <text x="8" y="165" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">Used in: HVAC systems, industrial ovens, climate control with debouncing</text>
+      </svg>`,
+    },
+    nodes: [
+      { id: 'in_HI',    type: 'INPUT',     x: 140, y: 420, fixedValue: 0, stepValues: [0, 0, 0], label: 'TEMP_HIGH' },
+      { id: 'in_LO',    type: 'INPUT',     x: 140, y: 520, fixedValue: 1, stepValues: [1, 0, 1], label: 'TEMP_LOW' },
+      { id: 'clk_1',    type: 'CLOCK',     x: 140, y: 670, value: 0, label: null },
+      { id: 'g1',       type: 'GATE_SLOT', x: 380, y: 470 },
+      { id: 'ff_1',     type: 'FF_SLOT',   ffType: null, x: 570, y: 470, initialQ: 0, label: 'FF1' },
+      { id: 'ff_2',     type: 'FF_SLOT',   ffType: null, x: 770, y: 470, initialQ: 0, label: 'FF2' },
+      { id: 'out_S1',   type: 'OUTPUT',    x: 570, y: 370, targetValue: 0, stepTargets: [0, 1, 0], label: 'STAGE1' },
+      { id: 'out_HEAT', type: 'OUTPUT',    x: 970, y: 470, targetValue: 1, stepTargets: [0, 0, 1], label: 'HEATER' },
+    ],
+    wires: [
+      { id: 'w1',    sourceId: 'in_HI',  targetId: 'g1',       targetInputIndex: 0 },
+      { id: 'w2',    sourceId: 'in_LO',  targetId: 'g1',       targetInputIndex: 1 },
+      { id: 'w3',    sourceId: 'g1',     targetId: 'ff_1',     targetInputIndex: 0 },
+      { id: 'w4',    sourceId: 'ff_1',   targetId: 'ff_2',     targetInputIndex: 0, sourceOutputIndex: 0 },
+      { id: 'wclk1', sourceId: 'clk_1',  targetId: 'ff_1',     targetInputIndex: 1, isClockWire: true },
+      { id: 'wclk2', sourceId: 'clk_1',  targetId: 'ff_2',     targetInputIndex: 1, isClockWire: true },
+      { id: 'woS1',  sourceId: 'ff_1',   targetId: 'out_S1',   targetInputIndex: 0, sourceOutputIndex: 0 },
+      { id: 'woH',   sourceId: 'ff_2',   targetId: 'out_HEAT', targetInputIndex: 0, sourceOutputIndex: 0 },
+    ],
+  },
+
+  // ════════════════════════════════════════════════════════════
+  // L56 — TRAFFIC LIGHT CONTROLLER (3 D-FFs ring + AND gate for pedestrian walk signal)
   // Ring counter: G=1,Y=0,R=0 → G=0,Y=1,R=0 → G=0,Y=0,R=1
   // AND(Q_R, BUTTON) → WALK signal. BUTTON=1 constant.
   // Step 1: WALK=AND(0,1)=0 (GREEN, no walk). Step 2: WALK=AND(1,1)=1 (RED, walk!).
   // Unique: AND (OR gives WALK=1 at step1 because OR(0,1)=1). D-FF (T-FF toggles wrong).
   {
-    id: 53, name: 'TRAFFIC LIGHT', difficulty: 'FSM Applications',
+    id: 56, name: 'TRAFFIC LIGHT', difficulty: 'FSM Applications',
     minSteps: 2,
     description: 'You are building a real traffic light controller. The light starts GREEN, then cycles to YELLOW, then RED. A pedestrian presses the WALK button — but they should only be allowed to cross when the light is RED. Build the circuit that makes this happen.',
     instruction: 'Build a traffic light: GREEN → YELLOW → RED. When RED is on and the button is pressed, WALK turns on.',
@@ -4603,10 +4832,10 @@ const LEVELS = [
     ],
   },
 
-  // L54 — VENDING MACHINE (3 D-FFs shift register + AND decode = coin counter)
+  // L57 — VENDING MACHINE (3 D-FFs shift register + AND decode = coin counter)
   // COIN=1 constant. 3 D-FFs count: 5₪→10₪→15₪. AND(Q2,Q3) → VEND at 15₪.
   {
-    id: 54, name: 'VENDING MACHINE', difficulty: 'FSM Applications',
+    id: 57, name: 'VENDING MACHINE', difficulty: 'FSM Applications',
     minSteps: 3,
     description: 'Vending Machine — insert three 5₪ coins to buy a drink (15₪). The shift register counts coins: each flip-flop represents 5₪ added. When all three are full, the machine vends. Found in every coin-operated machine, parking meter, and arcade system.',
     instruction: 'Insert 3 coins to get your drink!',
@@ -4695,9 +4924,9 @@ const LEVELS = [
     ],
   },
 
-  // L55 — PASSWORD LOCK (4 D-FFs shift register + AND decode, sequence 1-0-1-1)
+  // L58 — PASSWORD LOCK (4 D-FFs shift register + AND decode, sequence 1-0-1-1)
   {
-    id: 55, name: 'PASSWORD LOCK', difficulty: 'FSM Applications',
+    id: 58, name: 'PASSWORD LOCK', difficulty: 'FSM Applications',
     minSteps: 4,
     description: 'Password Lock — the code is 1-0-1-1. A shift register captures bits, but the "0" in the code needs to be inverted before storage. You need both a gate to flip the bit AND the right flip-flops to shift data. Used in keycard readers, PIN decoders, and serial authentication.',
     instruction: 'Enter the code 1-0-1-1 to unlock the safe.',
@@ -4813,14 +5042,248 @@ const LEVELS = [
     ],
   },
 
-  // ════════════════════════════════════════════════════════════
-  // TAB 7 — 7. Design  (IDs 56+)
+  // L59 — ROCKET LAUNCH SEQUENCE (AND gate x3 + D-FF x5 shift register)
+  // CMD=[1,1,1,1,1], SAFE=[1,1,1,0,1]. g1=AND(CMD,SAFE)=[1,1,1,0,1]→ff1.D.
+  // Shift register: ff1→ff2→ff3→ff4→ff5, all D-FF, all initialQ=0.
+  // Q1=[1,1,1,0,1], Q2=[0,1,1,1,0], Q3=[0,0,1,1,1], Q4=[0,0,0,1,1], Q5=[0,0,0,0,1].
+  // g2=AND(Q2_new,Q3_new)=[0,0,1,1,0]→STATUS.
+  // g3=AND(Q1_new,Q2_new)=[0,1,1,0,0]→ARMED.
+  // ENGINE=ff5.Q=[0,0,0,0,1].
+  // Unique: AND+D-FF is the only combo. OR(Q1,Q2)=[1,1,1,1,1] wrong. XOR=[1,0,0,1,1] wrong.
+  // NAND=[1,0,0,1,1] wrong. NOR=[0,0,0,0,0] all zero. T-FF toggles instead of shifting.
+  {
+    id: 59, name: 'ROCKET LAUNCH', difficulty: 'FSM Applications',
+    minSteps: 5,
+    description: 'Rocket Launch Sequence — a 5-stage shift register passes authorization down the pipeline: FUEL, PRESSURIZE, IGNITE, RELEASE, LIFTOFF. The command signal and safety check must both be active for the sequence to advance. Three AND gates verify conditions, detect armed status (early stages loaded), and confirm intermediate stages. Used in launch control systems, staged ignition sequences, and mission-critical state machines.',
+    instruction: 'Build a 5-stage rocket launch controller. Place one gate type and one flip-flop type, then STEP five times.',
+    instructionHtml: '<div style="text-align:center;margin:18px 0"><svg viewBox="0 0 260 240" width="195" height="180"><rect x="10" y="10" width="240" height="190" rx="12" fill="#111" stroke="#444" stroke-width="2"/><rect x="25" y="25" width="210" height="80" rx="6" fill="#0a0a0a" stroke="#333" stroke-width="1.5"/><text x="130" y="55" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="12" fill="#ff6b6b">ROCKET LAUNCH</text><text x="130" y="75" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#ff6b6b">5-STAGE SEQUENCE</text><rect x="25" y="115" width="38" height="22" rx="3" fill="rgba(57,255,20,0.1)" stroke="#39ff14" stroke-width="1"/><text x="44" y="130" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="#39ff14">FUEL</text><line x1="63" y1="126" x2="68" y2="126" stroke="#39ff14" stroke-width="1.5"/><rect x="68" y="115" width="38" height="22" rx="3" fill="rgba(57,255,20,0.1)" stroke="#39ff14" stroke-width="1"/><text x="87" y="130" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="#39ff14">PRSS</text><line x1="106" y1="126" x2="111" y2="126" stroke="#39ff14" stroke-width="1.5"/><rect x="111" y="115" width="38" height="22" rx="3" fill="rgba(255,204,0,0.15)" stroke="#ffcc00" stroke-width="1"/><text x="130" y="130" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="#ffcc00">IGNT</text><line x1="149" y1="126" x2="154" y2="126" stroke="#ffcc00" stroke-width="1.5"/><rect x="154" y="115" width="38" height="22" rx="3" fill="rgba(255,100,50,0.15)" stroke="#ff6b6b" stroke-width="1"/><text x="173" y="130" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="#ff6b6b">RELS</text><line x1="192" y1="126" x2="197" y2="126" stroke="#ff6b6b" stroke-width="1.5"/><rect x="197" y="115" width="38" height="22" rx="3" fill="rgba(255,50,50,0.2)" stroke="#ff4444" stroke-width="1.5"/><text x="216" y="130" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="#ff4444">LIFT</text><circle cx="65" cy="170" r="12" fill="rgba(0,180,255,0.15)" stroke="#00b4ff" stroke-width="1.5"/><text x="65" y="174" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="#00b4ff">CMD</text><circle cx="195" cy="170" r="12" fill="rgba(255,204,0,0.15)" stroke="#ffcc00" stroke-width="1.5"/><text x="195" y="174" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="#ffcc00">SAFE</text><text x="130" y="215" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#888">CMD + SAFE → 5-stage pipeline</text></svg></div><p style="text-align:center;color:#c8d8f0;font-size:14px;margin:8px 0">The <span style="color:#00b4ff;font-weight:bold">CMD</span> and <span style="color:#ffcc00;font-weight:bold">SAFE</span> signals gate the launch sequence entry.</p><p style="text-align:center;color:#c8d8f0;font-size:14px;margin:4px 0">Five flip-flops form a shift register passing authorization through each stage.</p><p style="text-align:center;color:#c8d8f0;font-size:14px;margin:4px 0">Three gates verify conditions and detect <span style="color:#ffcc00;font-weight:bold">ARMED</span> status.</p><p style="text-align:center;color:#888;font-size:12px;margin:4px 0">Place one gate type and one flip-flop type, then STEP five times.</p>',
+    hint: 'The first gate combines CMD and SAFE — only when BOTH are 1 should a "1" enter the shift register. Which gate outputs 1 only when both inputs are 1? The shift register must pass data faithfully from stage to stage — which flip-flop always captures its D input on the clock edge? The ARMED detector checks that two early stages are both loaded.',
+    solution: {
+      gatesUsed: ['AND', 'AND', 'AND'],
+      ffsUsed: ['D-FF', 'D-FF', 'D-FF', 'D-FF', 'D-FF'],
+      explanation: 'Rocket Launch — AND(CMD,SAFE) ensures both signals are active before authorizing the next stage. Five D-FFs form a shift register: the "1" ripples through FUEL→PRESSURIZE→IGNITE→RELEASE→LIFTOFF. AND gates also detect intermediate STATUS (stages 2+3 both active) and ARMED (stages 1+2 both loaded). OR would pass a 1 when only one signal is present (unsafe launch). XOR/NAND/NOR all produce wrong entry patterns. T-FF toggles instead of shifting data. Used in launch control systems and staged ignition sequences.',
+      blockSvg: `<svg viewBox="0 0 480 200" width="580" height="245">
+        <text x="12" y="32" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#00b4ff">CMD</text>
+        <line x1="50" y1="27" x2="90" y2="42" stroke="#00b4ff" stroke-width="2.5"/>
+        <text x="12" y="62" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#ffcc00">SAFE</text>
+        <line x1="50" y1="57" x2="90" y2="52" stroke="#ffcc00" stroke-width="2.5"/>
+        <text x="12" y="152" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#ffcc00">CLK</text>
+        <line x1="45" y1="147" x2="90" y2="130" stroke="#ffcc00" stroke-width="2.5"/>
+        <rect x="90" y="15" width="270" height="140" rx="8" fill="rgba(10,30,50,0.9)" stroke="#ff6b6b" stroke-width="2.5"/>
+        <text x="225" y="60" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#ff6b6b">ROCKET</text>
+        <text x="225" y="82" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#ff6b6b">LAUNCH</text>
+        <text x="225" y="104" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="12" fill="#888">5-stage shift register</text>
+        <line x1="360" y1="40" x2="400" y2="40" stroke="#ff4444" stroke-width="2.5"/>
+        <text x="408" y="45" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#ff4444">ENGINE</text>
+        <line x1="360" y1="80" x2="400" y2="80" stroke="#39ff14" stroke-width="2.5"/>
+        <text x="408" y="85" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#39ff14">STATUS</text>
+        <line x1="360" y1="120" x2="400" y2="120" stroke="#ffcc00" stroke-width="2.5"/>
+        <text x="408" y="125" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#ffcc00">ARMED</text>
+      </svg>`,
+      circuitSvg: `<svg viewBox="0 0 620 220" width="750" height="270">
+        <text x="8" y="16" font-family="JetBrains Mono,monospace" font-size="9" fill="#888">S1: AND(1,1)=1→FUEL | S2: 1→PRESS | S3: 1→IGNITE | S4: AND(1,0)=0 gap | S5: AND(1,1)=1→LIFTOFF</text>
+        <text x="8" y="42" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#00b4ff">CMD:  1→1→1→1→1</text>
+        <text x="8" y="58" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#ffcc00">SAFE: 1→1→1→0→1</text>
+        <line x1="140" y1="38" x2="170" y2="48" stroke="#00b4ff" stroke-width="1.5"/>
+        <line x1="140" y1="54" x2="170" y2="52" stroke="#ffcc00" stroke-width="1.5"/>
+        <rect x="170" y="36" width="50" height="28" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/>
+        <text x="195" y="54" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#a0c8ff">AND</text>
+        <line x1="220" y1="50" x2="240" y2="50" stroke="#39ff14" stroke-width="1.5"/>
+        <rect x="240" y="36" width="42" height="28" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/>
+        <text x="261" y="54" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#a0c8ff">D-FF1</text>
+        <line x1="282" y1="50" x2="292" y2="50" stroke="#39ff14" stroke-width="1.5"/>
+        <rect x="292" y="36" width="42" height="28" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/>
+        <text x="313" y="54" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#a0c8ff">D-FF2</text>
+        <line x1="334" y1="50" x2="344" y2="50" stroke="#39ff14" stroke-width="1.5"/>
+        <rect x="344" y="36" width="42" height="28" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/>
+        <text x="365" y="54" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#a0c8ff">D-FF3</text>
+        <line x1="386" y1="50" x2="396" y2="50" stroke="#39ff14" stroke-width="1.5"/>
+        <rect x="396" y="36" width="42" height="28" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/>
+        <text x="417" y="54" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#a0c8ff">D-FF4</text>
+        <line x1="438" y1="50" x2="448" y2="50" stroke="#39ff14" stroke-width="1.5"/>
+        <rect x="448" y="36" width="42" height="28" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/>
+        <text x="469" y="54" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#a0c8ff">D-FF5</text>
+        <line x1="490" y1="50" x2="520" y2="50" stroke="#ff4444" stroke-width="1.5"/>
+        <text x="525" y="54" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ff4444">ENGINE: 0→0→0→0→1</text>
+        <text x="525" y="104" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#39ff14">STATUS: 0→0→1→1→0</text>
+        <text x="525" y="134" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ffcc00">ARMED: 0→1→1→0→0</text>
+        <polyline points="313,64 313,90 365,90 365,80" stroke="#39ff14" stroke-width="1" fill="none"/>
+        <rect x="290" y="90" width="50" height="22" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/>
+        <text x="315" y="105" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#a0c8ff">AND</text>
+        <line x1="340" y1="101" x2="520" y2="101" stroke="#39ff14" stroke-width="1.5"/>
+        <polyline points="261,64 261,120 270,120" stroke="#ffcc00" stroke-width="1" fill="none"/>
+        <polyline points="313,64 313,130 270,130" stroke="#ffcc00" stroke-width="1" fill="none"/>
+        <rect x="240" y="116" width="50" height="22" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/>
+        <text x="265" y="131" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#a0c8ff">AND</text>
+        <line x1="290" y1="127" x2="520" y2="127" stroke="#ffcc00" stroke-width="1.5"/>
+        <text x="8" y="180" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#ffcc00">CLK x5</text>
+        <text x="8" y="198" font-family="JetBrains Mono,monospace" font-size="9" fill="#888">AND gates verify both signals. D-FFs shift authorization through 5 stages. ARMED when stages 1+2 loaded.</text>
+        <text x="8" y="214" font-family="JetBrains Mono,monospace" font-size="9" fill="#888">Used in: launch control systems, staged ignition, mission-critical state machines</text>
+      </svg>`,
+    },
+    nodes: [
+      { id: 'in_CMD',    type: 'INPUT',     x: 120, y: 400, fixedValue: 1, stepValues: [1, 1, 1, 1, 1], label: 'CMD' },
+      { id: 'in_SAFE',   type: 'INPUT',     x: 120, y: 520, fixedValue: 1, stepValues: [1, 1, 1, 0, 1], label: 'SAFE' },
+      { id: 'clk_1',     type: 'CLOCK',     x: 120, y: 720, value: 0, label: null },
+      { id: 'g1',        type: 'GATE_SLOT', x: 300, y: 460 },
+      { id: 'ff_1',      type: 'FF_SLOT',   ffType: null, x: 440, y: 460, initialQ: 0, label: 'FUEL' },
+      { id: 'ff_2',      type: 'FF_SLOT',   ffType: null, x: 560, y: 460, initialQ: 0, label: 'PRESS' },
+      { id: 'ff_3',      type: 'FF_SLOT',   ffType: null, x: 680, y: 460, initialQ: 0, label: 'IGNITE' },
+      { id: 'ff_4',      type: 'FF_SLOT',   ffType: null, x: 800, y: 460, initialQ: 0, label: 'RELEASE' },
+      { id: 'ff_5',      type: 'FF_SLOT',   ffType: null, x: 920, y: 460, initialQ: 0, label: 'LIFTOFF' },
+      { id: 'g2',        type: 'GATE_SLOT', x: 700, y: 620 },
+      { id: 'g3',        type: 'GATE_SLOT', x: 400, y: 620 },
+      { id: 'out_ENG',   type: 'OUTPUT',    x: 1150, y: 400, targetValue: 1, stepTargets: [0, 0, 0, 0, 1], label: 'ENGINE' },
+      { id: 'out_STS',   type: 'OUTPUT',    x: 1150, y: 550, targetValue: 0, stepTargets: [0, 0, 1, 1, 0], label: 'STATUS' },
+      { id: 'out_ARM',   type: 'OUTPUT',    x: 1150, y: 700, targetValue: 0, stepTargets: [0, 1, 1, 0, 0], label: 'ARMED' },
+    ],
+    wires: [
+      { id: 'w1',    sourceId: 'in_CMD',  targetId: 'g1',      targetInputIndex: 0 },
+      { id: 'w2',    sourceId: 'in_SAFE', targetId: 'g1',      targetInputIndex: 1 },
+      { id: 'w3',    sourceId: 'g1',      targetId: 'ff_1',    targetInputIndex: 0 },
+      { id: 'w12',   sourceId: 'ff_1',    targetId: 'ff_2',    targetInputIndex: 0, sourceOutputIndex: 0 },
+      { id: 'w23',   sourceId: 'ff_2',    targetId: 'ff_3',    targetInputIndex: 0, sourceOutputIndex: 0 },
+      { id: 'w34',   sourceId: 'ff_3',    targetId: 'ff_4',    targetInputIndex: 0, sourceOutputIndex: 0 },
+      { id: 'w45',   sourceId: 'ff_4',    targetId: 'ff_5',    targetInputIndex: 0, sourceOutputIndex: 0 },
+      { id: 'wclk1', sourceId: 'clk_1',   targetId: 'ff_1',    targetInputIndex: 1, isClockWire: true },
+      { id: 'wclk2', sourceId: 'clk_1',   targetId: 'ff_2',    targetInputIndex: 1, isClockWire: true },
+      { id: 'wclk3', sourceId: 'clk_1',   targetId: 'ff_3',    targetInputIndex: 1, isClockWire: true },
+      { id: 'wclk4', sourceId: 'clk_1',   targetId: 'ff_4',    targetInputIndex: 1, isClockWire: true },
+      { id: 'wclk5', sourceId: 'clk_1',   targetId: 'ff_5',    targetInputIndex: 1, isClockWire: true },
+      { id: 'wg2a',  sourceId: 'ff_2',    targetId: 'g2',      targetInputIndex: 0, sourceOutputIndex: 0 },
+      { id: 'wg2b',  sourceId: 'ff_3',    targetId: 'g2',      targetInputIndex: 1, sourceOutputIndex: 0 },
+      { id: 'wg3a',  sourceId: 'ff_1',    targetId: 'g3',      targetInputIndex: 0, sourceOutputIndex: 0 },
+      { id: 'wg3b',  sourceId: 'ff_2',    targetId: 'g3',      targetInputIndex: 1, sourceOutputIndex: 0 },
+      { id: 'woE',   sourceId: 'ff_5',    targetId: 'out_ENG', targetInputIndex: 0, sourceOutputIndex: 0 },
+      { id: 'woS',   sourceId: 'g2',      targetId: 'out_STS', targetInputIndex: 0 },
+      { id: 'woA',   sourceId: 'g3',      targetId: 'out_ARM', targetInputIndex: 0 },
+    ],
+  },
+
+  // L60 — CPU PIPELINE (AND gate x3 + D-FF x5 pipeline stages)
+  // INSTR=[1,1,0,1,1], BRANCH=[0,1,1,0,1]. ff1.D=INSTR directly.
+  // Shift register: ff1→ff2→ff3→ff4→ff5, all D-FF, all initialQ=0.
+  // 3-phase eval: outputs read NEW Q after clock edge.
+  // Q1=[1,1,0,1,1], Q2=[0,1,1,0,1], Q3=[0,0,1,1,0], Q4=[0,0,0,1,1], Q5=[0,0,0,0,1].
+  // g1=AND(BRANCH,Q2_new)=AND([0,1,1,0,1],[0,1,1,0,1])=[0,1,1,0,1]→HAZARD.
+  // g2=AND(INSTR,Q3_new)=AND([1,1,0,1,1],[0,0,1,1,0])=[0,0,0,1,0]→ACTIVE.
+  // g3=AND(BRANCH,Q4_new)=AND([0,1,1,0,1],[0,0,0,1,1])=[0,0,0,0,1]→RESULT.
+  // Unique: AND+D-FF only combo. OR(BRANCH,Q2)=[0,1,1,0,1] same as HAZARD for AND but
+  // OR(INSTR,Q3)=[1,1,1,1,1] wrong ACTIVE. T-FF toggles instead of shifting.
+  {
+    id: 60, name: 'CPU PIPELINE', difficulty: 'FSM Applications',
+    minSteps: 5,
+    description: 'CPU Pipeline — a 5-stage instruction pipeline: FETCH, DECODE, EXECUTE, MEMORY, WRITEBACK. Instructions flow through the pipeline one stage per clock cycle. AND gates detect data hazards (when adjacent stages conflict) and control pipeline stalls. Found in every modern CPU, GPU shader unit, and DSP processor.',
+    instruction: 'Build a 5-stage CPU pipeline. Place one gate type and one flip-flop type, then STEP five times.',
+    instructionHtml: '<div style="text-align:center;margin:18px 0"><svg viewBox="0 0 280 240" width="210" height="180"><rect x="10" y="10" width="260" height="190" rx="12" fill="#111" stroke="#444" stroke-width="2"/><rect x="25" y="25" width="230" height="75" rx="6" fill="#0a0a0a" stroke="#333" stroke-width="1.5"/><text x="140" y="50" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" fill="#00d4ff">CPU PIPELINE</text><text x="140" y="70" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#00d4ff">5-STAGE PROCESSOR</text><rect x="20" y="112" width="44" height="22" rx="3" fill="rgba(0,180,255,0.1)" stroke="#00b4ff" stroke-width="1"/><text x="42" y="127" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="#00b4ff">FETCH</text><line x1="64" y1="123" x2="70" y2="123" stroke="#00b4ff" stroke-width="1.5"/><rect x="70" y="112" width="44" height="22" rx="3" fill="rgba(0,180,255,0.1)" stroke="#00b4ff" stroke-width="1"/><text x="92" y="127" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="#00b4ff">DECOD</text><line x1="114" y1="123" x2="120" y2="123" stroke="#00b4ff" stroke-width="1.5"/><rect x="120" y="112" width="44" height="22" rx="3" fill="rgba(57,255,20,0.1)" stroke="#39ff14" stroke-width="1"/><text x="142" y="127" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="#39ff14">EXEC</text><line x1="164" y1="123" x2="170" y2="123" stroke="#39ff14" stroke-width="1.5"/><rect x="170" y="112" width="44" height="22" rx="3" fill="rgba(255,204,0,0.15)" stroke="#ffcc00" stroke-width="1"/><text x="192" y="127" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="#ffcc00">MEM</text><line x1="214" y1="123" x2="220" y2="123" stroke="#ffcc00" stroke-width="1.5"/><rect x="220" y="112" width="44" height="22" rx="3" fill="rgba(255,100,50,0.15)" stroke="#ff6b6b" stroke-width="1.5"/><text x="242" y="127" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="#ff6b6b">WB</text><circle cx="80" cy="168" r="12" fill="rgba(0,180,255,0.15)" stroke="#00b4ff" stroke-width="1.5"/><text x="80" y="172" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="#00b4ff">INSTR</text><circle cx="200" cy="168" r="12" fill="rgba(255,100,50,0.15)" stroke="#ff6b6b" stroke-width="1.5"/><text x="200" y="172" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="#ff6b6b">BRNCH</text><text x="140" y="210" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#888">INSTR stream + BRANCH detection</text></svg></div><p style="text-align:center;color:#c8d8f0;font-size:14px;margin:8px 0">The <span style="color:#00b4ff;font-weight:bold">INSTR</span> stream enters the pipeline at the FETCH stage.</p><p style="text-align:center;color:#c8d8f0;font-size:14px;margin:4px 0">Five flip-flops pass instructions through FETCH, DECODE, EXECUTE, MEMORY, WRITEBACK.</p><p style="text-align:center;color:#c8d8f0;font-size:14px;margin:4px 0">Three gates detect <span style="color:#ff6b6b;font-weight:bold">HAZARDS</span> and confirm pipeline <span style="color:#39ff14;font-weight:bold">ACTIVE</span> status.</p><p style="text-align:center;color:#888;font-size:12px;margin:4px 0">Place one gate type and one flip-flop type, then STEP five times.</p>',
+    hint: 'Instructions must pass faithfully from stage to stage — which flip-flop captures its D input exactly? The hazard detector needs BOTH a branch signal AND an active decode stage to flag — which gate outputs 1 only when both inputs are 1?',
+    solution: {
+      gatesUsed: ['AND', 'AND', 'AND'],
+      ffsUsed: ['D-FF', 'D-FF', 'D-FF', 'D-FF', 'D-FF'],
+      explanation: 'CPU Pipeline — Five D-FFs form a shift register: instructions ripple through FETCH→DECODE→EXECUTE→MEMORY→WRITEBACK. AND gates detect hazards (BRANCH active while DECODE has data), confirm pipeline activity (INSTR present while EXECUTE has data), and flag writeback (BRANCH confirmed at MEMORY stage). OR would flag false hazards when only one signal is present. XOR/NAND/NOR produce wrong detection patterns. T-FF toggles instead of passing data. Used in every modern CPU, GPU, and DSP.',
+      blockSvg: `<svg viewBox="0 0 480 200" width="580" height="245">
+        <text x="12" y="32" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#00b4ff">INSTR</text>
+        <line x1="60" y1="27" x2="90" y2="42" stroke="#00b4ff" stroke-width="2.5"/>
+        <text x="12" y="62" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#ff6b6b">BRANCH</text>
+        <line x1="72" y1="57" x2="90" y2="52" stroke="#ff6b6b" stroke-width="2.5"/>
+        <text x="12" y="152" font-family="JetBrains Mono,monospace" font-size="14" font-weight="bold" fill="#ffcc00">CLK</text>
+        <line x1="45" y1="147" x2="90" y2="130" stroke="#ffcc00" stroke-width="2.5"/>
+        <rect x="90" y="15" width="270" height="140" rx="8" fill="rgba(10,30,50,0.9)" stroke="#00d4ff" stroke-width="2.5"/>
+        <text x="225" y="55" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#00d4ff">CPU</text>
+        <text x="225" y="77" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#00d4ff">PIPELINE</text>
+        <text x="225" y="99" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="12" fill="#888">5-stage processor</text>
+        <line x1="360" y1="40" x2="400" y2="40" stroke="#39ff14" stroke-width="2.5"/>
+        <text x="408" y="45" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#39ff14">RESULT</text>
+        <line x1="360" y1="80" x2="400" y2="80" stroke="#ff6b6b" stroke-width="2.5"/>
+        <text x="408" y="85" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#ff6b6b">HAZARD</text>
+        <line x1="360" y1="120" x2="400" y2="120" stroke="#00b4ff" stroke-width="2.5"/>
+        <text x="408" y="125" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#00b4ff">ACTIVE</text>
+      </svg>`,
+      circuitSvg: `<svg viewBox="0 0 620 220" width="750" height="270">
+        <text x="8" y="16" font-family="JetBrains Mono,monospace" font-size="9" fill="#888">S1: INSTR=1→FETCH | S2: 1→DECODE | S3: 0 gap | S4: 1→EXECUTE | S5: branch+MEM→RESULT</text>
+        <text x="8" y="42" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#00b4ff">INSTR:  1→1→0→1→1</text>
+        <text x="8" y="58" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#ff6b6b">BRANCH: 0→1→1→0→1</text>
+        <line x1="140" y1="38" x2="170" y2="44" stroke="#00b4ff" stroke-width="1.5"/>
+        <rect x="170" y="32" width="42" height="28" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/>
+        <text x="191" y="50" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#a0c8ff">D-FF1</text>
+        <line x1="212" y1="46" x2="222" y2="46" stroke="#39ff14" stroke-width="1.5"/>
+        <rect x="222" y="32" width="42" height="28" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/>
+        <text x="243" y="50" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#a0c8ff">D-FF2</text>
+        <line x1="264" y1="46" x2="274" y2="46" stroke="#39ff14" stroke-width="1.5"/>
+        <rect x="274" y="32" width="42" height="28" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/>
+        <text x="295" y="50" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#a0c8ff">D-FF3</text>
+        <line x1="316" y1="46" x2="326" y2="46" stroke="#39ff14" stroke-width="1.5"/>
+        <rect x="326" y="32" width="42" height="28" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/>
+        <text x="347" y="50" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#a0c8ff">D-FF4</text>
+        <line x1="368" y1="46" x2="378" y2="46" stroke="#39ff14" stroke-width="1.5"/>
+        <rect x="378" y="32" width="42" height="28" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/>
+        <text x="399" y="50" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#a0c8ff">D-FF5</text>
+        <text x="445" y="50" font-family="JetBrains Mono,monospace" font-size="9" fill="#888">FETCH→DECODE→EXEC→MEM→WB</text>
+        <polyline points="243,60 243,82 140,82 140,92" stroke="#ff6b6b" stroke-width="1" fill="none"/>
+        <rect x="120" y="82" width="50" height="22" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/>
+        <text x="145" y="97" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#a0c8ff">AND</text>
+        <line x1="170" y1="93" x2="445" y2="93" stroke="#ff6b6b" stroke-width="1.5"/>
+        <text x="450" y="97" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#ff6b6b">HAZARD: 0→1→1→0→1</text>
+        <polyline points="295,60 295,118 200,118 200,128" stroke="#00b4ff" stroke-width="1" fill="none"/>
+        <rect x="180" y="118" width="50" height="22" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/>
+        <text x="205" y="133" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#a0c8ff">AND</text>
+        <line x1="230" y1="129" x2="445" y2="129" stroke="#00b4ff" stroke-width="1.5"/>
+        <text x="450" y="133" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#00b4ff">ACTIVE: 0→0→0→1→0</text>
+        <polyline points="347,60 347,155 260,155 260,165" stroke="#39ff14" stroke-width="1" fill="none"/>
+        <rect x="240" y="155" width="50" height="22" rx="4" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="1.5"/>
+        <text x="265" y="170" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#a0c8ff">AND</text>
+        <line x1="290" y1="166" x2="445" y2="166" stroke="#39ff14" stroke-width="1.5"/>
+        <text x="450" y="170" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#39ff14">RESULT: 0→0→0→0→1</text>
+        <text x="8" y="198" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#ffcc00">CLK x5</text>
+        <text x="100" y="214" font-family="JetBrains Mono,monospace" font-size="9" fill="#888">Used in: CPUs (x86, ARM, RISC-V), GPU shader cores, DSP processors</text>
+      </svg>`,
+    },
+    nodes: [
+      { id: 'in_INSTR',  type: 'INPUT',     x: 120, y: 400, fixedValue: 1, stepValues: [1, 1, 0, 1, 1], label: 'INSTR' },
+      { id: 'in_BRANCH', type: 'INPUT',     x: 120, y: 520, fixedValue: 0, stepValues: [0, 1, 1, 0, 1], label: 'BRANCH' },
+      { id: 'clk_1',     type: 'CLOCK',     x: 120, y: 720, value: 0, label: null },
+      { id: 'ff_1',      type: 'FF_SLOT',   ffType: null, x: 340, y: 460, initialQ: 0, label: 'FETCH' },
+      { id: 'ff_2',      type: 'FF_SLOT',   ffType: null, x: 460, y: 460, initialQ: 0, label: 'DECODE' },
+      { id: 'ff_3',      type: 'FF_SLOT',   ffType: null, x: 580, y: 460, initialQ: 0, label: 'EXEC' },
+      { id: 'ff_4',      type: 'FF_SLOT',   ffType: null, x: 700, y: 460, initialQ: 0, label: 'MEM' },
+      { id: 'ff_5',      type: 'FF_SLOT',   ffType: null, x: 820, y: 460, initialQ: 0, label: 'WB' },
+      { id: 'g1',        type: 'GATE_SLOT', x: 500, y: 620 },
+      { id: 'g2',        type: 'GATE_SLOT', x: 700, y: 620 },
+      { id: 'g3',        type: 'GATE_SLOT', x: 900, y: 620 },
+      { id: 'out_RES',   type: 'OUTPUT',    x: 1150, y: 400, targetValue: 1, stepTargets: [0, 0, 0, 0, 1], label: 'RESULT' },
+      { id: 'out_HAZ',   type: 'OUTPUT',    x: 1150, y: 550, targetValue: 1, stepTargets: [0, 1, 1, 0, 1], label: 'HAZARD' },
+      { id: 'out_ACT',   type: 'OUTPUT',    x: 1150, y: 700, targetValue: 0, stepTargets: [0, 0, 0, 1, 0], label: 'ACTIVE' },
+    ],
+    wires: [
+      { id: 'w1',    sourceId: 'in_INSTR',  targetId: 'ff_1',    targetInputIndex: 0 },
+      { id: 'w12',   sourceId: 'ff_1',      targetId: 'ff_2',    targetInputIndex: 0, sourceOutputIndex: 0 },
+      { id: 'w23',   sourceId: 'ff_2',      targetId: 'ff_3',    targetInputIndex: 0, sourceOutputIndex: 0 },
+      { id: 'w34',   sourceId: 'ff_3',      targetId: 'ff_4',    targetInputIndex: 0, sourceOutputIndex: 0 },
+      { id: 'w45',   sourceId: 'ff_4',      targetId: 'ff_5',    targetInputIndex: 0, sourceOutputIndex: 0 },
+      { id: 'wclk1', sourceId: 'clk_1',     targetId: 'ff_1',    targetInputIndex: 1, isClockWire: true },
+      { id: 'wclk2', sourceId: 'clk_1',     targetId: 'ff_2',    targetInputIndex: 1, isClockWire: true },
+      { id: 'wclk3', sourceId: 'clk_1',     targetId: 'ff_3',    targetInputIndex: 1, isClockWire: true },
+      { id: 'wclk4', sourceId: 'clk_1',     targetId: 'ff_4',    targetInputIndex: 1, isClockWire: true },
+      { id: 'wclk5', sourceId: 'clk_1',     targetId: 'ff_5',    targetInputIndex: 1, isClockWire: true },
+      { id: 'wg1a',  sourceId: 'in_BRANCH', targetId: 'g1',      targetInputIndex: 0 },
+      { id: 'wg1b',  sourceId: 'ff_2',      targetId: 'g1',      targetInputIndex: 1, sourceOutputIndex: 0 },
+      { id: 'wg2a',  sourceId: 'in_INSTR',  targetId: 'g2',      targetInputIndex: 0 },
+      { id: 'wg2b',  sourceId: 'ff_3',      targetId: 'g2',      targetInputIndex: 1, sourceOutputIndex: 0 },
+      { id: 'wg3a',  sourceId: 'in_BRANCH', targetId: 'g3',      targetInputIndex: 0 },
+      { id: 'wg3b',  sourceId: 'ff_4',      targetId: 'g3',      targetInputIndex: 1, sourceOutputIndex: 0 },
+      { id: 'woR',   sourceId: 'g3',        targetId: 'out_RES', targetInputIndex: 0 },
+      { id: 'woH',   sourceId: 'g1',        targetId: 'out_HAZ', targetInputIndex: 0 },
+      { id: 'woA',   sourceId: 'g2',        targetId: 'out_ACT', targetInputIndex: 0 },
+    ],
+  },
+
+  // TAB 7 — 7. Design  (IDs 61+)
   // Sandbox / open-ended design levels.
   // ════════════════════════════════════════════════════════════
 
-  // L56 — DESIGN MODE (empty canvas — player builds their own circuit)
+  // L61 — DESIGN MODE (empty canvas — player builds their own circuit)
   {
-    id: 56, name: 'DESIGN MODE', difficulty: 'Design Mode',
+    id: 61, name: 'DESIGN MODE', difficulty: 'Design Mode',
     description: 'Design Mode — create your own circuit from scratch. Place nodes, draw wires, and build whatever you want. Export your creation and share it with others.',
     instruction: 'Welcome to Design Mode! Use the toolbar on the left to place components and draw wires.',
     instructionHtml: '<div style="text-align:center;margin:16px 0"><svg viewBox="0 0 220 140" width="165" height="105"><rect x="10" y="10" width="200" height="120" rx="10" fill="#0a0e14" stroke="#a060ff" stroke-width="2"/><circle cx="50" cy="50" r="15" fill="rgba(57,255,20,0.15)" stroke="#39ff14" stroke-width="2"/><text x="50" y="54" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#39ff14">IN</text><rect x="90" y="38" width="40" height="25" rx="4" fill="rgba(0,212,255,0.1)" stroke="#00d4ff" stroke-width="1.5"/><text x="110" y="55" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#00d4ff">GATE</text><circle cx="170" cy="50" r="15" fill="rgba(200,216,240,0.1)" stroke="#c8d8f0" stroke-width="2"/><text x="170" y="54" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#c8d8f0">OUT</text><line x1="65" y1="50" x2="90" y2="50" stroke="#39ff14" stroke-width="2"/><line x1="130" y1="50" x2="155" y2="50" stroke="#39ff14" stroke-width="2"/><text x="110" y="100" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#a060ff">BUILD YOUR OWN</text><text x="110" y="118" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#a060ff">CIRCUIT</text></svg></div><p style="text-align:center;color:#c8d8f0;font-size:14px;margin:8px 0">Place inputs, gates, flip-flops, and outputs on an empty canvas.</p><p style="text-align:center;color:#c8d8f0;font-size:14px;margin:4px 0">Draw wires to connect them. Test your circuit. Export and share!</p>',

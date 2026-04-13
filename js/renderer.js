@@ -69,6 +69,10 @@ const Renderer = (() => {
   // ── Vertical-layout centering ─────────────────────────────
   let _currentLayout = null;
   let _offsetX = 0, _offsetY = 0;
+  let _userPanned = false;
+  let _userZoom = 1;
+  let _baseScale = 1;
+  let _baseOffsetX = 0, _baseOffsetY = 0;
 
   function init(canvasEl) {
     canvas = canvasEl;
@@ -107,9 +111,12 @@ const Renderer = (() => {
     const availW = W;
     const availH = H - 56;   // 56 = HUD height
     // Scale down if the level is too big, never scale up beyond 1
-    _scale = Math.min(1, availW / levelW, availH / levelH);
+    _baseScale = Math.min(1, availW / levelW, availH / levelH);
     const levelCX = (minX + maxX) / 2;
     const levelCY = (minY + maxY) / 2;
+    _baseOffsetX = W / 2 - levelCX * _baseScale;
+    _baseOffsetY = (56 + H) / 2 - levelCY * _baseScale;
+    _scale = _baseScale * _userZoom;
     _offsetX = W / 2 - levelCX * _scale;
     _offsetY = (56 + H) / 2 - levelCY * _scale;
   }
@@ -128,7 +135,7 @@ const Renderer = (() => {
     _drawBackground();
     _drawGrid();
 
-    if (!State.designMode) _computeCenterOffset(level);
+    if (!State.designMode && !_userPanned) _computeCenterOffset(level);
 
     const { wireValues, nodeValues } = evalResult || {
       wireValues: new Map(),
@@ -142,6 +149,7 @@ const Renderer = (() => {
     if (_scale !== 1) ctx.scale(_scale, _scale);
 
     _drawWires(level, wireValues);
+    _drawPulses(level, wireValues);
     _drawNodes(level, nodeValues, ffStates, hoveredNodeId, solved);
 
     // Design mode: wire preview line from source to mouse
@@ -329,6 +337,82 @@ const Renderer = (() => {
     ctx.arc(x, y, wireW + 1.5, 0, Math.PI * 2);
     ctx.fill();
     ctx.restore();
+  }
+
+  // ── Pulse Animation (data flow on STEP) ────────────────────
+  let _pulseStart = 0;
+  const PULSE_MS = 700;
+
+  function startPulse() { _pulseStart = Date.now(); }
+
+  function _drawPulses(level, wireValues) {
+    const elapsed = Date.now() - _pulseStart;
+    if (elapsed > PULSE_MS || !_pulseStart) return;
+    const t = elapsed / PULSE_MS; // 0→1
+    const nodeMap = new Map(level.nodes.map(n => [n.id, n]));
+
+    level.wires.forEach(wire => {
+      const src = nodeMap.get(wire.sourceId);
+      const dst = nodeMap.get(wire.targetId);
+      if (!src || !dst) return;
+      const val = wireValues.get(wire.id) ?? null;
+
+      const srcPt = _nodeOutputAnchor(src, wire.sourceOutputIndex || 0);
+      const dstPt = _nodeInputAnchor(dst, wire.targetInputIndex, wire.isClockWire);
+
+      // Compute point along the wire path at position t
+      let px, py;
+      if (_currentLayout === 'vertical') {
+        const my = srcPt.y + (dstPt.y - srcPt.y) * 0.55;
+        // 3 segments: src→mid1, mid1→mid2, mid2→dst
+        const d1 = Math.abs(my - srcPt.y);
+        const d2 = Math.abs(dstPt.x - srcPt.x);
+        const d3 = Math.abs(dstPt.y - my);
+        const total = d1 + d2 + d3;
+        const pos = t * total;
+        if (pos <= d1) {
+          const s = d1 > 0 ? pos / d1 : 0;
+          px = srcPt.x; py = srcPt.y + (my - srcPt.y) * s;
+        } else if (pos <= d1 + d2) {
+          const s = d2 > 0 ? (pos - d1) / d2 : 0;
+          px = srcPt.x + (dstPt.x - srcPt.x) * s; py = my;
+        } else {
+          const s = d3 > 0 ? (pos - d1 - d2) / d3 : 0;
+          px = dstPt.x; py = my + (dstPt.y - my) * s;
+        }
+      } else {
+        const mx = srcPt.x + (dstPt.x - srcPt.x) * 0.55;
+        const d1 = Math.abs(mx - srcPt.x);
+        const d2 = Math.abs(dstPt.y - srcPt.y);
+        const d3 = Math.abs(dstPt.x - mx);
+        const total = d1 + d2 + d3;
+        const pos = t * total;
+        if (pos <= d1) {
+          const s = d1 > 0 ? pos / d1 : 0;
+          px = srcPt.x + (mx - srcPt.x) * s; py = srcPt.y;
+        } else if (pos <= d1 + d2) {
+          const s = d2 > 0 ? (pos - d1) / d2 : 0;
+          px = mx; py = srcPt.y + (dstPt.y - srcPt.y) * s;
+        } else {
+          const s = d3 > 0 ? (pos - d1 - d2) / d3 : 0;
+          px = mx + (dstPt.x - mx) * s; py = dstPt.y;
+        }
+      }
+
+      // Draw pulse dot
+      const pulseColor = wire.isClockWire ? '#ffcc00' : (val === 1 ? '#39ff14' : (val === 0 ? '#ff4444' : '#555'));
+      const alpha = 1 - t * 0.4;
+      const r = 8 + (1 - t) * 5;
+      ctx.save();
+      ctx.globalAlpha = alpha;
+      ctx.fillStyle = pulseColor;
+      ctx.shadowColor = pulseColor;
+      ctx.shadowBlur = 15;
+      ctx.beginPath();
+      ctx.arc(px, py, r, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    });
   }
 
   // ── Node Anchors ──────────────────────────────────────────
@@ -1299,12 +1383,56 @@ const Renderer = (() => {
   }
 
   // ── Solved Halo ───────────────────────────────────────────
+  // ── Solve Animation ────────────────────────────────────────
+  let _solveAnimStart = 0;
+  const SOLVE_ANIM_MS = 1800;
+
+  function startSolveAnim() { _solveAnimStart = Date.now(); }
+
   function _drawSolvedHalo() {
+    const elapsed = _solveAnimStart ? Date.now() - _solveAnimStart : SOLVE_ANIM_MS;
+    const t = Math.min(elapsed / SOLVE_ANIM_MS, 1); // 0→1
+
+    // Expanding ring wave
+    const waveR = t * Math.max(W, H) * 0.8;
+    const waveAlpha = 0.25 * (1 - t);
+    ctx.save();
+    ctx.strokeStyle = `rgba(57,255,20,${waveAlpha})`;
+    ctx.lineWidth = 4 + (1 - t) * 8;
+    ctx.beginPath();
+    ctx.arc(W / 2, H / 2, waveR, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.restore();
+
+    // Pulsing green vignette
+    const pulse = 0.5 + 0.5 * Math.sin(elapsed / 120);
+    const vigAlpha = 0.04 + 0.03 * pulse;
     const grad = ctx.createRadialGradient(W/2, H/2, H*0.1, W/2, H/2, H*0.75);
-    grad.addColorStop(0, 'rgba(57,255,20,0.0)');
-    grad.addColorStop(1, 'rgba(57,255,20,0.06)');
+    grad.addColorStop(0, `rgba(57,255,20,0.0)`);
+    grad.addColorStop(1, `rgba(57,255,20,${vigAlpha})`);
     ctx.fillStyle = grad;
     ctx.fillRect(0, 0, W, H);
+
+    // Glow pulse on output nodes
+    if (_currentLevel) {
+      ctx.save();
+      ctx.translate(_offsetX, _offsetY);
+      if (_scale !== 1) ctx.scale(_scale, _scale);
+      const glowPulse = 15 + 15 * Math.sin(elapsed / 80);
+      _currentLevel.nodes.forEach(n => {
+        if (n.type === 'OUTPUT' && !n.sandbox) {
+          ctx.beginPath();
+          ctx.arc(n.x, n.y, 40, 0, Math.PI * 2);
+          ctx.strokeStyle = `rgba(57,255,20,${0.4 + 0.4 * Math.sin(elapsed / 80)})`;
+          ctx.lineWidth = 3;
+          ctx.shadowColor = '#39ff14';
+          ctx.shadowBlur = glowPulse;
+          ctx.stroke();
+          ctx.shadowBlur = 0;
+        }
+      });
+      ctx.restore();
+    }
   }
 
   // ── Helpers ───────────────────────────────────────────────
@@ -1390,8 +1518,26 @@ const Renderer = (() => {
   function panBy(dx, dy) {
     _offsetX += dx;
     _offsetY += dy;
+    _userPanned = true;
   }
 
-  return { init, render, resize, getNodeAtPoint, canvasToWorld, getWireAtPoint, panBy };
+  function zoomAt(px, py, delta) {
+    const oldScale = _scale;
+    const factor = delta > 0 ? 0.9 : 1.1; // scroll down = zoom out, up = zoom in
+    _userZoom = Math.max(0.3, Math.min(4, _userZoom * factor));
+    const newScale = (_userPanned || State.designMode) ? oldScale * factor : _baseScale * _userZoom;
+    // Zoom toward mouse position
+    _offsetX = px - (px - _offsetX) * (newScale / oldScale);
+    _offsetY = py - (py - _offsetY) * (newScale / oldScale);
+    _scale = newScale;
+    _userPanned = true;
+  }
+
+  function resetPan() {
+    _userPanned = false;
+    _userZoom = 1;
+  }
+
+  return { init, render, resize, getNodeAtPoint, canvasToWorld, getWireAtPoint, panBy, zoomAt, resetPan, startSolveAnim, startPulse };
 
 })();

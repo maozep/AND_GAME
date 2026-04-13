@@ -951,6 +951,7 @@
     _autoClkInterval = setInterval(() => {
       if (State.solved) { _stopAutoClock(); return; }
       State.stepClock();
+      Renderer.startPulse();
       _updateStepCount();
       setTimeout(_checkFail, 200);
     }, 600);
@@ -972,6 +973,7 @@
     if (required <= 0) return; // non-sequential or no step limit
     if (State.stepCount >= required && !State.solved) {
       _stopAutoClock();
+      Sound.play('fail');
       failOverlay.classList.remove('hidden');
     }
   }
@@ -991,6 +993,8 @@
   btnStep.addEventListener('click', () => {
     if (!State.isSequentialLevel() || State.solved) return;
     State.stepClock();
+    Renderer.startPulse();
+    Sound.play('step');
     _updateStepCount();
     // Check fail after a short delay (let tick evaluate first)
     setTimeout(_checkFail, 200);
@@ -1028,6 +1032,8 @@
     if (result.solved && !_lastSolved) {
       _lastSolved = true;
       _stopAutoClock();
+      Renderer.startSolveAnim();
+      Sound.play('win');
       _onSolve();
     }
     if (!result.solved) {
@@ -1068,6 +1074,7 @@
     }
 
     const levelDef = LEVELS[index];
+    Renderer.resetPan();
     State.setLevelIndex(index);
     State.setLevel(levelDef);
     _currentLevelId = levelDef.id;
@@ -1265,10 +1272,11 @@
   });
 
   document.getElementById('btn-undo').addEventListener('click', () => {
-    if (State.undo()) _updateStepCount();
+    if (State.undo()) { Sound.play('undo'); _updateStepCount(); }
   });
 
   document.getElementById('btn-clear-gates').addEventListener('click', () => {
+    Sound.play('clear');
     State.resetLevel();
   });
 
@@ -1605,6 +1613,7 @@
       e.preventDefault();
       if (State.isSequentialLevel() && !State.solved) {
         State.stepClock();
+        Renderer.startPulse();
         _updateStepCount();
         setTimeout(_checkFail, 200);
       }
@@ -1633,6 +1642,15 @@
   colorizeTruthTableBits();
   setupComponentInfoButtons();
 
+  // ── Sound ─────────────────────────────────────────────────
+  const btnMute = document.getElementById('btn-mute');
+  function _updateMuteBtn() {
+    btnMute.textContent = Sound.isMuted() ? '🔇' : '🔊';
+    btnMute.classList.toggle('muted', Sound.isMuted());
+  }
+  btnMute.addEventListener('click', () => { Sound.toggleMute(); _updateMuteBtn(); });
+  _updateMuteBtn();
+
   // ── Input Callbacks ───────────────────────────────────────
   Input.init(canvas, {
     onGatePlaced:  () => { /* tick loop handles re-render */ },
@@ -1654,8 +1672,10 @@
       waveformPanel.classList.add('hidden');
       btnWaveform.classList.remove('active');
     } else {
-      waveformPanel.classList.remove('hidden'); // un-hide FIRST so it has dimensions
-      Waveform.show(); // then show (which does requestAnimationFrame resize+render)
+      // Force browser to register the hidden state first, then animate in
+      waveformPanel.offsetHeight; // force reflow
+      waveformPanel.classList.remove('hidden');
+      Waveform.show();
       btnWaveform.classList.add('active');
     }
   }
@@ -1861,6 +1881,7 @@
 
   document.getElementById('btn-design-clear').addEventListener('click', () => {
     if (!State.level) return;
+    Sound.play('clear');
     State.level.nodes = [];
     State.level.wires = [];
     State.selectedNodeId = null;

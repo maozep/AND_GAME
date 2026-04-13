@@ -56,6 +56,14 @@ const Input = (() => {
     _canvas.addEventListener('click',      _onCanvasClick);
     _canvas.addEventListener('mousedown',  _onMouseDown);
     _canvas.addEventListener('mouseup',    _onMouseUp);
+    _canvas.addEventListener('wheel',      _onWheel, { passive: false });
+  }
+
+  function _onWheel(e) {
+    if (!State.level) return;
+    e.preventDefault();
+    const { x, y } = _getCanvasPoint(e);
+    Renderer.zoomAt(x, y, e.deltaY);
   }
 
   // ── Design Mode: Node Dragging & Canvas Panning ──
@@ -65,8 +73,21 @@ const Input = (() => {
   let _panStart = { x: 0, y: 0 };
 
   function _onMouseDown(e) {
-    if (!State.designMode || State.designTool !== 'select') return;
     if (!State.level) return;
+
+    // Normal mode: pan if not clicking a node
+    if (!State.designMode) {
+      const canvasPoint = _getCanvasPoint(e);
+      const node = Renderer.getNodeAtPoint(canvasPoint.x, canvasPoint.y, State.level.nodes);
+      if (!node) {
+        _panning = true;
+        _panStart = { x: e.clientX, y: e.clientY };
+      }
+      return;
+    }
+
+    // Design mode
+    if (State.designTool !== 'select') return;
     const canvasPoint = _getCanvasPoint(e);
     const node = Renderer.getNodeAtPoint(canvasPoint.x, canvasPoint.y, State.level.nodes);
     if (node) {
@@ -158,6 +179,7 @@ const Input = (() => {
               targetInputIndex: nextIdx,
               sourceOutputIndex: 0,
             });
+            Sound.play('wire');
             _wireSource = null;
             if (_onGatePlaced) _onGatePlaced(null);
           }
@@ -173,6 +195,7 @@ const Input = (() => {
     // ── Normal Mode ──
     if (node && node.type === 'MUX_SELECT') {
       node.value = (node.value ?? 0) ^ 1;
+      Sound.play('toggle');
       if (_onGatePlaced) _onGatePlaced(node.id);
     }
   }
@@ -249,12 +272,14 @@ const Input = (() => {
 
     if (dragged.kind === 'gate' && node.type === 'GATE_SLOT') {
       State.setGate(node.id, dragged.value);
+      Sound.play('gate');
       if (_onGatePlaced) _onGatePlaced(node.id);
       return true;
     }
 
     if (dragged.kind === 'ff' && node.type === 'FF_SLOT') {
       State.setFfType(node.id, dragged.value);
+      Sound.play('ff');
       if (_onGatePlaced) _onGatePlaced(node.id);
       return true;
     }
@@ -305,8 +330,8 @@ const Input = (() => {
       _mouseWorld = Renderer.canvasToWorld(x, y);
     }
 
-    // Design mode: canvas panning
-    if (_panning && State.designMode && State.designTool === 'select') {
+    // Canvas panning (design mode select tool OR normal mode)
+    if (_panning && (State.designMode ? State.designTool === 'select' : true)) {
       const dx = e.clientX - _panStart.x;
       const dy = e.clientY - _panStart.y;
       _panStart = { x: e.clientX, y: e.clientY };

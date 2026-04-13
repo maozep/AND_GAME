@@ -1007,21 +1007,31 @@
 
   // ── Fail detection ─────────────────────────────────────────
   const failOverlay   = document.getElementById('fail-overlay');
+  const failMessage   = document.getElementById('fail-message');
   const btnFailRetry  = document.getElementById('btn-fail-retry');
+  const btnFailSolve  = document.getElementById('btn-fail-solve');
+  let _failCount = 0;
 
   function _checkFail() {
     const levelDef = LEVELS[State.currentLevelIndex];
     if (!levelDef || State.solved) return;
-    if (State.stepCount <= 0) return; // no steps taken yet
-    // Determine how many steps are required
+    if (State.stepCount <= 0) return;
     const minSteps = levelDef.minSteps || 0;
     const maxStepVals = (levelDef.nodes || []).reduce((max, n) =>
       n.stepValues ? Math.max(max, n.stepValues.length) : max, 0);
     const required = Math.max(minSteps, maxStepVals);
-    if (required <= 0) return; // non-sequential or no step limit
+    if (required <= 0) return;
     if (State.stepCount >= required && !State.solved) {
       _stopAutoClock();
       Sound.play('fail');
+      _failCount++;
+      if (_failCount >= 3 && levelDef.solution) {
+        failMessage.textContent = `Attempt ${_failCount} failed. Want to see the solution?`;
+        btnFailSolve.classList.remove('hidden');
+      } else {
+        failMessage.textContent = `The output doesn't match the target. Try a different combination! (Attempt ${_failCount})`;
+        btnFailSolve.classList.add('hidden');
+      }
       failOverlay.classList.remove('hidden');
     }
   }
@@ -1034,6 +1044,10 @@
   }
 
   btnFailRetry.addEventListener('click', _closeFailOverlay);
+  btnFailSolve.addEventListener('click', () => {
+    failOverlay.classList.add('hidden');
+    _devAutoSolve();
+  });
   failOverlay.addEventListener('click', (e) => {
     if (e.target === failOverlay) _closeFailOverlay();
   });
@@ -1235,6 +1249,7 @@
     _reviewSnapshots = [];
     _reviewMode = false;
     reviewBar.classList.add('hidden');
+    _failCount = 0;
 
     // Reset waveform for new level
     Waveform.reset();

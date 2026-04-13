@@ -4360,41 +4360,60 @@ const LEVELS = [
         <line x1="290" y1="102" x2="345" y2="102" stroke="#c8d8f0" stroke-width="2.5"/>
         <text x="353" y="107" font-family="JetBrains Mono,monospace" font-size="16" font-weight="bold" fill="#c8d8f0">Q2</text>
       </svg>`,
-      circuitSvg: `<svg viewBox="0 0 520 220" width="630" height="270">
-        <text x="8" y="18" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">STEP 1: Q1 toggles 0→1, AND(0,1)=0 → Q2 holds | STEP 2: Q1 toggles 1→0, AND(1,1)=1 → Q2 toggles 0→1</text>
+      circuitSvg: `<svg viewBox="0 0 540 280" width="650" height="340">
+        <!-- Step trace header -->
+        <text x="8" y="16" font-family="JetBrains Mono,monospace" font-size="9" fill="#888">INIT: Q1=0, Q2=0</text>
+        <text x="8" y="30" font-family="JetBrains Mono,monospace" font-size="9" fill="#39ff14">S1: T=1 → Q1: 0⊕1=1 | AND(0,1)=0 → Q2: 0⊕0=0 → count=01</text>
+        <text x="8" y="44" font-family="JetBrains Mono,monospace" font-size="9" fill="#39ff14">S2: T=1 → Q1: 1⊕1=0 | AND(1,1)=1 → Q2: 0⊕1=1 → count=10</text>
         <!-- T=1 input -->
-        <text x="8" y="60" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#39ff14">T=1</text>
-        <line x1="45" y1="56" x2="80" y2="56" stroke="#39ff14" stroke-width="2"/>
-        <line x1="60" y1="56" x2="60" y2="120" stroke="#39ff14" stroke-width="1.5"/>
-        <line x1="60" y1="120" x2="195" y2="120" stroke="#39ff14" stroke-width="1.5"/>
-        <!-- T-FF1: Q' = Q ⊕ T -->
-        <text x="117" y="33" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">Q1' = Q1 ⊕ 1</text>
-        <rect x="80" y="38" width="75" height="42" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
-        <text x="117" y="64" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#a0c8ff">T-FF1</text>
-        <!-- Q1 out -->
-        <line x1="155" y1="56" x2="185" y2="56" stroke="#39ff14" stroke-width="2"/>
-        <line x1="185" y1="56" x2="185" y2="105" stroke="#39ff14" stroke-width="1.5"/>
-        <line x1="185" y1="105" x2="195" y2="105" stroke="#39ff14" stroke-width="1.5"/>
-        <line x1="185" y1="56" x2="400" y2="56" stroke="#39ff14" stroke-width="1.5"/>
-        <text x="408" y="61" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#c8d8f0">Q1: 1→0</text>
-        <!-- AND: Q1 · T -->
-        <text x="225" y="90" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">Q1 · T</text>
-        <rect x="195" y="95" width="60" height="38" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
-        <text x="225" y="119" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#a0c8ff">AND</text>
-        <!-- AND out to T-FF2 -->
-        <line x1="255" y1="114" x2="290" y2="114" stroke="#39ff14" stroke-width="2"/>
-        <!-- T-FF2: Q' = Q ⊕ T -->
-        <text x="327" y="90" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">Q2' = Q2 ⊕ T2</text>
-        <rect x="290" y="95" width="75" height="42" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
-        <text x="327" y="121" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#a0c8ff">T-FF2</text>
-        <!-- Q2 out -->
-        <line x1="365" y1="114" x2="400" y2="114" stroke="#39ff14" stroke-width="2"/>
-        <text x="408" y="119" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#c8d8f0">Q2: 0→1</text>
+        <text x="8" y="80" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#39ff14">T=1</text>
+        <!-- T → FF1 -->
+        <polyline points="45,76 80,76" stroke="#39ff14" stroke-width="2" fill="none"/>
+        <!-- T → AND (branch down) -->
+        <polyline points="60,76 60,140 195,140" stroke="#39ff14" stroke-width="1.5" fill="none"/>
+        <circle cx="60" cy="76" r="2.5" fill="#39ff14"/>
+        <!-- T-FF1 -->
+        <text x="117" y="58" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">Q1' = Q1 ⊕ 1</text>
+        <rect x="80" y="62" width="75" height="42" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="117" y="88" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#a0c8ff">T-FF1</text>
+        <text x="117" y="114" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="#00d4ff">Q1: 0 → 1 → 0</text>
+        <!-- Q1 → AND -->
+        <polyline points="155,80 185,80 185,125 195,125" stroke="#39ff14" stroke-width="1.5" fill="none"/>
+        <circle cx="185" cy="80" r="2.5" fill="#39ff14"/>
+        <!-- Q1 → output -->
+        <polyline points="185,80 420,80" stroke="#39ff14" stroke-width="1.5" fill="none"/>
+        <text x="428" y="78" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#c8d8f0">Q1</text>
+        <text x="428" y="92" font-family="JetBrains Mono,monospace" font-size="9" fill="#00d4ff">0 → 1 → 0</text>
+        <!-- AND gate -->
+        <text x="225" y="112" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">Q1 · T</text>
+        <rect x="195" y="118" width="60" height="34" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="225" y="140" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#a0c8ff">AND</text>
+        <text x="225" y="162" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="#00d4ff">out: 0 → 1 → 0</text>
+        <!-- AND → T-FF2 -->
+        <line x1="255" y1="135" x2="300" y2="135" stroke="#39ff14" stroke-width="2"/>
+        <!-- T-FF2 -->
+        <text x="337" y="112" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">Q2' = Q2 ⊕ T2</text>
+        <rect x="300" y="118" width="75" height="42" rx="5" fill="rgba(14,31,51,0.96)" stroke="#2a5a90" stroke-width="2"/>
+        <text x="337" y="144" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="bold" fill="#a0c8ff">T-FF2</text>
+        <text x="337" y="170" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="#00d4ff">Q2: 0 → 0 → 1</text>
+        <!-- Q2 → output -->
+        <line x1="375" y1="135" x2="420" y2="135" stroke="#39ff14" stroke-width="2"/>
+        <text x="428" y="133" font-family="JetBrains Mono,monospace" font-size="11" font-weight="bold" fill="#c8d8f0">Q2</text>
+        <text x="428" y="147" font-family="JetBrains Mono,monospace" font-size="9" fill="#00d4ff">0 → 0 → 1</text>
         <!-- CLK -->
-        <text x="8" y="165" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#ffcc00">CLK ×2</text>
-        <text x="8" y="185" font-family="JetBrains Mono,monospace" font-size="10" fill="#888">AND carry: FF2 toggles only when Q1=1 — synchronous counting</text>
+        <text x="8" y="205" font-family="JetBrains Mono,monospace" font-size="12" font-weight="bold" fill="#ffcc00">CLK ×2</text>
+        <polyline points="50,211 117,211 117,104" stroke="#ffcc00" stroke-width="1" fill="none" stroke-dasharray="4,3"/>
+        <polyline points="117,211 337,211 337,160" stroke="#ffcc00" stroke-width="1" fill="none" stroke-dasharray="4,3"/>
+        <!-- Step summary table -->
+        <text x="8" y="235" font-family="JetBrains Mono,monospace" font-size="10" font-weight="bold" fill="#00d4ff">Step Table:</text>
+        <text x="8" y="250" font-family="JetBrains Mono,monospace" font-size="9" fill="#888">       Q1  AND  Q2  Count</text>
+        <text x="8" y="262" font-family="JetBrains Mono,monospace" font-size="9" fill="#c8d8f0">INIT:  0    0    0    00</text>
+        <text x="8" y="274" font-family="JetBrains Mono,monospace" font-size="9" fill="#c8d8f0">S1:    1    0    0    01</text>
+        <text x="8" y="286" font-family="JetBrains Mono,monospace" font-size="9" fill="#39ff14">S2:    0    1    1    10  ✓</text>
         <!-- Formulas -->
-        <text x="8" y="210" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">T-FF: Q' = Q ⊕ T  |  T2 = Q1 · T  |  Carry = AND(Q1,T)</text>
+        <text x="250" y="250" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">T-FF: Q' = Q ⊕ T</text>
+        <text x="250" y="265" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">T2 = AND(Q1, T)</text>
+        <text x="250" y="280" font-family="JetBrains Mono,monospace" font-size="9" font-weight="bold" fill="#ffcc00">Carry = Q1 · T</text>
       </svg>`,
     },
     nodes: [

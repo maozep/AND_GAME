@@ -134,6 +134,14 @@
     <canvas id="waveform-canvas"></canvas>
   </div>
 
+  <!-- Review Mode Bar -->
+  <div id="review-bar" class="hidden">
+    <button id="btn-review-prev" class="review-btn">◀ PREV</button>
+    <div id="review-timeline"></div>
+    <button id="btn-review-next" class="review-btn">NEXT ▶</button>
+    <button id="btn-review-exit" class="review-btn review-exit">EXIT REVIEW</button>
+  </div>
+
   <!-- Stage Select Overlay -->
   <div id="menu-overlay" class="hidden" aria-hidden="true">
     <div id="menu-box" role="dialog" aria-modal="true" aria-labelledby="menu-title">
@@ -204,6 +212,7 @@
       </div>
       <div id="win-buttons">
         <button id="btn-next">NEXT LEVEL <span style="font-size:24px;vertical-align:middle">➜</span></button>
+        <button id="btn-review" class="btn-secondary hidden">REVIEW</button>
         <button id="btn-screenshot" class="btn-share">SHARE</button>
         <button id="btn-restart" class="btn-secondary">RESTART</button>
         <button id="btn-win-stages" class="btn-secondary">STAGES</button>

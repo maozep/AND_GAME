@@ -1010,6 +1010,12 @@
     const level  = State.level;
     if (!level) return;
 
+    // In review mode, don't run the engine — just keep the RAF loop alive
+    if (_reviewMode) {
+      _rafId = requestAnimationFrame(tick);
+      return;
+    }
+
     const result = Engine.evaluate(level, State.getFfStates(), State.stepCount);
     State.setEvalResult(result);
 
@@ -1019,6 +1025,9 @@
     }
 
     Renderer.render(level, result, State.hoveredNodeId, result.solved, State.stepCount);
+
+    // Record review snapshot
+    if (!_reviewMode) _recordSnapshot(State.stepCount, result);
 
     // Record waveform data (always record, render only when visible)
     if (result.nodeValues) {
@@ -1066,6 +1075,87 @@
     _rafId = requestAnimationFrame(tick);
   }
 
+  // ── Review Mode ──────────────────────────────────────────
+  let _reviewSnapshots = [];   // Array of { stepCount, nodeValues, wireValues, ffStates }
+  let _reviewMode = false;
+  let _reviewIndex = 0;
+  const reviewBar = document.getElementById('review-bar');
+  const reviewTimeline = document.getElementById('review-timeline');
+  const btnReview = document.getElementById('btn-review');
+  const btnReviewPrev = document.getElementById('btn-review-prev');
+  const btnReviewNext = document.getElementById('btn-review-next');
+  const btnReviewExit = document.getElementById('btn-review-exit');
+
+  function _recordSnapshot(stepCount, evalResult) {
+    if (!evalResult || !evalResult.nodeValues) return;
+    // Deep clone Maps
+    const snap = {
+      stepCount,
+      nodeValues: new Map(evalResult.nodeValues),
+      wireValues: new Map(evalResult.wireValues),
+      ffStates: new Map([...State.getFfStates()].map(([k, v]) => [k, { ...v }])),
+    };
+    // Replace if same step, else push
+    if (_reviewSnapshots.length > 0 && _reviewSnapshots[_reviewSnapshots.length - 1].stepCount === stepCount) {
+      _reviewSnapshots[_reviewSnapshots.length - 1] = snap;
+    } else {
+      _reviewSnapshots.push(snap);
+    }
+  }
+
+  function _enterReview() {
+    if (_reviewSnapshots.length === 0) return;
+    _reviewMode = true;
+    _reviewIndex = _reviewSnapshots.length - 1;
+    winOverlay.classList.add('hidden');
+    reviewBar.classList.remove('hidden');
+    _buildReviewTimeline();
+    _showReviewStep(_reviewIndex);
+  }
+
+  function _exitReview() {
+    _reviewMode = false;
+    reviewBar.classList.add('hidden');
+    // Re-enter normal solved state
+    winOverlay.classList.remove('hidden');
+  }
+
+  function _buildReviewTimeline() {
+    reviewTimeline.innerHTML = '';
+    _reviewSnapshots.forEach((snap, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'review-step' + (i === _reviewIndex ? ' active' : '');
+      btn.textContent = snap.stepCount === 0 ? 'INIT' : 'S' + snap.stepCount;
+      btn.addEventListener('click', () => _showReviewStep(i));
+      reviewTimeline.appendChild(btn);
+    });
+  }
+
+  function _showReviewStep(index) {
+    if (index < 0 || index >= _reviewSnapshots.length) return;
+    _reviewIndex = index;
+    const snap = _reviewSnapshots[index];
+    // Update timeline active
+    reviewTimeline.querySelectorAll('.review-step').forEach((el, i) => {
+      el.classList.toggle('active', i === index);
+    });
+    // Restore FF states from snapshot so renderer shows Q values
+    const savedFf = State.getFfStates();
+    snap.ffStates.forEach((v, k) => savedFf.set(k, { ...v }));
+    // Render with snapshot data
+    const level = State.level;
+    if (!level) return;
+    const evalResult = { nodeValues: snap.nodeValues, wireValues: snap.wireValues, solved: false };
+    Renderer.render(level, evalResult, State.hoveredNodeId, false, snap.stepCount);
+    // Trigger pulse on forward step
+    Renderer.startPulse();
+  }
+
+  btnReviewPrev.addEventListener('click', () => _showReviewStep(_reviewIndex - 1));
+  btnReviewNext.addEventListener('click', () => _showReviewStep(_reviewIndex + 1));
+  btnReviewExit.addEventListener('click', _exitReview);
+  btnReview.addEventListener('click', _enterReview);
+
   // ── Load a Level ─────────────────────────────────────────
   function loadLevel(index) {
     if (index >= LEVELS.length) {
@@ -1081,6 +1171,9 @@
     _lastSolved = false;
     _levelFinished = false;
     _elapsedMs = 0;
+    _reviewSnapshots = [];
+    _reviewMode = false;
+    reviewBar.classList.add('hidden');
 
     // Reset waveform for new level
     Waveform.reset();
@@ -1204,6 +1297,8 @@
       } else {
         winSolution.classList.add('hidden');
       }
+      // Show REVIEW button for sequential levels
+      btnReview.classList.toggle('hidden', _reviewSnapshots.length < 2);
       winOverlay.classList.remove('hidden');
       renderLevelMenu();
     }, 900);   // short delay so player sees the green flash first

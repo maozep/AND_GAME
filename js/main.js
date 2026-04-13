@@ -1246,11 +1246,17 @@
       startTimer();
     }
 
-    // Start tutorials on first visit
+    // Queue tutorial for after instruction overlay is dismissed
+    _pendingTutorial = null;
     if (index === 0) {
-      setTimeout(() => _startTutorial(TUTORIAL_GATE_STEPS, 'andgame_tut_gates'), 500);
+      _pendingTutorial = { steps: TUTORIAL_GATE_STEPS, key: 'andgame_tut_gates' };
     } else if (index === 30) {
-      setTimeout(() => _startTutorial(TUTORIAL_FF_STEPS, 'andgame_tut_ff'), 500);
+      _pendingTutorial = { steps: TUTORIAL_FF_STEPS, key: 'andgame_tut_ff' };
+    }
+    // If no instruction overlay, start tutorial immediately
+    if (!hasInstruction && _pendingTutorial) {
+      setTimeout(() => _startTutorial(_pendingTutorial.steps, _pendingTutorial.key), 500);
+      _pendingTutorial = null;
     }
   }
 
@@ -1292,6 +1298,7 @@
   let _tutorialActive = false;
   let _tutorialSteps = [];
   let _tutorialKey = '';
+  let _pendingTutorial = null;
 
   function _startTutorial(steps, storageKey) {
     if (localStorage.getItem(storageKey) === '1') return;
@@ -1480,6 +1487,11 @@
   btnStart.addEventListener('click', () => {
     instructionOverlay.classList.add('hidden');
     startTimer();
+    // Start pending tutorial after instruction overlay closes
+    if (_pendingTutorial) {
+      setTimeout(() => _startTutorial(_pendingTutorial.steps, _pendingTutorial.key), 300);
+      _pendingTutorial = null;
+    }
   });
 
   const solutionExplanation = document.getElementById('solution-explanation');

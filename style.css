@@ -383,6 +383,99 @@ html, body {
   to   { opacity: 1; transform: translateY(-50%) translateX(0); }
 }
 
+/* ── Tutorial Overlay ────────────────────────────────────── */
+
+#tutorial-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  pointer-events: none;
+}
+#tutorial-overlay.hidden { display: none; }
+
+#tutorial-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  pointer-events: auto;
+}
+
+#tutorial-box {
+  position: absolute;
+  background: #0d1117;
+  border: 2px solid #39ff14;
+  border-radius: 12px;
+  padding: 16px 20px;
+  max-width: 340px;
+  pointer-events: auto;
+  box-shadow: 0 0 30px rgba(57, 255, 20, 0.2);
+  animation: overlayIn 0.3s ease-out;
+}
+
+#tutorial-step-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: #39ff14;
+  margin-bottom: 8px;
+}
+
+#tutorial-text {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  color: #c8d8f0;
+  line-height: 1.5;
+  margin-bottom: 14px;
+}
+
+#tutorial-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+#btn-tutorial-next {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding: 6px 16px;
+  border: 2px solid #39ff14;
+  border-radius: 6px;
+  background: rgba(57, 255, 20, 0.1);
+  color: #39ff14;
+  cursor: pointer;
+}
+#btn-tutorial-next:hover {
+  background: rgba(57, 255, 20, 0.25);
+}
+
+#btn-tutorial-skip {
+  font-size: 10px;
+  padding: 5px 12px;
+  opacity: 0.7;
+}
+
+#tutorial-arrow {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border: 10px solid transparent;
+  pointer-events: none;
+}
+#tutorial-arrow.arrow-down {
+  border-top-color: #39ff14;
+}
+#tutorial-arrow.arrow-up {
+  border-bottom-color: #39ff14;
+}
+#tutorial-arrow.arrow-left {
+  border-right-color: #39ff14;
+}
+#tutorial-arrow.arrow-right {
+  border-left-color: #39ff14;
+}
+
 #btn-review {
   border-color: #a060ff;
   color: #a060ff;

@@ -1245,7 +1245,136 @@
     if (!hasInstruction) {
       startTimer();
     }
+
+    // Start tutorials on first visit
+    if (index === 0) {
+      setTimeout(() => _startTutorial(TUTORIAL_GATE_STEPS, 'andgame_tut_gates'), 500);
+    } else if (index === 30) {
+      setTimeout(() => _startTutorial(TUTORIAL_FF_STEPS, 'andgame_tut_ff'), 500);
+    }
   }
+
+  // ── Tutorial ───────────────────────────────────────────────
+  const tutorialOverlay = document.getElementById('tutorial-overlay');
+  const tutorialBox = document.getElementById('tutorial-box');
+  const tutorialStepNum = document.getElementById('tutorial-step-num');
+  const tutorialText = document.getElementById('tutorial-text');
+  const tutorialArrow = document.getElementById('tutorial-arrow');
+  const btnTutorialNext = document.getElementById('btn-tutorial-next');
+  const btnTutorialSkip = document.getElementById('btn-tutorial-skip');
+
+  const TUTORIAL_GATE_STEPS = [
+    { text: 'Welcome to <span style="color:#39ff14">AND_GAME</span>! This is a digital logic puzzle game. Let\'s learn the basics.', target: null },
+    { text: 'This is the <span style="color:#39ff14">circuit board</span>. Green circles are <span style="color:#39ff14">INPUTS</span> (fixed values). The gray circles are <span style="color:#c8d8f0">OUTPUTS</span> (your targets).', target: '#game-canvas', arrow: 'up' },
+    { text: 'These empty boxes in the middle are <span style="color:#00d4ff">GATE SLOTS</span>. Your job is to place the right logic gate in each slot.', target: '#game-canvas', arrow: 'up' },
+    { text: 'This is the <span style="color:#00d4ff">GATE PALETTE</span>. Drag a gate from here and drop it onto a gate slot on the circuit board.', target: '#gate-palette', arrow: 'left' },
+    { text: 'Try dragging <span style="color:#39ff14">NOT</span> from the palette onto the gate slot. NOT flips the input: 0→1 and 1→0.', target: '#gate-palette', arrow: 'left' },
+    { text: 'The <span style="color:#ffd700">TRUTH TABLE</span> button shows you what output is expected for each input combination.', target: '#btn-truth', arrow: 'down' },
+    { text: 'If you get stuck, click <span style="color:#ffd700">HINT</span> for a helpful clue about the solution.', target: '#btn-hint', arrow: 'down' },
+    { text: 'Made a mistake? Click <span style="color:#e67e22">UNDO</span> to go back, or <span style="color:#c8d8f0">CLEAR ALL</span> to remove all gates.', target: '#btn-undo', arrow: 'left' },
+    { text: 'When all outputs turn <span style="color:#39ff14">green</span>, you\'ve solved the level! 🎉', target: null },
+    { text: 'You\'re ready! Drag the <span style="color:#39ff14">NOT</span> gate onto the slot to solve your first puzzle. Good luck!', target: '#gate-palette', arrow: 'left' },
+  ];
+
+  const TUTORIAL_FF_STEPS = [
+    { text: 'Welcome to <span style="color:#a060ff">Flip-Flops</span>! These levels work differently — they are <span style="color:#ffcc00">sequential</span>, meaning they depend on time.', target: null },
+    { text: 'You\'ll see a <span style="color:#ffcc00">CLOCK</span> signal (yellow). Every time you click <span style="color:#00d4ff">STEP</span>, the clock ticks and the circuit updates.', target: '#seq-controls', arrow: 'down' },
+    { text: 'The purple boxes are <span style="color:#a060ff">FLIP-FLOP SLOTS</span>. A flip-flop remembers a value (Q) and updates it on each clock tick.', target: '#game-canvas', arrow: 'up' },
+    { text: 'This is the <span style="color:#a060ff">FLIP-FLOP PALETTE</span>. Drag a flip-flop type (D, T, SR, or JK) onto a slot.', target: '#ff-palette', arrow: 'left' },
+    { text: '<span style="color:#00d4ff">D-FF</span>: captures input D on clock edge.<br><span style="color:#00d4ff">T-FF</span>: toggles Q when T=1.<br><span style="color:#00d4ff">SR-FF</span>: S sets, R resets.<br><span style="color:#00d4ff">JK-FF</span>: like SR but J=K=1 toggles.', target: '#ff-palette', arrow: 'left' },
+    { text: 'The small number below a flip-flop shows its <span style="color:#00d4ff">current Q state</span>. Watch it change with each STEP!', target: '#game-canvas', arrow: 'up' },
+    { text: 'The <span style="color:#00d4ff">WAVEFORM</span> button opens a timing diagram that records all signals over time. Very useful for debugging!', target: '#btn-waveform', arrow: 'down' },
+    { text: 'Click <span style="color:#00d4ff">STEP</span> to advance the clock. You need to reach the target output after the required number of steps.', target: '#seq-controls', arrow: 'down' },
+    { text: 'You\'re ready! Place the right flip-flop and click STEP to solve your first sequential puzzle. Good luck!', target: '#ff-palette', arrow: 'left' },
+  ];
+
+  let _tutorialStep = 0;
+  let _tutorialActive = false;
+  let _tutorialSteps = [];
+  let _tutorialKey = '';
+
+  function _startTutorial(steps, storageKey) {
+    if (localStorage.getItem(storageKey) === '1') return;
+    _tutorialSteps = steps;
+    _tutorialKey = storageKey;
+    _tutorialActive = true;
+    _tutorialStep = 0;
+    tutorialOverlay.classList.remove('hidden');
+    _showTutorialStep();
+  }
+
+  function _showTutorialStep() {
+    if (_tutorialStep >= _tutorialSteps.length) {
+      _endTutorial();
+      return;
+    }
+    const step = _tutorialSteps[_tutorialStep];
+    tutorialStepNum.textContent = `STEP ${_tutorialStep + 1} / ${_tutorialSteps.length}`;
+    tutorialText.innerHTML = step.text;
+    btnTutorialNext.textContent = _tutorialStep === _tutorialSteps.length - 1 ? 'START!' : 'NEXT ➜';
+
+    // Position the box
+    tutorialArrow.className = '';
+    if (!step.target) {
+      // Center on screen
+      tutorialBox.style.left = '50%';
+      tutorialBox.style.top = '50%';
+      tutorialBox.style.transform = 'translate(-50%, -50%)';
+      tutorialArrow.style.display = 'none';
+    } else {
+      tutorialBox.style.transform = '';
+      tutorialArrow.style.display = '';
+      const el = document.querySelector(step.target);
+      if (el) {
+        const rect = el.getBoundingClientRect();
+        const boxW = 340;
+        if (step.arrow === 'left') {
+          // Box to the left of target
+          tutorialBox.style.left = Math.max(8, rect.left - boxW - 20) + 'px';
+          tutorialBox.style.top = rect.top + 'px';
+          tutorialArrow.className = 'arrow-right';
+          tutorialArrow.style.left = (rect.left - 22) + 'px';
+          tutorialArrow.style.top = (rect.top + 16) + 'px';
+        } else if (step.arrow === 'down') {
+          // Box below target
+          tutorialBox.style.left = Math.max(8, rect.left - 40) + 'px';
+          tutorialBox.style.top = (rect.bottom + 16) + 'px';
+          tutorialArrow.className = 'arrow-up';
+          tutorialArrow.style.left = (rect.left + rect.width / 2 - 10) + 'px';
+          tutorialArrow.style.top = (rect.bottom - 2) + 'px';
+        } else if (step.arrow === 'up') {
+          // Box above target center
+          tutorialBox.style.left = '50%';
+          tutorialBox.style.top = '80px';
+          tutorialBox.style.transform = 'translateX(-50%)';
+          tutorialArrow.style.display = 'none';
+        } else {
+          tutorialBox.style.left = '50%';
+          tutorialBox.style.top = '50%';
+          tutorialBox.style.transform = 'translate(-50%, -50%)';
+          tutorialArrow.style.display = 'none';
+        }
+      }
+    }
+  }
+
+  function _nextTutorialStep() {
+    _tutorialStep++;
+    if (_tutorialStep >= _tutorialSteps.length) {
+      _endTutorial();
+    } else {
+      _showTutorialStep();
+    }
+  }
+
+  function _endTutorial() {
+    _tutorialActive = false;
+    tutorialOverlay.classList.add('hidden');
+    localStorage.setItem(_tutorialKey, '1');
+  }
+
+  btnTutorialNext.addEventListener('click', _nextTutorialStep);
+  btnTutorialSkip.addEventListener('click', _endTutorial);
 
   // ── Win Sequence ─────────────────────────────────────────
   function _onSolve() {

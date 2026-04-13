@@ -821,13 +821,37 @@
     difficultyTabs.innerHTML = '';
 
     DIFFICULTY_ORDER.forEach((difficulty) => {
-      const count = LEVELS.filter((level) => level.difficulty === difficulty).length;
+      const levelsInTab = LEVELS.filter((level) => level.difficulty === difficulty);
+      const count = levelsInTab.length;
+      const done = levelsInTab.filter(l => isLevelCompleted(l.id)).length;
+      const pct = count > 0 ? Math.round((done / count) * 100) : 0;
+      const allDone = done === count && count > 0;
+
       const tab = document.createElement('button');
       tab.type = 'button';
-      tab.className = `difficulty-tab${currentMenuDifficulty === difficulty ? ' active' : ''}`;
-      tab.textContent = `${difficulty} (${count})`;
+      tab.className = `difficulty-tab${currentMenuDifficulty === difficulty ? ' active' : ''}${allDone ? ' completed' : ''}`;
       tab.setAttribute('aria-pressed', currentMenuDifficulty === difficulty ? 'true' : 'false');
       tab.addEventListener('click', () => setMenuDifficulty(difficulty));
+
+      // Tab text: name + progress
+      const label = document.createElement('span');
+      label.className = 'tab-label';
+      label.textContent = `${difficulty} ${done}/${count}${allDone ? ' ✓' : ''}`;
+      tab.appendChild(label);
+
+      // Progress bar
+      const bar = document.createElement('div');
+      bar.className = 'tab-progress';
+      const fill = document.createElement('div');
+      fill.className = 'tab-progress-fill';
+      fill.style.width = pct + '%';
+      if (pct === 0) fill.classList.add('empty');
+      else if (pct < 50) fill.classList.add('low');
+      else if (pct < 100) fill.classList.add('mid');
+      else fill.classList.add('full');
+      bar.appendChild(fill);
+      tab.appendChild(bar);
+
       difficultyTabs.appendChild(tab);
     });
   }
@@ -1155,6 +1179,19 @@
   btnReviewNext.addEventListener('click', () => _showReviewStep(_reviewIndex + 1));
   btnReviewExit.addEventListener('click', _exitReview);
   btnReview.addEventListener('click', _enterReview);
+
+  document.getElementById('btn-explain').addEventListener('click', () => {
+    if (!State.level) return;
+    winOverlay.classList.add('hidden');
+    Renderer.startExplain(State.level);
+    // When done, re-show win overlay
+    const _checkDone = setInterval(() => {
+      if (!Renderer.isExplaining()) {
+        clearInterval(_checkDone);
+        winOverlay.classList.remove('hidden');
+      }
+    }, 200);
+  });
 
   // ── Load a Level ─────────────────────────────────────────
   function loadLevel(index) {
@@ -1891,6 +1928,73 @@
   Input.init(canvas, {
     onGatePlaced:  () => { /* tick loop handles re-render */ },
     onHoverChange: () => { /* hover state already in State, tick renders it */ },
+  });
+
+  // ── Chip Tooltip (truth table on hover) ────────────────────
+  const chipTooltip = document.getElementById('chip-tooltip');
+  const GATE_TT = {
+    AND:  { name: 'AND', formula: 'Z = A · B', inputs: ['A','B'], rows: [[0,0,0],[0,1,0],[1,0,0],[1,1,1]] },
+    OR:   { name: 'OR',  formula: 'Z = A + B', inputs: ['A','B'], rows: [[0,0,0],[0,1,1],[1,0,1],[1,1,1]] },
+    XOR:  { name: 'XOR', formula: 'Z = A ⊕ B', inputs: ['A','B'], rows: [[0,0,0],[0,1,1],[1,0,1],[1,1,0]] },
+    NAND: { name: 'NAND', formula: 'Z = ¬(A · B)', inputs: ['A','B'], rows: [[0,0,1],[0,1,1],[1,0,1],[1,1,0]] },
+    NOR:  { name: 'NOR',  formula: 'Z = ¬(A + B)', inputs: ['A','B'], rows: [[0,0,1],[0,1,0],[1,0,0],[1,1,0]] },
+    NOT:  { name: 'NOT',  formula: 'Z = ¬A', inputs: ['A'], rows: [[0,1],[1,0]] },
+  };
+  const FF_TT = {
+    D:  { name: 'D Flip-Flop', formula: "Q' = D", desc: 'Captures D on clock edge' },
+    T:  { name: 'T Flip-Flop', formula: "Q' = Q ⊕ T", desc: 'Toggles when T=1, holds when T=0' },
+    SR: { name: 'SR Flip-Flop', formula: "Q' = S + ¬R·Q", desc: 'S=SET, R=RESET, both=SET dominates' },
+    JK: { name: 'JK Flip-Flop', formula: "Q' = J·¬Q + ¬K·Q", desc: 'Like SR but J=K=1 toggles' },
+  };
+
+  function _buildGateTooltip(gate) {
+    const tt = GATE_TT[gate];
+    if (!tt) return '';
+    const cols = [...tt.inputs, 'Z'];
+    let html = `<div class="chip-tt-name">${tt.name}</div><table><tr>`;
+    cols.forEach(c => { html += `<th>${c}</th>`; });
+    html += '</tr>';
+    tt.rows.forEach(row => {
+      html += '<tr>';
+      row.forEach(v => { html += `<td class="v${v}">${v}</td>`; });
+      html += '</tr>';
+    });
+    html += `</table><div class="chip-tt-formula">${tt.formula}</div>`;
+    return html;
+  }
+
+  function _buildFfTooltip(ff) {
+    const tt = FF_TT[ff];
+    if (!tt) return '';
+    return `<div class="chip-tt-name">${tt.name}</div><div>${tt.desc}</div><div class="chip-tt-formula">${tt.formula}</div>`;
+  }
+
+  document.querySelectorAll('.gate-chip').forEach(chip => {
+    chip.addEventListener('mouseenter', (e) => {
+      const gate = chip.dataset.gate;
+      const ff = chip.dataset.ff;
+      let html = '';
+      if (gate) html = _buildGateTooltip(gate);
+      else if (ff) html = _buildFfTooltip(ff);
+      if (!html) return;
+      chipTooltip.innerHTML = html;
+      chipTooltip.classList.remove('hidden');
+      const rect = chip.getBoundingClientRect();
+      const hudRight = chip.closest('#hud-right');
+      const parentRect = hudRight ? hudRight.getBoundingClientRect() : rect;
+      chipTooltip.classList.remove('hidden');
+      const ttW = chipTooltip.offsetWidth;
+      chipTooltip.style.right = '';
+      chipTooltip.style.left = '';
+      chipTooltip.style.top = (rect.bottom + 6) + 'px';
+      // Clamp to screen — prefer left alignment but don't overflow right
+      const leftPos = rect.left;
+      const maxLeft = window.innerWidth - ttW - 8;
+      chipTooltip.style.left = Math.max(4, Math.min(leftPos, maxLeft)) + 'px';
+    });
+    chip.addEventListener('mouseleave', () => {
+      chipTooltip.classList.add('hidden');
+    });
   });
 
   // ── Renderer Init & Resize ────────────────────────────────

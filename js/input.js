@@ -203,6 +203,7 @@ const Input = (() => {
   // Wire drawing state
   let _wireSource = null;
   let _mouseWorld = { x: 0, y: 0 };
+  let _mouseCanvas = { x: 0, y: 0 };
 
   function _attachChipDrag(chip) {
     chip.draggable = true;
@@ -325,7 +326,8 @@ const Input = (() => {
       : node && (node.type === 'GATE_SLOT' || node.type === 'FF_SLOT' || node.type === 'MUX_SELECT');
     const hoverId = isHoverable ? node.id : null;
 
-    // Track mouse world position for wire preview
+    // Track mouse positions
+    _mouseCanvas = { x, y };
     if (State.designMode) {
       _mouseWorld = Renderer.canvasToWorld(x, y);
     }
@@ -386,6 +388,7 @@ const Input = (() => {
     init, refreshChips,
     get wireSource() { return _wireSource; },
     get mouseWorld() { return _mouseWorld; },
+    get mouseCanvas() { return _mouseCanvas; },
   };
 
 })();

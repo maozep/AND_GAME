@@ -29,6 +29,115 @@
   --font:         'JetBrains Mono', 'Courier New', monospace;
 }
 
+/* ── Light Theme ─────────────────────────────────────────── */
+body.light-theme {
+  --bg:           #2a3040;
+  --bg-panel:     #242a38;
+  --bg-panel-alt: #1e2430;
+  --border:       #3a4860;
+  --border-bright:#506080;
+  --text-primary: #c0cce0;
+  --text-dim:     #708098;
+  --text-muted:   #4a5a70;
+  --accent-blue:  #4a90dd;
+  --accent-cyan:  #40b8d8;
+  --neon-green:   #50cc30;
+  --neon-dim:     #308818;
+  --signal-low:   #e04040;
+  --signal-none:  #4a5868;
+  --gold:         #ddaa22;
+}
+
+body.light-theme #game-canvas {
+  filter: none;
+}
+
+body.light-theme #hud {
+  background: linear-gradient(180deg, rgba(36,42,56,0.97) 0%, rgba(36,42,56,0.88) 100%);
+  border-bottom-color: #3a4860;
+}
+
+body.light-theme .btn-secondary {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: #3a4860;
+  color: #90a0b8;
+}
+body.light-theme .btn-secondary:hover {
+  background: rgba(64, 184, 216, 0.12);
+  border-color: #40b8d8;
+  color: #c0cce0;
+}
+
+body.light-theme .gate-chip {
+  background: #1e2430;
+  border-color: #3a4860;
+  color: #c0cce0;
+}
+body.light-theme .gate-chip:hover {
+  border-color: #40b8d8;
+  background: #2a3448;
+  box-shadow: 0 0 8px rgba(64, 184, 216, 0.2);
+}
+
+body.light-theme #design-toolbar {
+  background: rgba(36, 42, 56, 0.97);
+  border-right-color: #3a4860;
+}
+
+body.light-theme .design-tool {
+  background: #1e2430;
+  border-color: #3a4860;
+  color: #90a0b8;
+}
+body.light-theme .design-tool.active {
+  border-color: #40b8d8;
+  background: rgba(64, 184, 216, 0.15);
+  color: #40b8d8;
+}
+
+body.light-theme #waveform-panel {
+  background: #1e2430;
+  border-top-color: #3a4860;
+}
+
+body.light-theme #review-bar {
+  background: rgba(36, 42, 56, 0.97);
+  border-top-color: #7050b0;
+}
+
+body.light-theme .review-step {
+  background: #1e2430;
+  border-color: #3a4860;
+  color: #708098;
+}
+body.light-theme .review-step.active {
+  border-color: #50cc30;
+  background: rgba(80, 204, 48, 0.12);
+  color: #50cc30;
+}
+
+body.light-theme #tutorial-box {
+  background: #242a38;
+  border-color: #50cc30;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+body.light-theme #tutorial-text {
+  color: #c0cce0;
+}
+
+body.light-theme #menu-overlay,
+body.light-theme #win-overlay,
+body.light-theme #hint-overlay,
+body.light-theme #info-overlay,
+body.light-theme #truth-overlay,
+body.light-theme #diagram-overlay,
+body.light-theme #instruction-overlay,
+body.light-theme #fail-overlay,
+body.light-theme #final-overlay {
+  background: rgba(30, 36, 48, 0.85);
+  backdrop-filter: blur(8px);
+}
+
 html, body {
   width: 100%;
   height: 100%;
@@ -476,6 +585,18 @@ html, body {
   border-left-color: #39ff14;
 }
 
+#btn-explain {
+  border-color: #ffcc00;
+  color: #ffcc00;
+  background: rgba(255, 204, 0, 0.1);
+  font-size: 12px;
+  letter-spacing: 2px;
+}
+#btn-explain:hover {
+  background: rgba(255, 204, 0, 0.25);
+  box-shadow: 0 0 12px rgba(255, 204, 0, 0.3);
+}
+
 #btn-review {
   border-color: #a060ff;
   color: #a060ff;
@@ -770,6 +891,18 @@ html, body {
   color: #fff;
 }
 
+#btn-theme {
+  border-color: rgba(255, 204, 0, 0.55);
+  color: #ffcc00;
+  background: rgba(255, 204, 0, 0.08);
+  font-size: 18px;
+  padding: 2px 6px;
+  line-height: 1;
+}
+#btn-theme:hover {
+  background: rgba(255, 204, 0, 0.18);
+}
+
 #btn-mute {
   border-color: rgba(160, 96, 255, 0.55);
   color: #a060ff;
@@ -893,6 +1026,50 @@ html, body {
   border-radius: 6px;
   transition: box-shadow 0.25s, background 0.25s;
 }
+#chip-tooltip {
+  position: absolute;
+  background: rgba(10, 14, 20, 0.96);
+  border: 2px solid #00d4ff;
+  border-radius: 10px;
+  padding: 12px 16px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  color: #c8d8f0;
+  pointer-events: none;
+  z-index: 50;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.6);
+  white-space: nowrap;
+  animation: tooltip-pop 0.15s ease-out;
+}
+#chip-tooltip.hidden { display: none; }
+#chip-tooltip table { border-collapse: collapse; }
+#chip-tooltip th {
+  color: #00d4ff;
+  padding: 3px 10px;
+  border-bottom: 1px solid #1e3a50;
+  font-weight: 700;
+  font-size: 13px;
+}
+#chip-tooltip td {
+  padding: 3px 10px;
+  text-align: center;
+  font-size: 13px;
+}
+#chip-tooltip td.v1 { color: #39ff14; font-weight: 700; }
+#chip-tooltip td.v0 { color: #c62828; font-weight: 700; }
+#chip-tooltip .chip-tt-name {
+  color: #00d4ff;
+  font-weight: 700;
+  font-size: 15px;
+  margin-bottom: 6px;
+}
+#chip-tooltip .chip-tt-formula {
+  color: #ffcc00;
+  font-weight: 700;
+  margin-top: 6px;
+  font-size: 13px;
+}
+
 #gate-palette.highlight {
   box-shadow: 0 0 18px rgba(0, 212, 255, 0.4);
   background: rgba(0, 212, 255, 0.08);
@@ -1540,6 +1717,52 @@ html, body {
   background: rgba(0, 212, 255, 0.15);
   color: #fff;
   box-shadow: 0 0 12px rgba(0, 212, 255, 0.22);
+}
+
+.difficulty-tab.completed {
+  border-color: #39ff14;
+}
+.difficulty-tab.completed.active {
+  background: rgba(57, 255, 20, 0.12);
+  box-shadow: 0 0 12px rgba(57, 255, 20, 0.2);
+}
+
+.difficulty-tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.tab-label {
+  white-space: nowrap;
+}
+
+.tab-progress {
+  width: 100%;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.tab-progress-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.4s ease;
+}
+.tab-progress-fill.empty {
+  background: #333;
+}
+.tab-progress-fill.low {
+  background: #e67e22;
+}
+.tab-progress-fill.mid {
+  background: #00d4ff;
+}
+.tab-progress-fill.full {
+  background: #39ff14;
+  box-shadow: 0 0 6px rgba(57, 255, 20, 0.4);
 }
 
 .difficulty-empty {

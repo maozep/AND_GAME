@@ -50,6 +50,51 @@ const Renderer = (() => {
     accentCyan:   '#00d4ff',
   };
 
+  // Dark theme defaults (saved for toggle)
+  const C_DARK = { ...C };
+
+  const C_LIGHT = {
+    bg:           '#222838',
+    grid:         'rgba(60, 120, 180, 0.12)',
+    gridAccent:   'rgba(60, 120, 180, 0.22)',
+    wireHigh:     '#50cc30',
+    wireHighGlow: 'rgba(80,204,48,0.45)',
+    wireLow:      '#e04040',
+    wireLowGlow:  'rgba(224,64,64,0.3)',
+    wireNull:     '#3a4a60',
+    wireClock:    '#40b8d8',
+    wireClockGlow:'rgba(64,184,216,0.4)',
+    nodeInput:       '#1a2a1a',
+    nodeInputBorder: '#40a040',
+    nodeGate:        '#182840',
+    nodeGateBorder:  '#406090',
+    nodeGateEmpty:   '#1e2e44',
+    nodeGateEmptyBorder: '#4a6a8a',
+    nodeOutput:      '#1a2a1a',
+    nodeOutputBorder:'#309030',
+    clockFill:       '#142838',
+    clockBorder:     '#2090c0',
+    clockBorderHigh: '#40b8d8',
+    ffFill:          '#1e1830',
+    ffBorder:        '#7040c0',
+    ffBorderActive:  '#9060ee',
+    ffQhigh:         '#50cc30',
+    ffQlow:          '#e04040',
+    ffClkAccent:     '#40b8d8',
+    textPrimary:  '#c0cce0',
+    textDim:      '#607088',
+    textGate:     '#80b0ee',
+    textValue:    '#e0e8f0',
+    textHigh:     '#50cc30',
+    textLow:      '#ff5050',
+    accentCyan:   '#40b8d8',
+  };
+
+  function setLightTheme(isLight) {
+    const src = isLight ? C_LIGHT : C_DARK;
+    Object.keys(src).forEach(k => { C[k] = src[k]; });
+  }
+
   // ── Node geometry ──────────────────────────────────────────
   const NODE = {
     inputR:  28,
@@ -224,7 +269,24 @@ const Renderer = (() => {
       _drawNodeTooltip(level, hoveredNodeId, nodeValues);
     }
 
-    if (solved) _drawSolvedHalo();
+    // Wire tooltip (only when no node is hovered)
+    if (!hoveredNodeId && Input.mouseCanvas) {
+      const mc = Input.mouseCanvas;
+      const hWire = getWireAtPoint(mc.x, mc.y, level);
+      if (hWire) {
+        _drawWireTooltip(level, hWire, wireValues, mc.x, mc.y);
+      }
+    }
+
+    if (_explainActive) {
+      ctx.save();
+      ctx.translate(_offsetX, _offsetY);
+      if (_scale !== 1) ctx.scale(_scale, _scale);
+      _drawExplainHighlights(level);
+      ctx.restore();
+    }
+
+    if (solved && !_explainActive) _drawSolvedHalo();
   }
 
   // ── Background ────────────────────────────────────────────
@@ -1474,6 +1536,212 @@ const Renderer = (() => {
     ctx.restore();
   }
 
+  // ── Wire Tooltip ───────────────────────────────────────────
+  const GATE_SYMBOL = { AND: '·', OR: '+', XOR: '⊕', NAND: '·', NOR: '+', NOT: '¬' };
+
+  function _getNodeExpr(nodeId, level, depth) {
+    if (depth > 4) return '...';
+    const node = level.nodes.find(n => n.id === nodeId);
+    if (!node) return '?';
+    if (node.type === 'INPUT') return node.label || 'IN';
+    if (node.type === 'CLOCK') return 'CLK';
+    if (node.type === 'MUX_SELECT') return node.label || 'SW';
+    if (node.type === 'FF_SLOT') {
+      const name = node.label || 'Q';
+      return name;
+    }
+    if (node.type === 'GATE_SLOT' && node.gate) {
+      const inputs = level.wires
+        .filter(w => w.targetId === nodeId)
+        .sort((a, b) => (a.targetInputIndex || 0) - (b.targetInputIndex || 0))
+        .map(w => _getNodeExpr(w.sourceId, level, depth + 1));
+      const g = node.gate;
+      if (g === 'NOT') return `¬(${inputs[0] || '?'})`;
+      const sym = GATE_SYMBOL[g] || g;
+      const inner = inputs.join(` ${sym} `);
+      if (g === 'NAND') return `¬(${inner})`;
+      if (g === 'NOR') return `¬(${inner})`;
+      return inner || '?';
+    }
+    return node.label || node.type;
+  }
+
+  function _drawWireTooltip(level, wire, wireValues, mx, my) {
+    const val = wireValues.get(wire.id) ?? null;
+    const src = level.nodes.find(n => n.id === wire.sourceId);
+    if (!src) return;
+
+    // Build expression
+    const expr = _getNodeExpr(wire.sourceId, level, 0);
+    const valStr = val !== null ? val.toString() : '?';
+    const line = `${expr} = ${valStr}`;
+
+    // Draw tooltip near mouse
+    ctx.save();
+    ctx.font = 'bold 11px JetBrains Mono, monospace';
+    const pad = 8;
+    const tw = ctx.measureText(line).width + pad * 2;
+    const th = 22;
+    let tx = mx + 16;
+    let ty = my - 30;
+    if (tx + tw > W) tx = mx - tw - 8;
+    if (ty < 4) ty = my + 16;
+
+    ctx.fillStyle = 'rgba(10, 14, 20, 0.94)';
+    ctx.strokeStyle = '#ffcc00';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.roundRect(tx, ty, tw, th, 5);
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.fillStyle = '#ffcc00';
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(line, tx + pad, ty + th / 2);
+    ctx.restore();
+  }
+
+  // ── Explain Animation ──────────────────────────────────────
+  let _explainActive = false;
+  let _explainNodes = [];    // ordered node IDs to highlight
+  let _explainWires = [];    // ordered wire IDs to highlight
+  let _explainStep = -1;
+  let _explainTimer = null;
+  let _explainHighlightNodes = new Set();
+  let _explainHighlightWires = new Set();
+
+  function startExplain(level) {
+    if (!level) return;
+    // Build topological order: inputs first, then gates/FFs by depth, then outputs
+    const nodeMap = new Map(level.nodes.map(n => [n.id, n]));
+    const inputs = level.nodes.filter(n => n.type === 'INPUT' || n.type === 'CLOCK');
+    const gates = level.nodes.filter(n => n.type === 'GATE_SLOT' || n.type === 'FF_SLOT' || n.type === 'MUX_SELECT');
+    const outputs = level.nodes.filter(n => n.type === 'OUTPUT');
+
+    // Simple BFS ordering from inputs
+    const visited = new Set();
+    const order = [];
+    const wireOrder = [];
+    const queue = inputs.map(n => n.id);
+    queue.forEach(id => { visited.add(id); order.push(id); });
+
+    while (queue.length > 0) {
+      const id = queue.shift();
+      // Find outgoing wires
+      const outWires = level.wires.filter(w => w.sourceId === id);
+      outWires.forEach(w => {
+        wireOrder.push(w.id);
+        if (!visited.has(w.targetId)) {
+          visited.add(w.targetId);
+          order.push(w.targetId);
+          queue.push(w.targetId);
+        }
+      });
+    }
+
+    _explainNodes = order;
+    _explainWires = wireOrder;
+    _explainStep = -1;
+    _explainHighlightNodes = new Set();
+    _explainHighlightWires = new Set();
+    _explainActive = true;
+    _advanceExplain();
+  }
+
+  function _advanceExplain() {
+    _explainStep++;
+    // Alternate: add a node, then its outgoing wires
+    const totalSteps = _explainNodes.length + _explainWires.length;
+    if (_explainStep >= totalSteps) {
+      // Done — keep everything highlighted for a moment then stop
+      _explainTimer = setTimeout(stopExplain, 1500);
+      return;
+    }
+
+    // Interleave: nodes and wires
+    let nodeIdx = 0, wireIdx = 0;
+    for (let i = 0; i <= _explainStep; i++) {
+      if (nodeIdx <= wireIdx && nodeIdx < _explainNodes.length) {
+        _explainHighlightNodes.add(_explainNodes[nodeIdx]);
+        nodeIdx++;
+      } else if (wireIdx < _explainWires.length) {
+        _explainHighlightWires.add(_explainWires[wireIdx]);
+        wireIdx++;
+      } else if (nodeIdx < _explainNodes.length) {
+        _explainHighlightNodes.add(_explainNodes[nodeIdx]);
+        nodeIdx++;
+      }
+    }
+
+    Sound.play('step');
+    _explainTimer = setTimeout(_advanceExplain, 400);
+  }
+
+  function stopExplain() {
+    _explainActive = false;
+    _explainHighlightNodes.clear();
+    _explainHighlightWires.clear();
+    if (_explainTimer) clearTimeout(_explainTimer);
+    _explainTimer = null;
+  }
+
+  function isExplaining() { return _explainActive; }
+
+  function _drawExplainHighlights(level) {
+    if (!_explainActive) return;
+    const nodeMap = new Map(level.nodes.map(n => [n.id, n]));
+
+    // Dim everything first (draw a semi-transparent overlay)
+    ctx.save();
+    ctx.globalAlpha = 0.6;
+    ctx.fillStyle = C.bg;
+    ctx.fillRect(-5000, -5000, 10000, 10000);
+    ctx.restore();
+
+    // Redraw highlighted wires brightly
+    level.wires.forEach(wire => {
+      if (!_explainHighlightWires.has(wire.id)) return;
+      const src = nodeMap.get(wire.sourceId);
+      const dst = nodeMap.get(wire.targetId);
+      if (!src || !dst) return;
+      const srcPt = _nodeOutputAnchor(src, wire.sourceOutputIndex || 0);
+      const dstPt = _nodeInputAnchor(dst, wire.targetInputIndex, wire.isClockWire);
+      ctx.save();
+      ctx.strokeStyle = wire.isClockWire ? '#ffcc00' : '#39ff14';
+      ctx.lineWidth = 3;
+      ctx.shadowColor = wire.isClockWire ? '#ffcc00' : '#39ff14';
+      ctx.shadowBlur = 12;
+      if (wire.isClockWire) { ctx.setLineDash([8, 5]); }
+      _drawWirePath(srcPt, dstPt);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.restore();
+    });
+
+    // Redraw highlighted nodes brightly
+    _explainHighlightNodes.forEach(nodeId => {
+      const node = nodeMap.get(nodeId);
+      if (!node) return;
+      ctx.save();
+      const isNew = nodeId === _explainNodes[Math.max(0,
+        [..._explainHighlightNodes].length - 1)];
+      const color = node.type === 'INPUT' ? '#39ff14'
+        : node.type === 'CLOCK' ? '#ffcc00'
+        : node.type === 'OUTPUT' ? '#00d4ff'
+        : node.type === 'FF_SLOT' ? '#a060ff'
+        : '#00d4ff';
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 3;
+      ctx.shadowColor = color;
+      ctx.shadowBlur = 18;
+      ctx.beginPath();
+      ctx.arc(node.x, node.y, 38, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.restore();
+    });
+  }
+
   function _drawSolvedHalo() {
     const elapsed = _solveAnimStart ? Date.now() - _solveAnimStart : SOLVE_ANIM_MS;
     const t = Math.min(elapsed / SOLVE_ANIM_MS, 1); // 0→1
@@ -1623,6 +1891,6 @@ const Renderer = (() => {
     _userZoom = 1;
   }
 
-  return { init, render, resize, getNodeAtPoint, canvasToWorld, getWireAtPoint, panBy, zoomAt, resetPan, startSolveAnim, startPulse };
+  return { init, render, resize, getNodeAtPoint, canvasToWorld, getWireAtPoint, panBy, zoomAt, resetPan, startSolveAnim, startPulse, setLightTheme, startExplain, stopExplain, isExplaining };
 
 })();

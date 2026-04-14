@@ -60,7 +60,7 @@
   const BEST_TIMES_KEY = 'and_game_best_times';
   const completedLevelIds = new Set(loadCompletedLevelIds());
   const bestTimes = loadBestTimes();
-  const DIFFICULTY_ORDER = ['Fundamentals', 'Building Blocks', 'Advanced Circuits', 'Flip-Flops', 'Sequential Logic', 'FSM Applications', 'Design Mode'];
+  const DIFFICULTY_ORDER = ['Fundamentals', 'Building Blocks', 'Advanced Circuits', 'Flip-Flops', 'Sequential Logic', 'FSM Applications', 'Design Mode', 'Gallery'];
   const TRUTH_OBJECTIVES = {
     1: 'Goal: Understand that an AND gate outputs 1 only when both inputs are 1.',
     2: 'Goal: Understand that an OR gate outputs 1 when at least one input is 1.',
@@ -825,13 +825,15 @@
     'Sequential Logic': 'Flip-flops + gates combined — counters, filters, LFSRs, hazard detectors, pipeline bypass.',
     'FSM Applications': 'Finite state machines — elevator, alarm, traffic light, vending machine, rocket launch, CPU pipeline.',
     'Design Mode': 'Sandbox — build anything from scratch. Place nodes, draw wires, test and share.',
+    'Gallery': 'Browse saved circuit designs — your personal collection and community creations.',
   };
 
   function renderDifficultyTabs() {
     difficultyTabs.innerHTML = '';
 
     DIFFICULTY_ORDER.forEach((difficulty) => {
-      const levelsInTab = LEVELS.filter((level) => level.difficulty === difficulty);
+      const isGalleryTab = difficulty === 'Gallery';
+      const levelsInTab = isGalleryTab ? [] : LEVELS.filter((level) => level.difficulty === difficulty);
       const count = levelsInTab.length;
       const done = levelsInTab.filter(l => isLevelCompleted(l.id)).length;
       const pct = count > 0 ? Math.round((done / count) * 100) : 0;
@@ -839,28 +841,30 @@
 
       const tab = document.createElement('button');
       tab.type = 'button';
-      tab.className = `difficulty-tab${currentMenuDifficulty === difficulty ? ' active' : ''}${allDone ? ' completed' : ''}`;
+      tab.className = `difficulty-tab${currentMenuDifficulty === difficulty ? ' active' : ''}${allDone ? ' completed' : ''}${isGalleryTab ? ' gallery-tab-special' : ''}`;
       tab.setAttribute('aria-pressed', currentMenuDifficulty === difficulty ? 'true' : 'false');
       tab.addEventListener('click', () => setMenuDifficulty(difficulty));
 
       // Tab text: name + progress
       const label = document.createElement('span');
       label.className = 'tab-label';
-      label.textContent = `${difficulty} ${done}/${count}${allDone ? ' ✓' : ''}`;
+      label.textContent = isGalleryTab ? '★ Gallery' : `${difficulty} ${done}/${count}${allDone ? ' ✓' : ''}`;
       tab.appendChild(label);
 
-      // Progress bar
-      const bar = document.createElement('div');
-      bar.className = 'tab-progress';
-      const fill = document.createElement('div');
-      fill.className = 'tab-progress-fill';
-      fill.style.width = pct + '%';
-      if (pct === 0) fill.classList.add('empty');
-      else if (pct < 50) fill.classList.add('low');
-      else if (pct < 100) fill.classList.add('mid');
-      else fill.classList.add('full');
-      bar.appendChild(fill);
-      tab.appendChild(bar);
+      if (!isGalleryTab) {
+        // Progress bar
+        const bar = document.createElement('div');
+        bar.className = 'tab-progress';
+        const fill = document.createElement('div');
+        fill.className = 'tab-progress-fill';
+        fill.style.width = pct + '%';
+        if (pct === 0) fill.classList.add('empty');
+        else if (pct < 50) fill.classList.add('low');
+        else if (pct < 100) fill.classList.add('mid');
+        else fill.classList.add('full');
+        bar.appendChild(fill);
+        tab.appendChild(bar);
+      }
 
       // Hover → show description
       tab.addEventListener('mouseenter', () => {
@@ -882,6 +886,12 @@
   function renderLevelMenu() {
     levelGrid.innerHTML = '';
     renderDifficultyTabs();
+
+    // Gallery tab — render inline gallery
+    if (currentMenuDifficulty === 'Gallery') {
+      _renderMenuGallery();
+      return;
+    }
 
     const filteredLevels = LEVELS
       .map((level, index) => ({ level, index }))
@@ -1327,6 +1337,8 @@
       _pendingTutorial = { steps: TUTORIAL_GATE_STEPS, key: 'andgame_tut_gates' };
     } else if (index === 30) {
       _pendingTutorial = { steps: TUTORIAL_FF_STEPS, key: 'andgame_tut_ff' };
+    } else if (index === 60) {
+      _pendingTutorial = { steps: TUTORIAL_DESIGN_STEPS, key: 'andgame_tut_design' };
     }
     // If no instruction overlay, start tutorial immediately
     if (!hasInstruction && _pendingTutorial) {
@@ -1367,6 +1379,21 @@
     { text: 'The <span style="color:#00d4ff">WAVEFORM</span> button opens a timing diagram that records all signals over time. Very useful for debugging!', target: '#btn-waveform', arrow: 'down' },
     { text: 'Click <span style="color:#00d4ff">STEP</span> to advance the clock. You need to reach the target output after the required number of steps.', target: '#seq-controls', arrow: 'down' },
     { text: 'You\'re ready! Place the right flip-flop and click STEP to solve your first sequential puzzle. Good luck!', target: '#ff-palette', arrow: 'left' },
+  ];
+
+  const TUTORIAL_DESIGN_STEPS = [
+    { text: 'Welcome to <span style="color:#a060ff">Design Mode</span>! This is your sandbox — build any digital circuit you can imagine, from scratch.', target: null },
+    { text: 'The <span style="color:#00d4ff">toolbar on the left</span> contains your tools. Select a component type and click on the canvas to place it.', target: '#design-tools', arrow: 'left' },
+    { text: '<span style="color:#39ff14">INPUT</span> — creates an input signal.<br><span style="color:#c8d8f0">OUTPUT</span> — creates a target output.<br><span style="color:#00d4ff">GATE</span> — places a logic gate slot.', target: '#design-tools', arrow: 'left' },
+    { text: '<span style="color:#a060ff">FF</span> — flip-flop slot.<br><span style="color:#ffcc00">CLK</span> — clock signal.<br><span style="color:#00d4ff">SWITCH</span> — MUX select.<br><span style="color:#c8d8f0">7SEG</span> — 7-segment display.', target: '#design-tools', arrow: 'left' },
+    { text: 'Select <span style="color:#00d4ff">WIRE</span> mode to draw connections. Click a node\'s output, then click another node\'s input to connect them.', target: '#design-tools', arrow: 'left' },
+    { text: 'Click on any placed component with <span style="color:#00d4ff">SELECT</span> to see its <span style="color:#a060ff">PROPERTIES</span> — you can change labels, values, and initial states.', target: '#design-props', arrow: 'left' },
+    { text: 'Use <span style="color:#39ff14">SAVE TO GALLERY</span> to save your design with a name and description. Check the box to share it with the community!', target: '#btn-design-gallery-save', arrow: 'left' },
+    { text: 'Click <span style="color:#39ff14">GALLERY</span> to browse your saved designs and designs shared by other players around the world.', target: '#btn-design-gallery', arrow: 'left' },
+    { text: '<span style="color:#00d4ff">TEST</span> lets you run your circuit — click STEP to advance the clock and see signals propagate.', target: '#btn-design-test', arrow: 'left' },
+    { text: '<span style="color:#00d4ff">EXPORT</span> copies the circuit as JSON. <span style="color:#00d4ff">IMPORT</span> loads a JSON circuit. <span style="color:#39ff14">SHARE</span> creates a screenshot to share.', target: '#btn-design-export', arrow: 'left' },
+    { text: 'Use the <span style="color:#ff5252">DELETE</span> tool to remove components, and <span style="color:#ff5252">CLEAR ALL</span> to start over. <span style="color:#ffaa00">UNDO/REDO</span> to fix mistakes.', target: '#btn-design-clear', arrow: 'left' },
+    { text: 'You\'re all set! Start placing components and build something amazing. Have fun! 🎉', target: null },
   ];
 
   let _tutorialStep = 0;
@@ -2371,6 +2398,350 @@
         URL.revokeObjectURL(url);
       }
     }, 'image/png');
+  });
+
+  // ── Gallery ───────────────────────────────────────────────
+  const GALLERY_KEY = 'andgame_gallery';
+  const AUTHOR_KEY = 'andgame_author';
+  const galleryOverlay = document.getElementById('gallery-overlay');
+  const galleryGrid = document.getElementById('gallery-grid');
+  const galleryEmpty = document.getElementById('gallery-empty');
+  const galleryLoading = document.getElementById('gallery-loading');
+  const gallerySaveOverlay = document.getElementById('gallery-save-overlay');
+  const gallerySaveName = document.getElementById('gallery-save-name');
+  const gallerySaveAuthor = document.getElementById('gallery-save-author');
+  const gallerySaveDesc = document.getElementById('gallery-save-desc');
+  const gallerySaveCommunity = document.getElementById('gallery-save-community');
+  const galleryTabs = document.querySelectorAll('.gallery-tab');
+  let galleryActiveTab = 'my';
+  let communityCache = null;
+
+  function _loadGallery() {
+    try {
+      return JSON.parse(localStorage.getItem(GALLERY_KEY)) || [];
+    } catch (_) { return []; }
+  }
+  function _saveGalleryLocal(items) {
+    localStorage.setItem(GALLERY_KEY, JSON.stringify(items));
+  }
+
+  function _loadNodeCounter(item) {
+    let maxNum = 0;
+    (item.nodes || []).forEach(n => {
+      const m = String(n.id).match(/(\d+)$/);
+      if (m) maxNum = Math.max(maxNum, parseInt(m[1]));
+    });
+    (item.wires || []).forEach(w => {
+      const m = String(w.id).match(/(\d+)$/);
+      if (m) maxNum = Math.max(maxNum, parseInt(m[1]));
+    });
+    return maxNum + 1;
+  }
+
+  function _loadDesignIntoCanvas(item) {
+    State.level.nodes = JSON.parse(JSON.stringify(item.nodes));
+    State.level.wires = JSON.parse(JSON.stringify(item.wires));
+    State.selectedNodeId = null;
+    State.nodeCounter = _loadNodeCounter(item);
+    galleryOverlay.classList.add('hidden');
+  }
+
+  function _renderCard(item, idx, isCommunity) {
+    const card = document.createElement('div');
+    card.className = 'gallery-card';
+    const date = new Date(item.date).toLocaleDateString();
+    const nodes = (item.nodes || []).length;
+    const wires = (item.wires || []).length;
+    card.innerHTML =
+      `<div class="gallery-card-name">${_esc(item.name)}</div>` +
+      (item.author ? `<div class="gallery-card-author">by ${_esc(item.author)}</div>` : '') +
+      (item.desc ? `<div class="gallery-card-desc">${_esc(item.desc)}</div>` : '') +
+      `<div class="gallery-card-meta">${nodes} nodes · ${wires} wires · ${date}</div>` +
+      `<div class="gallery-card-actions">` +
+        `<button class="gallery-btn-load" data-idx="${idx}" data-src="${isCommunity ? 'community' : 'local'}">LOAD</button>` +
+        `<button class="gallery-btn-export" data-idx="${idx}" data-src="${isCommunity ? 'community' : 'local'}">EXPORT</button>` +
+        (!isCommunity ? `<button class="gallery-btn-delete" data-idx="${idx}">DELETE</button>` : '') +
+      `</div>`;
+    return card;
+  }
+
+  function _renderMyGallery() {
+    const items = _loadGallery();
+    galleryGrid.innerHTML = '';
+    galleryLoading.classList.add('hidden');
+    galleryEmpty.textContent = 'No saved designs yet. Build a circuit and click SAVE TO GALLERY.';
+    galleryEmpty.classList.toggle('hidden', items.length > 0);
+    items.forEach((item, idx) => {
+      galleryGrid.appendChild(_renderCard(item, idx, false));
+    });
+  }
+
+  async function _renderCommunityGallery(forceRefresh) {
+    galleryGrid.innerHTML = '';
+    galleryEmpty.classList.add('hidden');
+    galleryLoading.classList.remove('hidden');
+
+    try {
+      if (!communityCache || forceRefresh) {
+        const fb = window._fb;
+        const db = window._fbDb;
+        const q = fb.query(fb.collection(db, 'designs'), fb.orderBy('date', 'desc'), fb.limit(100));
+        const snap = await fb.getDocs(q);
+        communityCache = [];
+        snap.forEach(d => communityCache.push({ id: d.id, ...d.data() }));
+      }
+      galleryGrid.innerHTML = '';
+      galleryLoading.classList.add('hidden');
+      galleryEmpty.textContent = 'No community designs yet. Be the first to share!';
+      galleryEmpty.classList.toggle('hidden', communityCache.length > 0);
+      communityCache.forEach((item, idx) => {
+        galleryGrid.appendChild(_renderCard(item, idx, true));
+      });
+    } catch (err) {
+      galleryLoading.textContent = 'Failed to load community designs. Check your connection.';
+      console.error('Community gallery error:', err);
+    }
+  }
+
+  function _renderGallery() {
+    if (galleryActiveTab === 'my') {
+      _renderMyGallery();
+    } else {
+      _renderCommunityGallery(false);
+    }
+  }
+
+  function _esc(str) {
+    const d = document.createElement('div');
+    d.textContent = str;
+    return d.innerHTML;
+  }
+
+  // ── Menu-embedded Gallery (inside STAGES overlay) ─────────
+  let menuGalleryTab = 'my';
+
+  function _renderMenuGallery() {
+    levelGrid.innerHTML = '';
+
+    // Sub-tab bar
+    const bar = document.createElement('div');
+    bar.className = 'menu-gallery-tabs';
+    ['my', 'community'].forEach(t => {
+      const btn = document.createElement('button');
+      btn.className = `menu-gallery-tab${menuGalleryTab === t ? ' active' : ''}`;
+      btn.textContent = t === 'my' ? 'MY DESIGNS' : 'COMMUNITY';
+      btn.addEventListener('click', () => {
+        menuGalleryTab = t;
+        _renderMenuGallery();
+      });
+      bar.appendChild(btn);
+    });
+    levelGrid.appendChild(bar);
+
+    // Content container
+    const container = document.createElement('div');
+    container.className = 'menu-gallery-grid';
+    levelGrid.appendChild(container);
+
+    if (menuGalleryTab === 'my') {
+      _renderMenuGalleryItems(container, _loadGallery(), false);
+    } else {
+      _renderMenuGalleryCommunity(container);
+    }
+  }
+
+  function _renderMenuGalleryItems(container, items, isCommunity) {
+    container.innerHTML = '';
+    if (items.length === 0) {
+      const empty = document.createElement('div');
+      empty.className = 'difficulty-empty';
+      empty.textContent = isCommunity
+        ? 'No community designs yet. Be the first to share!'
+        : 'No saved designs yet. Go to Design Mode and save a circuit!';
+      container.appendChild(empty);
+      return;
+    }
+    items.forEach((item, idx) => {
+      container.appendChild(_renderCard(item, idx, isCommunity));
+    });
+
+    // Delegated click handler
+    container.onclick = (e) => {
+      const btn = e.target.closest('button');
+      if (!btn) return;
+      const cidx = parseInt(btn.dataset.idx);
+      const src = btn.dataset.src;
+
+      if (btn.classList.contains('gallery-btn-load')) {
+        const it = src === 'community' ? communityCache[cidx] : _loadGallery()[cidx];
+        if (!it || !State.level) return;
+        _loadDesignIntoCanvas(it);
+        closeMenuOverlay();
+        // Make sure we're in design mode (level 61)
+        const designIdx = LEVELS.findIndex(l => l.id === 61);
+        if (State.currentLevelIndex !== designIdx && designIdx >= 0) loadLevel(designIdx);
+      }
+
+      if (btn.classList.contains('gallery-btn-export')) {
+        const it = src === 'community' ? communityCache[cidx] : _loadGallery()[cidx];
+        if (!it) return;
+        const json = JSON.stringify({ nodes: it.nodes, wires: it.wires }, null, 2);
+        navigator.clipboard.writeText(json).then(() => {
+          alert('JSON copied to clipboard! (' + json.length + ' chars)');
+        }).catch(() => { prompt('Copy this JSON:', json); });
+      }
+
+      if (btn.classList.contains('gallery-btn-delete')) {
+        const localItems = _loadGallery();
+        if (cidx < 0 || cidx >= localItems.length) return;
+        if (!confirm(`Delete "${localItems[cidx].name}"?`)) return;
+        localItems.splice(cidx, 1);
+        _saveGalleryLocal(localItems);
+        _renderMenuGallery();
+      }
+    };
+  }
+
+  async function _renderMenuGalleryCommunity(container) {
+    container.innerHTML = '<div class="difficulty-empty">Loading community designs...</div>';
+    try {
+      if (!communityCache) {
+        const fb = window._fb;
+        const db = window._fbDb;
+        const q = fb.query(fb.collection(db, 'designs'), fb.orderBy('date', 'desc'), fb.limit(100));
+        const snap = await fb.getDocs(q);
+        communityCache = [];
+        snap.forEach(d => communityCache.push({ id: d.id, ...d.data() }));
+      }
+      _renderMenuGalleryItems(container, communityCache, true);
+    } catch (err) {
+      container.innerHTML = '<div class="difficulty-empty">Failed to load community designs. Check your connection.</div>';
+      console.error('Community gallery error:', err);
+    }
+  }
+
+  // Tab switching
+  galleryTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      galleryActiveTab = tab.dataset.tab;
+      galleryTabs.forEach(t => t.classList.toggle('active', t === tab));
+      _renderGallery();
+    });
+  });
+
+  // Open save dialog
+  document.getElementById('btn-design-gallery-save').addEventListener('click', () => {
+    if (!State.level) return;
+    if (State.level.nodes.length === 0) {
+      alert('Nothing to save — place some components first.');
+      return;
+    }
+    gallerySaveName.value = '';
+    gallerySaveAuthor.value = localStorage.getItem(AUTHOR_KEY) || '';
+    gallerySaveDesc.value = '';
+    gallerySaveCommunity.checked = true;
+    gallerySaveOverlay.classList.remove('hidden');
+    gallerySaveName.focus();
+  });
+
+  // Cancel save
+  document.getElementById('btn-gallery-save-cancel').addEventListener('click', () => {
+    gallerySaveOverlay.classList.add('hidden');
+  });
+
+  // Confirm save
+  document.getElementById('btn-gallery-save-confirm').addEventListener('click', async () => {
+    const name = gallerySaveName.value.trim() || 'Untitled';
+    const author = gallerySaveAuthor.value.trim() || 'Anonymous';
+    const desc = gallerySaveDesc.value.trim();
+    const shareToCommunity = gallerySaveCommunity.checked;
+
+    // Remember author name
+    localStorage.setItem(AUTHOR_KEY, author);
+
+    const designData = {
+      name,
+      author,
+      desc,
+      date: Date.now(),
+      nodes: JSON.parse(JSON.stringify(State.level.nodes)),
+      wires: JSON.parse(JSON.stringify(State.level.wires)),
+    };
+
+    // Save locally
+    const items = _loadGallery();
+    items.unshift(designData);
+    _saveGalleryLocal(items);
+
+    // Save to Firestore
+    if (shareToCommunity && window._fbDb) {
+      try {
+        await window._fb.addDoc(
+          window._fb.collection(window._fbDb, 'designs'),
+          designData
+        );
+        communityCache = null; // invalidate cache
+      } catch (err) {
+        console.error('Failed to share to community:', err);
+        alert('Saved locally, but failed to share to community. Check your connection.');
+      }
+    }
+
+    gallerySaveOverlay.classList.add('hidden');
+    Sound.play('clear');
+  });
+
+  // Open gallery
+  document.getElementById('btn-design-gallery').addEventListener('click', () => {
+    _renderGallery();
+    galleryOverlay.classList.remove('hidden');
+  });
+
+  // Close gallery
+  document.getElementById('btn-gallery-close').addEventListener('click', () => {
+    galleryOverlay.classList.add('hidden');
+  });
+
+  // Gallery card actions (delegated)
+  galleryGrid.addEventListener('click', (e) => {
+    const btn = e.target.closest('button');
+    if (!btn) return;
+    const idx = parseInt(btn.dataset.idx);
+    const src = btn.dataset.src;
+
+    if (btn.classList.contains('gallery-btn-load')) {
+      const item = src === 'community' ? communityCache[idx] : _loadGallery()[idx];
+      if (!item) return;
+      _loadDesignIntoCanvas(item);
+    }
+
+    if (btn.classList.contains('gallery-btn-export')) {
+      const item = src === 'community' ? communityCache[idx] : _loadGallery()[idx];
+      if (!item) return;
+      const json = JSON.stringify({ nodes: item.nodes, wires: item.wires }, null, 2);
+      navigator.clipboard.writeText(json).then(() => {
+        alert('JSON copied to clipboard! (' + json.length + ' chars)');
+      }).catch(() => {
+        prompt('Copy this JSON:', json);
+      });
+    }
+
+    if (btn.classList.contains('gallery-btn-delete')) {
+      const items = _loadGallery();
+      if (idx < 0 || idx >= items.length) return;
+      if (!confirm(`Delete "${items[idx].name}"?`)) return;
+      items.splice(idx, 1);
+      _saveGalleryLocal(items);
+      _renderMyGallery();
+    }
+  });
+
+  // Close overlays on backdrop click
+  galleryOverlay.addEventListener('click', (e) => {
+    if (e.target === galleryOverlay) galleryOverlay.classList.add('hidden');
+  });
+  gallerySaveOverlay.addEventListener('click', (e) => {
+    if (e.target === gallerySaveOverlay) gallerySaveOverlay.classList.add('hidden');
   });
 
   const btnDesignTest = document.getElementById('btn-design-test');

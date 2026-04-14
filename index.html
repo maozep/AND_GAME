@@ -5,6 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AND_GAME — Logic Gate Puzzles</title>
   <link rel="stylesheet" href="style.css" />
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.7.1/firebase-app.js';
+    import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, orderBy, limit } from 'https://www.gstatic.com/firebasejs/11.7.1/firebase-firestore.js';
+    const app = initializeApp({
+      apiKey: "AIzaSyA_PRQFzzRna2v3LeqdzG0zVgQVGPLT-r8",
+      authDomain: "and-game-ab098.firebaseapp.com",
+      projectId: "and-game-ab098",
+      storageBucket: "and-game-ab098.firebasestorage.app",
+      messagingSenderId: "591967386096",
+      appId: "1:591967386096:web:48d6f846e8ca5e0696c535"
+    });
+    const db = getFirestore(app);
+    window._fbDb = db;
+    window._fb = { collection, addDoc, getDocs, deleteDoc, doc, query, orderBy, limit };
+  </script>
 </head>
 <body>
 
@@ -113,14 +128,59 @@
       </label>
     </div>
     <div id="design-actions">
-      <button id="btn-design-undo" class="design-action" data-shortcut="Ctrl+Z">UNDO</button>
-      <button id="btn-design-redo" class="design-action" data-shortcut="Ctrl+Y">REDO</button>
       <button id="btn-design-test" class="design-action" data-shortcut="T">TEST</button>
       <button id="btn-design-back" class="design-action hidden">BACK TO EDIT</button>
       <button id="btn-design-export" class="design-action" data-shortcut="E">EXPORT</button>
       <button id="btn-design-import" class="design-action" data-shortcut="P">IMPORT</button>
+      <button id="btn-design-gallery-save" class="design-action design-action-share" data-shortcut="K">SAVE TO GALLERY</button>
+      <button id="btn-design-gallery" class="design-action design-action-share" data-shortcut="L">GALLERY</button>
       <button id="btn-design-share" class="design-action design-action-share" data-shortcut="R">SHARE</button>
+      <button id="btn-design-undo" class="design-action" data-shortcut="Ctrl+Z">UNDO</button>
+      <button id="btn-design-redo" class="design-action" data-shortcut="Ctrl+Y">REDO</button>
       <button id="btn-design-clear" class="design-action design-action-danger" data-shortcut="X">CLEAR ALL</button>
+    </div>
+  </div>
+
+  <!-- Gallery Overlay -->
+  <div id="gallery-overlay" class="hidden" aria-hidden="true">
+    <div id="gallery-box" role="dialog" aria-modal="true">
+      <div id="gallery-header">
+        <div id="gallery-tabs">
+          <button class="gallery-tab active" data-tab="my">MY DESIGNS</button>
+          <button class="gallery-tab" data-tab="community">COMMUNITY</button>
+        </div>
+        <button id="btn-gallery-close" class="btn-secondary" aria-label="Close gallery">CLOSE</button>
+      </div>
+      <div id="gallery-grid"></div>
+      <div id="gallery-empty" class="hidden">No saved designs yet. Build a circuit and click SAVE TO GALLERY.</div>
+      <div id="gallery-loading" class="hidden">Loading community designs...</div>
+    </div>
+  </div>
+
+  <!-- Gallery Save Dialog -->
+  <div id="gallery-save-overlay" class="hidden" aria-hidden="true">
+    <div id="gallery-save-box" role="dialog" aria-modal="true">
+      <div id="gallery-save-title">SAVE DESIGN</div>
+      <label class="gallery-save-row">
+        <span>Name</span>
+        <input type="text" id="gallery-save-name" maxlength="30" placeholder="My Circuit" />
+      </label>
+      <label class="gallery-save-row">
+        <span>Author</span>
+        <input type="text" id="gallery-save-author" maxlength="20" placeholder="Your name" />
+      </label>
+      <label class="gallery-save-row">
+        <span>Description</span>
+        <textarea id="gallery-save-desc" maxlength="200" rows="3" placeholder="Optional description..."></textarea>
+      </label>
+      <label class="gallery-save-check">
+        <input type="checkbox" id="gallery-save-community" checked />
+        <span>Share to Community Gallery</span>
+      </label>
+      <div id="gallery-save-actions">
+        <button id="btn-gallery-save-cancel" class="design-action">CANCEL</button>
+        <button id="btn-gallery-save-confirm" class="design-action design-action-share">SAVE</button>
+      </div>
     </div>
   </div>
 

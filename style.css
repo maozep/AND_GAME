@@ -133,7 +133,9 @@ body.light-theme #truth-overlay,
 body.light-theme #diagram-overlay,
 body.light-theme #instruction-overlay,
 body.light-theme #fail-overlay,
-body.light-theme #final-overlay {
+body.light-theme #final-overlay,
+body.light-theme #gallery-overlay,
+body.light-theme #gallery-save-overlay {
   background: rgba(30, 36, 48, 0.85);
   backdrop-filter: blur(8px);
 }
@@ -248,15 +250,15 @@ html, body {
   position: fixed;
   top: 90px;
   left: 0;
-  width: 150px;
+  width: 200px;
   bottom: 0;
   background: rgba(10, 14, 20, 0.97);
   border-right: 2px solid #1e3a50;
   z-index: 150;
   display: flex;
   flex-direction: column;
-  padding: 12px 8px;
-  gap: 8px;
+  padding: 16px 12px;
+  gap: 10px;
   overflow-y: auto;
   overflow-x: hidden;
   scrollbar-width: none;
@@ -271,29 +273,29 @@ html, body {
 
 #design-toolbar-title {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 10px;
+  font-size: 13px;
   font-weight: 700;
   letter-spacing: 2px;
   color: #a060ff;
   text-align: center;
-  padding-bottom: 8px;
+  padding-bottom: 10px;
   border-bottom: 1px solid rgba(160, 96, 255, 0.3);
 }
 
 #design-tools {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
 }
 
 .design-tool {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 700;
-  letter-spacing: 1px;
-  padding: 6px 8px;
+  letter-spacing: 1.5px;
+  padding: 9px 12px;
   border: 1px solid #2a5a90;
-  border-radius: 4px;
+  border-radius: 6px;
   background: rgba(42, 90, 144, 0.1);
   color: #a0c8ff;
   cursor: pointer;
@@ -333,8 +335,8 @@ html, body {
 #design-props {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  padding: 8px 4px;
+  gap: 8px;
+  padding: 10px 6px;
   border-top: 1px solid rgba(160, 96, 255, 0.2);
   border-bottom: 1px solid rgba(160, 96, 255, 0.2);
 }
@@ -343,7 +345,7 @@ html, body {
 
 #design-props-title {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 700;
   letter-spacing: 1.5px;
   color: #a060ff;
@@ -352,7 +354,7 @@ html, body {
 
 #design-props-type {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 10px;
+  font-size: 12px;
   color: #00d4ff;
   text-align: center;
   margin-bottom: 4px;
@@ -362,19 +364,19 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 6px;
+  gap: 8px;
   font-family: 'JetBrains Mono', monospace;
-  font-size: 9px;
+  font-size: 11px;
   color: #888;
 }
 
 .design-prop-row input {
-  width: 60px;
+  width: 80px;
   font-family: 'JetBrains Mono', monospace;
-  font-size: 9px;
-  padding: 2px 4px;
+  font-size: 11px;
+  padding: 4px 6px;
   border: 1px solid #2a5a90;
-  border-radius: 3px;
+  border-radius: 4px;
   background: #0a0e14;
   color: #c8d8f0;
   outline: none;
@@ -385,18 +387,18 @@ html, body {
 }
 
 #prop-steps, #prop-step-targets {
-  width: 80px;
+  width: 100px;
   letter-spacing: 1px;
 }
 
 .design-prop-toggle {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 700;
-  width: 30px;
-  height: 22px;
+  width: 36px;
+  height: 28px;
   border: 1px solid #2a5a90;
-  border-radius: 3px;
+  border-radius: 4px;
   background: rgba(42, 90, 144, 0.15);
   color: #a0c8ff;
   cursor: pointer;
@@ -411,19 +413,19 @@ html, body {
   margin-top: auto;
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  padding-top: 8px;
+  gap: 6px;
+  padding-top: 10px;
   border-top: 1px solid rgba(160, 96, 255, 0.2);
 }
 
 .design-action {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 700;
-  letter-spacing: 1px;
-  padding: 6px 8px;
+  letter-spacing: 1.5px;
+  padding: 9px 12px;
   border: 1px solid #a060ff;
-  border-radius: 4px;
+  border-radius: 6px;
   background: rgba(160, 96, 255, 0.1);
   color: #a060ff;
   cursor: pointer;
@@ -1295,7 +1297,9 @@ html, body {
 #diagram-overlay,
 #info-overlay,
 #truth-overlay,
-#instruction-overlay {
+#instruction-overlay,
+#gallery-overlay,
+#gallery-save-overlay {
   position: fixed;
   inset: 0;
   z-index: 200;
@@ -1320,7 +1324,9 @@ html, body {
 #diagram-overlay.hidden,
 #info-overlay.hidden,
 #truth-overlay.hidden,
-#instruction-overlay.hidden {
+#instruction-overlay.hidden,
+#gallery-overlay.hidden,
+#gallery-save-overlay.hidden {
   display: none;
 }
 
@@ -2599,4 +2605,277 @@ button:active {
   #level-best {
     font-size: 9px;
   }
+}
+
+/* ── Gallery Overlay ──────────────────────────────────────── */
+#gallery-box {
+  width: min(900px, calc(100vw - 32px));
+  max-height: min(700px, calc(100vh - 80px));
+  overflow: auto;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-bright);
+  border-radius: 12px;
+  padding: 24px;
+}
+
+#gallery-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+#gallery-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 2px;
+}
+
+#gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 16px;
+}
+
+#gallery-empty {
+  text-align: center;
+  color: var(--text-dim);
+  padding: 48px 16px;
+  font-size: 13px;
+}
+
+.gallery-card {
+  background: var(--bg-panel-alt);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px;
+  cursor: default;
+  transition: border-color 0.2s;
+}
+.gallery-card:hover {
+  border-color: var(--accent);
+}
+
+.gallery-card-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+  word-break: break-word;
+}
+
+.gallery-card-desc {
+  font-size: 11px;
+  color: var(--text-dim);
+  margin-bottom: 8px;
+  word-break: break-word;
+  white-space: pre-wrap;
+  max-height: 48px;
+  overflow: hidden;
+}
+
+.gallery-card-meta {
+  font-size: 10px;
+  color: var(--text-dim);
+  margin-bottom: 10px;
+  opacity: 0.7;
+}
+
+.gallery-card-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.gallery-card-actions button {
+  font-family: inherit;
+  font-size: 10px;
+  padding: 4px 10px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  background: var(--bg-panel);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+.gallery-card-actions button:hover {
+  background: var(--border);
+  border-color: var(--border-bright);
+}
+.gallery-card-actions .gallery-btn-delete {
+  color: #ff4444;
+  border-color: #441111;
+}
+.gallery-card-actions .gallery-btn-delete:hover {
+  background: #331111;
+  border-color: #ff4444;
+}
+
+/* ── Gallery Save Dialog ──────────────────────────────────── */
+#gallery-save-box {
+  width: min(420px, calc(100vw - 32px));
+  background: var(--bg-panel);
+  border: 1px solid var(--border-bright);
+  border-radius: 12px;
+  padding: 24px;
+}
+
+#gallery-save-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 2px;
+  margin-bottom: 16px;
+}
+
+.gallery-save-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+.gallery-save-row span {
+  font-size: 11px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.gallery-save-row input,
+.gallery-save-row textarea {
+  font-family: inherit;
+  font-size: 13px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text-primary);
+  outline: none;
+  resize: vertical;
+}
+.gallery-save-row input:focus,
+.gallery-save-row textarea:focus {
+  border-color: var(--accent);
+}
+
+#gallery-save-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+/* ── Menu-embedded Gallery (inside STAGES) ──────────────── */
+.menu-gallery-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+.menu-gallery-tab {
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 10px 24px;
+  border-radius: 8px;
+  border: 2px solid var(--border);
+  background: transparent;
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.menu-gallery-tab:hover {
+  color: var(--text-primary);
+  border-color: #a060ff;
+  background: rgba(160, 96, 255, 0.08);
+}
+.menu-gallery-tab.active {
+  background: linear-gradient(135deg, rgba(160, 96, 255, 0.25), rgba(0, 212, 255, 0.15));
+  border-color: #a060ff;
+  color: #fff;
+  box-shadow: 0 0 16px rgba(160, 96, 255, 0.3), inset 0 0 8px rgba(160, 96, 255, 0.1);
+}
+
+.menu-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 14px;
+}
+
+/* Gallery special tab in difficulty bar */
+.gallery-tab-special {
+  border-color: #a060ff !important;
+  color: #c090ff;
+}
+.gallery-tab-special:hover {
+  border-color: #c090ff !important;
+  color: #fff;
+  box-shadow: 0 0 12px rgba(160, 96, 255, 0.25);
+}
+.gallery-tab-special.active {
+  background: linear-gradient(135deg, rgba(160, 96, 255, 0.2), rgba(0, 212, 255, 0.1)) !important;
+  border-color: #a060ff !important;
+  color: #fff;
+  box-shadow: 0 0 16px rgba(160, 96, 255, 0.3);
+}
+
+/* Gallery Tabs */
+#gallery-tabs {
+  display: flex;
+  gap: 4px;
+}
+.gallery-tab {
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  padding: 10px 22px;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.gallery-tab:hover {
+  color: var(--text-primary);
+  border-color: #a060ff;
+  background: rgba(160, 96, 255, 0.08);
+}
+.gallery-tab.active {
+  background: linear-gradient(135deg, rgba(160, 96, 255, 0.25), rgba(0, 212, 255, 0.15));
+  border-color: #a060ff;
+  color: #fff;
+  box-shadow: 0 0 16px rgba(160, 96, 255, 0.3), inset 0 0 8px rgba(160, 96, 255, 0.1);
+}
+
+#gallery-loading {
+  text-align: center;
+  color: var(--text-dim);
+  padding: 48px 16px;
+  font-size: 13px;
+}
+
+.gallery-card-author {
+  font-size: 11px;
+  color: var(--accent);
+  margin-bottom: 4px;
+  opacity: 0.8;
+}
+
+.gallery-save-check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  cursor: pointer;
+}
+.gallery-save-check input[type="checkbox"] {
+  accent-color: var(--accent);
+  width: 16px;
+  height: 16px;
+}
+.gallery-save-check span {
+  font-size: 12px;
+  color: var(--text-primary);
 }

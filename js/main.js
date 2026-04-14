@@ -60,7 +60,7 @@
   const BEST_TIMES_KEY = 'and_game_best_times';
   const completedLevelIds = new Set(loadCompletedLevelIds());
   const bestTimes = loadBestTimes();
-  const DIFFICULTY_ORDER = ['Fundamentals', 'Building Blocks', 'Advanced Circuits', 'Flip-Flops', 'Sequential Logic', 'FSM Applications', 'Design', 'Design Mode'];
+  const DIFFICULTY_ORDER = ['Fundamentals', 'Building Blocks', 'Advanced Circuits', 'Flip-Flops', 'Sequential Logic', 'FSM Applications', 'Design Mode'];
   const TRUTH_OBJECTIVES = {
     1: 'Goal: Understand that an AND gate outputs 1 only when both inputs are 1.',
     2: 'Goal: Understand that an OR gate outputs 1 when at least one input is 1.',
@@ -824,7 +824,6 @@
     'Flip-Flops': 'Sequential logic — D, T, SR, JK flip-flops. Shift registers, counters, ring counters. Memory and timing.',
     'Sequential Logic': 'Flip-flops + gates combined — counters, filters, LFSRs, hazard detectors, pipeline bypass.',
     'FSM Applications': 'Finite state machines — elevator, alarm, traffic light, vending machine, rocket launch, CPU pipeline.',
-    'Design': 'Challenge levels — design your own circuits.',
     'Design Mode': 'Sandbox — build anything from scratch. Place nodes, draw wires, test and share.',
   };
 

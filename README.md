@@ -27,7 +27,7 @@ The game covers both **combinational logic** (gates only) and **sequential logic
 The aesthetic draws from professional EDA (Electronic Design Automation) tools: dark backgrounds, signal-colored traces, and clean node annotations.
 
 **Core constraints:**
-- Tech stack: HTML5 Canvas, CSS, Vanilla JavaScript — no external libraries or frameworks.
+- Tech stack: HTML5 Canvas, CSS, Vanilla JavaScript — Firebase Firestore for community features.
 - Platform: Any modern browser, no installation required.
 
 ---
@@ -90,7 +90,26 @@ Levels support optional features:
 4. **Clear All:** Reset all placed components (also via Ctrl+Shift+R).
 5. **Auto-Solve (dev):** Ctrl+Shift+S places the correct solution and runs all required steps.
 
-### 2.5 Evaluation Engine
+### 2.5 Design Mode (Level 61)
+
+A free-form sandbox where players build circuits from scratch:
+- Place any component: INPUT, OUTPUT, GATE, FF, CLK, MUX, 7SEG.
+- Draw wires between nodes.
+- Edit node properties (labels, values, initial states).
+- TEST mode to run and verify circuits.
+- EXPORT/IMPORT circuits as JSON.
+- A guided tutorial on first entry explains all tools.
+
+### 2.6 Gallery System
+
+Players can save and share their Design Mode creations:
+
+- **Personal Gallery** — Saved locally (localStorage). Name, author, description. Edit, delete, load, export.
+- **Community Gallery** — Shared via Firebase Firestore. Browse designs from all players worldwide. Like/unlike designs. Save a copy to your personal gallery. Delete your own uploads.
+- **Search** — Filter designs by name, author, or description in both galleries.
+- **Access** — Gallery is available from the Design Mode toolbar and as a dedicated tab in the STAGES menu.
+
+### 2.7 Evaluation Engine
 
 #### Combinational Evaluation
 Every gate placement triggers a full forward-propagation pass through the DAG using topological sort (Kahn's algorithm). Each node is evaluated exactly once after all upstream dependencies resolve.
@@ -104,13 +123,13 @@ For levels with flip-flops, evaluation runs in three phases per clock edge:
 
 Dynamic inputs (`stepValues`) update their `fixedValue` before each step.
 
-### 2.6 Win Condition
+### 2.8 Win Condition
 
 ```
 win = (stepCount >= minSteps) AND ∀ output o: o.computedValue === o.targetValue
 ```
 
-### 2.7 Fail Detection
+### 2.9 Fail Detection
 
 For levels with `minSteps` or `stepValues`, if all required steps complete without reaching the target, a fail overlay appears with a retry option.
 
@@ -189,14 +208,15 @@ For levels with `minSteps` or `stepValues`, if all required steps complete witho
 
 | Module         | File              | Responsibility                                              |
 |----------------|-------------------|-------------------------------------------------------------|
-| Entry Point    | `index.html`      | Canvas, HUD, overlays (win/fail/hint/menu/truth table)      |
-| Styles         | `style.css`       | Dark EDA theme, overlays, responsive layout                 |
+| Entry Point    | `index.html`      | Canvas, HUD, overlays, Firebase SDK initialization          |
+| Styles         | `style.css`       | Dark EDA theme, overlays, gallery UI, responsive layout     |
 | Game State     | `js/state.js`     | Level state, FF states, clock control, stepValues management |
 | Evaluator      | `js/engine.js`    | 3-phase DAG evaluation, gate/FF functions, win condition     |
 | Renderer       | `js/renderer.js`  | Canvas rendering: nodes, wires, FF states, timeline displays |
 | Interaction    | `js/input.js`     | Drag-and-drop for gates and FFs, hover handling              |
-| Level Data     | `js/levels.js`    | 50 level definitions with solutions and SVG diagrams         |
-| Main Loop      | `js/main.js`      | Init, timers, menus, auto-solve, fail detection              |
+| Level Data     | `js/levels.js`    | 61 level definitions with solutions and SVG diagrams         |
+| Main Loop      | `js/main.js`      | Init, timers, menus, gallery, tutorials, fail detection      |
+| Firestore Rules| `firestore.rules` | Security rules for community gallery                        |
 
 ### 3.3 Gate & FF Computation Functions
 
@@ -261,18 +281,20 @@ For levels with `stepValues`/`stepTargets`, inputs and outputs display **mini-ci
 ### 4.5 UI Panels
 
 - **HUD:** Level name, timer, best time, gate/FF palettes, action buttons.
-- **Stage Menu:** Grid of levels organized by difficulty tabs, with completion status.
+- **Stage Menu:** Grid of levels organized by difficulty tabs, with completion status and gallery tab.
 - **Hint Overlay:** Per-level guidance without revealing the solution.
 - **Truth Table Overlay:** Required truth table for combinational levels.
 - **Win Overlay:** Solution diagrams (block + circuit), explanation, gates/FFs used.
 - **Fail Overlay:** Retry option when all steps complete without matching targets.
 - **Info Panel:** Gate truth tables and flip-flop function tables with CMOS diagrams.
+- **Gallery Overlay:** Personal and community design browser with search, likes, and management.
+- **Gallery Save Dialog:** Name, author, description, and community sharing option.
 
 ---
 
 ## 5. Current Status
 
-### 50 Levels Across 5 Difficulty Tiers
+### 61 Levels Across 7 Difficulty Tiers
 
 | Tab | Levels | Difficulty | Topics |
 |-----|--------|------------|--------|
@@ -281,6 +303,8 @@ For levels with `stepValues`/`stepTargets`, inputs and outputs display **mini-ci
 | 3. Advanced Circuits | 21–30 | Hard | Majority, equality, comparator, decoder, full adder, MUX tree, ripple carry adder, logic matrix |
 | 4. Flip-Flops | 31–40 | Sequential | D/T/SR/JK flip-flops, ripple counter, Johnson counter, shift register, hold mode, ring counter, program counter |
 | 5. Sequential Logic | 41–50 | Advanced | Synchronizer, filter, edge pulse, conditional SET, write-enable register, synchronous counter, LFSR, pipeline bypass, hazard detector, dual-mode register |
+| 6. FSM Applications | 51–60 | Expert | Elevator controller, alarm system, traffic light, vending machine, rocket launch, CPU pipeline FSMs |
+| 7. Design Mode | 61 | Sandbox | Free-form circuit builder with gallery and community sharing |
 
 ### Real-World Architectures Covered
 
@@ -298,7 +322,7 @@ Levels 41–50 map to specific hardware:
 
 ### Features
 
-- 50 levels with unique solutions
+- 61 levels with unique solutions + sandbox mode
 - Drag-and-drop gate and flip-flop placement
 - Real-time combinational and sequential evaluation
 - Dynamic input/output timeline visualization (stepValues/stepTargets)
@@ -308,6 +332,11 @@ Levels 41–50 map to specific hardware:
 - Hint system with per-level guidance
 - Auto-clock for sequential levels
 - Fail detection with retry for multi-step levels
+- **Design Mode** — free-form circuit sandbox with full component palette
+- **Personal Gallery** — save, name, describe, edit, and manage your designs locally
+- **Community Gallery** — share designs to Firebase, browse others' creations, like/unlike
+- **Search** — filter gallery designs by name, author, or description
+- **Guided Tutorials** — interactive walkthroughs for gates (L1), flip-flops (L31), and design mode (L61)
 - Dev auto-solve (Ctrl+Shift+S) and clear-all (Ctrl+Shift+R)
 - Gate and FF truth tables with CMOS transistor structure diagrams
 - Completion persistence via localStorage
@@ -318,16 +347,19 @@ Levels 41–50 map to specific hardware:
 
 ```
 AND_GAME/
-├── index.html          # Entry point — canvas + DOM overlays
-├── style.css           # Dark EDA theme, all UI styling
+├── index.html          # Entry point — canvas, DOM overlays, Firebase SDK
+├── style.css           # Dark EDA theme, all UI styling, gallery styles
+├── firestore.rules     # Firestore security rules for community gallery
 ├── README.md           # This document
 └── js/
-    ├── main.js         # Bootstrap, game loop, menus, auto-solve, fail detection
+    ├── main.js         # Bootstrap, game loop, menus, gallery, tutorials
     ├── state.js        # Game state, FF states, clock control, stepValues
     ├── engine.js       # 3-phase DAG evaluator, gate/FF functions, win condition
     ├── renderer.js     # Canvas rendering: nodes, wires, FFs, timeline displays
     ├── input.js        # Drag-and-drop, hover handling, hit testing
-    └── levels.js       # 50 level definitions with solutions and SVG diagrams
+    ├── sound.js        # Audio playback
+    ├── waveform.js     # Sequential mode waveform visualization
+    └── levels.js       # 61 level definitions with solutions and SVG diagrams
 ```
 
 ---
@@ -338,8 +370,10 @@ AND_GAME/
 - Sequential evaluation uses a 3-phase pipeline: propagate → clock edge → re-propagate.
 - Dynamic inputs (`stepValues`) and fail detection (`minSteps`) enable multi-step puzzle design.
 - Timeline visualization (mini-circles inside nodes) provides visual feedback for time-varying signals.
-- All levels have mathematically proven unique solutions stored in `solution` objects.
-- The architecture supports expanding beyond 50 levels with no code changes.
+- All puzzle levels have mathematically proven unique solutions stored in `solution` objects.
+- The architecture supports expanding beyond 61 levels with no code changes.
+- Community features use Firebase Firestore (compat SDK) which works from both `file://` and `http://` protocols.
+- Gallery ownership is tracked via a per-browser `authorId` — players can only delete their own community uploads.
 
 ---
 
@@ -355,6 +389,28 @@ AND_GAME/
 | `Escape` | Close any open overlay |
 | `Ctrl+Shift+S` | Auto-solve current level (dev tool) |
 | `Ctrl+Shift+R` | Clear all placed components |
+
+### Design Mode Shortcuts
+
+| Shortcut | Action |
+|----------|--------|
+| `S` | Select tool |
+| `I` | Place Input |
+| `O` | Place Output |
+| `G` | Place Gate |
+| `F` | Place Flip-Flop |
+| `C` | Place Clock |
+| `M` | Place MUX Switch |
+| `7` | Place 7-Segment Display |
+| `W` | Wire tool |
+| `D` | Delete tool |
+| `T` | Test circuit |
+| `E` | Export JSON |
+| `P` | Import JSON |
+| `K` | Save to Gallery |
+| `L` | Open Gallery |
+| `R` | Share screenshot |
+| `X` | Clear all |
 
 ---
 

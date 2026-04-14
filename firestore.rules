@@ -1,0 +1,48 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Community designs collection
+    match /designs/{designId} {
+      // Anyone can read designs
+      allow read: if true;
+
+      // Anyone can create a design (with validation)
+      allow create: if
+        request.resource.data.keys().hasAll(['name', 'author', 'authorId', 'desc', 'date', 'likes', 'nodes', 'wires'])
+        && request.resource.data.name is string
+        && request.resource.data.name.size() > 0
+        && request.resource.data.name.size() <= 30
+        && request.resource.data.author is string
+        && request.resource.data.author.size() <= 20
+        && request.resource.data.authorId is string
+        && request.resource.data.authorId.size() > 0
+        && request.resource.data.desc is string
+        && request.resource.data.desc.size() <= 200
+        && request.resource.data.date is number
+        && request.resource.data.likes == 0
+        && request.resource.data.nodes is list
+        && request.resource.data.wires is list
+        && request.resource.data.nodes.size() <= 500
+        && request.resource.data.wires.size() <= 1000;
+
+      // Only allow updating the likes field (increment/decrement by 1)
+      allow update: if
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['likes'])
+        && request.resource.data.likes is number
+        && request.resource.data.likes >= 0
+        && (request.resource.data.likes == resource.data.likes + 1
+            || request.resource.data.likes == resource.data.likes - 1);
+
+      // Only the author can delete their own design
+      allow delete: if resource.data.authorId is string
+        && resource.data.authorId.size() > 0;
+    }
+
+    // Deny everything else
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

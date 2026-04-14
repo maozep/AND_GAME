@@ -2632,6 +2632,24 @@ button:active {
   letter-spacing: 2px;
 }
 
+#gallery-search-row {
+  margin-bottom: 14px;
+}
+#gallery-search {
+  width: 100%;
+  font-family: inherit;
+  font-size: 13px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text-primary);
+  outline: none;
+}
+#gallery-search:focus {
+  border-color: var(--accent);
+}
+
 #gallery-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
@@ -2710,6 +2728,32 @@ button:active {
   background: #331111;
   border-color: #ff4444;
 }
+.gallery-card-actions .gallery-btn-like {
+  color: var(--text-dim);
+  border-color: var(--border);
+}
+.gallery-card-actions .gallery-btn-like:hover,
+.gallery-card-actions .gallery-btn-like.liked {
+  color: #ff4081;
+  border-color: #662040;
+  background: rgba(255, 64, 129, 0.1);
+}
+.gallery-card-actions .gallery-btn-save-copy {
+  color: #00d4ff;
+  border-color: #0a3a50;
+}
+.gallery-card-actions .gallery-btn-save-copy:hover {
+  background: rgba(0, 212, 255, 0.1);
+  border-color: #00d4ff;
+}
+.gallery-card-actions .gallery-btn-edit {
+  color: #ffaa00;
+  border-color: #4a3000;
+}
+.gallery-card-actions .gallery-btn-edit:hover {
+  background: rgba(255, 170, 0, 0.1);
+  border-color: #ffaa00;
+}
 
 /* ── Gallery Save Dialog ──────────────────────────────────── */
 #gallery-save-box {
@@ -2769,6 +2813,7 @@ button:active {
   display: flex;
   gap: 8px;
   margin-bottom: 18px;
+  grid-column: 1 / -1;
 }
 .menu-gallery-tab {
   font-family: inherit;
@@ -2796,10 +2841,31 @@ button:active {
   box-shadow: 0 0 16px rgba(160, 96, 255, 0.3), inset 0 0 8px rgba(160, 96, 255, 0.1);
 }
 
+.menu-gallery-search-row {
+  margin-bottom: 14px;
+  grid-column: 1 / -1;
+}
+.menu-gallery-search {
+  width: 100%;
+  max-width: 350px;
+  font-family: inherit;
+  font-size: 13px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text-primary);
+  outline: none;
+}
+.menu-gallery-search:focus {
+  border-color: var(--accent);
+}
+
 .menu-gallery-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   gap: 14px;
+  grid-column: 1 / -1;
 }
 
 /* Gallery special tab in difficulty bar */

@@ -2403,6 +2403,12 @@
   // ── Gallery ───────────────────────────────────────────────
   const GALLERY_KEY = 'andgame_gallery';
   const AUTHOR_KEY = 'andgame_author';
+  const AUTHOR_ID_KEY = 'andgame_author_id';
+  // Unique per-browser author ID for ownership
+  if (!localStorage.getItem(AUTHOR_ID_KEY)) {
+    localStorage.setItem(AUTHOR_ID_KEY, 'u_' + Date.now() + '_' + Math.random().toString(36).slice(2, 10));
+  }
+  const _authorId = localStorage.getItem(AUTHOR_ID_KEY);
   const galleryOverlay = document.getElementById('gallery-overlay');
   const galleryGrid = document.getElementById('gallery-grid');
   const galleryEmpty = document.getElementById('gallery-empty');
@@ -2414,7 +2420,20 @@
   const gallerySaveCommunity = document.getElementById('gallery-save-community');
   const galleryTabs = document.querySelectorAll('.gallery-tab');
   let galleryActiveTab = 'my';
+  const COMMUNITY_CACHE_KEY = 'andgame_community_cache';
   let communityCache = null;
+
+  function _loadCommunityCache() {
+    try {
+      const raw = localStorage.getItem(COMMUNITY_CACHE_KEY);
+      return raw ? JSON.parse(raw) : null;
+    } catch (_) { return null; }
+  }
+  function _saveCommunityCache(items) {
+    try {
+      localStorage.setItem(COMMUNITY_CACHE_KEY, JSON.stringify(items));
+    } catch (_) { /* quota exceeded — ignore */ }
+  }
 
   function _loadGallery() {
     try {
@@ -2439,11 +2458,24 @@
   }
 
   function _loadDesignIntoCanvas(item) {
+    if (State.level && State.level.nodes.length > 0) {
+      if (!confirm('Loading will replace your current design. Continue?')) return;
+    }
     State.level.nodes = JSON.parse(JSON.stringify(item.nodes));
     State.level.wires = JSON.parse(JSON.stringify(item.wires));
     State.selectedNodeId = null;
     State.nodeCounter = _loadNodeCounter(item);
     galleryOverlay.classList.add('hidden');
+  }
+
+  const _likedDesigns = new Set(JSON.parse(localStorage.getItem('andgame_liked') || '[]'));
+  function _saveLiked() { localStorage.setItem('andgame_liked', JSON.stringify([..._likedDesigns])); }
+
+  function _findCommunityItem(btn) {
+    const docId = btn.dataset.docId;
+    if (!docId || !communityCache) return null;
+    const idx = communityCache.findIndex(c => c.id === docId);
+    return idx >= 0 ? { item: communityCache[idx], idx } : null;
   }
 
   function _renderCard(item, idx, isCommunity) {
@@ -2452,26 +2484,55 @@
     const date = new Date(item.date).toLocaleDateString();
     const nodes = (item.nodes || []).length;
     const wires = (item.wires || []).length;
+    const likes = item.likes || 0;
+    const liked = isCommunity && item.id && _likedDesigns.has(item.id);
+    const isOwn = isCommunity && item.authorId && item.authorId === _authorId;
+    const did = isCommunity ? ` data-doc-id="${item.id || ''}"` : '';
     card.innerHTML =
       `<div class="gallery-card-name">${_esc(item.name)}</div>` +
       (item.author ? `<div class="gallery-card-author">by ${_esc(item.author)}</div>` : '') +
       (item.desc ? `<div class="gallery-card-desc">${_esc(item.desc)}</div>` : '') +
       `<div class="gallery-card-meta">${nodes} nodes · ${wires} wires · ${date}</div>` +
       `<div class="gallery-card-actions">` +
-        `<button class="gallery-btn-load" data-idx="${idx}" data-src="${isCommunity ? 'community' : 'local'}">LOAD</button>` +
-        `<button class="gallery-btn-export" data-idx="${idx}" data-src="${isCommunity ? 'community' : 'local'}">EXPORT</button>` +
+        `<button class="gallery-btn-load" data-idx="${idx}" data-src="${isCommunity ? 'community' : 'local'}"${did}>LOAD</button>` +
+        (isCommunity ? `<button class="gallery-btn-like${liked ? ' liked' : ''}"${did}>${liked ? '♥' : '♡'} ${likes}</button>` : '') +
+        (isCommunity ? `<button class="gallery-btn-save-copy"${did}>SAVE COPY</button>` : '') +
+        (isOwn ? `<button class="gallery-btn-delete-community"${did}>DELETE</button>` : '') +
+        (!isCommunity ? `<button class="gallery-btn-edit" data-idx="${idx}">EDIT</button>` : '') +
         (!isCommunity ? `<button class="gallery-btn-delete" data-idx="${idx}">DELETE</button>` : '') +
       `</div>`;
     return card;
   }
 
+  const gallerySearch = document.getElementById('gallery-search');
+  let gallerySearchQuery = '';
+
+  gallerySearch.addEventListener('input', () => {
+    gallerySearchQuery = gallerySearch.value.trim().toLowerCase();
+    _renderGallery();
+  });
+
+  function _filterItems(items) {
+    if (!gallerySearchQuery) return items.map((item, idx) => ({ item, idx }));
+    return items
+      .map((item, idx) => ({ item, idx }))
+      .filter(({ item }) =>
+        (item.name || '').toLowerCase().includes(gallerySearchQuery) ||
+        (item.author || '').toLowerCase().includes(gallerySearchQuery) ||
+        (item.desc || '').toLowerCase().includes(gallerySearchQuery)
+      );
+  }
+
   function _renderMyGallery() {
     const items = _loadGallery();
+    const filtered = _filterItems(items);
     galleryGrid.innerHTML = '';
     galleryLoading.classList.add('hidden');
-    galleryEmpty.textContent = 'No saved designs yet. Build a circuit and click SAVE TO GALLERY.';
-    galleryEmpty.classList.toggle('hidden', items.length > 0);
-    items.forEach((item, idx) => {
+    galleryEmpty.textContent = gallerySearchQuery
+      ? 'No designs match your search.'
+      : 'No saved designs yet. Build a circuit and click SAVE TO GALLERY.';
+    galleryEmpty.classList.toggle('hidden', filtered.length > 0);
+    filtered.forEach(({ item, idx }) => {
       galleryGrid.appendChild(_renderCard(item, idx, false));
     });
   }
@@ -2479,28 +2540,46 @@
   async function _renderCommunityGallery(forceRefresh) {
     galleryGrid.innerHTML = '';
     galleryEmpty.classList.add('hidden');
-    galleryLoading.classList.remove('hidden');
 
+    // Show cached data immediately
+    const localCache = communityCache || _loadCommunityCache();
+    if (localCache && !forceRefresh) {
+      communityCache = localCache;
+      _renderCommunityCards(galleryGrid, galleryEmpty, galleryLoading);
+    } else {
+      galleryLoading.classList.remove('hidden');
+    }
+
+    // Fetch fresh data from network
     try {
-      if (!communityCache || forceRefresh) {
-        const fb = window._fb;
-        const db = window._fbDb;
-        const q = fb.query(fb.collection(db, 'designs'), fb.orderBy('date', 'desc'), fb.limit(100));
-        const snap = await fb.getDocs(q);
-        communityCache = [];
-        snap.forEach(d => communityCache.push({ id: d.id, ...d.data() }));
+      const db = window._fbDb;
+      if (db) {
+        const snap = await db.collection('designs').orderBy('date', 'desc').limit(100).get();
+        const freshData = [];
+        snap.forEach(d => freshData.push({ id: d.id, ...d.data() }));
+        communityCache = freshData;
+        _saveCommunityCache(communityCache);
       }
-      galleryGrid.innerHTML = '';
-      galleryLoading.classList.add('hidden');
-      galleryEmpty.textContent = 'No community designs yet. Be the first to share!';
-      galleryEmpty.classList.toggle('hidden', communityCache.length > 0);
-      communityCache.forEach((item, idx) => {
-        galleryGrid.appendChild(_renderCard(item, idx, true));
-      });
+      _renderCommunityCards(galleryGrid, galleryEmpty, galleryLoading);
     } catch (err) {
-      galleryLoading.textContent = 'Failed to load community designs. Check your connection.';
+      // Keep existing cache on error — don't wipe it
+      if (!localCache) galleryLoading.textContent = 'Failed to load community designs. Check your connection.';
       console.error('Community gallery error:', err);
     }
+  }
+
+  function _renderCommunityCards(grid, emptyEl, loadingEl) {
+    if (!communityCache) return;
+    const filtered = _filterItems(communityCache);
+    grid.innerHTML = '';
+    if (loadingEl) loadingEl.classList.add('hidden');
+    emptyEl.textContent = gallerySearchQuery
+      ? 'No community designs match your search.'
+      : 'No community designs yet. Be the first to share!';
+    emptyEl.classList.toggle('hidden', filtered.length > 0);
+    filtered.forEach(({ item, idx }) => {
+      grid.appendChild(_renderCard(item, idx, true));
+    });
   }
 
   function _renderGallery() {
@@ -2519,6 +2598,18 @@
 
   // ── Menu-embedded Gallery (inside STAGES overlay) ─────────
   let menuGalleryTab = 'my';
+  let menuGallerySearchQuery = '';
+
+  function _filterMenuItems(items) {
+    if (!menuGallerySearchQuery) return items.map((item, idx) => ({ item, idx }));
+    return items
+      .map((item, idx) => ({ item, idx }))
+      .filter(({ item }) =>
+        (item.name || '').toLowerCase().includes(menuGallerySearchQuery) ||
+        (item.author || '').toLowerCase().includes(menuGallerySearchQuery) ||
+        (item.desc || '').toLowerCase().includes(menuGallerySearchQuery)
+      );
+  }
 
   function _renderMenuGallery() {
     levelGrid.innerHTML = '';
@@ -2538,6 +2629,22 @@
     });
     levelGrid.appendChild(bar);
 
+    // Search bar
+    const searchRow = document.createElement('div');
+    searchRow.className = 'menu-gallery-search-row';
+    const searchInput = document.createElement('input');
+    searchInput.type = 'text';
+    searchInput.placeholder = 'Search designs...';
+    searchInput.maxLength = 30;
+    searchInput.className = 'menu-gallery-search';
+    searchInput.value = menuGallerySearchQuery;
+    searchInput.addEventListener('input', () => {
+      menuGallerySearchQuery = searchInput.value.trim().toLowerCase();
+      _renderMenuGallery();
+    });
+    searchRow.appendChild(searchInput);
+    levelGrid.appendChild(searchRow);
+
     // Content container
     const container = document.createElement('div');
     container.className = 'menu-gallery-grid';
@@ -2552,43 +2659,104 @@
 
   function _renderMenuGalleryItems(container, items, isCommunity) {
     container.innerHTML = '';
-    if (items.length === 0) {
+    const filtered = _filterMenuItems(items);
+    if (filtered.length === 0) {
       const empty = document.createElement('div');
       empty.className = 'difficulty-empty';
-      empty.textContent = isCommunity
-        ? 'No community designs yet. Be the first to share!'
-        : 'No saved designs yet. Go to Design Mode and save a circuit!';
+      empty.textContent = menuGallerySearchQuery
+        ? 'No designs match your search.'
+        : isCommunity
+          ? 'No community designs yet. Be the first to share!'
+          : 'No saved designs yet. Go to Design Mode and save a circuit!';
       container.appendChild(empty);
       return;
     }
-    items.forEach((item, idx) => {
+    filtered.forEach(({ item, idx }) => {
       container.appendChild(_renderCard(item, idx, isCommunity));
     });
 
     // Delegated click handler
-    container.onclick = (e) => {
+    container.onclick = async (e) => {
       const btn = e.target.closest('button');
       if (!btn) return;
-      const cidx = parseInt(btn.dataset.idx);
-      const src = btn.dataset.src;
+      const localIdx = parseInt(btn.dataset.idx);
 
       if (btn.classList.contains('gallery-btn-load')) {
-        const it = src === 'community' ? communityCache[cidx] : _loadGallery()[cidx];
+        const found = btn.dataset.docId ? _findCommunityItem(btn) : null;
+        const it = found ? found.item : _loadGallery()[localIdx];
         if (!it || !State.level) return;
         _loadDesignIntoCanvas(it);
         closeMenuOverlay();
-        // Make sure we're in design mode (level 61)
         const designIdx = LEVELS.findIndex(l => l.id === 61);
         if (State.currentLevelIndex !== designIdx && designIdx >= 0) loadLevel(designIdx);
       }
 
-      if (btn.classList.contains('gallery-btn-export')) {
-        const it = src === 'community' ? communityCache[cidx] : _loadGallery()[cidx];
-        if (!it) return;
-        const json = JSON.stringify({ nodes: it.nodes, wires: it.wires }, null, 2);
-        navigator.clipboard.writeText(json).then(() => {
-          alert('JSON copied to clipboard! (' + json.length + ' chars)');
-        }).catch(() => { prompt('Copy this JSON:', json); });
+      if (btn.classList.contains('gallery-btn-like')) {
+        const found = _findCommunityItem(btn);
+        if (!found) return;
+        const { item: ci, idx: cIdx } = found;
+        const docId = ci.id;
+        const alreadyLiked = _likedDesigns.has(docId);
+        const prevLikes = ci.likes || 0;
+        if (alreadyLiked) { _likedDesigns.delete(docId); ci.likes = Math.max(0, prevLikes - 1); }
+        else { _likedDesigns.add(docId); ci.likes = prevLikes + 1; }
+        _saveLiked();
+        btn.classList.toggle('liked', !alreadyLiked);
+        btn.innerHTML = `${!alreadyLiked ? '♥' : '♡'} ${ci.likes}`;
+        if (window._fbDb) {
+          window._fbDb.collection('designs').doc(docId).update({
+            likes: firebase.firestore.FieldValue.increment(alreadyLiked ? -1 : 1)
+          }).catch(function(err) {
+            console.error('Like update failed:', err);
+            if (alreadyLiked) { _likedDesigns.add(docId); } else { _likedDesigns.delete(docId); }
+            _saveLiked(); ci.likes = prevLikes;
+            btn.classList.toggle('liked', alreadyLiked);
+            btn.innerHTML = `${alreadyLiked ? '♥' : '♡'} ${prevLikes}`;
+          });
+        }
+      }
+
+      if (btn.classList.contains('gallery-btn-save-copy')) {
+        const found = _findCommunityItem(btn);
+        if (!found) return;
+        const it = found.item;
+        const localItems = _loadGallery();
+        localItems.unshift({
+          name: it.name + ' (copy)',
+          author: it.author || '',
+          desc: it.desc || '',
+          date: Date.now(),
+          nodes: JSON.parse(JSON.stringify(it.nodes)),
+          wires: JSON.parse(JSON.stringify(it.wires)),
+        });
+        _saveGalleryLocal(localItems);
+        alert(`"${it.name}" saved to your designs!`);
+      }
+
+      if (btn.classList.contains('gallery-btn-edit')) {
+        const localItems = _loadGallery();
+        if (localIdx < 0 || localIdx >= localItems.length) return;
+        const it = localItems[localIdx];
+        const newName = prompt('Name:', it.name);
+        if (newName === null) return;
+        const newDesc = prompt('Description:', it.desc || '');
+        if (newDesc === null) return;
+        it.name = newName.trim() || it.name;
+        it.desc = newDesc.trim();
+        _saveGalleryLocal(localItems);
+        _renderMenuGallery();
+      }
+
+      if (btn.classList.contains('gallery-btn-delete-community')) {
+        const found = _findCommunityItem(btn);
+        if (!found) return;
+        if (!confirm(`Delete "${found.item.name}" from community?`)) return;
+        window._fbDb.collection('designs').doc(found.item.id).delete().catch(function(err) {
+          console.error('Delete failed:', err);
+        });
+        communityCache.splice(found.idx, 1);
+        _saveCommunityCache(communityCache);
+        _renderMenuGallery();
       }
 
       if (btn.classList.contains('gallery-btn-delete')) {
@@ -2603,19 +2771,28 @@
   }
 
   async function _renderMenuGalleryCommunity(container) {
-    container.innerHTML = '<div class="difficulty-empty">Loading community designs...</div>';
-    try {
-      if (!communityCache) {
-        const fb = window._fb;
-        const db = window._fbDb;
-        const q = fb.query(fb.collection(db, 'designs'), fb.orderBy('date', 'desc'), fb.limit(100));
-        const snap = await fb.getDocs(q);
-        communityCache = [];
-        snap.forEach(d => communityCache.push({ id: d.id, ...d.data() }));
-      }
+    // Show cached data immediately
+    const localCache = communityCache || _loadCommunityCache();
+    if (localCache) {
+      communityCache = localCache;
       _renderMenuGalleryItems(container, communityCache, true);
+    } else {
+      container.innerHTML = '<div class="difficulty-empty">Loading community designs...</div>';
+    }
+
+    // Fetch fresh data from network
+    try {
+      const db = window._fbDb;
+      if (db) {
+        const snap = await db.collection('designs').orderBy('date', 'desc').limit(100).get();
+        const freshData = [];
+        snap.forEach(d => freshData.push({ id: d.id, ...d.data() }));
+        communityCache = freshData;
+        _saveCommunityCache(communityCache);
+        _renderMenuGalleryItems(container, communityCache, true);
+      }
     } catch (err) {
-      container.innerHTML = '<div class="difficulty-empty">Failed to load community designs. Check your connection.</div>';
+      if (!localCache) container.innerHTML = '<div class="difficulty-empty">Failed to load community designs. Check your connection.</div>';
       console.error('Community gallery error:', err);
     }
   }
@@ -2639,7 +2816,11 @@
     gallerySaveName.value = '';
     gallerySaveAuthor.value = localStorage.getItem(AUTHOR_KEY) || '';
     gallerySaveDesc.value = '';
-    gallerySaveCommunity.checked = true;
+    const fbReady = !!window._fbDb;
+    gallerySaveCommunity.checked = fbReady;
+    gallerySaveCommunity.disabled = !fbReady;
+    gallerySaveCommunity.parentElement.style.opacity = fbReady ? '' : '0.4';
+    gallerySaveCommunity.parentElement.title = fbReady ? '' : 'Community sharing unavailable — check your connection';
     gallerySaveOverlay.classList.remove('hidden');
     gallerySaveName.focus();
   });
@@ -2662,8 +2843,10 @@
     const designData = {
       name,
       author,
+      authorId: _authorId,
       desc,
       date: Date.now(),
+      likes: 0,
       nodes: JSON.parse(JSON.stringify(State.level.nodes)),
       wires: JSON.parse(JSON.stringify(State.level.wires)),
     };
@@ -2673,20 +2856,36 @@
     items.unshift(designData);
     _saveGalleryLocal(items);
 
+    const saveBtn = document.getElementById('btn-gallery-save-confirm');
+
     // Save to Firestore
-    if (shareToCommunity && window._fbDb) {
-      try {
-        await window._fb.addDoc(
-          window._fb.collection(window._fbDb, 'designs'),
-          designData
-        );
-        communityCache = null; // invalidate cache
-      } catch (err) {
-        console.error('Failed to share to community:', err);
-        alert('Saved locally, but failed to share to community. Check your connection.');
+    if (shareToCommunity) {
+      if (!window._fbDb) {
+        alert('Community sharing unavailable — Firebase not loaded. Saved locally only.');
+      } else {
+        try {
+          // Generate ID client-side and use set() — don't await server confirmation
+          const docRef = window._fbDb.collection('designs').doc();
+          const docId = docRef.id;
+          docRef.set(designData).catch(function(err) {
+            console.error('Community save failed:', err);
+          });
+          // Optimistic update
+          const savedItem = Object.assign({}, designData, { id: docId });
+          if (communityCache) {
+            communityCache.unshift(savedItem);
+          } else {
+            communityCache = [savedItem];
+          }
+          _saveCommunityCache(communityCache);
+        } catch (err) {
+          console.error('Failed to share to community:', err);
+        }
       }
     }
 
+    saveBtn.textContent = 'SAVE';
+    saveBtn.disabled = false;
     gallerySaveOverlay.classList.add('hidden');
     Sound.play('clear');
   });
@@ -2703,34 +2902,91 @@
   });
 
   // Gallery card actions (delegated)
-  galleryGrid.addEventListener('click', (e) => {
+  galleryGrid.addEventListener('click', async (e) => {
     const btn = e.target.closest('button');
     if (!btn) return;
-    const idx = parseInt(btn.dataset.idx);
-    const src = btn.dataset.src;
+    const localIdx = parseInt(btn.dataset.idx);
 
     if (btn.classList.contains('gallery-btn-load')) {
-      const item = src === 'community' ? communityCache[idx] : _loadGallery()[idx];
+      const found = btn.dataset.docId ? _findCommunityItem(btn) : null;
+      const item = found ? found.item : _loadGallery()[localIdx];
       if (!item) return;
       _loadDesignIntoCanvas(item);
     }
 
-    if (btn.classList.contains('gallery-btn-export')) {
-      const item = src === 'community' ? communityCache[idx] : _loadGallery()[idx];
-      if (!item) return;
-      const json = JSON.stringify({ nodes: item.nodes, wires: item.wires }, null, 2);
-      navigator.clipboard.writeText(json).then(() => {
-        alert('JSON copied to clipboard! (' + json.length + ' chars)');
-      }).catch(() => {
-        prompt('Copy this JSON:', json);
+    if (btn.classList.contains('gallery-btn-like')) {
+      const found = _findCommunityItem(btn);
+      if (!found) return;
+      const { item: ci, idx: cIdx } = found;
+      const docId = ci.id;
+      const alreadyLiked = _likedDesigns.has(docId);
+      const prevLikes = ci.likes || 0;
+      if (alreadyLiked) { _likedDesigns.delete(docId); ci.likes = Math.max(0, prevLikes - 1); }
+      else { _likedDesigns.add(docId); ci.likes = prevLikes + 1; }
+      _saveLiked();
+      btn.classList.toggle('liked', !alreadyLiked);
+      btn.innerHTML = `${!alreadyLiked ? '♥' : '♡'} ${ci.likes}`;
+      if (window._fbDb) {
+        window._fbDb.collection('designs').doc(docId).update({
+          likes: firebase.firestore.FieldValue.increment(alreadyLiked ? -1 : 1)
+        }).catch(function(err) {
+          console.error('Like update failed:', err);
+          if (alreadyLiked) { _likedDesigns.add(docId); } else { _likedDesigns.delete(docId); }
+          _saveLiked(); ci.likes = prevLikes;
+          btn.classList.toggle('liked', alreadyLiked);
+          btn.innerHTML = `${alreadyLiked ? '♥' : '♡'} ${prevLikes}`;
+        });
+      }
+    }
+
+    if (btn.classList.contains('gallery-btn-save-copy')) {
+      const found = _findCommunityItem(btn);
+      if (!found) return;
+      const it = found.item;
+      const items = _loadGallery();
+      items.unshift({
+        name: it.name + ' (copy)',
+        author: it.author || '',
+        desc: it.desc || '',
+        date: Date.now(),
+        nodes: JSON.parse(JSON.stringify(it.nodes)),
+        wires: JSON.parse(JSON.stringify(it.wires)),
       });
+      _saveGalleryLocal(items);
+      alert(`"${it.name}" saved to your designs!`);
+    }
+
+    if (btn.classList.contains('gallery-btn-edit')) {
+      const items = _loadGallery();
+      if (localIdx < 0 || localIdx >= items.length) return;
+      const item = items[localIdx];
+      const newName = prompt('Name:', item.name);
+      if (newName === null) return;
+      const newDesc = prompt('Description:', item.desc || '');
+      if (newDesc === null) return;
+      item.name = newName.trim() || item.name;
+      item.desc = newDesc.trim();
+      _saveGalleryLocal(items);
+      _renderMyGallery();
+    }
+
+    if (btn.classList.contains('gallery-btn-delete-community')) {
+      const found = _findCommunityItem(btn);
+      if (!found) return;
+      if (!confirm(`Delete "${found.item.name}" from community?`)) return;
+      window._fbDb.collection('designs').doc(found.item.id).delete().catch(function(err) {
+        console.error('Delete failed:', err);
+      });
+      communityCache.splice(found.idx, 1);
+      _saveCommunityCache(communityCache);
+      _renderCommunityGallery(false);
     }
 
     if (btn.classList.contains('gallery-btn-delete')) {
       const items = _loadGallery();
-      if (idx < 0 || idx >= items.length) return;
-      if (!confirm(`Delete "${items[idx].name}"?`)) return;
-      items.splice(idx, 1);
+      if (localIdx < 0 || localIdx >= items.length) return;
+      if (!confirm(`Delete "${items[localIdx].name}"?`)) return;
+      items.splice(localIdx, 1);
       _saveGalleryLocal(items);
       _renderMyGallery();
     }

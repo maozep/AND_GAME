@@ -5,20 +5,48 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AND_GAME — Logic Gate Puzzles</title>
   <link rel="stylesheet" href="style.css" />
-  <script type="module">
-    import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.7.1/firebase-app.js';
-    import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, orderBy, limit } from 'https://www.gstatic.com/firebasejs/11.7.1/firebase-firestore.js';
-    const app = initializeApp({
-      apiKey: "AIzaSyA_PRQFzzRna2v3LeqdzG0zVgQVGPLT-r8",
-      authDomain: "and-game-ab098.firebaseapp.com",
-      projectId: "and-game-ab098",
-      storageBucket: "and-game-ab098.firebasestorage.app",
-      messagingSenderId: "591967386096",
-      appId: "1:591967386096:web:48d6f846e8ca5e0696c535"
-    });
-    const db = getFirestore(app);
-    window._fbDb = db;
-    window._fb = { collection, addDoc, getDocs, deleteDoc, doc, query, orderBy, limit };
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+  <script>
+    (function() {
+      try {
+        var app = firebase.initializeApp({
+          apiKey: "AIzaSyA_PRQFzzRna2v3LeqdzG0zVgQVGPLT-r8",
+          authDomain: "and-game-ab098.firebaseapp.com",
+          projectId: "and-game-ab098",
+          storageBucket: "and-game-ab098.firebasestorage.app",
+          messagingSenderId: "591967386096",
+          appId: "1:591967386096:web:48d6f846e8ca5e0696c535"
+        });
+        var db = firebase.firestore();
+        window._fbDb = db;
+        window._fb = {
+          collection: function(db, name) { return db.collection(name); },
+          addDoc: function(colRef, data) { return colRef.add(data); },
+          getDocs: function(q) { return q.get().then(function(snap) { var arr = []; snap.forEach(function(d) { arr.push(d); }); return { forEach: function(fn) { arr.forEach(fn); } }; }); },
+          deleteDoc: function(docRef) { return docRef.delete(); },
+          doc: function(db, col, id) { return db.collection(col).doc(id); },
+          query: function(colRef, _order, _limit) { return colRef; },
+          orderBy: function(field, dir) { return { _field: field, _dir: dir }; },
+          limit: function(n) { return { _n: n }; },
+          updateDoc: function(docRef, data) { return docRef.update(data); },
+          increment: function(n) { return firebase.firestore.FieldValue.increment(n); }
+        };
+        // Wrap query to apply orderBy and limit
+        window._fb.query = function(colRef) {
+          var q = colRef;
+          for (var i = 1; i < arguments.length; i++) {
+            var arg = arguments[i];
+            if (arg && arg._field) q = q.orderBy(arg._field, arg._dir || 'asc');
+            if (arg && arg._n) q = q.limit(arg._n);
+          }
+          return q;
+        };
+        console.log('[Firebase] initialized OK');
+      } catch(e) {
+        console.error('[Firebase] init failed:', e);
+      }
+    })();
   </script>
 </head>
 <body>
@@ -150,6 +178,9 @@
           <button class="gallery-tab" data-tab="community">COMMUNITY</button>
         </div>
         <button id="btn-gallery-close" class="btn-secondary" aria-label="Close gallery">CLOSE</button>
+      </div>
+      <div id="gallery-search-row">
+        <input type="text" id="gallery-search" placeholder="Search designs..." maxlength="30" />
       </div>
       <div id="gallery-grid"></div>
       <div id="gallery-empty" class="hidden">No saved designs yet. Build a circuit and click SAVE TO GALLERY.</div>

@@ -1,6 +1,6 @@
 # AND_GAME — Digital Logic Puzzle Engine
 
-### [▶ Play the game](https://maozep.github.io/AND_GAME/)
+### [▶ Play the game](https://MaozEpsein.github.io/AND_GAME/)
 
 > A browser-based digital logic puzzle game built on HTML5 Canvas and Vanilla JavaScript.
 > Place gates and flip-flops. Trace signals through time. Think in boolean.

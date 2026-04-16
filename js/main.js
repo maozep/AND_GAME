@@ -1661,7 +1661,7 @@
     octx.fillStyle = '#555';
     octx.font = '12px JetBrains Mono, monospace';
     octx.textAlign = 'right';
-    octx.fillText('AND_GAME — maozep.github.io/AND_GAME', w - 20, 28);
+    octx.fillText('AND_GAME — MaozEpsein.github.io/AND_GAME', w - 20, 28);
     octx.fillText('CIRCUIT SOLVED', w - 20, 50);
 
     // Copy game canvas below banner
@@ -2374,7 +2374,7 @@
     octx.fillStyle = '#555';
     octx.font = '12px JetBrains Mono, monospace';
     octx.textAlign = 'right';
-    octx.fillText('AND_GAME — maozep.github.io/AND_GAME', w - 20, 28);
+    octx.fillText('AND_GAME — MaozEpsein.github.io/AND_GAME', w - 20, 28);
     octx.fillText('DESIGNED WITH LOVE', w - 20, 50);
 
     // Game canvas

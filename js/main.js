@@ -1034,6 +1034,14 @@
       _stopAutoClock();
       Sound.play('fail');
       _failCount++;
+      try {
+        window.posthog && posthog.capture('level_failed', {
+          level_index: State.currentLevelIndex,
+          level_id: levelDef.id,
+          level_name: levelDef.name,
+          fail_count: _failCount
+        });
+      } catch(e){}
       if (_failCount >= 3 && levelDef.solution) {
         failMessage.textContent = `Attempt ${_failCount} failed. Want to see the solution?`;
         btnFailSolve.classList.remove('hidden');
@@ -1243,11 +1251,20 @@
   // ── Load a Level ─────────────────────────────────────────
   function loadLevel(index) {
     if (index >= LEVELS.length) {
+      try { window.posthog && posthog.capture('game_completed_all'); } catch(e){}
       _showFinalScreen();
       return;
     }
 
     const levelDef = LEVELS[index];
+    try {
+      window.posthog && posthog.capture('level_started', {
+        level_index: index,
+        level_id: levelDef.id,
+        level_name: levelDef.name,
+        difficulty: levelDef.difficulty || 'Medium'
+      });
+    } catch(e){}
     Renderer.resetPan();
     State.setLevelIndex(index);
     State.setLevel(levelDef);
@@ -1494,6 +1511,16 @@
       stopTimer();
       setBestTime(levelDef.id, _elapsedMs);
       markLevelCompleted(levelDef.id);
+      try {
+        window.posthog && posthog.capture('level_completed', {
+          level_index: idx,
+          level_id: levelDef.id,
+          level_name: levelDef.name,
+          difficulty: levelDef.difficulty || 'Medium',
+          time_ms: _elapsedMs,
+          fail_count: _failCount
+        });
+      } catch(e){}
       // Update HUD to reveal real name now that level is completed
       levelName.textContent = `${idx + 1}. ${getDisplayName(levelDef)}`;
       winLevelEl.textContent = `LEVEL ${idx + 1} — ${LEVELS[idx].name}`;

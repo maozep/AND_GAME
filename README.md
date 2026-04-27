@@ -6,7 +6,7 @@
 > Learn how real hardware thinks — one circuit at a time.
 
 <p align="center">
-  <a href="https://MaozEpsein.github.io/AND_GAME/">
+  <a href="https://maozepstein.github.io/AND_GAME/">
     <strong>▶ Play Now</strong>
   </a>
   &nbsp;·&nbsp;
@@ -219,5 +219,5 @@ For multi-step levels, if all required steps complete without matching, a fail o
 <p align="center">
   <em>AND_GAME — built in the browser. Powered by boolean algebra and sequential logic.</em>
   <br/>
-  <a href="https://MaozEpsein.github.io/AND_GAME/"><strong>▶ Play it</strong></a>
+  <a href="https://maozepstein.github.io/AND_GAME/"><strong>▶ Play it</strong></a>
 </p>

@@ -143,11 +143,28 @@ body.light-theme #gallery-save-overlay {
 html, body {
   width: 100%;
   height: 100%;
+  /* dvh stays correct as mobile browser chrome shows/hides */
+  height: 100dvh;
   overflow: hidden;
+  overscroll-behavior: none;
   background: var(--bg);
   color: var(--text-primary);
   font-family: var(--font);
   -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  touch-action: manipulation;
+}
+
+/* Allow text selection inside text inputs only — disable elsewhere on mobile so long-press doesn't pop the magnifier */
+body {
+  -webkit-user-select: none;
+  user-select: none;
+}
+input, textarea {
+  -webkit-user-select: text;
+  user-select: text;
 }
 
 /* ── Canvas ─────────────────────────────────────────────── */
@@ -158,8 +175,12 @@ html, body {
   left: 0;
   width: 100%;
   height: 100%;
+  height: 100dvh;
   display: block;
   cursor: default;
+  /* Disable native gestures (pull-to-refresh, double-tap zoom, browser pan) so we get raw pointer events */
+  touch-action: none;
+  -webkit-touch-callout: none;
 }
 
 /* ── HUD ─────────────────────────────────────────────────── */
@@ -719,6 +740,45 @@ html, body {
   display: flex;
   flex-direction: column;
   transition: transform 0.35s ease-out, opacity 0.35s ease-out;
+  /* Honor iOS safe area */
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* ── Drawer handle (drag to resize, tap to toggle expanded) ── */
+#waveform-handle {
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: ns-resize;
+  background: rgba(30, 58, 80, 0.4);
+  border-bottom: 1px solid #1e3a50;
+  touch-action: none;
+  user-select: none;
+  flex-shrink: 0;
+}
+#waveform-handle .grip {
+  width: 56px;
+  height: 4px;
+  border-radius: 999px;
+  background: #2a5a90;
+  box-shadow: 0 0 6px rgba(0, 212, 255, 0.25);
+}
+#waveform-handle:hover .grip {
+  background: #00d4ff;
+}
+#waveform-handle.dragging .grip {
+  background: #39ff14;
+}
+
+#waveform-header-actions {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+#btn-waveform-expand {
+  font-size: 14px !important;
+  padding: 3px 10px !important;
 }
 
 #waveform-header {
@@ -757,8 +817,19 @@ html, body {
   color: #ccc;
 }
 
-#waveform-canvas {
+/* Scroll wrapper — lets the canvas grow taller than the panel and scroll vertically */
+#waveform-scroll {
   flex: 1;
+  width: 100%;
+  overflow-y: auto;
+  overflow-x: auto;
+  /* On mobile: native vertical scroll feels best; allow horizontal too */
+  touch-action: pan-y pan-x;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+#waveform-canvas {
+  display: block;
   width: 100%;
 }
 
@@ -2944,4 +3015,538 @@ button:active {
 .gallery-save-check span {
   font-size: 12px;
   color: var(--text-primary);
+}
+
+/* ============================================================
+   📱 MOBILE / TOUCH RESPONSIVE LAYER
+   Goal: same URL works comfortably on phones, with a compact HUD,
+   a slide-up gate palette drawer, full-screen overlays, and 44px+
+   touch targets. Hover styles are stripped on coarse pointers.
+   ============================================================ */
+
+/* ── Coarse pointer (touch) — strip hover effects, enlarge tap zones ── */
+@media (hover: none) and (pointer: coarse) {
+  /* Disable shortcut tooltips that rely on :hover (they're useless on touch and break taps) */
+  [data-shortcut]:hover::after { display: none !important; }
+
+  /* Bigger tap zones on the small chrome buttons */
+  .btn-secondary,
+  #btn-mute,
+  #btn-undo,
+  #btn-clear-gates,
+  #btn-truth-close,
+  .btn-close {
+    min-height: 36px;
+    min-width: 36px;
+  }
+
+  /* Avoid sticky :hover state on tapped buttons */
+  button:hover { transition: none; }
+}
+
+/* ── Tablet & narrower ─────────────────────────────────────── */
+@media (max-width: 1024px) {
+  /* Design toolbar: from left rail to bottom strip, horizontally scrollable */
+  body.has-design-toolbar #design-toolbar:not(.hidden) {
+    /* fallback if class not present, also handle by id below */
+  }
+}
+
+/* ── Phone breakpoint (primary mobile layout) ─────────────── */
+@media (max-width: 820px) {
+
+  /* ── HUD becomes a compact 2-row bar at the top ────────── */
+  #hud {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 6px 8px;
+    gap: 4px;
+    min-height: 0;
+    /* Honor iOS notch */
+    padding-top: max(6px, env(safe-area-inset-top));
+    padding-left: max(8px, env(safe-area-inset-left));
+    padding-right: max(8px, env(safe-area-inset-right));
+  }
+
+  /* Hide title/subtitle to save room, but keep clock-controls visible
+     for sequential levels — they're the primary interaction on FF stages. */
+  #hud-title,
+  #hud-subtitle {
+    display: none;
+  }
+
+  #hud-center {
+    width: 100%;
+    order: 3;
+  }
+
+  #clock-controls:not(.hidden) {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    align-items: stretch;
+    width: 100%;
+    padding: 4px 0 0;
+    border-top: 1px solid var(--border);
+  }
+  #clock-controls-label {
+    font-size: 9px;
+    text-align: center;
+  }
+  #clock-controls-row {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    align-items: stretch;
+    justify-content: stretch;
+  }
+  #clock-controls-row button {
+    flex: 1 1 0;
+    min-height: 40px;
+    min-width: 0;
+    font-size: 11px;
+    padding: 8px 6px;
+    letter-spacing: 1px;
+  }
+  #step-count {
+    flex: 1 1 100%;
+    text-align: center;
+    font-size: 10px;
+    padding-top: 2px;
+  }
+
+  #hud-left,
+  #hud-right {
+    min-width: 0;
+    width: 100%;
+    margin: 0;
+  }
+
+  #hud-left { order: 1; }
+  #hud-right { order: 2; align-items: stretch; }
+
+  #level-label,
+  #gate-palette-label {
+    display: none;
+  }
+
+  #level-status-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  #level-name {
+    font-size: 12px;
+    line-height: 1.2;
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  #level-time-row {
+    gap: 6px;
+  }
+
+  #level-time,
+  #level-best {
+    font-size: 9px;
+    padding: 3px 6px;
+  }
+
+  #hud-actions {
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  #hud-actions button {
+    flex: 1;
+    min-width: 0;
+    min-height: 38px;
+    font-size: 10px;
+    padding: 8px 10px;
+    letter-spacing: 1.5px;
+  }
+
+  /* Palette row */
+  #gate-palette-label-row {
+    flex-wrap: wrap;
+    gap: 6px;
+    justify-content: flex-end;
+  }
+
+  #btn-info {
+    width: 36px;
+    height: 36px;
+    font-size: 18px;
+  }
+
+  #btn-undo,
+  #btn-clear-gates {
+    min-height: 32px;
+    padding: 6px 10px;
+    font-size: 9px;
+  }
+
+  #gate-palette {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 4px;
+    width: 100%;
+  }
+
+  #ff-palette {
+    width: 100%;
+  }
+  #ff-chips {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 4px;
+  }
+
+  /* ── When the FF palette is shown (sequential levels), put gate-palette
+        and ff-palette side-by-side so the canvas keeps maximum vertical room. ── */
+  #hud-right:has(#ff-palette:not(.hidden)) {
+    display: grid;
+    /* Give FFs more width than gates so each FF chip stays large.
+       Gate column shrinks (chips already small text); FF column grows. */
+    grid-template-columns: 1fr 1.35fr;
+    grid-template-areas:
+      "label label"
+      "gates ffs";
+    column-gap: 1px;
+    row-gap: 3px;
+  }
+  #hud-right:has(#ff-palette:not(.hidden)) #gate-palette,
+  #hud-right:has(#ff-palette:not(.hidden)) #ff-chips {
+    /* Tighter chip-to-chip spacing so we don't waste pixels */
+    gap: 3px;
+  }
+  #hud-right:has(#ff-palette:not(.hidden)) #gate-palette-label-row {
+    grid-area: label;
+  }
+  #hud-right:has(#ff-palette:not(.hidden)) #gate-palette {
+    /* 6 gates as a compact 3×2 block on the left */
+    grid-area: gates;
+    grid-template-columns: repeat(3, 1fr);
+    width: auto;
+  }
+  #hud-right:has(#ff-palette:not(.hidden)) #ff-palette {
+    grid-area: ffs;
+    width: auto;
+  }
+  #hud-right:has(#ff-palette:not(.hidden)) #ff-palette-label {
+    /* Save vertical room — the visual difference is enough */
+    display: none;
+  }
+  #hud-right:has(#ff-palette:not(.hidden)) #ff-chips {
+    /* 4 flip-flops as 2×2 next to the gate block, matching its 2-row height */
+    grid-template-columns: repeat(2, 1fr);
+  }
+  /* Compact gate chips, taller FF chips (more room per chip thanks to 2-col grid) */
+  #hud-right:has(#ff-palette:not(.hidden)) #gate-palette .gate-chip {
+    min-height: 32px;
+    padding: 6px 2px;
+    font-size: 9.5px;
+    letter-spacing: 1px;
+  }
+  #hud-right:has(#ff-palette:not(.hidden)) #ff-chips .gate-chip {
+    min-height: 44px;
+    padding: 10px 4px;
+    font-size: 14px;
+    letter-spacing: 1.5px;
+  }
+
+  .gate-chip {
+    /* Bigger and easier to grab on touch */
+    min-height: 38px;
+    padding: 8px 4px;
+    font-size: 11px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    touch-action: none; /* let our pointer drag handler take over */
+  }
+
+  /* ── Design toolbar: from a left rail to a bottom horizontal strip ── */
+  #design-toolbar {
+    top: auto;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: auto;
+    max-height: 40dvh;
+    border-right: none;
+    border-top: 2px solid #1e3a50;
+    flex-direction: column;
+    padding: 8px 8px max(8px, env(safe-area-inset-bottom));
+    gap: 6px;
+    z-index: 160;
+  }
+
+  #design-toolbar-title {
+    font-size: 10px;
+    padding-bottom: 4px;
+  }
+
+  #design-tools,
+  #design-actions {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 0;
+    padding: 0;
+    border: none;
+  }
+
+  .design-tool,
+  .design-action {
+    flex: 1 0 calc(25% - 6px);
+    min-height: 40px;
+    padding: 8px 6px;
+    font-size: 10px;
+  }
+
+  #design-props {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 6px;
+  }
+
+  /* ── Overlays go full-screen on phone ──────────────────── */
+  #menu-box,
+  #info-box,
+  #diagram-box,
+  #hint-box,
+  #gallery-box,
+  #truth-box,
+  #fail-box,
+  #win-box,
+  #final-box,
+  #instruction-box,
+  #gallery-save-box {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    max-height: 100dvh !important;
+    height: 100dvh;
+    border-radius: 0 !important;
+    padding: 14px !important;
+    padding-top: max(14px, env(safe-area-inset-top)) !important;
+    padding-bottom: max(14px, env(safe-area-inset-bottom)) !important;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Win overlay grid stacks vertically */
+  #win-stats { flex-direction: column; gap: 6px; }
+  #win-buttons,
+  #fail-buttons,
+  #gallery-save-actions,
+  #design-actions {
+    flex-wrap: wrap;
+  }
+  #win-buttons button,
+  #fail-buttons button {
+    flex: 1 1 calc(50% - 8px);
+    min-height: 44px;
+    font-size: 11px;
+    padding: 10px 8px;
+  }
+
+  /* Solution diagrams stack */
+  #solution-diagrams {
+    grid-template-columns: 1fr !important;
+    gap: 12px;
+  }
+
+  /* Gallery grid: 1 col on phone */
+  #gallery-grid,
+  .menu-gallery-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Truth-table info grid: 1 col */
+  #truth-grid,
+  #ff-section {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Truth tables scroll horizontally on small screens */
+  .truth-card { overflow-x: auto; }
+  .truth-card table { min-width: 100%; }
+
+  /* Tutorial popup: wider, bottom-anchored */
+  #tutorial-box {
+    max-width: calc(100vw - 24px);
+    font-size: 14px;
+  }
+
+  /* Drag ghost should follow finger smoothly */
+  #drag-ghost {
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+  }
+
+  /* Waveform: drawer-like sizing on phone (taller default, easier to read) */
+  #waveform-panel { height: 50dvh; min-height: 180px; }
+  #waveform-panel.expanded { height: 88dvh !important; }
+  #waveform-panel.collapsed { height: 70px !important; }
+  #waveform-handle { height: 22px; }
+  #waveform-handle .grip { width: 64px; height: 5px; }
+
+  /* Review bar: scroll the timeline horizontally */
+  #review-bar {
+    height: 64px;
+    padding: 0 8px;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .review-btn {
+    min-height: 40px;
+    padding: 6px 10px;
+  }
+
+  /* All form inputs: 16px font prevents iOS auto-zoom on focus */
+  input[type="text"],
+  input[type="number"],
+  textarea {
+    font-size: 16px !important;
+  }
+
+  /* Inline diagram-overlay can spill past the viewport — give it room */
+  #diagram-content {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+}
+
+/* ── Small phones (≤480px): tighter spacing ────────────── */
+@media (max-width: 480px) {
+  #gate-palette {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  /* All 4 flip-flops fit on a single row, even on the smallest phones */
+  #ff-chips {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 3px;
+  }
+  #ff-chips .gate-chip {
+    font-size: 10px;
+    padding: 6px 2px;
+  }
+
+  #hud-actions button {
+    font-size: 9px;
+    padding: 8px 6px;
+    letter-spacing: 1px;
+  }
+
+  #level-time,
+  #level-best {
+    font-size: 8.5px;
+  }
+
+  .design-tool,
+  .design-action {
+    flex: 1 0 calc(33.333% - 6px);
+    font-size: 9.5px;
+  }
+
+  #win-buttons button,
+  #fail-buttons button {
+    flex: 1 1 100%;
+  }
+}
+
+/* ── Landscape phones: keep HUD as a single thin row ────── */
+@media (max-height: 520px) and (orientation: landscape) and (max-width: 1024px) {
+  #hud {
+    flex-direction: row;
+    align-items: center;
+    padding: 4px 8px;
+  }
+  #hud-left { order: 1; flex: 1; }
+  #hud-right { order: 3; flex: 1; }
+  #hud-center { order: 2; flex: 1; }
+  #hud-title, #hud-subtitle { display: none; }
+  #clock-controls:not(.hidden) {
+    display: flex;
+    flex-direction: row;
+    gap: 4px;
+    align-items: center;
+  }
+  #clock-controls-label { display: none; }
+  #clock-controls-row {
+    display: flex;
+    gap: 4px;
+    flex: 1;
+  }
+  #clock-controls-row button {
+    flex: 1;
+    min-height: 32px;
+    font-size: 9px;
+    padding: 6px 4px;
+  }
+  #level-status-row { flex-direction: row; }
+  #gate-palette {
+    grid-template-columns: repeat(6, 1fr);
+  }
+  #waveform-panel { height: 60dvh; min-height: 140px; }
+}
+
+/* ── Landscape suggestion overlay (used by JS on portrait phones) ── */
+#orientation-hint {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(10, 14, 20, 0.96);
+  color: var(--text-primary);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 24px;
+  font-family: var(--font);
+}
+#orientation-hint.hidden { display: none; }
+#orientation-hint .rotate-icon {
+  font-size: 56px;
+  margin-bottom: 18px;
+  animation: rotate-pulse 2s ease-in-out infinite;
+}
+#orientation-hint h3 {
+  font-size: 16px;
+  letter-spacing: 3px;
+  color: var(--accent-cyan);
+  margin-bottom: 10px;
+}
+#orientation-hint p {
+  font-size: 13px;
+  color: var(--text-dim);
+  max-width: 340px;
+  line-height: 1.6;
+  margin-bottom: 18px;
+}
+#orientation-hint button {
+  font-family: inherit;
+  font-size: 12px;
+  letter-spacing: 2px;
+  padding: 10px 22px;
+  border: 1px solid var(--accent-cyan);
+  border-radius: 6px;
+  background: rgba(0, 212, 255, 0.1);
+  color: var(--accent-cyan);
+  cursor: pointer;
+  min-height: 44px;
+}
+@keyframes rotate-pulse {
+  0%, 100% { transform: rotate(-15deg); }
+  50%      { transform: rotate(75deg); }
 }

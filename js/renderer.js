@@ -127,9 +127,19 @@ const Renderer = (() => {
   }
 
   function resize() {
-    W = canvas.width  = window.innerWidth;
-    H = canvas.height = window.innerHeight;
+    // Use device pixel ratio so canvas stays crisp on retina / high-DPI phones,
+    // while keeping CSS size in CSS pixels. We scale ctx so existing draw code
+    // continues to work in CSS-pixel coordinates.
+    const dpr = Math.min(window.devicePixelRatio || 1, 3);
+    W = window.innerWidth;
+    H = window.innerHeight;
+    canvas.width  = Math.round(W * dpr);
+    canvas.height = Math.round(H * dpr);
+    canvas.style.width  = W + 'px';
+    canvas.style.height = H + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
+  window.addEventListener('orientationchange', () => setTimeout(resize, 100));
 
   // ── Centering + auto-scale for all levels ───────────────────
   let _scale = 1;

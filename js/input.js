@@ -57,12 +57,95 @@ const Input = (() => {
       _dragGhost.style.left = e.clientX + 'px';
       _dragGhost.style.top = e.clientY + 'px';
     });
-    _canvas.addEventListener('mousemove',  _onMouseMove);
-    _canvas.addEventListener('mouseleave', _onMouseLeave);
-    _canvas.addEventListener('click',      _onCanvasClick);
-    _canvas.addEventListener('mousedown',  _onMouseDown);
-    _canvas.addEventListener('mouseup',    _onMouseUp);
-    _canvas.addEventListener('wheel',      _onWheel, { passive: false });
+    // ── Unified pointer events (works for mouse, touch, pen) ──
+    _canvas.addEventListener('pointermove',  _onPointerMove);
+    _canvas.addEventListener('pointerleave', _onMouseLeave);
+    _canvas.addEventListener('pointerdown',  _onPointerDown);
+    _canvas.addEventListener('pointerup',    _onPointerUp);
+    _canvas.addEventListener('pointercancel',_onPointerUp);
+    _canvas.addEventListener('click',        _onCanvasClick);
+    _canvas.addEventListener('wheel',        _onWheel, { passive: false });
+    // Block native context menu on long-press / right-click so it doesn't pop on touch
+    _canvas.addEventListener('contextmenu', e => e.preventDefault());
+  }
+
+  // ── Multi-pointer state (for pinch zoom + two-finger pan) ──
+  const _pointers = new Map(); // pointerId -> { x, y }
+  let _pinchStartDist = 0;
+  let _pinchCenter    = { x: 0, y: 0 };
+  let _pinching       = false;
+  function _pointerDist() {
+    const pts = [..._pointers.values()];
+    if (pts.length < 2) return 0;
+    const dx = pts[0].x - pts[1].x, dy = pts[0].y - pts[1].y;
+    return Math.hypot(dx, dy);
+  }
+  function _pointerMid() {
+    const pts = [..._pointers.values()];
+    if (pts.length < 2) return { x: 0, y: 0 };
+    return { x: (pts[0].x + pts[1].x) / 2, y: (pts[0].y + pts[1].y) / 2 };
+  }
+
+  function _onPointerDown(e) {
+    _pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    try { _canvas.setPointerCapture(e.pointerId); } catch (_) {}
+
+    if (_pointers.size === 2) {
+      // Begin pinch — cancel any single-pointer pan/drag
+      _panning   = false;
+      _dragNode  = null;
+      _pinching  = true;
+      _pinchStartDist = _pointerDist();
+      const mid = _pointerMid();
+      const rect = _canvas.getBoundingClientRect();
+      _pinchCenter = { x: mid.x - rect.left, y: mid.y - rect.top };
+      _setCanvasCursor('grabbing');
+      return;
+    }
+
+    if (_pointers.size === 1) _onMouseDown(e);
+  }
+
+  function _onPointerUp(e) {
+    _pointers.delete(e.pointerId);
+    if (_pointers.size < 2) {
+      _pinching = false;
+      _pinchStartDist = 0;
+    }
+    if (_pointers.size === 0) _onMouseUp(e);
+  }
+
+  function _onPointerMove(e) {
+    if (_pointers.has(e.pointerId)) {
+      _pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    }
+
+    if (_pinching && _pointers.size === 2) {
+      const newDist = _pointerDist();
+      if (_pinchStartDist > 0 && newDist > 0) {
+        const factor = newDist / _pinchStartDist;
+        // Convert to wheel-equivalent step calls — call zoomAt repeatedly in small ticks
+        if (factor > 1.04) {
+          Renderer.zoomAt(_pinchCenter.x, _pinchCenter.y, -1); // zoom in
+          _pinchStartDist = newDist;
+        } else if (factor < 0.96) {
+          Renderer.zoomAt(_pinchCenter.x, _pinchCenter.y, 1);  // zoom out
+          _pinchStartDist = newDist;
+        }
+      }
+      // Two-finger pan
+      const mid = _pointerMid();
+      const rect = _canvas.getBoundingClientRect();
+      const cx = mid.x - rect.left, cy = mid.y - rect.top;
+      const dx = cx - _pinchCenter.x, dy = cy - _pinchCenter.y;
+      if (Math.abs(dx) > 0.5 || Math.abs(dy) > 0.5) {
+        Renderer.panBy(dx, dy);
+        _pinchCenter = { x: cx, y: cy };
+      }
+      return;
+    }
+
+    _onMouseMove(e);
   }
 
   function _onWheel(e) {
@@ -411,8 +494,21 @@ const Input = (() => {
     }
   }
 
+  // Touch-drag entry point — used by the touch.js chip-drag system since
+  // HTML5 drag-and-drop is unreliable on iOS / mobile Chrome.
+  function dropAt(canvasX, canvasY, dragged) {
+    return _handleDrop(canvasX, canvasY, dragged);
+  }
+  function resolveDropTargetAt(canvasX, canvasY, dragged) {
+    const prev = _dragged;
+    _dragged = dragged;
+    const t = _resolveDropTarget(canvasX, canvasY);
+    _dragged = prev;
+    return t;
+  }
+
   return {
-    init, refreshChips,
+    init, refreshChips, dropAt, resolveDropTargetAt,
     get wireSource() { return _wireSource; },
     get mouseWorld() { return _mouseWorld; },
     get mouseCanvas() { return _mouseCanvas; },

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" fill="#0a0e14"/>
+  <rect x="32" y="32" width="448" height="448" rx="64" fill="#0f1520" stroke="#00d4ff" stroke-width="8"/>
+  <!-- Stylized AND gate -->
+  <g transform="translate(96 128)">
+    <path d="M0 0 L0 256 Q256 256 256 128 Q256 0 0 0 Z"
+          fill="rgba(0,212,255,0.15)" stroke="#00d4ff" stroke-width="14" stroke-linejoin="round"/>
+    <line x1="-72" y1="64"  x2="0" y2="64"  stroke="#00d4ff" stroke-width="14"/>
+    <line x1="-72" y1="192" x2="0" y2="192" stroke="#00d4ff" stroke-width="14"/>
+    <line x1="256" y1="128" x2="328" y2="128" stroke="#39ff14" stroke-width="14"/>
+    <circle cx="328" cy="128" r="14" fill="#39ff14"/>
+  </g>
+</svg>

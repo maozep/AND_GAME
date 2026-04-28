@@ -63,6 +63,9 @@ const Waveform = (() => {
         _signals.push({ id: n.id, label: n.label || n.id, color: '#00d4ff', type: 'output' });
       }
     });
+    // Re-size the canvas now that we know how many rows we need to draw,
+    // so all signals are rendered (the scroll wrapper handles overflow).
+    if (_canvas) _resize();
   }
 
   // Record current state (call after each STEP evaluation)
@@ -93,11 +96,24 @@ const Waveform = (() => {
     if (!_canvas) return;
     const parent = _canvas.parentElement;
     if (!parent) return;
-    _canvas.width = parent.clientWidth * (window.devicePixelRatio || 1);
-    _canvas.height = parent.clientHeight * (window.devicePixelRatio || 1);
-    _canvas.style.width = parent.clientWidth + 'px';
-    _canvas.style.height = parent.clientHeight + 'px';
-    _ctx.setTransform(window.devicePixelRatio || 1, 0, 0, window.devicePixelRatio || 1, 0, 0);
+    const dpr = window.devicePixelRatio || 1;
+
+    // Width = scroll wrapper width (so it fills horizontally)
+    const cssW = parent.clientWidth;
+
+    // Height = enough to draw every signal row + header + padding.
+    // Without this, signals beyond what fits in the panel were clipped — now the
+    // scroll wrapper handles overflow so we can show as many signals as needed.
+    const rowsH    = Math.max(1, _signals.length) * ROW_H;
+    const contentH = HEADER_H + PAD * 2 + rowsH + 8;
+    // Don't shrink below the visible viewport — keeps the background filling the panel
+    const cssH = Math.max(contentH, parent.clientHeight);
+
+    _canvas.width  = cssW * dpr;
+    _canvas.height = cssH * dpr;
+    _canvas.style.width  = cssW + 'px';
+    _canvas.style.height = cssH + 'px';
+    _ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
 
   function render() {
@@ -245,6 +261,8 @@ const Waveform = (() => {
     });
   }
 
-  return { init, reset, setSignals, record, show, hide, toggle, isVisible, render };
+  function resize() { _resize(); render(); }
+
+  return { init, reset, setSignals, record, show, hide, toggle, isVisible, render, resize };
 
 })();

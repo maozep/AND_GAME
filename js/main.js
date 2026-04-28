@@ -1331,7 +1331,7 @@
       _setClockControlsVisible(isSequential);
       _updateStepCount();
       _setFfPaletteVisible(isSequential);
-      if (isSequential) Input.refreshChips();
+      if (isSequential) { Input.refreshChips(); if (typeof Touch !== 'undefined') Touch.refreshChips(); }
     }
 
     // Hide overlays
@@ -3045,7 +3045,7 @@
     _setClockControlsVisible(isSequential);
     _updateStepCount();
     _setFfPaletteVisible(isSequential);
-    if (isSequential) Input.refreshChips();
+    if (isSequential) { Input.refreshChips(); if (typeof Touch !== 'undefined') Touch.refreshChips(); }
   });
 
   btnDesignBack.addEventListener('click', () => {
